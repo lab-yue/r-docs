@@ -1,0 +1,14 @@
+{
+  "name": "r-docs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "rainy-me <github@rainy.me>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vuepress dev pages",
+    "build": "vuepress build pages"
+  },
+  "dependencies": {
+    "vuepress": "^1.4.1"
+  }
+}
