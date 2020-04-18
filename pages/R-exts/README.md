@@ -7,354 +7,346 @@ resource-type: document
 title: Writing R Extensions
 ---
 
-Writing R Extensions 
-====================
+# Writing R Extensions
 
-Table of Contents 
------------------
+## Table of Contents
 
- 
--   [Acknowledgements](#Acknowledgements)
--   [1 Creating R
-    packages](#Creating-R-packages)
-    -   [1.1 Package
-        structure](#Package-structure)
-        -   [1.1.1 The `DESCRIPTION`
-            file](#The-DESCRIPTION-file)
-        -   [1.1.2 Licensing](#Licensing)
-        -   [1.1.3 Package
-            Dependencies](#Package-Dependencies)
-            -   [1.1.3.1 Suggested
-                packages](#Suggested-packages)
-        -   [1.1.4 The `INDEX`
-            file](#The-INDEX-file)
-        -   [1.1.5 Package
-            subdirectories](#Package-subdirectories)
-        -   [1.1.6 Data in
-            packages](#Data-in-packages)
-        -   [1.1.7 Non-R scripts in
-            packages](#Non_002dR-scripts-in-packages)
-        -   [1.1.8 Specifying
-            URLs](#Specifying-URLs)
-    -   [1.2 Configure and
-        cleanup](#Configure-and-cleanup)
-        -   [1.2.1 Using
-            `Makevars`](#Using-Makevars)
-            -   [1.2.1.1 OpenMP
-                support](#OpenMP-support)
-            -   [1.2.1.2 Using
-                pthreads](#Using-pthreads)
-            -   [1.2.1.3 Compiling in
-                sub-directories](#Compiling-in-sub_002ddirectories)
-        -   [1.2.2 Configure
-            example](#Configure-example)
-        -   [1.2.3 Using F9x
-            code](#Using-F9x-code)
-        -   [1.2.4 Using C++11
-            code](#Using-C_002b_002b11-code)
-        -   [1.2.5 Using C++14
-            code](#Using-C_002b_002b14-code)
-        -   [1.2.6 Using C++17
-            code](#Using-C_002b_002b17-code)
-    -   [1.3 Checking and building
-        packages](#Checking-and-building-packages)
-        -   [1.3.1 Checking
-            packages](#Checking-packages)
-        -   [1.3.2 Building package
-            tarballs](#Building-package-tarballs)
-        -   [1.3.3 Building binary
-            packages](#Building-binary-packages)
-    -   [1.4 Writing package
-        vignettes](#Writing-package-vignettes)
-        -   [1.4.1 Encodings and
-            vignettes](#Encodings-and-vignettes)
-        -   [1.4.2 Non-Sweave
-            vignettes](#Non_002dSweave-vignettes)
-    -   [1.5 Package
-        namespaces](#Package-namespaces)
-        -   [1.5.1 Specifying imports and
-            exports](#Specifying-imports-and-exports)
-        -   [1.5.2 Registering S3
-            methods](#Registering-S3-methods)
-        -   [1.5.3 Load hooks](#Load-hooks)
-        -   [1.5.4 useDynLib](#useDynLib)
-        -   [1.5.5 An example](#An-example)
-        -   [1.5.6 Namespaces with S4 classes and
-            methods](#Namespaces-with-S4-classes-and-methods)
-    -   [1.6 Writing portable
-        packages](#Writing-portable-packages)
-        -   [1.6.1 PDF size](#PDF-size)
-        -   [1.6.2 Check timing](#Check-timing)
-        -   [1.6.3 Encoding
-            issues](#Encoding-issues)
-        -   [1.6.4 Portable C and C++
-            code](#Portable-C-and-C_002b_002b-code)
-            -   [1.6.4.1 Common
-                symbols](#Common-symbols)
-        -   [1.6.5 Binary
-            distribution](#Binary-distribution)
-    -   [1.7 Diagnostic
-        messages](#Diagnostic-messages)
-    -   [1.8
-        Internationalization](#Internationalization)
-        -   [1.8.1 C-level
-            messages](#C_002dlevel-messages)
-        -   [1.8.2 R messages](#R-messages)
-        -   [1.8.3 Preparing
-            translations](#Preparing-translations)
-    -   [1.9 CITATION files](#CITATION-files)
-    -   [1.10 Package types](#Package-types)
-        -   [1.10.1 Frontend](#Frontend)
-    -   [1.11 Services](#Services)
--   [2 Writing R documentation
-    files](#Writing-R-documentation-files)
-    -   [2.1 Rd format](#Rd-format)
-        -   [2.1.1 Documenting
-            functions](#Documenting-functions)
-        -   [2.1.2 Documenting data
-            sets](#Documenting-data-sets)
-        -   [2.1.3 Documenting S4 classes and
-            methods](#Documenting-S4-classes-and-methods)
-        -   [2.1.4 Documenting
-            packages](#Documenting-packages)
-    -   [2.2 Sectioning](#Sectioning)
-    -   [2.3 Marking text](#Marking-text)
-    -   [2.4 Lists and
-        tables](#Lists-and-tables)
-    -   [2.5
-        Cross-references](#Cross_002dreferences)
-    -   [2.6 Mathematics](#Mathematics)
-    -   [2.7 Figures](#Figures)
-    -   [2.8 Insertions](#Insertions)
-    -   [2.9 Indices](#Indices)
-    -   [2.10 Platform-specific
-        documentation](#Platform_002dspecific-sections)
-    -   [2.11 Conditional
-        text](#Conditional-text)
-    -   [2.12 Dynamic pages](#Dynamic-pages)
-    -   [2.13 User-defined
-        macros](#User_002ddefined-macros)
-    -   [2.14 Encoding](#Encoding)
-    -   [2.15 Processing documentation
-        files](#Processing-documentation-files)
-    -   [2.16 Editing Rd
-        files](#Editing-Rd-files)
--   [3 Tidying and profiling R
-    code](#Tidying-and-profiling-R-code)
-    -   [3.1 Tidying R code](#Tidying-R-code)
-    -   [3.2 Profiling R code for
-        speed](#Profiling-R-code-for-speed)
-    -   [3.3 Profiling R code for memory
-        use](#Profiling-R-code-for-memory-use)
-        -   [3.3.1 Memory statistics from
-            `Rprof`](#Memory-statistics-from-Rprof)
-        -   [3.3.2 Tracking memory
-            allocations](#Tracking-memory-allocations)
-        -   [3.3.3 Tracing copies of an
-            object](#Tracing-copies-of-an-object)
-    -   [3.4 Profiling compiled
-        code](#Profiling-compiled-code)
-        -   [3.4.1 Linux](#Linux)
-            -   [3.4.1.1 sprof](#sprof)
-            -   [3.4.1.2 oprofile and
-                operf](#oprofile-and-operf)
-        -   [3.4.2 Solaris](#Solaris)
-        -   [3.4.3 macOS](#macOS)
--   [4 Debugging](#Debugging)
-    -   [4.1 Browsing](#Browsing)
-    -   [4.2 Debugging R
-        code](#Debugging-R-code)
-    -   [4.3 Checking memory
-        access](#Checking-memory-access)
-        -   [4.3.1 Using
-            gctorture](#Using-gctorture)
-        -   [4.3.2 Using
-            valgrind](#Using-valgrind)
-        -   [4.3.3 Using the Address
-            Sanitizer](#Using-Address-Sanitizer)
-            -   [4.3.3.1 Using the Leak
-                Sanitizer](#Using-Leak-Sanitizer)
-        -   [4.3.4 Using the Undefined Behaviour
-            Sanitizer](#Using-Undefined-Behaviour-Sanitizer)
-        -   [4.3.5 Other analyses with
-            'clang'](#Other-analyses-with-_0060clang_0027)
-        -   [4.3.6 Using 'Dr.
-            Memory'](#Using-_0060Dr_002e-Memory_0027)
-        -   [4.3.7 Fortran array bounds
-            checking](#Fortran-array-bounds-checking)
-    -   [4.4 Debugging compiled
-        code](#Debugging-compiled-code)
-        -   [4.4.1 Finding entry points in dynamically loaded
-            code](#Finding-entry-points)
-        -   [4.4.2 Inspecting R objects when
-            debugging](#Inspecting-R-objects)
-    -   [4.5 Using Link-time
-        Optimization](#Using-Link_002dtime-Optimization)
--   [5 System and foreign language
-    interfaces](#System-and-foreign-language-interfaces)
-    -   [5.1 Operating system
-        access](#Operating-system-access)
-    -   [5.2 Interface functions `.C` and
-        `.Fortran`](#Interface-functions-_002eC-and-_002eFortran)
-    -   [5.3 `dyn.load` and
-        `dyn.unload`](#dyn_002eload-and-dyn_002eunload)
-    -   [5.4 Registering native
-        routines](#Registering-native-routines)
-        -   [5.4.1 Speed
-            considerations](#Speed-considerations)
-        -   [5.4.2 Example: converting a package to use
-            registration](#Converting-a-package-to-use-registration)
-        -   [5.4.3 Linking to native routines in other
-            packages](#Linking-to-native-routines-in-other-packages)
-    -   [5.5 Creating shared
-        objects](#Creating-shared-objects)
-    -   [5.6 Interfacing C++
-        code](#Interfacing-C_002b_002b-code)
-        -   [5.6.1 External C++
-            code](#External-C_002b_002b-code)
-    -   [5.7 Fortran I/O](#Fortran-I_002fO)
-    -   [5.8 Linking to other
-        packages](#Linking-to-other-packages)
-        -   [5.8.1
-            Unix-alikes](#Unix_002dalikes)
-        -   [5.8.2 Windows](#Windows)
-    -   [5.9 Handling R objects in
-        C](#Handling-R-objects-in-C)
-        -   [5.9.1 Handling the effects of garbage
-            collection](#Garbage-Collection)
-        -   [5.9.2 Allocating
-            storage](#Allocating-storage)
-        -   [5.9.3 Details of R
-            types](#Details-of-R-types)
-        -   [5.9.4 Attributes](#Attributes)
-        -   [5.9.5 Classes](#Classes)
-        -   [5.9.6 Handling
-            lists](#Handling-lists)
-        -   [5.9.7 Handling character
-            data](#Handling-character-data)
-        -   [5.9.8 Finding and setting
-            variables](#Finding-and-setting-variables)
-        -   [5.9.9 Some convenience
-            functions](#Some-convenience-functions)
-            -   [5.9.9.1 Semi-internal convenience
-                functions](#Semi_002dinternal-convenience-functions)
-        -   [5.9.10 Named objects and
-            copying](#Named-objects-and-copying)
-    -   [5.10 Interface functions `.Call` and
-        `.External`](#Interface-functions-_002eCall-and-_002eExternal)
-        -   [5.10.1 Calling
-            `.Call`](#Calling-_002eCall)
-        -   [5.10.2 Calling
-            `.External`](#Calling-_002eExternal)
-        -   [5.10.3 Missing and special
-            values](#Missing-and-special-values)
-    -   [5.11 Evaluating R expressions from
-        C](#Evaluating-R-expressions-from-C)
-        -   [5.11.1
-            Zero-finding](#Zero_002dfinding)
-        -   [5.11.2 Calculating numerical
-            derivatives](#Calculating-numerical-derivatives)
-    -   [5.12 Parsing R code from
-        C](#Parsing-R-code-from-C)
-        -   [5.12.1 Accessing source
-            references](#Accessing-source-references)
-    -   [5.13 External pointers and weak
-        references](#External-pointers-and-weak-references)
-        -   [5.13.1 An
-            example](#An-external-pointer-example)
-    -   [5.14 Vector accessor
-        functions](#Vector-accessor-functions)
-    -   [5.15 Character encoding
-        issues](#Character-encoding-issues)
--   [6 The R API: entry points for C
-    code](#The-R-API)
-    -   [6.1 Memory
-        allocation](#Memory-allocation)
-        -   [6.1.1 Transient storage
-            allocation](#Transient-storage-allocation)
-        -   [6.1.2 User-controlled
-            memory](#User_002dcontrolled-memory)
-    -   [6.2 Error signaling](#Error-signaling)
-        -   [6.2.1 Error signaling from
-            Fortran](#Error-signaling-from-Fortran)
-    -   [6.3 Random number
-        generation](#Random-numbers)
-    -   [6.4 Missing and IEEE special
-        values](#Missing-and-IEEE-values)
-    -   [6.5 Printing](#Printing)
-        -   [6.5.1 Printing from
-            Fortran](#Printing-from-Fortran)
-    -   [6.6 Calling C from Fortran and vice
-        versa](#Calling-C-from-Fortran-and-vice-versa)
-        -   [6.6.1 Fortran character
-            strings](#Fortran-character-strings)
-        -   [6.6.2 Fortran
-            LOGICAL](#Fortran-LOGICAL)
-    -   [6.7 Numerical analysis
-        subroutines](#Numerical-analysis-subroutines)
-        -   [6.7.1 Distribution
-            functions](#Distribution-functions)
-        -   [6.7.2 Mathematical
-            functions](#Mathematical-functions)
-        -   [6.7.3 Numerical
-            Utilities](#Numerical-Utilities)
-        -   [6.7.4 Mathematical
-            constants](#Mathematical-constants)
-    -   [6.8 Optimization](#Optimization)
-    -   [6.9 Integration](#Integration)
-    -   [6.10 Utility
-        functions](#Utility-functions)
-    -   [6.11 Re-encoding](#Re_002dencoding)
-    -   [6.12 Condition handling and cleanup
-        code](#Condition-handling-and-cleanup-code)
-    -   [6.13 Allowing
-        interrupts](#Allowing-interrupts)
-    -   [6.14 Platform and version
-        information](#Platform-and-version-information)
-    -   [6.15 Inlining C
-        functions](#Inlining-C-functions)
-    -   [6.16 Controlling
-        visibility](#Controlling-visibility)
-    -   [6.17 Using these functions in your own C
-        code](#Standalone-Mathlib)
-    -   [6.18 Organization of header
-        files](#Organization-of-header-files)
--   [7 Generic functions and
-    methods](#Generic-functions-and-methods)
-    -   [7.1 Adding new
-        generics](#Adding-new-generics)
--   [8 Linking GUIs and other front-ends to
-    R](#Linking-GUIs-and-other-front_002dends-to-R)
-    -   [8.1 Embedding R under
-        Unix-alikes](#Embedding-R-under-Unix_002dalikes)
-        -   [8.1.1 Compiling against the R
-            library](#Compiling-against-the-R-library)
-        -   [8.1.2 Setting R
-            callbacks](#Setting-R-callbacks)
-        -   [8.1.3 Registering
-            symbols](#Registering-symbols)
-        -   [8.1.4 Meshing event
-            loops](#Meshing-event-loops)
-        -   [8.1.5 Threading
-            issues](#Threading-issues)
-    -   [8.2 Embedding R under
-        Windows](#Embedding-R-under-Windows)
-        -   [8.2.1 Using
-            (D)COM](#Using-_0028D_0029COM)
-        -   [8.2.2 Calling R.dll
-            directly](#Calling-R_002edll-directly)
-        -   [8.2.3 Finding
-            R\_HOME](#Finding-R_005fHOME)
--   [Function and variable
-    index](#Function-and-variable-index)
--   [Concept index](#Concept-index)
+- [Acknowledgements](#Acknowledgements)
+- [1 Creating R
+  packages](#Creating-R-packages)
+  - [1.1 Package
+    structure](#Package-structure)
+    - [1.1.1 The `DESCRIPTION`
+      file](#The-DESCRIPTION-file)
+    - [1.1.2 Licensing](#Licensing)
+    - [1.1.3 Package
+      Dependencies](#Package-Dependencies)
+      - [1.1.3.1 Suggested
+        packages](#Suggested-packages)
+    - [1.1.4 The `INDEX`
+      file](#The-INDEX-file)
+    - [1.1.5 Package
+      subdirectories](#Package-subdirectories)
+    - [1.1.6 Data in
+      packages](#Data-in-packages)
+    - [1.1.7 Non-R scripts in
+      packages](#Non_002dR-scripts-in-packages)
+    - [1.1.8 Specifying
+      URLs](#Specifying-URLs)
+  - [1.2 Configure and
+    cleanup](#Configure-and-cleanup)
+    - [1.2.1 Using
+      `Makevars`](#Using-Makevars)
+      - [1.2.1.1 OpenMP
+        support](#OpenMP-support)
+      - [1.2.1.2 Using
+        pthreads](#Using-pthreads)
+      - [1.2.1.3 Compiling in
+        sub-directories](#Compiling-in-sub_002ddirectories)
+    - [1.2.2 Configure
+      example](#Configure-example)
+    - [1.2.3 Using F9x
+      code](#Using-F9x-code)
+    - [1.2.4 Using C++11
+      code](#Using-C_002b_002b11-code)
+    - [1.2.5 Using C++14
+      code](#Using-C_002b_002b14-code)
+    - [1.2.6 Using C++17
+      code](#Using-C_002b_002b17-code)
+  - [1.3 Checking and building
+    packages](#Checking-and-building-packages)
+    - [1.3.1 Checking
+      packages](#Checking-packages)
+    - [1.3.2 Building package
+      tarballs](#Building-package-tarballs)
+    - [1.3.3 Building binary
+      packages](#Building-binary-packages)
+  - [1.4 Writing package
+    vignettes](#Writing-package-vignettes)
+    - [1.4.1 Encodings and
+      vignettes](#Encodings-and-vignettes)
+    - [1.4.2 Non-Sweave
+      vignettes](#Non_002dSweave-vignettes)
+  - [1.5 Package
+    namespaces](#Package-namespaces)
+    - [1.5.1 Specifying imports and
+      exports](#Specifying-imports-and-exports)
+    - [1.5.2 Registering S3
+      methods](#Registering-S3-methods)
+    - [1.5.3 Load hooks](#Load-hooks)
+    - [1.5.4 useDynLib](#useDynLib)
+    - [1.5.5 An example](#An-example)
+    - [1.5.6 Namespaces with S4 classes and
+      methods](#Namespaces-with-S4-classes-and-methods)
+  - [1.6 Writing portable
+    packages](#Writing-portable-packages)
+    - [1.6.1 PDF size](#PDF-size)
+    - [1.6.2 Check timing](#Check-timing)
+    - [1.6.3 Encoding
+      issues](#Encoding-issues)
+    - [1.6.4 Portable C and C++
+      code](#Portable-C-and-C_002b_002b-code)
+      - [1.6.4.1 Common
+        symbols](#Common-symbols)
+    - [1.6.5 Binary
+      distribution](#Binary-distribution)
+  - [1.7 Diagnostic
+    messages](#Diagnostic-messages)
+  - [1.8
+    Internationalization](#Internationalization)
+    - [1.8.1 C-level
+      messages](#C_002dlevel-messages)
+    - [1.8.2 R messages](#R-messages)
+    - [1.8.3 Preparing
+      translations](#Preparing-translations)
+  - [1.9 CITATION files](#CITATION-files)
+  - [1.10 Package types](#Package-types)
+    - [1.10.1 Frontend](#Frontend)
+  - [1.11 Services](#Services)
+- [2 Writing R documentation
+  files](#Writing-R-documentation-files)
+  - [2.1 Rd format](#Rd-format)
+    - [2.1.1 Documenting
+      functions](#Documenting-functions)
+    - [2.1.2 Documenting data
+      sets](#Documenting-data-sets)
+    - [2.1.3 Documenting S4 classes and
+      methods](#Documenting-S4-classes-and-methods)
+    - [2.1.4 Documenting
+      packages](#Documenting-packages)
+  - [2.2 Sectioning](#Sectioning)
+  - [2.3 Marking text](#Marking-text)
+  - [2.4 Lists and
+    tables](#Lists-and-tables)
+  - [2.5
+    Cross-references](#Cross_002dreferences)
+  - [2.6 Mathematics](#Mathematics)
+  - [2.7 Figures](#Figures)
+  - [2.8 Insertions](#Insertions)
+  - [2.9 Indices](#Indices)
+  - [2.10 Platform-specific
+    documentation](#Platform_002dspecific-sections)
+  - [2.11 Conditional
+    text](#Conditional-text)
+  - [2.12 Dynamic pages](#Dynamic-pages)
+  - [2.13 User-defined
+    macros](#User_002ddefined-macros)
+  - [2.14 Encoding](#Encoding)
+  - [2.15 Processing documentation
+    files](#Processing-documentation-files)
+  - [2.16 Editing Rd
+    files](#Editing-Rd-files)
+- [3 Tidying and profiling R
+  code](#Tidying-and-profiling-R-code)
+  - [3.1 Tidying R code](#Tidying-R-code)
+  - [3.2 Profiling R code for
+    speed](#Profiling-R-code-for-speed)
+  - [3.3 Profiling R code for memory
+    use](#Profiling-R-code-for-memory-use)
+    - [3.3.1 Memory statistics from
+      `Rprof`](#Memory-statistics-from-Rprof)
+    - [3.3.2 Tracking memory
+      allocations](#Tracking-memory-allocations)
+    - [3.3.3 Tracing copies of an
+      object](#Tracing-copies-of-an-object)
+  - [3.4 Profiling compiled
+    code](#Profiling-compiled-code)
+    - [3.4.1 Linux](#Linux)
+      - [3.4.1.1 sprof](#sprof)
+      - [3.4.1.2 oprofile and
+        operf](#oprofile-and-operf)
+    - [3.4.2 Solaris](#Solaris)
+    - [3.4.3 macOS](#macOS)
+- [4 Debugging](#Debugging)
+  - [4.1 Browsing](#Browsing)
+  - [4.2 Debugging R
+    code](#Debugging-R-code)
+  - [4.3 Checking memory
+    access](#Checking-memory-access)
+    - [4.3.1 Using
+      gctorture](#Using-gctorture)
+    - [4.3.2 Using
+      valgrind](#Using-valgrind)
+    - [4.3.3 Using the Address
+      Sanitizer](#Using-Address-Sanitizer)
+      - [4.3.3.1 Using the Leak
+        Sanitizer](#Using-Leak-Sanitizer)
+    - [4.3.4 Using the Undefined Behaviour
+      Sanitizer](#Using-Undefined-Behaviour-Sanitizer)
+    - [4.3.5 Other analyses with
+      'clang'](#Other-analyses-with-_0060clang_0027)
+    - [4.3.6 Using 'Dr.
+      Memory'](#Using-_0060Dr_002e-Memory_0027)
+    - [4.3.7 Fortran array bounds
+      checking](#Fortran-array-bounds-checking)
+  - [4.4 Debugging compiled
+    code](#Debugging-compiled-code)
+    - [4.4.1 Finding entry points in dynamically loaded
+      code](#Finding-entry-points)
+    - [4.4.2 Inspecting R objects when
+      debugging](#Inspecting-R-objects)
+  - [4.5 Using Link-time
+    Optimization](#Using-Link_002dtime-Optimization)
+- [5 System and foreign language
+  interfaces](#System-and-foreign-language-interfaces)
+  - [5.1 Operating system
+    access](#Operating-system-access)
+  - [5.2 Interface functions `.C` and
+    `.Fortran`](#Interface-functions-_002eC-and-_002eFortran)
+  - [5.3 `dyn.load` and
+    `dyn.unload`](#dyn_002eload-and-dyn_002eunload)
+  - [5.4 Registering native
+    routines](#Registering-native-routines)
+    - [5.4.1 Speed
+      considerations](#Speed-considerations)
+    - [5.4.2 Example: converting a package to use
+      registration](#Converting-a-package-to-use-registration)
+    - [5.4.3 Linking to native routines in other
+      packages](#Linking-to-native-routines-in-other-packages)
+  - [5.5 Creating shared
+    objects](#Creating-shared-objects)
+  - [5.6 Interfacing C++
+    code](#Interfacing-C_002b_002b-code)
+    - [5.6.1 External C++
+      code](#External-C_002b_002b-code)
+  - [5.7 Fortran I/O](#Fortran-I_002fO)
+  - [5.8 Linking to other
+    packages](#Linking-to-other-packages)
+    - [5.8.1
+      Unix-alikes](#Unix_002dalikes)
+    - [5.8.2 Windows](#Windows)
+  - [5.9 Handling R objects in
+    C](#Handling-R-objects-in-C)
+    - [5.9.1 Handling the effects of garbage
+      collection](#Garbage-Collection)
+    - [5.9.2 Allocating
+      storage](#Allocating-storage)
+    - [5.9.3 Details of R
+      types](#Details-of-R-types)
+    - [5.9.4 Attributes](#Attributes)
+    - [5.9.5 Classes](#Classes)
+    - [5.9.6 Handling
+      lists](#Handling-lists)
+    - [5.9.7 Handling character
+      data](#Handling-character-data)
+    - [5.9.8 Finding and setting
+      variables](#Finding-and-setting-variables)
+    - [5.9.9 Some convenience
+      functions](#Some-convenience-functions)
+      - [5.9.9.1 Semi-internal convenience
+        functions](#Semi_002dinternal-convenience-functions)
+    - [5.9.10 Named objects and
+      copying](#Named-objects-and-copying)
+  - [5.10 Interface functions `.Call` and
+    `.External`](#Interface-functions-_002eCall-and-_002eExternal)
+    - [5.10.1 Calling
+      `.Call`](#Calling-_002eCall)
+    - [5.10.2 Calling
+      `.External`](#Calling-_002eExternal)
+    - [5.10.3 Missing and special
+      values](#Missing-and-special-values)
+  - [5.11 Evaluating R expressions from
+    C](#Evaluating-R-expressions-from-C)
+    - [5.11.1
+      Zero-finding](#Zero_002dfinding)
+    - [5.11.2 Calculating numerical
+      derivatives](#Calculating-numerical-derivatives)
+  - [5.12 Parsing R code from
+    C](#Parsing-R-code-from-C)
+    - [5.12.1 Accessing source
+      references](#Accessing-source-references)
+  - [5.13 External pointers and weak
+    references](#External-pointers-and-weak-references)
+    - [5.13.1 An
+      example](#An-external-pointer-example)
+  - [5.14 Vector accessor
+    functions](#Vector-accessor-functions)
+  - [5.15 Character encoding
+    issues](#Character-encoding-issues)
+- [6 The R API: entry points for C
+  code](#The-R-API)
+  - [6.1 Memory
+    allocation](#Memory-allocation)
+    - [6.1.1 Transient storage
+      allocation](#Transient-storage-allocation)
+    - [6.1.2 User-controlled
+      memory](#User_002dcontrolled-memory)
+  - [6.2 Error signaling](#Error-signaling)
+    - [6.2.1 Error signaling from
+      Fortran](#Error-signaling-from-Fortran)
+  - [6.3 Random number
+    generation](#Random-numbers)
+  - [6.4 Missing and IEEE special
+    values](#Missing-and-IEEE-values)
+  - [6.5 Printing](#Printing)
+    - [6.5.1 Printing from
+      Fortran](#Printing-from-Fortran)
+  - [6.6 Calling C from Fortran and vice
+    versa](#Calling-C-from-Fortran-and-vice-versa)
+    - [6.6.1 Fortran character
+      strings](#Fortran-character-strings)
+    - [6.6.2 Fortran
+      LOGICAL](#Fortran-LOGICAL)
+  - [6.7 Numerical analysis
+    subroutines](#Numerical-analysis-subroutines)
+    - [6.7.1 Distribution
+      functions](#Distribution-functions)
+    - [6.7.2 Mathematical
+      functions](#Mathematical-functions)
+    - [6.7.3 Numerical
+      Utilities](#Numerical-Utilities)
+    - [6.7.4 Mathematical
+      constants](#Mathematical-constants)
+  - [6.8 Optimization](#Optimization)
+  - [6.9 Integration](#Integration)
+  - [6.10 Utility
+    functions](#Utility-functions)
+  - [6.11 Re-encoding](#Re_002dencoding)
+  - [6.12 Condition handling and cleanup
+    code](#Condition-handling-and-cleanup-code)
+  - [6.13 Allowing
+    interrupts](#Allowing-interrupts)
+  - [6.14 Platform and version
+    information](#Platform-and-version-information)
+  - [6.15 Inlining C
+    functions](#Inlining-C-functions)
+  - [6.16 Controlling
+    visibility](#Controlling-visibility)
+  - [6.17 Using these functions in your own C
+    code](#Standalone-Mathlib)
+  - [6.18 Organization of header
+    files](#Organization-of-header-files)
+- [7 Generic functions and
+  methods](#Generic-functions-and-methods)
+  - [7.1 Adding new
+    generics](#Adding-new-generics)
+- [8 Linking GUIs and other front-ends to
+  R](#Linking-GUIs-and-other-front_002dends-to-R)
+  - [8.1 Embedding R under
+    Unix-alikes](#Embedding-R-under-Unix_002dalikes)
+    - [8.1.1 Compiling against the R
+      library](#Compiling-against-the-R-library)
+    - [8.1.2 Setting R
+      callbacks](#Setting-R-callbacks)
+    - [8.1.3 Registering
+      symbols](#Registering-symbols)
+    - [8.1.4 Meshing event
+      loops](#Meshing-event-loops)
+    - [8.1.5 Threading
+      issues](#Threading-issues)
+  - [8.2 Embedding R under
+    Windows](#Embedding-R-under-Windows)
+    - [8.2.1 Using
+      (D)COM](#Using-_0028D_0029COM)
+    - [8.2.2 Calling R.dll
+      directly](#Calling-R_002edll-directly)
+    - [8.2.3 Finding
+      R_HOME](#Finding-R_005fHOME)
+- [Function and variable
+  index](#Function-and-variable-index)
+- [Concept index](#Concept-index)
 
- 
-Next: [Acknowledgements](#Acknowledgements)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-Writing R Extensions 
-====================
+# Writing R Extensions
 
 This is a guide to extending R, describing the process of creating R
 add-on packages, writing R documentation, R's system and foreign
@@ -378,46 +370,34 @@ Copyright © 1999--2018 R Core Team
 > versions, except that this permission notice may be stated in a
 > translation approved by the R Core Team.
 
-  ----------------------------------------------------------------------------------------- ---- --
-  • [Acknowledgements](#Acknowledgements)                                                        
-  • [Creating R packages](#Creating-R-packages)                                                  
-  • [Writing R documentation files](#Writing-R-documentation-files)                              
-  • [Tidying and profiling R code](#Tidying-and-profiling-R-code)                                
-  • [Debugging](#Debugging)                                                                      
-  • [System and foreign language interfaces](#System-and-foreign-language-interfaces)            
-  • [The R API](#The-R-API)                                                                      
-  • [Generic functions and methods](#Generic-functions-and-methods)                              
-  • [Linking GUIs and other front-ends to R](#Linking-GUIs-and-other-front_002dends-to-R)        
-  • [Function and variable index](#Function-and-variable-index)                                  
-  • [Concept index](#Concept-index)                                                              
-  ----------------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Acknowledgements](#Acknowledgements)     
+ • [Creating R packages](#Creating-R-packages)     
+ • [Writing R documentation files](#Writing-R-documentation-files)     
+ • [Tidying and profiling R code](#Tidying-and-profiling-R-code)     
+ • [Debugging](#Debugging)     
+ • [System and foreign language interfaces](#System-and-foreign-language-interfaces)     
+ • [The R API](#The-R-API)     
+ • [Generic functions and methods](#Generic-functions-and-methods)     
+ • [Linking GUIs and other front-ends to R](#Linking-GUIs-and-other-front_002dends-to-R)     
+ • [Function and variable index](#Function-and-variable-index)     
+ • [Concept index](#Concept-index)
 
- 
-Next: [Creating R packages](#Creating-R-packages), Previous:
-[Top](#Top), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-Acknowledgements 
-----------------
+---
+
+## Acknowledgements
 
 The contributions to early versions of this manual by Saikat DebRoy (who
 wrote the first draft of a guide to using `.Call` and `.External`) and
 Adrian Trapletti (who provided information on the C++ interface) are
 gratefully acknowledged.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Writing R documentation files](#Writing-R-documentation-files),
-Previous: [Acknowledgements](#Acknowledgements), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-1 Creating R packages 
----------------------
-
- 
+## 1 Creating R packages
 
 Packages provide a mechanism for loading optional code, data and
 documentation as needed. The R distribution itself includes about 30
@@ -427,8 +407,7 @@ In the following, we assume that you know the `library()` command,
 including its `lib.loc` argument, and we also assume basic knowledge of
 the `R CMD INSTALL` utility. Otherwise, please look at R's help pages on
 
- 
-``` 
+```r
 ?library
 ?INSTALL
 ```
@@ -444,69 +423,68 @@ Once a source package is created, it must be installed by the command
 [Add-on-packages](./R-admin.html#Add_002don-packages) in R Installation
 and Administration.
 
-Other types of extensions are supported (but rare): See [Package
-types](#Package-types).
+Other types of extensions are supported (but rare): See [Package types](#Package-types).
 
 Some notes on terminology complete this introduction. These will help
 with the reading of this manual, and also in describing concepts
 accurately when asking for help.
 
-A *package* is a directory of files which extend R, a *source package*
+A _package_ is a directory of files which extend R, a _source package_
 (the master files of a package), or a tarball containing the files of a
-source package, or an *installed* package, the result of running
+source package, or an _installed_ package, the result of running
 `R CMD INSTALL` on a source package. On some platforms (notably macOS
-and Windows) there are also *binary packages*, a zip file or tarball
+and Windows) there are also _binary packages_, a zip file or tarball
 containing the files of an installed package which can be unpacked
 rather than installing from sources.
 
-A package is **not**[^1^](#FOOT1) a *library*. The latter is
+A package is **not**[^1^](#FOOT1) a _library_. The latter is
 used in two senses in R documentation.
 
--   A directory into which packages are installed, e.g.
-    `/usr/lib/R/library`: in that sense it is sometimes
-    referred to as a *library directory* or *library tree* (since the
-    library is a directory which contains packages as directories, which
-    themselves contain directories).
--   That used by the operating system, as a shared, dynamic or static
-    library or (especially on Windows) a DLL, where the second L stands
-    for 'library'. Installed packages may contain compiled code in what
-    is known on Unix-alikes as a *shared object* and on Windows as a
-    DLL. The concept of a *shared library* (*dynamic library* on macOS)
-    as a collection of compiled code to which a package might link is
-    also used, especially for R itself on some platforms. On most
-    platforms these concepts are interchangeable (shared objects and
-    DLLs can both be loaded into the R process and be linked against),
-    but macOS distinguishes between shared objects (extension
-    `.so`) and dynamic libraries (extension `.dylib`).
+- A directory into which packages are installed, e.g.
+  `/usr/lib/R/library`: in that sense it is sometimes
+  referred to as a _library directory_ or _library tree_ (since the
+  library is a directory which contains packages as directories, which
+  themselves contain directories).
+- That used by the operating system, as a shared, dynamic or static
+  library or (especially on Windows) a DLL, where the second L stands
+  for 'library'. Installed packages may contain compiled code in what
+  is known on Unix-alikes as a _shared object_ and on Windows as a
+  DLL. The concept of a _shared library_ (_dynamic library_ on macOS)
+  as a collection of compiled code to which a package might link is
+  also used, especially for R itself on some platforms. On most
+  platforms these concepts are interchangeable (shared objects and
+  DLLs can both be loaded into the R process and be linked against),
+  but macOS distinguishes between shared objects (extension
+  `.so`) and dynamic libraries (extension `.dylib`).
 
 There are a number of well-defined operations on source packages.
 
--   The most common is *installation* which takes a source package and
-    installs it in a library using `R CMD INSTALL` or
-    `install.packages`.
--   Source packages can be *built*. This involves taking a source
-    directory and creating a tarball ready for distribution, including
-    cleaning it up and creating PDF documentation from any *vignettes*
-    it may contain. Source packages (and most often tarballs) can be
-    *checked*, when a test installation is done and tested (including
-    running its examples); also, the contents of the package are tested
-    in various ways for consistency and portability.
--   *Compilation* is not a correct term for a package. Installing a
-    source package which contains C, C++ or Fortran code will involve
-    compiling that code. There is also the possibility of 'byte'
-    compiling the R code in a package (using the facilities of package
-    **compiler**): nowadays this is enabled by default for all packages.
-    So *compiling* a package may come to mean byte-compiling its R code.
--   It used to be unambiguous to talk about *loading* an installed
-    package using `library()`, but since the advent of package
-    namespaces this has been less clear: people now often talk about
-    *loading* the package's namespace and then *attaching* the package
-    so it becomes visible on the search path. Function `library`
-    performs both steps, but a package's namespace can be loaded without
-    the package being attached (for example by calls like
-    `splines::ns`).
+- The most common is _installation_ which takes a source package and
+  installs it in a library using `R CMD INSTALL` or
+  `install.packages`.
+- Source packages can be _built_. This involves taking a source
+  directory and creating a tarball ready for distribution, including
+  cleaning it up and creating PDF documentation from any _vignettes_
+  it may contain. Source packages (and most often tarballs) can be
+  _checked_, when a test installation is done and tested (including
+  running its examples); also, the contents of the package are tested
+  in various ways for consistency and portability.
+- _Compilation_ is not a correct term for a package. Installing a
+  source package which contains C, C++ or Fortran code will involve
+  compiling that code. There is also the possibility of 'byte'
+  compiling the R code in a package (using the facilities of package
+  **compiler**): nowadays this is enabled by default for all packages.
+  So _compiling_ a package may come to mean byte-compiling its R code.
+- It used to be unambiguous to talk about _loading_ an installed
+  package using `library()`, but since the advent of package
+  namespaces this has been less clear: people now often talk about
+  _loading_ the package's namespace and then _attaching_ the package
+  so it becomes visible on the search path. Function `library`
+  performs both steps, but a package's namespace can be loaded without
+  the package being attached (for example by calls like
+  `splines::ns`).
 
-The concept of *lazy loading* of code or data is mentioned at several
+The concept of _lazy loading_ of code or data is mentioned at several
 points. This is part of the installation, always selected for R code but
 optional for data. When used the R objects of the package are created at
 installation time and stored in a database in the `R` directory
@@ -521,29 +499,25 @@ join in the collaborative project and to submit their own packages to
 CRAN: current instructions are linked from
 <https://CRAN.R-project.org/banner.shtml#submitting>.
 
-  --------------------------------------------------------------------- ---- --
-  • [Package structure](#Package-structure)                                  
-  • [Configure and cleanup](#Configure-and-cleanup)                          
-  • [Checking and building packages](#Checking-and-building-packages)        
-  • [Writing package vignettes](#Writing-package-vignettes)                  
-  • [Package namespaces](#Package-namespaces)                                
-  • [Writing portable packages](#Writing-portable-packages)                  
-  • [Diagnostic messages](#Diagnostic-messages)                              
-  • [Internationalization](#Internationalization)                            
-  • [CITATION files](#CITATION-files)                                        
-  • [Package types](#Package-types)                                          
-  • [Services](#Services)                                                    
-  --------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Package structure](#Package-structure)     
+ • [Configure and cleanup](#Configure-and-cleanup)     
+ • [Checking and building packages](#Checking-and-building-packages)     
+ • [Writing package vignettes](#Writing-package-vignettes)     
+ • [Package namespaces](#Package-namespaces)     
+ • [Writing portable packages](#Writing-portable-packages)     
+ • [Diagnostic messages](#Diagnostic-messages)     
+ • [Internationalization](#Internationalization)     
+ • [CITATION files](#CITATION-files)     
+ • [Package types](#Package-types)     
+ • [Services](#Services)
 
- 
-Next: [Configure and cleanup](#Configure-and-cleanup), Previous:
-[Creating R packages](#Creating-R-packages), Up: [Creating R
-packages](#Creating-R-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 1.1 Package structure 
+---
+
+### 1.1 Package structure
 
 The sources of an R package consists of a subdirectory containing a
 files `DESCRIPTION` and `NAMESPACE`, and the
@@ -567,8 +541,6 @@ whose name starts with a dot).
 The `DESCRIPTION` and `INDEX` files are described in
 the subsections below. The `NAMESPACE` file is described in the
 section on [Package namespaces](#Package-namespaces).
-
- 
 
 The optional files `configure` and `cleanup` are
 (Bourne) shell scripts which are, respectively, executed before and (if
@@ -598,78 +570,16 @@ addition, files with names '`con`', '`prn`',
 '`lpt9`' after conversion to lower case and stripping possible
 "extensions" (e.g., '`lpt5.foo.bar`'), are disallowed. Also,
 file names in the same directory must not differ only by case (see the
-previous paragraph). In addition, the basenames of '`.Rd`'
-files may be used in URLs and so must be ASCII and not contain `%`. For
-maximal portability filenames should only contain only ASCII characters
-not excluded already (that is `A-Za-z0-9._!#$%&+,;=@^(){}'` --- we
-exclude space as many utilities do not accept spaces in file paths):
-non-English alphabetic characters cannot be guaranteed to be supported
-in all locales. It would be good practice to avoid the shell
-metacharacters `(){}'$~`: `~` is also used as part of '8.3' filenames
-on Windows. In addition, packages are normally distributed as tarballs,
-and these have a limit on path lengths: for maximal portability 100
-bytes.
 
-A source package if possible should not contain binary executable files:
-they are not portable, and a security risk if they are of the
-appropriate architecture. `R CMD check` will warn about
-them[^4^](#FOOT4) unless they are listed (one filepath per line)
-in a file `BinaryFiles` at the top level of the package. Note
-that CRAN will not accept submissions containing binary files even if
-they are listed.
-
-The R function `package.skeleton` can help to create the structure for a
-new package: see its help page for details.
-
-  --------------------------------------------------------------- ---- --
-  • [The DESCRIPTION file](#The-DESCRIPTION-file)                      
-  • [Licensing](#Licensing)                                            
-  • [Package Dependencies](#Package-Dependencies)                      
-  • [The INDEX file](#The-INDEX-file)                                  
-  • [Package subdirectories](#Package-subdirectories)                  
-  • [Data in packages](#Data-in-packages)                              
-  • [Non-R scripts in packages](#Non_002dR-scripts-in-packages)        
-  • [Specifying URLs](#Specifying-URLs)                                
-  --------------------------------------------------------------- ---- --
-
-------------------------------------------------------------------------
-
- 
-Next: [Licensing](#Licensing), Previous: [Package
-structure](#Package-structure), Up: [Package
-structure](#Package-structure)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.1 The `DESCRIPTION` file 
+#### 1.1.1 The `DESCRIPTION` file
 
 The `DESCRIPTION` file contains basic information about the
 package in the following format:
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | Package: pkgname                                                      |
-> | Version: 0.5-1                                                        |
-> | Date: 2015-01-01                                                      |
-> | Title: My First Collection of Functions                               |
-> | Authors@R: c(person("Joe", "Developer", role = c("aut", "cre"),       |
-> |                      email = "Joe.Developer@some.domain.net"),        |
-> |               person("Pat", "Developer", role = "aut"),               |
-> |               person("A.", "User", role = "ctb",                      |
-> |                      email = "A.User@whereever.net"))                 |
-> | Author: Joe Developer [aut, cre],                                     |
-> |   Pat Developer [aut],                                                |
-> |   A. User [ctb]                                                       |
-> | Maintainer: Joe Developer <Joe.Developer@some.domain.net>             |
-> | Depends: R (>= 3.1.0), nlme                                           |
-> | Suggests: MASS                                                        |
-> | Description: A (one paragraph) description of what                    |
-> |   the package does and why it may be useful.                          |
-> | License: GPL (>= 2)                                                   |
-> | URL: https://www.r-project.org, http://www.another.url                |
-> | BugReports: https://pkgname.bugtracker.url                            |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | Package: pkgname | | Version: 0.5-1 | | Date: 2015-01-01 | | Title: My First Collection of Functions | | Authors@R: c(person("Joe", "Developer", role = c("aut", "cre"), | | email = "Joe.Developer@some.domain.net"), | | person("Pat", "Developer", role = "aut"), | | person("A.", "User", role = "ctb", | | email = "A.User@whereever.net")) | | Author: Joe Developer [aut, cre], | | Pat Developer [aut], | | A. User [ctb] | | Maintainer: Joe Developer <Joe.Developer@some.domain.net> | | Depends: R (>= 3.1.0), nlme | | Suggests: MASS | | Description: A (one paragraph) description of what | | the package does and why it may be useful. | | License: GPL (>= 2) | | URL: https://www.r-project.org, http://www.another.url | | BugReports: https://pkgname.bugtracker.url | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 The format is that of a version of a 'Debian Control File' (see the help
@@ -686,7 +596,7 @@ For maximal portability, the `DESCRIPTION` file should be
 written entirely in ASCII --- if this is not possible it must contain an
 '`Encoding`' field (see below).
 
-Several optional fields take *logical values*: these can be specified as
+Several optional fields take _logical values_: these can be specified as
 '`yes`', '`true`', '`no`' or
 '`false`': capitalized values are also accepted.
 
@@ -705,7 +615,7 @@ explaining, this should be done in the '`Description`' field
 (and not the '`Title`' field).
 
 The mandatory '`Version`' field gives the version of the
-package. This is a sequence of at least *two* (and usually three)
+package. This is a sequence of at least _two_ (and usually three)
 non-negative integers separated by single '`.`' or
 '`-`' characters. The canonical form is as shown in the
 example, and a version such as '`0.01`' or '`0.01.0`'
@@ -715,9 +625,9 @@ decimal number, so for example `0.9 < 0.75` since `9 < 75`.
 The mandatory '`License`' field is discussed in the next
 subsection.
 
-The mandatory '`Title`' field should give a *short* description
+The mandatory '`Title`' field should give a _short_ description
 of the package. Some package listings may truncate the title to 65
-characters. It should use *title case* (that is, use capitals for the
+characters. It should use _title case_ (that is, use capitals for the
 principal words: `tools::toTitleCase` can help you with this), not use
 any markup, not have any continuation lines, and not end in a period
 (unless part of ...). Do not repeat the package name: it is often used
@@ -725,7 +635,7 @@ prefixed by the name. Refer to other packages and external software in
 single quotes, and to book titles (and similar) in double quotes.
 
 The mandatory '`Description`' field should give a
-*comprehensive* description of what the package does. One can use
+_comprehensive_ description of what the package does. One can use
 several (complete) sentences, but only one paragraph. It should be
 intelligible to all the intended readership (e.g. for a CRAN package to
 all CRAN users). It is good practice not to start with the package name,
@@ -737,23 +647,23 @@ explaining the package name if necessary. URLs should be enclosed in
 angle brackets, e.g. '`<https://www.r-project.org>`': see also
 [Specifying URLs](#Specifying-URLs).
 
-The mandatory '`Author`' field describes who wrote *the
-package*. It is a plain text field intended for human readers, but not
+The mandatory '`Author`' field describes who wrote _the
+package_. It is a plain text field intended for human readers, but not
 for automatic processing (such as extracting the email addresses of all
 listed contributors: for that use '`Authors@R`'). Note that all
 significant contributors must be included: if you wrote an R wrapper for
 the work of others included in the `src` directory, you are not
 the sole (and maybe not even the main) author.
 
-The mandatory '`Maintainer`' field should give a *single* name
-followed by a *valid* (RFC 2822) email address in angle brackets. It
+The mandatory '`Maintainer`' field should give a _single_ name
+followed by a _valid_ (RFC 2822) email address in angle brackets. It
 should not end in a period or comma. This field is what is reported by
 the `maintainer` function and used by `bug.report`. For a CRAN package
-it should be a *person*, not a mailing list and not a corporate entity:
+it should be a _person_, not a mailing list and not a corporate entity:
 do ensure that it is valid and will remain valid for the lifetime of the
 package.
 
-Note that the *display name* (the part before the address in angle
+Note that the _display name_ (the part before the address in angle
 brackets) should be enclosed in double quotes if it contains
 non-alphanumeric characters such as comma or period. (The current
 standard, RFC 5322, allows periods but RFC 2822 did not.)
@@ -761,8 +671,8 @@ standard, RFC 5322, allows periods but RFC 2822 did not.)
 Both '`Author`' and '`Maintainer`' fields can be
 omitted if a suitable '`Authors@R`' field is given. This field
 can be used to provide a refined and machine-readable description of the
-package "authors" (in particular specifying their precise *roles*),
-*via* suitable R code. It should create an object of class `"person"`,
+package "authors" (in particular specifying their precise _roles_),
+_via_ suitable R code. It should create an object of class `"person"`,
 by either a call to `person` or a series of calls (one per "author")
 concatenated by `c()`: see the example `DESCRIPTION` file
 above. The roles can include '`"aut"`' (author) for full
@@ -780,7 +690,7 @@ holder(s) are not the authors. If necessary, this can refer to an
 installed file: the convention is to use file
 `inst/COPYRIGHTS`.
 
-The optional '`Date`' field gives the *release date* of the
+The optional '`Date`' field gives the _release date_ of the
 current version of the package. It is strongly
 recommended[^6^](#FOOT6) to use the '`yyyy-mm-dd`'
 format conforming to the ISO 8601 standard.
@@ -797,8 +707,7 @@ Dependencies external to the R system should be listed in the
 The '`URL`' field may give a list of URLs separated by commas
 or whitespace, for example the homepage of the author or a page where
 additional material describing the software can be found. These URLs are
-converted to active hyperlinks in CRAN package listings. See [Specifying
-URLs](#Specifying-URLs).
+converted to active hyperlinks in CRAN package listings. See [Specifying URLs](#Specifying-URLs).
 
 The '`BugReports`' field may contain a single URL to which bug
 reports about the package should be submitted. This URL will be used by
@@ -819,9 +728,8 @@ A '`Collate`' field can be used for controlling the collation
 order for the R code files in a package when these are processed for
 package installation. The default is to collate according to the
 '`C`' locale. If present, the collate specification must list
-*all* R code files in the package (taking possible OS-specific
-subdirectories into account, see [Package
-subdirectories](#Package-subdirectories)) as a whitespace separated list
+_all_ R code files in the package (taking possible OS-specific
+subdirectories into account, see [Package subdirectories](#Package-subdirectories)) as a whitespace separated list
 of file paths relative to the `R` subdirectory. Paths
 containing white space or quotes need to be quoted. An OS-specific
 collation field ('`Collate.unix`' or
@@ -864,13 +772,12 @@ The '`VignetteBuilder`' field names (in a comma-separated list)
 packages that provide an engine for building vignettes. These may
 include the current package, or ones listed in '`Depends`',
 '`Suggests`' or '`Imports`'. The **utils** package is
-always implicitly appended. See [Non-Sweave
-vignettes](#Non_002dSweave-vignettes) for details. Note that if, for
+always implicitly appended. See [Non-Sweave vignettes](#Non_002dSweave-vignettes) for details. Note that if, for
 example, a vignette has engine '`knitr::rmarkdown`', then
 [**knitr**](https://CRAN.R-project.org/package=knitr) provides the
 engine but both **knitr** and
 [**rmarkdown**](https://CRAN.R-project.org/package=rmarkdown) are needed
-for using it, so *both* these packages need to be in the
+for using it, so _both_ these packages need to be in the
 '`VignetteBuilder`' field and at least suggested (as
 **rmarkdown** is only suggested by **knitr**, and hence not available
 automatically along with it). Many packages using
@@ -887,7 +794,7 @@ encoding of `.Rd` files. The examples are assumed to be in this
 encoding when running `R CMD check`, and it is used for the encoding of
 the `CITATION` file. Only encoding names `latin1`, `latin2` and `UTF-8`
 are known to be portable. (Do not specify an encoding unless one is
-actually needed: doing so makes the package *less* portable. If a
+actually needed: doing so makes the package _less_ portable. If a
 package has a specified encoding, you should run `R CMD build` etc in a
 locale using that encoding.)
 
@@ -958,15 +865,9 @@ authors/developers[^9^](#FOOT9)) and `MailingList` are in common
 use. Some repositories (including CRAN and R-forge) add their own
 fields.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Package Dependencies](#Package-Dependencies), Previous: [The
-DESCRIPTION file](#The-DESCRIPTION-file), Up: [Package
-structure](#Package-structure)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.2 Licensing 
+#### 1.1.2 Licensing
 
 Licensing for a package which might be distributed is an important but
 potentially complex subject.
@@ -988,49 +889,47 @@ holders: if needed, use a '`Copyright`' field.
 
 The mandatory '`License`' field in the `DESCRIPTION`
 file should specify the license of the package in a standardized form.
-Alternatives are indicated *via* vertical bars. Individual
+Alternatives are indicated _via_ vertical bars. Individual
 specifications must be one of
 
--   One of the "standard" short specifications
+- One of the "standard" short specifications
 
-     
-    ``` 
-    GPL-2 GPL-3 LGPL-2 LGPL-2.1 LGPL-3 AGPL-3 Artistic-2.0
-    BSD_2_clause BSD_3_clause MIT
-    ```
-    
+```r
+GPL-2 GPL-3 LGPL-2 LGPL-2.1 LGPL-3 AGPL-3 Artistic-2.0
+BSD_2_clause BSD_3_clause MIT
+```
 
-    as made available *via* <https://www.R-project.org/Licenses/> and
-    contained in subdirectory `share/licenses` of the R source
-    or home directory.
+as made available _via_ <https://www.R-project.org/Licenses/> and
+contained in subdirectory `share/licenses` of the R source
+or home directory.
 
--   The names or abbreviations of other licenses contained in the
-    license data base in file `share/licenses/license.db` in
-    the R source or home directory, possibly (for versioned licenses)
-    followed by a version restriction of the form '`(op v)`'
-    with '`op`' one of the comparison operators '`<`',
-    '`<=`', '`>`', '`>=`', '`==`',
-    or '`!=`' and '`v`' a numeric version
-    specification (strings of non-negative integers separated by
-    '`.`'), possibly combined *via* '`,`' (see below
-    for an example). For versioned licenses, one can also specify the
-    name followed by the version, or combine an existing abbreviation
-    and the version with a '`-`'.
+- The names or abbreviations of other licenses contained in the
+  license data base in file `share/licenses/license.db` in
+  the R source or home directory, possibly (for versioned licenses)
+  followed by a version restriction of the form '`(op v)`'
+  with '`op`' one of the comparison operators '`<`',
+  '`<=`', '`>`', '`>=`', '`==`',
+  or '`!=`' and '`v`' a numeric version
+  specification (strings of non-negative integers separated by
+  '`.`'), possibly combined _via_ '`,`' (see below
+  for an example). For versioned licenses, one can also specify the
+  name followed by the version, or combine an existing abbreviation
+  and the version with a '`-`'.
 
-    Abbreviations `GPL` and `LGPL` are ambiguous and
-    usually[^10^](#FOOT10) taken to mean any version of the
-    license: but it is better not to use them.
+  Abbreviations `GPL` and `LGPL` are ambiguous and
+  usually[^10^](#FOOT10) taken to mean any version of the
+  license: but it is better not to use them.
 
--   One of the strings '`file LICENSE`' or
-    '`file LICENCE`' referring to a file named
-    `LICENSE` or `LICENCE` in the package (source and
-    installation) top-level directory.
+- One of the strings '`file LICENSE`' or
+  '`file LICENCE`' referring to a file named
+  `LICENSE` or `LICENCE` in the package (source and
+  installation) top-level directory.
 
--   The string '`Unlimited`', meaning that there are no
-    restrictions on distribution or use other than those imposed by
-    relevant laws (including copyright laws).
+- The string '`Unlimited`', meaning that there are no
+  restrictions on distribution or use other than those imposed by
+  relevant laws (including copyright laws).
 
-If a package license *restricts* a base license (where permitted, e.g.,
+If a package license _restricts_ a base license (where permitted, e.g.,
 using GPL-3 or AGPL-3 with an attribution clause), the additional terms
 should be placed in file `LICENSE` (or `LICENCE`), and
 the string '`+ file LICENSE`' (or '`+ file LICENCE`',
@@ -1041,8 +940,7 @@ includes it.
 
 Examples of standardized specifications include
 
- 
-``` 
+```r
 License: GPL-2
 License: LGPL (>= 2.0, < 3) | Mozilla Public License
 License: GPL-2 | file LICENCE
@@ -1067,35 +965,28 @@ to be FOSS, and '`License_restricts_use`' can have values
 known to restrict users or usage, or known not to. These are used by,
 e.g., the `available.packages` filters.
 
- 
-
 The optional file `LICENSE`/`LICENCE` contains a copy
 of the license of the package. To avoid any confusion only include such
 a file if it is referred to in the '`License`' field of the
 `DESCRIPTION` file.
 
-Whereas you should feel free to include a license file in your *source*
-distribution, please do not arrange to *install* yet another copy of the
+Whereas you should feel free to include a license file in your _source_
+distribution, please do not arrange to _install_ yet another copy of the
 GNU `COPYING` or `COPYING.LIB` files but refer to the
 copies on <https://www.R-project.org/Licenses/> and included in the R
 distribution (in directory `share/licenses`). Since files named
-`LICENSE` or `LICENCE` *will* be installed, do not use
+`LICENSE` or `LICENCE` _will_ be installed, do not use
 these names for standard license files. To include comments about the
 licensing rather than the body of a license, use a file named something
 like `LICENSE.note`.
 
 A few "standard" licenses are rather license templates which need
-additional information to be completed *via*
+additional information to be completed _via_
 '`+ file LICENSE`'.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [The INDEX file](#The-INDEX-file), Previous:
-[Licensing](#Licensing), Up: [Package structure](#Package-structure)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.3 Package Dependencies 
+#### 1.1.3 Package Dependencies
 
 The '`Depends`' field gives a comma-separated list of package
 names which this package depends on. Those packages will be attached
@@ -1139,7 +1030,7 @@ requirements) before the current package.
 The '`Imports`' field lists packages whose namespaces are
 imported from (as specified in the `NAMESPACE` file) but which
 do not need to be attached. Namespaces accessed by the '`::`'
-and '``' operators must be listed here, or in
+and '`:::`' operators must be listed here, or in
 '`Suggests`' or '`Enhances`' (see below). Ideally this
 field will include all the standard packages that are used, and it is
 important to include S4-using packages (as their class definitions can
@@ -1175,27 +1066,27 @@ another package it should be in '`Suggests`' and not
 
 The general rules are
 
--   A package should be listed in only one of these fields.
--   Packages whose namespace only is needed to load the package using
-    `library(pkgname)` should be listed in the '`Imports`'
-    field and not in the '`Depends`' field. Packages listed in
-    `import` or `importFrom` directives in the `NAMESPACE` file
-    should almost always be in '`Imports`' and not
-    '`Depends`'.
--   Packages that need to be attached to successfully load the package
-    using `library(pkgname)` must be listed in the '`Depends`'
-    field.
--   All packages that are needed[^12^](#FOOT12) to successfully
-    run `R CMD check` on the package must be listed in one of
-    '`Depends`' or '`Suggests`' or
-    '`Imports`'. Packages used to run examples or tests
-    conditionally (e.g. *via* `if(require(pkgname))`) should be listed
-    in '`Suggests`' or '`Enhances`'. (This allows
-    checkers to ensure that all the packages needed for a complete check
-    are installed.)
--   Packages needed to use datasets from the package should be in
-    '`Imports`': this includes those needed to define S4
-    classes used.
+- A package should be listed in only one of these fields.
+- Packages whose namespace only is needed to load the package using
+  `library(pkgname)` should be listed in the '`Imports`'
+  field and not in the '`Depends`' field. Packages listed in
+  `import` or `importFrom` directives in the `NAMESPACE` file
+  should almost always be in '`Imports`' and not
+  '`Depends`'.
+- Packages that need to be attached to successfully load the package
+  using `library(pkgname)` must be listed in the '`Depends`'
+  field.
+- All packages that are needed[^12^](#FOOT12) to successfully
+  run `R CMD check` on the package must be listed in one of
+  '`Depends`' or '`Suggests`' or
+  '`Imports`'. Packages used to run examples or tests
+  conditionally (e.g. _via_ `if(require(pkgname))`) should be listed
+  in '`Suggests`' or '`Enhances`'. (This allows
+  checkers to ensure that all the packages needed for a complete check
+  are installed.)
+- Packages needed to use datasets from the package should be in
+  '`Imports`': this includes those needed to define S4
+  classes used.
 
 In particular, packages providing "only" data for examples or vignettes
 should be listed in '`Suggests`' rather than
@@ -1229,7 +1120,7 @@ needed parts of those packages are available when some other package
 imports the current package.
 
 The '`Imports`' field should not contain packages which are not
-imported from (*via* the `NAMESPACE` file or `::` or ``
+imported from (_via_ the `NAMESPACE` file or `::` or `:::`
 operators), as all the packages listed in that field need to be
 installed for the current package to be installed. (This is checked by
 `R CMD check`.)
@@ -1239,14 +1130,13 @@ exceptionally. Such calls are never needed for packages listed in
 '`Depends`' as they will already be on the search path. It used
 to be common practice to use `require` calls for packages listed in
 '`Suggests`' in functions which used their functionality, but
-nowadays it is better to access such functionality *via* `::` calls.
+nowadays it is better to access such functionality _via_ `::` calls.
 
 A package that wishes to make use of header files in other packages
 needs to declare them as a comma-separated list in the field
 '`LinkingTo`' in the `DESCRIPTION` file. For example
 
- 
-``` 
+```r
 LinkingTo: link1, link2
 ```
 
@@ -1272,33 +1162,29 @@ found. It is currently used by `R CMD check` to check that the packages
 can be found, at least as source packages (which can be installed on any
 platform).
 
-  --------------------------------------------- ---- --
-  • [Suggested packages](#Suggested-packages)        
-  --------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Suggested packages](#Suggested-packages)
 
- 
-Previous: [Package Dependencies](#Package-Dependencies), Up: [Package
-Dependencies](#Package-Dependencies)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.1.3.1 Suggested packages 
+---
+
+#### 1.1.3.1 Suggested packages
 
 Note that someone wanting to run the examples/tests/vignettes may not
 have a suggested package available (and it may not even be possible to
 install it for that platform). The recommendation used to be to make
-their use conditional *via* `if(require("pkgname"))`: this is OK if that
+their use conditional _via_ `if(require("pkgname"))`: this is OK if that
 conditioning is done in examples/tests/vignettes, although using
 `if(requireNamespace("pkgname"))` is preferred, if possible.
 
-However, using `require` for conditioning *in package code* is not good
+However, using `require` for conditioning _in package code_ is not good
 practice as it alters the search path for the rest of the session and
 relies on functions in that package not being masked by other `require`
 or `library` calls. It is better practice to use code like
 
- 
-``` 
+```r
    if (requireNamespace("rgl", quietly = TRUE)) {
       rgl::plot3d(...)
    } else {
@@ -1327,9 +1213,9 @@ Some people have assumed that a 'recommended' package in
 not so. (R can be installed without recommended packages, and which
 packages are 'recommended' may change.)
 
-As noted above, packages in '`Enhances`' *must* be used
+As noted above, packages in '`Enhances`' _must_ be used
 conditionally and hence objects within them should always be accessed
-*via* `::`.
+_via_ `::`.
 
 On most systems, `R CMD check` can be run with only those packages
 declared in '`Depends`' and '`Imports`' by setting
@@ -1339,15 +1225,9 @@ those in '`Enhances`' nor those not mentioned in the
 `DESCRIPTION` file. It is recommended that a package is checked
 with each of these set, as well as with neither.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Package subdirectories](#Package-subdirectories), Previous:
-[Package Dependencies](#Package-Dependencies), Up: [Package
-structure](#Package-structure)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.4 The `INDEX` file 
+#### 1.1.4 The `INDEX` file
 
 The optional file `INDEX` contains a line for each sufficiently
 interesting object in the package, giving its name and a description
@@ -1363,14 +1243,9 @@ information about the package into an overview help page (see
 [Documenting packages](#Documenting-packages)) and/or a vignette (see
 [Writing package vignettes](#Writing-package-vignettes)).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Data in packages](#Data-in-packages), Previous: [The INDEX
-file](#The-INDEX-file), Up: [Package structure](#Package-structure)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.5 Package subdirectories 
+#### 1.1.5 Package subdirectories
 
 The `R` subdirectory contains R code files, only. The code
 files to be installed must start with an ASCII (lower or upper case)
@@ -1386,7 +1261,7 @@ side effects such as `require` and `options`. If computations are
 required to create objects these can use code 'earlier' in the package
 (see the '`Collate`' field) plus functions in the
 '`Depends`' packages provided that the objects created do not
-depend on those packages except *via* namespace imports.
+depend on those packages except _via_ namespace imports.
 
 Two exceptions are allowed: if the `R` subdirectory contains a
 file `sysdata.rda` (a saved image of one or more R objects:
@@ -1394,7 +1269,7 @@ please use suitable compression as suggested by `tools::resaveRdaFiles`,
 and see also the '`SysDataCompression`' `DESCRIPTION`
 field.) this will be lazy-loaded into the namespace environment -- this
 is intended for system datasets that are not intended to be
-user-accessible *via* `data`. Also, files ending in '`.in`'
+user-accessible _via_ `data`. Also, files ending in '`.in`'
 will be allowed in the `R` directory to allow a
 `configure` script to generate suitable files.
 
@@ -1412,7 +1287,7 @@ Various R functions in a package can be used to initialize and clean up.
 See [Load hooks](#Load-hooks).
 
 The `man` subdirectory should contain (only) documentation
-files for the objects in the package in *R documentation* (Rd) format.
+files for the objects in the package in _R documentation_ (Rd) format.
 The documentation filenames must start with an ASCII (lower or upper
 case) letter or digit and have the extension `.Rd` (the
 default) or `.rd`. Further, the names must be valid in
@@ -1420,7 +1295,7 @@ default) or `.rd`. Further, the names must be valid in
 be entirely ASCII and not contain '`%`'. See [Writing R
 documentation files](#Writing-R-documentation-files), for more
 information. Note that all user-level objects in a package should be
-documented; if a package `pkg` contains user-level objects
+documented; if a package `pkg`{.variable} contains user-level objects
 which are for "internal" use only, it should provide a file
 `pkg-internal.Rd` which documents all such objects, and clearly
 states that these are not meant to be called by the user. See e.g. the
@@ -1497,7 +1372,7 @@ be installed in a multi-architecture setting since
 and it only copies shared objects/DLLs. If a package wants to install
 other binaries (for example executable programs), it should provide an R
 script `src/install.libs.R` which will be run as part of the
-installation in the `src` build directory *instead of* copying the
+installation in the `src` build directory _instead of_ copying the
 shared objects/DLLs. The script is run in a separate R environment
 containing the following variables: `R_PACKAGE_NAME` (the name of the
 package), `R_PACKAGE_SOURCE` (the path to the source directory of the
@@ -1508,8 +1383,7 @@ empty), `SHLIB_EXT` (the extension of shared objects) and `WINDOWS`
 behavior could be replicated with the following
 `src/install.libs.R` file:
 
- 
-``` 
+```r
 files <- Sys.glob(paste0("*", SHLIB_EXT))
 dest <- file.path(R_PACKAGE_DIR, paste0('libs', R_ARCH))
 dir.create(dest, recursive = TRUE, showWarnings = FALSE)
@@ -1521,8 +1395,7 @@ if(file.exists("symbols.rds"))
 On the other hand, executable programs could be installed along the
 lines of
 
- 
-``` 
+```r
 execs <- c("one", "two", "three")
 if(WINDOWS) execs <- paste0(execs, ".exe")
 if ( any(file.exists(execs)) ) {
@@ -1535,10 +1408,9 @@ if ( any(file.exists(execs)) ) {
 Note the use of architecture-specific subdirectories of `bin`
 where needed.
 
-The `data` subdirectory is for data files: See [Data in
-packages](#Data-in-packages).
+The `data` subdirectory is for data files: See [Data in packages](#Data-in-packages).
 
-The `demo` subdirectory is for R scripts (for running *via*
+The `demo` subdirectory is for R scripts (for running _via_
 `demo()`) that demonstrate some of the functionality of the package.
 Demos may be interactive and are not checked automatically, so if
 testing is desired use code in the `tests` directory to achieve
@@ -1548,8 +1420,7 @@ present, the `demo` subdirectory should also have a
 `00Index` file with one line for each demo, giving its name and
 a description separated by a tab or at least three spaces. (This index
 file is not generated automatically.) Note that a demo does not have a
-specified encoding and so should be an ASCII file (see [Encoding
-issues](#Encoding-issues)). Function `demo()` will use the package
+specified encoding and so should be an ASCII file (see [Encoding issues](#Encoding-issues)). Function `demo()` will use the package
 encoding if there is one, but this is mainly useful for non-ASCII
 comments.
 
@@ -1571,7 +1442,7 @@ files in `inst/doc` based on the extension.
 
 Note that with the exceptions of `INDEX`,
 `LICENSE`/`LICENCE` and `NEWS`, information
-files at the top level of the package will *not* be installed and so not
+files at the top level of the package will _not_ be installed and so not
 be known to users of Windows and macOS compiled packages (and not seen
 by those who use `R CMD INSTALL` or `install.packages` on the tarball).
 So any information files you wish an end user to see should be included
@@ -1579,15 +1450,11 @@ in `inst`. Note that if the named exceptions also occur in
 `inst`, the version in `inst` will be that seen in the
 installed package.
 
-  
-
 Things you might like to add to `inst` are a
 `CITATION` file for use by the `citation` function, and a
 `NEWS.Rd` file for use by the `news` function. See its help
 page for the specific format restrictions of the `NEWS.Rd`
 file.
-
- 
 
 Another file sometimes needed in `inst` is `AUTHORS`
 or `COPYRIGHTS` to specify the authors or copyright holders
@@ -1596,7 +1463,7 @@ when this is too complex to put in the `DESCRIPTION` file.
 Subdirectory `tests` is for additional package-specific test
 code, similar to the specific tests that come with the R distribution.
 Test code can either be provided directly in a `.R` (or
-`.r` as from R 3.4.0) file, or *via* a `.Rin` file
+`.r` as from R 3.4.0) file, or _via_ a `.Rin` file
 containing code which in turn creates the corresponding `.R`
 file (e.g., by collecting all function objects in the package and then
 calling them with the strangest arguments). The results of running a
@@ -1633,29 +1500,23 @@ Perl, or Tcl. NB: only files (and not directories) under `exec`
 are installed (and those with names starting with a dot are ignored),
 and they are all marked as executable (mode `755`, moderated by
 '`umask`') on POSIX platforms. Note too that this is not
-suitable for executable *programs* since some platforms (including
+suitable for executable _programs_ since some platforms (including
 Windows) support multiple architectures using the same installed package
 directory.
 
-Subdirectory `po` is used for files related to *localization*:
+Subdirectory `po` is used for files related to _localization_:
 see [Internationalization](#Internationalization).
 
 Subdirectory `tools` is the preferred place for auxiliary files
 needed during configuration, and also for sources need to re-create
 scripts (e.g. M4 files for `autoconf`).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Non-R scripts in packages](#Non_002dR-scripts-in-packages),
-Previous: [Package subdirectories](#Package-subdirectories), Up:
-[Package structure](#Package-structure)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.6 Data in packages 
+#### 1.1.6 Data in packages
 
 The `data` subdirectory is for data files, either to be made
-available *via* lazy-loading or for loading using `data()`. (The choice
+available _via_ lazy-loading or for loading using `data()`. (The choice
 is made by the '`LazyData`' field in the `DESCRIPTION`
 file: the default is not to do so.) It should not be used for other data
 files needed by the package, and the convention has grown up to use
@@ -1740,15 +1601,9 @@ than 1MB otherwise `gzip`.
 Lazy-loading is not supported for very large datasets (those which when
 serialized exceed 2GB, the limit for the format on 32-bit platforms).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Specifying URLs](#Specifying-URLs), Previous: [Data in
-packages](#Data-in-packages), Up: [Package
-structure](#Package-structure)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.7 Non-R scripts in packages 
+#### 1.1.7 Non-R scripts in packages
 
 Code which needs to be compiled (C, C++, Fortran ...) is included in the
 `src` subdirectory and discussed elsewhere in this document.
@@ -1773,13 +1628,13 @@ should not be installed.
 
 If your package requires one of these interpreters or an extension then
 this should be declared in the '`SystemRequirements`' field of
-its `DESCRIPTION` file. (Users of Java most often do so *via*
+its `DESCRIPTION` file. (Users of Java most often do so _via_
 [**rJava**](https://CRAN.R-project.org/package=rJava), when depending
 on/importing that suffices.)
 
 Windows and Mac users should be aware that the Tcl extensions
 '`BWidget`' and '`Tktable`' which are currently
-included with the R for Windows and in the macOS installers *are*
+included with the R for Windows and in the macOS installers _are_
 extensions and do need to be declared for users of other platforms (and
 that '`Tktable`' is less widely available than it used to be,
 including not in the main repositories for major Linux distributions).
@@ -1787,8 +1642,7 @@ including not in the main repositories for major Linux distributions).
 '`BWidget`' needs to be installed by the user on other OSes.
 This is fairly easy to do: first find the Tcl/Tk search path:
 
- 
-``` 
+```r
 library(tcltk)
 strsplit(tclvalue('auto_path'), " ")[[1]]
 ```
@@ -1797,8 +1651,7 @@ then download the sources from
 <https://sourceforge.net/projects/tcllib/files/BWidget/> and at the
 command line run something like
 
- 
-``` 
+```r
 tar xf bwidget-1.9.8.tar.gz
 sudo mv bwidget-1.9.8 /usr/local/lib
 ```
@@ -1806,14 +1659,9 @@ sudo mv bwidget-1.9.8 /usr/local/lib
 substituting a location on the Tcl/Tk search path for
 `/usr/local/lib` if needed.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Non-R scripts in packages](#Non_002dR-scripts-in-packages),
-Up: [Package structure](#Package-structure)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.8 Specifying URLs 
+#### 1.1.8 Specifying URLs
 
 URLs in many places in the package documentation will be converted to
 clickable hyperlinks in at least some of their renderings. So care is
@@ -1833,23 +1681,16 @@ Other characters may benefit from being encoded: see the help on
 
 The canonical URL for a CRAN package is
 
- 
-``` 
+```r
 https://cran.r-project.org/package=pkgname
 ```
 
 and not a version starting
 '`https://cran.r-project.org/web/packages/pkgname`'.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Checking and building packages](#Checking-and-building-packages),
-Previous: [Package structure](#Package-structure), Up: [Creating R
-packages](#Creating-R-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.2 Configure and cleanup 
+### 1.2 Configure and cleanup
 
 Note that most of this section is specific to Unix-alikes: see the
 comments later on about the Windows port of R.
@@ -1881,8 +1722,7 @@ files with the value of `HAVE_FOO`). For example, if a function named
 `bar` is to be made available by linking against library `foo` (i.e.,
 using `-lfoo`), one could use
 
- 
-``` 
+```r
 AC_CHECK_LIB(foo, fun, [HAVE_FOO=TRUE], [HAVE_FOO=FALSE])
 AC_SUBST(HAVE_FOO)
 ......
@@ -1895,8 +1735,7 @@ in `configure.ac` (assuming Autoconf 2.50 or later).
 The definition of the respective R function in `foo.R.in` could
 be
 
- 
-``` 
+```r
 foo <- function(x) {
     if(!@HAVE_FOO@)
       stop("Sorry, library ‘foo’ is not available")
@@ -1906,8 +1745,7 @@ foo <- function(x) {
 From this file `configure` creates the actual R source file
 `foo.R` looking like
 
- 
-``` 
+```r
 foo <- function(x) {
     if(!FALSE)
       stop("Sorry, library ‘foo’ is not available")
@@ -1924,42 +1762,39 @@ You will very likely need to ensure that the same C compiler and
 compiler flags are used in the `configure` tests as when
 compiling R or your package. Under a Unix-alike, you can achieve this by
 including the following fragment early in `configure.ac`
-(*before* calling `AC_PROG_CC`)
+(_before_ calling `AC_PROG_CC`)
 
- 
-``` 
-: $
-if test -z "$"; then
+```r
+: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
   exit 1
 fi
-CC=`"$/bin/R" CMD config CC`
-CFLAGS=`"$/bin/R" CMD config CFLAGS`
-CPPFLAGS=`"$/bin/R" CMD config CPPFLAGS`
+CC=`"${R_HOME}/bin/R" CMD config CC`
+CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
+CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
 ```
 
-(Using '`$/bin/R`' rather than just '`R`' is
+(Using '`${R_HOME}/bin/R`' rather than just '`R`' is
 necessary in order to use the correct version of R when running the
 script as part of `R CMD INSTALL`, and the quotes since
-'`$`' might contain spaces.)
+'`${R_HOME}`' might contain spaces.)
 
 If your code does load checks then you may also need
 
- 
-``` 
-LDFLAGS=`"$/bin/R" CMD config LDFLAGS`
+```r
+LDFLAGS=`"${R_HOME}/bin/R" CMD config LDFLAGS`
 ```
 
 and packages written with C++ need to pick up the details for the C++
 compiler and switch the current language to C++ by something like
 
- 
-``` 
-CXX=`"$/bin/R" CMD config CXX`
+```r
+CXX=`"${R_HOME}/bin/R" CMD config CXX`
 if test -z "$CXX"; then
   AC_MSG_ERROR([No C++ compiler is available])
 fi
-CXXFLAGS=`"$/bin/R" CMD config CXXFLAGS`
+CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXXFLAGS`
 AC_LANG(C++)
 ```
 
@@ -1970,7 +1805,7 @@ that an R installation is not required to have a C++ compiler so
 
 You can use `R CMD config` to get the value of the basic configuration
 variables, and also the header and library flags necessary for linking a
-front-end executable program against R, see [R CMD config \--help]
+front-end executable program against R, see [R CMD config \--help]{.kbd}
 for details. If you do, it is essential that you use both the command
 and the appropriate flags, so that for example '`CC`' must
 always be used with '`CFLAGS`' and (for code to be linked into
@@ -1984,13 +1819,12 @@ forms '`F77 FFLAGS FPICFLAGS`' and
 To check for an external BLAS library using the `AX_BLAS` macro from the
 official Autoconf Macro Archive, one can simply do
 
- 
-``` 
-FC=`"$/bin/R" CMD config FC`
-FCLAGS=`"$/bin/R" CMD config FFLAGS`
+```r
+FC=`"${R_HOME}/bin/R" CMD config FC`
+FCLAGS=`"${R_HOME}/bin/R" CMD config FFLAGS`
 AC_PROG_FC
-FLIBS=`"$/bin/R" CMD config FLIBS`
-AX_BLAS(, AC_MSG_ERROR([could not find your BLAS library], 1))
+FLIBS=`"${R_HOME}/bin/R" CMD config FLIBS`
+AX_BLAS([], AC_MSG_ERROR([could not find your BLAS library], 1))
 ```
 
 Note that `FLIBS` as determined by R must be used to ensure that Fortran
@@ -2002,8 +1836,7 @@ Otherwise `R CMD build` may ship the files that are created. For
 example, package [**RODBC**](https://CRAN.R-project.org/package=RODBC)
 has
 
- 
-``` 
+```r
 #!/bin/sh
 
 rm -f config.* src/Makevars src/config.h
@@ -2026,9 +1859,9 @@ When `configure.win` is run the environment variables `R_HOME`
 (which uses '`/`' as the file separator), `R_ARCH` and Use
 `R_ARCH_BIN` will be set. Use `R_ARCH` to decide if this is a 64-bit
 build (its value there is '`/x64`') and to install DLLs to the
-correct place (`$/libs$`). Use `R_ARCH_BIN` to
+correct place (`${R_HOME}/libs${R_ARCH}`). Use `R_ARCH_BIN` to
 find the correct place under the `bin` directory, e.g.
-`$/bin$/Rscript.exe`.
+`${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe`.
 
 In some rare circumstances, the configuration and cleanup scripts need
 to know the location into which the package is being installed. An
@@ -2041,16 +1874,16 @@ the value of the `LD_LIBRARY_PATH` (or equivalent) environment variable,
 but that the secondary object is automatically resolved. Another example
 is when a package installs support files that are required at run time,
 and their location is substituted into an R data structure at
-installation time. 
-  The
-names of the top-level library directory (i.e., specifiable *via* the
+installation time.
+The
+names of the top-level library directory (i.e., specifiable \_via\* the
 '`-l`' argument) and the directory of the package itself are
-made available to the installation scripts *via* the two
+made available to the installation scripts _via_ the two
 shell/environment variables `R_LIBRARY_DIR` and `R_PACKAGE_DIR`.
 Additionally, the name of the package (e.g. '`survival`' or
 '`MASS`') being installed is available from the environment
 variable `R_PACKAGE_NAME`. (Currently the value of `R_PACKAGE_DIR` is
-always `$/$`, but this used not to be the
+always `${R_LIBRARY_DIR}/${R_PACKAGE_NAME}`, but this used not to be the
 case when versioned installs were allowed. Its main use is in
 `configure.win` scripts for the installation path of external
 software's DLLs.) Note that the value of `R_PACKAGE_DIR` may contain
@@ -2066,8 +1899,7 @@ for the presence of the command itself (see for example package
 it can be asked if the software is installed, of a suitable version and
 for compilation/linking flags by e.g.
 
- 
-``` 
+```r
 $ pkg-config --exists ‘QtCore >= 4.0.0’  # check the status
 $ pkg-config --modversion QtCore
 4.8.7
@@ -2088,8 +1920,7 @@ Sometimes the name by which the software is known to `pkg-config` is not
 what one might expect (e.g. '`gtk+-2.0`' even for 2.22). To get
 a complete list use
 
- 
-``` 
+```r
 pkg-config --list-all | sort
 ```
 
@@ -2099,10 +1930,9 @@ This will include the file
 `configure.ac`[^27^](#FOOT27) in the top-level
 directory of the package. If extensions written in `m4` are needed,
 these should be included under the directory `tools` and
-included in `configure.ac` *via* e.g.,
+included in `configure.ac` _via_ e.g.,
 
- 
-``` 
+```r
 m4_include([tools/ax_pthread.m4])
 ```
 
@@ -2111,30 +1941,28 @@ One source of such extensions is the 'Autoconf Archive'
 assume this is installed on users' machines, so the extension should be
 shipped with the package (taking care to comply with its licence).
 
-  ------------------------------------------------- ---- --
-  • [Using Makevars](#Using-Makevars)                    
-  • [Configure example](#Configure-example)              
-  • [Using F9x code](#Using-F9x-code)                    
-  • [Using C++11 code](#Using-C_002b_002b11-code)        
-  • [Using C++14 code](#Using-C_002b_002b14-code)        
-  • [Using C++17 code](#Using-C_002b_002b17-code)        
-  ------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Using Makevars](#Using-Makevars)     
+ • [Configure example](#Configure-example)     
+ • [Using F9x code](#Using-F9x-code)     
+ • [Using C++11 code](#Using-C_002b_002b11-code)     
+ • [Using C++14 code](#Using-C_002b_002b14-code)     
+ • [Using C++17 code](#Using-C_002b_002b17-code)
 
- 
-Next: [Configure example](#Configure-example), Previous: [Configure and
-cleanup](#Configure-and-cleanup), Up: [Configure and
-cleanup](#Configure-and-cleanup)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.2.1 Using `Makevars` 
+---
 
-  --------------------------------------------------------------------- ---- --
-  • [OpenMP support](#OpenMP-support)                                        
-  • [Using pthreads](#Using-pthreads)                                        
-  • [Compiling in sub-directories](#Compiling-in-sub_002ddirectories)        
-  --------------------------------------------------------------------- ---- --
+#### 1.2.1 Using `Makevars`
+
+---
+
+• [OpenMP support](#OpenMP-support)     
+ • [Using pthreads](#Using-pthreads)     
+ • [Compiling in sub-directories](#Compiling-in-sub_002ddirectories)
+
+---
 
 Sometimes writing your own `configure` script can be avoided by
 supplying a file `Makevars`: also one of the most common uses
@@ -2149,10 +1977,9 @@ at all possible in a portable style, in particular (except for
 
 The most common use of a `Makevars` file is to set additional
 preprocessor options (for example include paths and definitions) for
-C/C++ files *via* `PKG_CPPFLAGS`, and additional compiler flags by
+C/C++ files _via_ `PKG_CPPFLAGS`, and additional compiler flags by
 setting `PKG_CFLAGS`, `PKG_CXXFLAGS` or `PKG_FFLAGS`, for C, C++ or
-Fortran respectively (see [Creating shared
-objects](#Creating-shared-objects)).
+Fortran respectively (see [Creating shared objects](#Creating-shared-objects)).
 
 **N.B.**: Include paths are preprocessor options, not compiler options,
 and **must** be set in `PKG_CPPFLAGS` as otherwise platform-specific
@@ -2163,7 +1990,7 @@ paths (e.g. '`-I/usr/local/include`') will take precedence.
 flag.
 
 `Makevars` can also be used to set flags for the linker, for
-example '`-L`' and '`-l`' options, *via* `PKG_LIBS`.
+example '`-L`' and '`-l`' options, _via_ `PKG_LIBS`.
 
 When writing a `Makevars` file for a package you intend to
 distribute, take care to ensure that it is not specific to your
@@ -2173,20 +2000,19 @@ arguments to compiler phases) are all specific to GCC.
 
 Also, do not set variables such as `CPPFLAGS`, `CFLAGS` etc.: these
 should be settable by users (sites) through appropriate personal
-(site-wide) `Makevars` files. See [Customizing package
-compilation](./R-admin.html#Customizing-package-compilation) in R
+(site-wide) `Makevars` files. See [Customizing package compilation](./R-admin.html#Customizing-package-compilation) in R
 Installation and Administration,
 
 There are some macros[^28^](#FOOT28) which are set whilst
 configuring the building of R itself and are stored in
 `R_HOME/etcR_ARCH/Makeconf`. That makefile is included as a
-`Makefile` *after* `Makevars[.win]`, and the macros it
+`Makefile` _after_ `Makevars[.win]`, and the macros it
 defines can be used in macro assignments and make command lines in the
 latter. These include
 
 `FLIBS`
 
-:   
+:
 
     A macro containing the set of libraries need to link Fortran code.
     This may need to be included in `PKG_LIBS`: it will normally be
@@ -2195,7 +2021,7 @@ latter. These include
 
 `BLAS_LIBS`
 
-:   
+:
 
     A macro containing the BLAS libraries used when building R. This may
     need to be included in `PKG_LIBS`. Beware that if it is empty then
@@ -2207,7 +2033,7 @@ latter. These include
 
 `LAPACK_LIBS`
 
-:   
+:
 
     A macro containing the LAPACK libraries (and paths where
     appropriate) used when building R. This may need to be included in
@@ -2228,7 +2054,7 @@ latter. These include
 
 `SAFE_FFLAGS`
 
-:   
+:
 
     A macro containing flags which are needed to circumvent
     over-optimization of FORTRAN code: it is might be
@@ -2247,8 +2073,7 @@ also be used to control the set of files which are compiled, either by
 excluding some files in `src` or including some files in
 subdirectories. For example
 
- 
-``` 
+```r
 OBJECTS = 4dfp/endianio.o 4dfp/Getifh.o R4dfp-object.o
 ```
 
@@ -2259,8 +2084,7 @@ to circumvent that, use a suitable (phony) target `all` before any
 actual targets in `Makevars.[win]`: for example package
 [**fastICA**](https://CRAN.R-project.org/package=fastICA) used to have
 
- 
-``` 
+```r
 PKG_LIBS = @BLAS_LIBS@
 
 SLAMC_FFLAGS=$(R_XTRA_FFLAGS) $(FPICFLAGS) $(SHLIB_FFLAGS) $(SAFE_FFLAGS)
@@ -2274,8 +2098,7 @@ slamc.o: slamc.f
 needed to ensure that the LAPACK routines find some constants without
 infinite looping. The Windows equivalent was
 
- 
-``` 
+```r
 all: $(SHLIB)
 
 slamc.o: slamc.f
@@ -2289,8 +2112,7 @@ will be called, but for back-compatibility it is best named `all`.
 If you want to create and then link to a library, say using code in a
 subdirectory, use something like
 
- 
-``` 
+```r
 .PHONY: all mylibs
 
 all: $(SHLIB)
@@ -2305,15 +2127,13 @@ guarantee that the dependencies of `all` will be run in a particular
 order (and some of the CRAN build machines use multiple CPUs and
 parallel makes). In particular,
 
- 
-``` 
+```r
 all: mylibs
 ```
 
 does **not** suffice. GNU make does allow the construct
 
- 
-``` 
+```r
 .NOTPARALLEL: all
 all: mylibs $(SHLIB)
 ```
@@ -2341,10 +2161,9 @@ If you want to run R code in `Makevars`, e.g. to find
 configuration information, please do ensure that you use the correct
 copy of `R` or `Rscript`: there might not be one in the path at all, or
 it might be the wrong version or architecture. The correct way to do
-this is *via*
+this is _via_
 
- 
-``` 
+```r
 "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" filename
 "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e ‘R expression’
 ```
@@ -2354,8 +2173,7 @@ where `$(R_ARCH_BIN)` is only needed currently on Windows.
 Environment or make variables can be used to select different macros for
 32- and 64-bit code, for example (GNU `make` syntax, allowed on Windows)
 
- 
-``` 
+```r
 ifeq "$(WIN)" "64"
 PKG_LIBS = value for 64-bit Windows
 else
@@ -2369,22 +2187,19 @@ reliable: import libraries are tied to a specific toolchain, and in
 particular on 64-bit Windows two different conventions have been
 commonly used. So for example instead of
 
- 
-``` 
+```r
 PKG_LIBS = -L$(XML_DIR)/lib -lxml2
 ```
 
 one can use
 
- 
-``` 
+```r
 PKG_LIBS = -L$(XML_DIR)/bin -lxml2
 ```
 
 since on Windows `-lxxx` will look in turn for
 
- 
-``` 
+```r
 libxxx.dll.a
 xxx.dll.a
 libxxx.a
@@ -2407,24 +2222,18 @@ over these differences but can cause equal difficulties.
 If static libraries are available they can save a lot of problems with
 run-time finding of DLLs, especially when binary packages are to be
 distributed and even more when these support both architectures. Where
-using DLLs is unavoidable we normally arrange (*via*
+using DLLs is unavoidable we normally arrange (_via_
 `configure.win`) to ship them in the same directory as the
 package DLL.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using pthreads](#Using-pthreads), Previous: [Using
-Makevars](#Using-Makevars), Up: [Using Makevars](#Using-Makevars)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.2.1.1 OpenMP support 
+#### 1.2.1.1 OpenMP support
 
 There is some support for packages which wish to use
 OpenMP[^30^](#FOOT30). The `make` macros
 
- 
-``` 
+```r
 SHLIB_OPENMP_CFLAGS
 SHLIB_OPENMP_CXXFLAGS
 SHLIB_OPENMP_FFLAGS
@@ -2442,8 +2251,7 @@ used for R (including Apple's for macOS and some others using
 For example, a package with C code written for OpenMP should have in
 `src/Makevars` the lines
 
- 
-``` 
+```r
 PKG_CFLAGS = $(SHLIB_OPENMP_CFLAGS)
 PKG_LIBS = $(SHLIB_OPENMP_CFLAGS)
 ```
@@ -2457,27 +2265,25 @@ is optional and on others that library depends on other optional
 libraries.
 
 Some care is needed when compilers are from different families which may
-use different OpenMP runtimes (e.g. `clang` *vs* GCC including
+use different OpenMP runtimes (e.g. `clang` _vs_ GCC including
 `gfortran`, although it is often possible to use the `clang` runtime
-with GCC but not *vice versa*: however `gfortran` 9.x may generate calls
+with GCC but not _vice versa_: however `gfortran` 9.x may generate calls
 not in the `clang` runtime). For a package with Fortran code using
 OpenMP the appropriate lines are
 
- 
-``` 
+```r
 PKG_FFLAGS = $(SHLIB_OPENMP_FFLAGS)
 PKG_LIBS = $(SHLIB_OPENMP_CFLAGS)
 ```
 
 as the C compiler will be used to link the package code. There are
-platforms on which this does not work *for some OpenMP-using code* and
+platforms on which this does not work _for some OpenMP-using code_ and
 installation will fail, so portable packages wanting to use Fortran code
 with OpenMP need to test their usage for themselves. An alternative for
 a package with only Fortran sources using OpenMP is to use a file
 `src/Makefile` (and `src/Makefile.win`) something like
 
- 
-``` 
+```r
 PKG_FFLAGS = $(SHLIB_OPENMP_FFLAGS)
 PKG_LIBS = $(SHLIB_OPENMP_FFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 SHLIB_LD = $(SHLIB_FCLD)
@@ -2492,8 +2298,7 @@ $(SHLIB): $(OBJECTS)
 
 Since R \>= 3.6.2 a further alternative is to use
 
- 
-``` 
+```r
 USE_FC_TO_LINK =
 PKG_FFLAGS = $(SHLIB_OPENMP_FFLAGS)
 PKG_LIBS = $(SHLIB_OPENMP_FFLAGS)
@@ -2507,7 +2312,7 @@ are of different families.
 
 For portability, any C/C++ code using the `omp_*` functions should
 include the `omp.h` header: some compilers (but not all)
-include it when OpenMP mode is switched on (e.g. *via* flag
+include it when OpenMP mode is switched on (e.g. _via_ flag
 `-fopenmp`).
 
 There is nothing[^32^](#FOOT32) to say what version of OpenMP
@@ -2548,15 +2353,14 @@ although it is common to use only a single thread below the first level.
 The correctness of the detected number of 'CPUs' and the assumption that
 the R process is entitled to use them all are both dubious assumptions.
 One way to limit resources is to limit the overall number of threads
-available to OpenMP in the R process: this can be done *via* environment
+available to OpenMP in the R process: this can be done _via_ environment
 variable `OMP_THREAD_LIMIT`, where implemented.[^35^](#FOOT35)
 Alternatively, the number of threads per region can be limited by the
 environment variable `OMP_NUM_THREADS` or API call
 `omp_set_num_threads`, or, better, for the regions in your code as part
 of their specification. E.g. R uses[^36^](#FOOT36)
 
- 
-``` 
+```r
 #pragma omp parallel for num_threads(nthreads) …
 ```
 
@@ -2569,15 +2373,9 @@ or before any use of OpenMP (which might be by another process or R
 itself). Also, implementation-specific variables such as
 `KMP_THREAD_LIMIT` might take precedence.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Compiling in sub-directories](#Compiling-in-sub_002ddirectories),
-Previous: [OpenMP support](#OpenMP-support), Up: [Using
-Makevars](#Using-Makevars)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.2.1.2 Using pthreads 
+#### 1.2.1.2 Using pthreads
 
 There is no direct support for the POSIX threads (more commonly known as
 `pthreads`): by the time we considered adding it several packages were
@@ -2587,8 +2385,7 @@ available on POSIX operating systems (hence not Windows).
 For reasonably recent versions of `gcc` and `clang` the correct
 specification is
 
- 
-``` 
+```r
 PKG_CPPFLAGS = -pthread
 PKG_LIBS = -pthread
 ```
@@ -2596,8 +2393,7 @@ PKG_LIBS = -pthread
 (and the plural version is also accepted on some systems/versions). For
 other platforms the specification is
 
- 
-``` 
+```r
 PKG_CPPFLAGS = -D_REENTRANT
 PKG_LIBS = -lpthread
 ```
@@ -2629,17 +2425,12 @@ optional (see
 for example, macOS lacks the 'Barriers' option.
 
 See also the comments on thread-safety and performance under OpenMP: on
-all known R platforms OpenMP is implemented *via* `pthreads` and the
+all known R platforms OpenMP is implemented _via_ `pthreads` and the
 known performance issues are in the latter.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Using pthreads](#Using-pthreads), Up: [Using
-Makevars](#Using-Makevars)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.2.1.3 Compiling in sub-directories 
+#### 1.2.1.3 Compiling in sub-directories
 
 Package authors fairly often want to organize code in sub-directories of
 `src`, for example if they are including a separate piece of
@@ -2649,8 +2440,7 @@ One simple way is simply to set `OBJECTS` to be all the objects that
 need to be compiled, including in sub-directories. For example, CRAN
 package [**RSiena**](https://CRAN.R-project.org/package=RSiena) has
 
- 
-``` 
+```r
 SOURCES = $(wildcard data/*.cpp network/*.cpp utils/*.cpp model/*.cpp model/*/*.cpp model/*/*/*.cpp)
 
 OBJECTS = siena07utilities.o siena07internals.o siena07setup.o siena07models.o $(SOURCES:.cpp=.o)
@@ -2661,8 +2451,7 @@ used, the source files need to be listed and kept up-to-date. As in the
 following from CRAN package
 [**lossDev**](https://CRAN.R-project.org/package=lossDev):
 
- 
-``` 
+```r
 OBJECTS.samplers = samplers/ExpandableArray.o samplers/Knots.o \
   samplers/RJumpSpline.o samplers/RJumpSplineFactory.o \
   samplers/RealSlicerOV.o samplers/SliceFactoryOV.o samplers/MNorm.o
@@ -2677,13 +2466,12 @@ OBJECTS = $(OBJECTS.samplers) $(OBJECTS.distributions) $(OBJECTS.root)
 Where the subdirectory is self-contained code with a suitable makefile,
 the best approach is something like
 
- 
-``` 
+```r
 PKG_LIBS = -LCsdp/lib -lsdp $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 
 $(SHLIB): Csdp/lib/libsdp.a
 
-Csdp/lib/libsdp.a:      
+Csdp/lib/libsdp.a:
         @(cd Csdp/lib && $(MAKE) libsdp.a \
           CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
 ```
@@ -2699,15 +2487,9 @@ We really do not recommend using `src/Makefile` instead of
 `src/Makevars`, and as the example above shows, it is not
 necessary.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using F9x code](#Using-F9x-code), Previous: [Using
-Makevars](#Using-Makevars), Up: [Configure and
-cleanup](#Configure-and-cleanup)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.2.2 Configure example 
+#### 1.2.2 Configure example
 
 It may be helpful to give an extended example of using a
 `configure` script to create a `src/Makevars` file:
@@ -2718,8 +2500,7 @@ The `configure.ac` file follows: `configure` is
 created from this by running `autoconf` in the top-level package
 directory (containing `configure.ac`).
 
->  
-> ``` 
+> ```r
 > AC_INIT([RODBC], 1.1.8) dnl package name, version
 >
 > dnl A user-specifiable option
@@ -2741,10 +2522,10 @@ directory (containing `configure.ac`).
 >             [odbc_include_path=$withval])
 > RODBC_CPPFLAGS="-I."
 > if test [ -n "$odbc_include_path" ] ; then
->    RODBC_CPPFLAGS="-I. -I$"
+>    RODBC_CPPFLAGS="-I. -I${odbc_include_path}"
 > else
->   if test [ -n "$" ] ; then
->      RODBC_CPPFLAGS="-I. -I$"
+>   if test [ -n "${ODBC_INCLUDE}" ] ; then
+>      RODBC_CPPFLAGS="-I. -I${ODBC_INCLUDE}"
 >   fi
 > fi
 >
@@ -2754,44 +2535,44 @@ directory (containing `configure.ac`).
 >                            [the location of ODBC libraries]),
 >             [odbc_lib_path=$withval])
 > if test [ -n "$odbc_lib_path" ] ; then
->    LIBS="-L$odbc_lib_path $"
+>    LIBS="-L$odbc_lib_path ${LIBS}"
 > else
->   if test [ -n "$" ] ; then
->      LIBS="-L$ $"
+>   if test [ -n "${ODBC_LIBS}" ] ; then
+>      LIBS="-L${ODBC_LIBS} ${LIBS}"
 >   else
->     if test -n "$"; then
+>     if test -n "${ODBC_CONFIG}"; then
 >       odbc_lib_path=`odbc_config --libs | sed s/-lodbc//`
->       LIBS="$ $"
+>       LIBS="${odbc_lib_path} ${LIBS}"
 >     fi
 >   fi
 > fi
 >
 > dnl Now find the compiler and compiler flags to use
-> : $
-> if test -z "$"; then
+> : ${R_HOME=`R RHOME`}
+> if test -z "${R_HOME}"; then
 >   echo "could not determine R_HOME"
 >   exit 1
 > fi
-> CC=`"$/bin/R" CMD config CC`
-> CFLAGS=`"$/bin/R" CMD config CFLAGS`
-> CPPFLAGS=`"$/bin/R" CMD config CPPFLAGS`
+> CC=`"${R_HOME}/bin/R" CMD config CC`
+> CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
+> CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
 >
-> if test -n "$"; then
+> if test -n "${ODBC_CONFIG}"; then
 >   RODBC_CPPFLAGS=`odbc_config --cflags`
 > fi
-> CPPFLAGS="$ $"
+> CPPFLAGS="${CPPFLAGS} ${RODBC_CPPFLAGS}"
 >
 > dnl Check the headers can be found
 > AC_CHECK_HEADERS(sql.h sqlext.h)
-> if test "$" = no ||
->    test "$" = no; then
+> if test "${ac_cv_header_sql_h}" = no ||
+>    test "${ac_cv_header_sqlext_h}" = no; then
 >    AC_MSG_ERROR("ODBC headers sql.h and sqlext.h not found")
 > fi
 >
 > dnl search for a library containing an ODBC function
-> if test [ -n "$" ] ; then
->   AC_SEARCH_LIBS(SQLTables, $, ,
->       AC_MSG_ERROR("ODBC driver manager $ not found"))
+> if test [ -n "${odbc_mgr}" ] ; then
+>   AC_SEARCH_LIBS(SQLTables, ${odbc_mgr}, ,
+>       AC_MSG_ERROR("ODBC driver manager ${odbc_mgr} not found"))
 > else
 >   AC_SEARCH_LIBS(SQLTables, odbc odbc32 iodbc, ,
 >       AC_MSG_ERROR("no ODBC driver manager found"))
@@ -2810,22 +2591,18 @@ directory (containing `configure.ac`).
 > AC_CONFIG_FILES([src/Makevars])
 > AC_OUTPUT
 > ```
-> 
+>
+> where `src/Makevars.in` would be simply
 
-where `src/Makevars.in` would be simply
-
->  
-> ``` 
+> ```r
 > PKG_CPPFLAGS = @RODBC_CPPFLAGS@
 > PKG_LIBS = @LIBS@
 > ```
-> 
+>
+> A user can then be advised to specify the location of the ODBC driver
+> manager files by options like (lines broken for easier reading)
 
-A user can then be advised to specify the location of the ODBC driver
-manager files by options like (lines broken for easier reading)
-
- 
-``` 
+```r
 R CMD INSTALL \
   --configure-args='--with-odbc-include=/opt/local/include \
   --with-odbc-lib=/opt/local/lib --with-odbc-manager=iodbc' \
@@ -2834,15 +2611,9 @@ R CMD INSTALL \
 
 or by setting the environment variables `ODBC_INCLUDE` and `ODBC_LIBS`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using C++11 code](#Using-C_002b_002b11-code), Previous:
-[Configure example](#Configure-example), Up: [Configure and
-cleanup](#Configure-and-cleanup)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.2.3 Using F9x code 
+#### 1.2.3 Using F9x code
 
 R assumes that source files with extension `.f` are fixed-form
 Fortran 90 (which includes Fortran 77), and passes them to the compiler
@@ -2885,23 +2656,16 @@ constraints on the order of compilation. For example, if file
 `cmi.f90` and `dmi.f90` then `src/Makevars`
 needs to contain something like
 
- 
-``` 
+```r
 cmi.o dmi.o: iface.o
 ```
 
 Note that it is not portable (although some platforms do accept it) to
 define a module of the same name in multiple source files.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using C++14 code](#Using-C_002b_002b14-code), Previous: [Using
-F9x code](#Using-F9x-code), Up: [Configure and
-cleanup](#Configure-and-cleanup)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.2.4 Using C++11 code 
+#### 1.2.4 Using C++11 code
 
 R can be built without a C++ compiler although one is available (but not
 necessarily installed) on all known R platforms. For full portability
@@ -2937,8 +2701,7 @@ In order to specify C++11 code in a package to be used with R versions
 from 3.1.0 but before 3.6.2, the package's `Makevars` file (or
 `Makevars.win` on Windows) should include the line
 
- 
-``` 
+```r
 CXX_STD = CXX11
 ```
 
@@ -2951,8 +2714,7 @@ directory by including '`C++11`' in the
 '`SystemRequirements`' field of the `DESCRIPTION`
 file, e.g.
 
- 
-``` 
+```r
 SystemRequirements: C++11
 ```
 
@@ -2964,15 +2726,13 @@ directory.
 Conversely, to ensure that the C++98 standard is assumed even when this
 is not the compiler default, use
 
- 
-``` 
+```r
 SystemRequirements: C++98
 ```
 
 or
 
- 
-``` 
+```r
 CXX_STD = CXX98
 ```
 
@@ -2988,8 +2748,7 @@ on Windows) if a C++11 compiler is required.
 Further control over compilation of C++11 code can be obtained by
 specifying the macros '`CXX11`' and '`CXX11STD`' when
 R is configured[^43^](#FOOT43), or in a personal or site
-`Makevars` file. See [Customizing package
-compilation](./R-admin.html#Customizing-package-compilation) in R
+`Makevars` file. See [Customizing package compilation](./R-admin.html#Customizing-package-compilation) in R
 Installation and Administration. If C++11 support is not available then
 these macros are both empty; if it is available by default,
 '`CXX11`' defaults to '`CXX`' and
@@ -3005,24 +2764,23 @@ different dialect of the standard such as `-std=c++11`.
 
 As noted above, support for C++11 varies across platforms: on some
 platforms, it may be possible or necessary to select a different
-compiler for C++11, *via* personal or site `Makevars` files.
+compiler for C++11, _via_ personal or site `Makevars` files.
 
 There is no guarantee that C++11 can be used in a package in combination
 with any other compiled language (even C), as the C++11 compiler may be
 incompatible with the native compilers for the platform.
 
 If a package using C++11 has a `configure` script it is essential that
-it selects the correct compiler, *via* something like
+it selects the correct compiler, _via_ something like
 
- 
-``` 
-CXX11=`"$/bin/R" CMD config CXX11`
+```r
+CXX11=`"${R_HOME}/bin/R" CMD config CXX11`
 if test -z "$CXX11"; then
   AC_MSG_ERROR([No C++11 compiler is available])
 fi
-CXX11STD=`"$/bin/R" CMD config CXX11STD`
-CXX="$ $"
-CXXFLAGS=`"$/bin/R" CMD config CXX11FLAGS`
+CXX11STD=`"${R_HOME}/bin/R" CMD config CXX11STD`
+CXX="${CXX11} ${CXX11STD}"
+CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXX11FLAGS`
 AC_LANG(C++)
 ```
 
@@ -3032,8 +2790,7 @@ If you want to compile C++11 code in a subdirectory, make sure you pass
 down the macros to specify that compiler, e.g. in
 `src/Makevars`
 
- 
-``` 
+```r
 sublibs:
          @(cd libs && $(MAKE) \
             CXX="$(CXX11) $(CXX11STD)" CXXFLAGS="$(CXX11FLAGS) $(CXX11PICFLAGS)")
@@ -3042,17 +2799,11 @@ sublibs:
 Note that the mechanisms described here specify C++11 for code compiled
 by `R CMD SHLIB` as used by default by `R CMD INSTALL`. They do not
 necessarily apply if there is a `src/Makefile` file, nor to
-compilation done in vignettes or *via* other packages.
+compilation done in vignettes or _via_ other packages.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using C++17 code](#Using-C_002b_002b17-code), Previous: [Using
-C++11 code](#Using-C_002b_002b11-code), Up: [Configure and
-cleanup](#Configure-and-cleanup)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.2.5 Using C++14 code 
+#### 1.2.5 Using C++14 code
 
 Support for a C++14 compiler (where available) was been added to R from
 version 3.4.0. Similar considerations to C++11 apply, with the variables
@@ -3061,16 +2812,14 @@ instead of '`CXX11`'. Hence to use C++14 code in a package, the
 package's `Makevars` file (or `Makevars.win` on
 Windows) should include the line
 
- 
-``` 
+```r
 CXX_STD = CXX14
 ```
 
 In the absence of a `Makevars` file, C++14 support can also be
 requested by the line:
 
- 
-``` 
+```r
 SystemRequirements: C++14
 ```
 
@@ -3083,8 +2832,7 @@ since the emulation typically leads to a namespace clash. In order to
 ensure that the code also compiles under C++14, something like the
 following should be done:
 
- 
-``` 
+```r
 #if __cplusplus >= 201402L
 using std::make_unique;
 #else
@@ -3093,10 +2841,9 @@ using std::make_unique;
 ```
 
 Code needing C++14 features would do better to test for their presence
-*via* 'SD-6 feature tests'[^45^](#FOOT45). That test could be
+_via_ 'SD-6 feature tests'[^45^](#FOOT45). That test could be
 
- 
-``` 
+```r
 #include <memory> // header where this is defined
 #if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique >= 201304)
 using std::make_unique;
@@ -3110,23 +2857,17 @@ has only partial C++14 support, and the flag to obtain that support is
 not included in the default Windows build of R --- one could try
 something like
 
- 
-``` 
+```r
 CXX14="$(BINPREF)g++ $(M_ARCH)"
-CXX14FLAGS="-O2 -Wall" 
-CXX14STD=-std=gnu1y 
+CXX14FLAGS="-O2 -Wall"
+CXX14STD=-std=gnu1y
 ```
 
 in `HOME/.R/Makevars.win`.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Using C++14 code](#Using-C_002b_002b14-code), Up: [Configure
-and cleanup](#Configure-and-cleanup)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.2.6 Using C++17 code 
+#### 1.2.6 Using C++17 code
 
 Support for C++17 was added to R version 3.4.0. The `configure`
 script tests a subset of C++17 features. `clang 4.0.0` and `gcc 7.1` and
@@ -3140,16 +2881,14 @@ The variables associated with the C++17 compiler use the prefix
 `Makevars` file (or `Makevars.win` on Windows) should
 include the line
 
- 
-``` 
+```r
 CXX_STD = CXX17
 ```
 
 In the absence of a `Makevars` file, C++17 support can also be
 requested by the line:
 
- 
-``` 
+```r
 SystemRequirements: C++17
 ```
 
@@ -3162,26 +2901,22 @@ support is still patchy, especially library support).
 No C++17 support is enabled in the current default build of R on
 Windows.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Writing package vignettes](#Writing-package-vignettes), Previous:
-[Configure and cleanup](#Configure-and-cleanup), Up: [Creating R
-packages](#Creating-R-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.3 Checking and building packages 
+### 1.3 Checking and building packages
 
 Before using these tools, please check that your package can be
-installed (which checked it can be loaded). `R CMD check` will *inter
-alia* do this, but you may get more detailed error messages doing the
+installed (which checked it can be loaded). `R CMD check` will _inter
+alia_ do this, but you may get more detailed error messages doing the
 install directly.
 
-  ----------------------------------------------------------- ---- --
-  • [Checking packages](#Checking-packages)                        
-  • [Building package tarballs](#Building-package-tarballs)        
-  • [Building binary packages](#Building-binary-packages)          
-  ----------------------------------------------------------- ---- --
+---
+
+• [Checking packages](#Checking-packages)     
+ • [Building package tarballs](#Building-package-tarballs)     
+ • [Building binary packages](#Building-binary-packages)
+
+---
 
 If your package specifies an encoding in its `DESCRIPTION`
 file, you should run these tools in a locale which makes use of that
@@ -3211,20 +2946,12 @@ locales (although UTF-8 locales will most likely work).
 > a case-honouring file system (some network-mounted file systems are
 > not).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Building package tarballs](#Building-package-tarballs), Previous:
-[Checking and building packages](#Checking-and-building-packages), Up:
-[Checking and building packages](#Checking-and-building-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.3.1 Checking packages 
-
- 
+#### 1.3.1 Checking packages
 
 Using `R CMD check`, the R package checker, one can test whether
-*source* R packages work correctly. It can be run on one or more
+_source_ R packages work correctly. It can be run on one or more
 directories, or compressed package `tar` archives with extension
 `.tar.gz`, `.tgz`, `.tar.bz2` or
 `.tar.xz`.
@@ -3258,8 +2985,8 @@ This runs a series of checks, including
     '`mle`', '`modreg`', '`mva`',
     '`nls`', '`stepfun`' and '`ts`'). Another
     check is that all packages mentioned in `library` or `require`s or
-    from which the `NAMESPACE` file imports or are called *via*
-    `::` or `` are listed (in '`Depends`',
+    from which the `NAMESPACE` file imports or are called _via_
+    `::` or `:::` are listed (in '`Depends`',
     '`Imports`', '`Suggests`'): this is not an
     exhaustive check of the actual imports.
 
@@ -3413,7 +3140,7 @@ All these tests are run with collation set to the `C` locale, and for
 the examples and tests with environment variable `LANGUAGE=en`: this is
 to minimize differences between platforms.
 
-Use [R CMD check \--help] to obtain more information about the
+Use [R CMD check \--help]{.kbd} to obtain more information about the
 usage of the R package checker. A subset of the checking steps can be
 selected by adding command-line options. It also allows customization by
 setting environment variables `_R_CHECK_*_` as described in
@@ -3426,15 +3153,13 @@ declarations[^51^](#FOOT51)in `DESCRIPTION` files
 needs repositories (including CRAN) set: do this in
 `~/.Rprofile`, by e.g.
 
- 
-``` 
+```r
 options(repos = c(CRAN="https://cran.r-project.org"))
 ```
 
 One check customization which can be revealing is
 
- 
-``` 
+```r
 _R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE"
 ```
 
@@ -3484,18 +3209,9 @@ or for batch jobs.
 > sub-architectures these can be supplied by e.g.
 > `--install-args=--force-biarch`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Building binary packages](#Building-binary-packages), Previous:
-[Checking packages](#Checking-packages), Up: [Checking and building
-packages](#Checking-and-building-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.3.2 Building package tarballs 
-
- 
- 
+#### 1.3.2 Building package tarballs
 
 Packages may be distributed in source form as "tarballs"
 (`.tar.gz` files) or in binary form. The source form can be
@@ -3536,10 +3252,10 @@ by default. In addition, those files in the `R`,
 `demo` and `man` directories which are flagged by
 `R CMD check` as having invalid names will be excluded.
 
-Use [R CMD build \--help] to obtain more information about the
+Use [R CMD build \--help]{.kbd} to obtain more information about the
 usage of the R package builder.
 
-Unless [R CMD build] is invoked with the
+Unless [R CMD build]{.kbd} is invoked with the
 `--no-build-vignettes` option (or the package's
 `DESCRIPTION` contains '`BuildVignettes: no`' or
 similar), it will attempt to (re)build the vignettes (see [Writing
@@ -3609,14 +3325,9 @@ when the package is installed, including index information on the
 vignettes and, rarely, information on the help pages and perhaps a copy
 of the PDF reference manual (see above).
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Building package tarballs](#Building-package-tarballs), Up:
-[Checking and building packages](#Checking-and-building-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.3.3 Building binary packages 
+#### 1.3.3 Building binary packages
 
 Binary packages are compressed copies of installed versions of packages.
 They contain compiled shared libraries rather than C, C++ or Fortran
@@ -3638,10 +3349,10 @@ By default, `R CMD INSTALL --build` will attempt to install the package
 into the default library tree for the local installation of R. This has
 two implications:
 
--   If the installation is successful, it will overwrite any existing
-    installation of the same package.
--   The default library tree must have write permission; if not, the
-    package will not install and the binary will not be created.
+- If the installation is successful, it will overwrite any existing
+  installation of the same package.
+- The default library tree must have write permission; if not, the
+  package will not install and the binary will not be created.
 
 To prevent changes to the present working installation or to provide an
 install location with write access, create a suitably located directory
@@ -3665,22 +3376,16 @@ Note that this is intended for developers on other platforms who do not
 have access to Windows but wish to provide binaries for the Windows
 platform.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Package namespaces](#Package-namespaces), Previous: [Checking and
-building packages](#Checking-and-building-packages), Up: [Creating R
-packages](#Creating-R-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 1.4 Writing package vignettes
 
-### 1.4 Writing package vignettes 
+---
 
- 
+• [Encodings and vignettes](#Encodings-and-vignettes)     
+ • [Non-Sweave vignettes](#Non_002dSweave-vignettes)
 
-  ------------------------------------------------------- ---- --
-  • [Encodings and vignettes](#Encodings-and-vignettes)        
-  • [Non-Sweave vignettes](#Non_002dSweave-vignettes)          
-  ------------------------------------------------------- ---- --
+---
 
 In addition to the help files in `Rd` format, R packages allow
 the inclusion of documents in arbitrary other formats. The standard
@@ -3695,7 +3400,7 @@ can easily read them. To ensure that they can be accessed from a browser
 ASCII letter and be comprised entirely of ASCII letters or digits or
 hyphen or underscore.
 
-A special case is *package vignettes*. Vignettes are documents in PDF or
+A special case is _package vignettes_. Vignettes are documents in PDF or
 HTML format obtained from plain text literate source files from which R
 knows how to extract R code and create output (in PDF/HTML or
 intermediate LaTeX). Vignette engines do this work, using "tangle" and
@@ -3719,7 +3424,7 @@ see the `Sweave` help page in R and the `Sweave` vignette in package
 Package vignettes are tested by `R CMD check` by executing all R code
 chunks they contain (except those marked for non-evaluation, e.g., with
 option `eval=FALSE` for Sweave). The R working directory for all
-vignette tests in `R CMD check` is a *copy* of the vignette source
+vignette tests in `R CMD check` is a _copy_ of the vignette source
 directory. Make sure all files needed to run the R code in the vignette
 (data sets, ...) are accessible by either placing them in the
 `inst/doc` hierarchy of the source package or by using calls to
@@ -3753,13 +3458,12 @@ careful to respect the environment values of `R_LIBS` and
 `Makefile` and it has a '`clean:`' target,
 `make clean` is run.
 
-All the usual *caveats* about including a `Makefile` apply. It
+All the usual _caveats_ about including a `Makefile` apply. It
 must be portable (no GNU extensions), use LF line endings and must work
 correctly with a parallel `make`: too many authors have written things
 like
 
- 
-``` 
+```r
 ## BAD EXAMPLE
 all: pdf clean
 
@@ -3778,9 +3482,8 @@ Metadata lines can be placed in the source file, preferably in LaTeX
 comments in the preamble. One such is a `\VignetteIndexEntry` of the
 form
 
- 
-``` 
-%\VignetteIndexEntry
+```r
+%\VignetteIndexEntry{Using Animal}
 ```
 
 Others you may see are `\VignettePackage` (currently ignored),
@@ -3798,7 +3501,7 @@ index is linked from the HTML help index for the package. If you do
 supply a `inst/doc/index.html` file it should contain relative
 links only to files under the installed `doc` directory, or
 perhaps (not really an index) to HTML help files or to the
-`DESCRIPTION` file, and be valid HTML as confirmed *via* the
+`DESCRIPTION` file, and be valid HTML as confirmed _via_ the
 [W3C Markup Validation Service](https://validator.w3.org) or
 [Validator.nu](https://validator.nu/).
 
@@ -3821,15 +3524,9 @@ vignette sources from directory `vignettes` to
 regular expressions on one or more lines. (See the description of the
 `.Rinstignore` file for full details.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Non-Sweave vignettes](#Non_002dSweave-vignettes), Previous:
-[Writing package vignettes](#Writing-package-vignettes), Up: [Writing
-package vignettes](#Writing-package-vignettes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.4.1 Encodings and vignettes 
+#### 1.4.1 Encodings and vignettes
 
 Vignettes will in general include descriptive text, R input, R output
 and figures, LaTeX include files and bibliographic references. As any of
@@ -3851,9 +3548,8 @@ at the top of the file.
 or in UTF-8 if that is declared. Non-ASCII encodings need to be declared
 to LaTeX via a line like
 
- 
-``` 
-\usepackage[utf8]
+```r
+\usepackage[utf8]{inputenc}
 ```
 
 (It is also possible to use the more recent '`inputenx`' LaTeX
@@ -3861,16 +3557,14 @@ package.) For files where this line is not needed (e.g. chapters
 included within the body of a larger document, or non-Sweave vignettes),
 the encoding may be declared using a comment like
 
- 
-``` 
-%\VignetteEncoding
+```r
+%\VignetteEncoding{UTF-8}
 ```
 
 If the encoding is UTF-8, this can also be declared using the
 declaration
 
- 
-``` 
+```r
 %\SweaveUTF8
 ```
 
@@ -3907,16 +3601,11 @@ encoding, so `fortunes.tex` will be in UTF-8 in any locale. Had
 `read.table` been told the data were UTF-8, `fortunes.tex`
 would have been in the locale's encoding.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Encodings and vignettes](#Encodings-and-vignettes), Up:
-[Writing package vignettes](#Writing-package-vignettes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+#### 1.4.2 Non-Sweave vignettes
 
-#### 1.4.2 Non-Sweave vignettes 
-
-Vignettes in formats other than Sweave are supported *via* "vignette
+Vignettes in formats other than Sweave are supported _via_ "vignette
 engines". For example
 [**knitr**](https://CRAN.R-project.org/package=knitr) version 1.1 or
 later can create `.tex` files from a variation on Sweave
@@ -3934,9 +3623,8 @@ the extension `.Rmd` (standing for "R markdown"). The user
 indicates the vignette engine within the vignette source using a
 `\VignetteEngine` line, for example
 
- 
-``` 
-%\VignetteEngine
+```r
+%\VignetteEngine{knitr::knitr}
 ```
 
 This specifies the name of a package and an engine to use in place of
@@ -3967,8 +3655,7 @@ Package writers who would like to supply vignette engines need to
 register those engines in the package `.onLoad` function. For example,
 that function could make the call
 
- 
-``` 
+```r
 tools::vignetteEngine("knitr", weave = vweave, tangle = vtangle,
                       pattern = "[.]Rmd$", package = "knitr")
 ```
@@ -3978,24 +3665,18 @@ tools::vignetteEngine("knitr", weave = vweave, tangle = vtangle,
 complicated, because it supports other input formats.) See the
 `?tools::vignetteEngine` help topic for details on engine registration.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Writing portable packages](#Writing-portable-packages), Previous:
-[Writing package vignettes](#Writing-package-vignettes), Up: [Creating R
-packages](#Creating-R-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.5 Package namespaces 
+### 1.5 Package namespaces
 
 R has a namespace management system for code in packages. This system
 allows the package writer to specify which variables in the package
-should be *exported* to make them available to package users, and which
-variables should be *imported* from other packages.
+should be _exported_ to make them available to package users, and which
+variables should be _imported_ from other packages.
 
 The namespace for a package is specified by the `NAMESPACE`
-file in the top level package directory. This file contains *namespace
-directives* describing the imports and exports of the namespace.
+file in the top level package directory. This file contains _namespace
+directives_ describing the imports and exports of the namespace.
 Additional directives register any shared objects to be loaded and any
 S3-style methods that are provided. Note that although the file looks
 like R code (and often has R-style comments) it is not processed as R
@@ -4006,12 +3687,12 @@ Packages are loaded and attached to the search path by calling `library`
 or `require`. Only the exported variables are placed in the attached
 frame. Loading a package that imports variables from other packages will
 cause these other packages to be loaded as well (unless they have
-already been loaded), but they will *not* be placed on the search path
+already been loaded), but they will _not_ be placed on the search path
 by these implicit loads. Thus code in the package can only depend on
 objects in its own namespace and its imports (including the **base**
 namespace) being visible[^60^](#FOOT60).
 
-Namespaces are *sealed* once they are loaded. Sealing means that imports
+Namespaces are _sealed_ once they are loaded. Sealing means that imports
 and exports cannot be changed and that internal variable bindings cannot
 be changed. Sealing allows a simpler implementation strategy for the
 namespace mechanism. Sealing also allows code analysis and compilation
@@ -4023,30 +3704,25 @@ functions in the package. If not found locally, R searches the package
 namespace first, then the imports, then the base namespace and then the
 normal search path.
 
-  ------------------------------------------------------------------------------------- ---- --
-  • [Specifying imports and exports](#Specifying-imports-and-exports)                        
-  • [Registering S3 methods](#Registering-S3-methods)                                        
-  • [Load hooks](#Load-hooks)                                                                
-  • [useDynLib](#useDynLib)                                                                  
-  • [An example](#An-example)                                                                
-  • [Namespaces with S4 classes and methods](#Namespaces-with-S4-classes-and-methods)        
-  ------------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Specifying imports and exports](#Specifying-imports-and-exports)     
+ • [Registering S3 methods](#Registering-S3-methods)     
+ • [Load hooks](#Load-hooks)     
+ • [useDynLib](#useDynLib)     
+ • [An example](#An-example)     
+ • [Namespaces with S4 classes and methods](#Namespaces-with-S4-classes-and-methods)
 
- 
-Next: [Registering S3 methods](#Registering-S3-methods), Previous:
-[Package namespaces](#Package-namespaces), Up: [Package
-namespaces](#Package-namespaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.5.1 Specifying imports and exports 
+---
+
+#### 1.5.1 Specifying imports and exports
 
 Exports are specified using the `export` directive in the
 `NAMESPACE` file. A directive of the form
 
- 
-``` 
+```r
 export(f, g)
 ```
 
@@ -4058,8 +3734,7 @@ For packages with many variables to export it may be more convenient to
 specify the names to export with a regular expression using
 `exportPattern`. The directive
 
- 
-``` 
+```r
 exportPattern("^[^\\.]")
 ```
 
@@ -4076,8 +3751,7 @@ other packages with namespaces need to be imported explicitly using the
 directives `import` and `importFrom`. The `import` directive imports all
 exported variables from the specified package(s). Thus the directives
 
- 
-``` 
+```r
 import(foo, bar)
 ```
 
@@ -4086,8 +3760,7 @@ specifies that all exported variables in the packages **foo** and
 a package are needed, then they can be imported using `importFrom`. The
 directive
 
- 
-``` 
+```r
 importFrom(foo, f, g)
 ```
 
@@ -4099,8 +3772,7 @@ with more than a dozen exports.
 To import every symbol from a package but for a few exceptions, pass the
 `except` argument to `import`. The directive
 
- 
-``` 
+```r
 import(foo, except=c(bar, baz))
 ```
 
@@ -4110,7 +3782,7 @@ after substituting each symbol for its corresponding string.
 
 It is possible to export variables from a namespace which it has
 imported from other namespaces: this has to be done explicitly and not
-*via* `exportPattern`.
+_via_ `exportPattern`.
 
 If a package only needs a few objects from another package it can use a
 fully qualified variable reference in the code instead of a formal
@@ -4123,19 +3795,13 @@ the `DESCRIPTION` file). Evaluating `foo::f` will cause package
 already---this can be an advantage in delaying the loading of a rarely
 used package.
 
-Using `foof` instead of `foo::f` allows access to unexported objects.
+Using `foo:::f` instead of `foo::f` allows access to unexported objects.
 This is generally not recommended, as the semantics of unexported
 objects may be changed by the package author in routine maintenance.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Load hooks](#Load-hooks), Previous: [Specifying imports and
-exports](#Specifying-imports-and-exports), Up: [Package
-namespaces](#Package-namespaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.5.2 Registering S3 methods 
+#### 1.5.2 Registering S3 methods
 
 The standard method for S3-style `UseMethod` dispatching might fail to
 locate methods defined in a package that is imported but not attached to
@@ -4145,8 +3811,7 @@ register the methods using `S3method` directives. If a package defines a
 function `print.foo` intended to be used as a `print` method for class
 `foo`, then the directive
 
- 
-``` 
+```r
 S3method(print, foo)
 ```
 
@@ -4161,18 +3826,16 @@ and non-standard names such as `[<-` and `function` must be.)
 It is possible to specify a third argument to S3method, the function to
 be used as the method, for example
 
- 
-``` 
+```r
 S3method(print, check_so_symbols, .print.via.format)
 ```
 
 when `print.check_so_symbols` is not needed.
 
 As of R version 3.6.0, one can also use `S3method()` directives to
-perform *delayed* registration. With
+perform _delayed_ registration. With
 
- 
-``` 
+```r
 if(getRversion() >= "3.6.0") {
     S3method(pkg::gen, cls)
 }
@@ -4185,17 +3848,9 @@ not "immediately" needed, and having to pre-load the namespace of `pkg`
 (and all its strong dependencies) in order to perform immediate
 registration is considered too "costly".
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [useDynLib](#useDynLib), Previous: [Registering S3
-methods](#Registering-S3-methods), Up: [Package
-namespaces](#Package-namespaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.5.3 Load hooks 
-
- 
+#### 1.5.3 Load hooks
 
 There are a number of hooks called as packages are loaded, attached,
 detached, and unloaded. See `help(".onLoad")` for more details.
@@ -4205,13 +3860,11 @@ provided for each. These hook functions are called `.onLoad` and
 `.onAttach`. They both take arguments[^61^](#FOOT61) `libname`
 and `pkgname`; they should be defined in the namespace but not exported.
 
- 
-
 Packages can use a `.onDetach` or `.Last.lib` function (provided the
 latter is exported from the namespace) when `detach` is called on the
 package. It is called with a single argument, the full path to the
 installed package. There is also a hook `.onUnload` which is called when
-the namespace is unloaded (*via* a call to `unloadNamespace`, perhaps
+the namespace is unloaded (_via_ a call to `unloadNamespace`, perhaps
 called by `detach(unload = TRUE)`) with argument the full path to the
 installed package's directory. `.onUnload` and `.onDetach` should be
 defined in the namespace and not exported, but `.Last.lib` does need to
@@ -4225,27 +3878,21 @@ described next.
 User-level hooks are also available: see the help on function `setHook`.
 
 These hooks are often used incorrectly. People forget to export
-`.Last.lib`. Compiled code should be loaded in `.onLoad` (or *via* a
+`.Last.lib`. Compiled code should be loaded in `.onLoad` (or _via_ a
 `useDynLb` directive: see below) and unloaded in `.onUnload`. Do
 remember that a package's namespace can be loaded without the namespace
 being attached (e.g. by `pkgname::fun`) and that a package can be
 detached and re-attached whilst its namespace remains loaded.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [An example](#An-example), Previous: [Load hooks](#Load-hooks),
-Up: [Package namespaces](#Package-namespaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.5.4 useDynLib 
+#### 1.5.4 useDynLib
 
 A `NAMESPACE` file can contain one or more `useDynLib`
 directives which allows shared objects that need to be
 loaded.[^62^](#FOOT62) The directive
 
- 
-``` 
+```r
 useDynLib(foo)
 ```
 
@@ -4256,12 +3903,11 @@ Packages that would only need a load hook function to load a shared
 object can use the `useDynLib` directive instead.
 
 The `useDynLib` directive also accepts the names of the native routines
-that are to be used in R *via* the `.C`, `.Call`, `.Fortran` and
+that are to be used in R _via_ the `.C`, `.Call`, `.Fortran` and
 `.External` interface functions. These are given as additional arguments
 to the directive, for example,
 
- 
-``` 
+```r
 useDynLib(foo, myRoutine, myOtherRoutine)
 ```
 
@@ -4273,15 +3919,13 @@ these names. These can be used in the `.C`, `.Call`, `.Fortran` and
 argument. For instance, we can call the routine `myRoutine` from R with
 the code
 
- 
-``` 
+```r
  .Call(myRoutine, x, y)
 ```
 
 rather than
 
- 
-``` 
+```r
  .Call("myRoutine", x, y, PACKAGE = "foo")
 ```
 
@@ -4300,15 +3944,13 @@ can be done in the `useDynLib` directive by using named arguments. For
 instance, to map the native symbol name `myRoutine` to the R variable
 `myRoutine_sym`, we would use
 
- 
-``` 
+```r
 useDynLib(foo, myRoutine_sym = myRoutine, myOtherRoutine)
 ```
 
 We could then call that routine from R using the command
 
- 
-``` 
+```r
  .Call(myRoutine_sym, x, y)
 ```
 
@@ -4324,8 +3966,7 @@ each time the routine is called. Given a reference to the DLL as an R
 variable, say `dll`, we can call the routine `myRoutine` using the
 expression
 
- 
-``` 
+```r
  .Call(dll$myRoutine, x, y)
 ```
 
@@ -4343,8 +3984,7 @@ assign the DLL reference for the DLL `foo` in the example above to the
 variable `myDLL`, we would use the following directive in the
 `NAMESPACE` file:
 
- 
-``` 
+```r
 myDLL = useDynLib(foo, myRoutine_sym = myRoutine, myOtherRoutine)
 ```
 
@@ -4352,8 +3992,7 @@ Then, the R variable `myDLL` is in the package's namespace and available
 for calls such as `myDLL$dynRoutine` to access routines that are not
 explicitly resolved at load time.
 
-If the package has registration information (see [Registering native
-routines](#Registering-native-routines)), then we can use that directly
+If the package has registration information (see [Registering native routines](#Registering-native-routines)), then we can use that directly
 rather than specifying the list of symbols again in the `useDynLib`
 directive in the `NAMESPACE` file. Each routine in the
 registration information is specified by giving a name by which the
@@ -4363,29 +4002,27 @@ information about the number and type of the parameters. Using the
 mechanism to create R variables for these symbols. For example, suppose
 we have the following registration information for a DLL named `myDLL`:
 
- 
-``` 
-static R_NativePrimitiveArgType foo_t = {
+```r
+static R_NativePrimitiveArgType foo_t[] = {
     REALSXP, INTSXP, STRSXP, LGLSXP
 };
 
-static const R_CMethodDef cMethods = {
-   ,
-   ,
-   
+static const R_CMethodDef cMethods[] = {
+   {"foo", (DL_FUNC) &foo, 4, foo_t},
+   {"bar_sym", (DL_FUNC) &bar, 0},
+   {NULL, NULL, 0, NULL}
 };
 
-static const R_CallMethodDef callMethods = {
-   ,
-   ,
-   
+static const R_CallMethodDef callMethods[] = {
+   {"R_call_sym", (DL_FUNC) &R_call, 4},
+   {"R_version_sym", (DL_FUNC) &R_version, 0},
+   {NULL, NULL, 0}
 };
 ```
 
 Then, the directive in the `NAMESPACE` file
 
- 
-``` 
+```r
 useDynLib(myDLL, .registration = TRUE)
 ```
 
@@ -4400,8 +4037,7 @@ information to map the native symbols to non-conflicting variable names
 in R, e.g. `R_version` to `R_version_sym` for use in an R function such
 as
 
- 
-``` 
+```r
 R_version <- function()
 {
   .Call(R_version_sym)
@@ -4413,8 +4049,7 @@ registered symbols, which can be useful when working with an existing
 package. For example, package
 [**KernSmooth**](https://CRAN.R-project.org/package=KernSmooth) has
 
- 
-``` 
+```r
 useDynLib(KernSmooth, .registration = TRUE, .fixes = "F_")
 ```
 
@@ -4427,28 +4062,17 @@ time of writing 90 CRAN packages did so). Once symbols are registered,
 check that the corresponding R variables are not accidentally exported
 by a pattern in the `NAMESPACE` file.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Namespaces with S4 classes and
-methods](#Namespaces-with-S4-classes-and-methods), Previous:
-[useDynLib](#useDynLib), Up: [Package namespaces](#Package-namespaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.5.5 An example 
+#### 1.5.5 An example
 
 As an example consider two packages named **foo** and **bar**. The R
 code for package **foo** in file `foo.R` is
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | x <- 1                                                                |
-> | f <- function(y) c(x,y)                                               |
-> | foo <- function(x) .Call("foo", x, PACKAGE="foo")                     |
-> | print.foo <- function(x, ...) cat("<a foo>\n")                        |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | x <- 1 | | f <- function(y) c(x,y) | | foo <- function(x) .Call("foo", x, PACKAGE="foo") | | print.foo <- function(x, ...) cat("<a foo>\n") | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 Some C code defines a C function compiled into DLL `foo` (with an
@@ -4456,44 +4080,32 @@ appropriate extension). The `NAMESPACE` file for this package
 is
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | useDynLib(foo)                                                        |
-> | export(f, foo)                                                        |
-> | S3method(print, foo)                                                  |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | useDynLib(foo) | | export(f, foo) | | S3method(print, foo) | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 The second package **bar** has code file `bar.R`
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | c <- function(...) sum(...)                                           |
-> | g <- function(y) f(c(y, 7))                                           |
-> | h <- function(y) y+9                                                  |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | c <- function(...) sum(...) | | g <- function(y) f(c(y, 7)) | | h <- function(y) y+9 | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 and `NAMESPACE` file
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | import(foo)                                                           |
-> | export(g, h)                                                          |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | import(foo) | | export(g, h) | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 Calling `library(bar)` loads **bar** and attaches its exports to the
 search path. Package **foo** is also loaded but not attached to the
 search path. A call to `g` produces
 
- 
-``` 
+```r
 > g(6)
 [1]  1 13
 ```
@@ -4503,14 +4115,9 @@ This is consistent with the definitions of `c` in the two settings: in
 **foo** the variable `c` refers to the standard function `c` in
 **base**.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [An example](#An-example), Up: [Package
-namespaces](#Package-namespaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.5.6 Namespaces with S4 classes and methods 
+#### 1.5.6 Namespaces with S4 classes and methods
 
 Some additional steps are needed for packages which make use of formal
 (S4-style) classes and methods (unless these are purely used
@@ -4520,10 +4127,7 @@ internally). The package should have `Depends: methods` in its
 exported need to be declared in the `NAMESPACE` file. For
 example, the **stats4** package has
 
- 
-
- 
-``` 
+```r
 export(mle) # exporting methods implicitly exports the generic
 importFrom("graphics", plot)
 importFrom("stats", optim, qchisq)
@@ -4538,8 +4142,6 @@ exportMethods(coef, confint, logLik, plot, profile, summary,
 export(AIC, BIC, nobs)
 ```
 
- 
-
 All S4 classes to be used outside the package need to be listed in an
 `exportClasses` directive. Alternatively, they can be specified using
 `exportClassPattern`[^64^](#FOOT64) in the same style as for
@@ -4552,12 +4154,12 @@ export its methods. If the generic function is not local to this
 package, either because it was imported as a generic function or because
 the non-generic version has been made generic solely to add S4 methods
 to it (as for functions such as `plot` in the example above), it can be
-declared *via* either or both of `export` or `exportMethods`, but the
+declared _via_ either or both of `export` or `exportMethods`, but the
 latter is clearer (and is used in the **stats4** example above). In
 particular, for primitive functions there is no generic function, so
 `export` would export the primitive, which makes no sense. On the other
 hand, if the generic is local to this package, it is more natural to
-export the function itself using `export()`, and this *must* be done if
+export the function itself using `export()`, and this _must_ be done if
 an implicit generic is created without setting any methods for it (as is
 the case for `AIC` in **stats4**).
 
@@ -4572,10 +4174,7 @@ but does not import the entire namespace of the other
 package[^65^](#FOOT65), it needs to import the classes and
 methods explicitly, with directives
 
- 
-
- 
-``` 
+```r
 importClassesFrom(package, ...)
 importMethodsFrom(package, ...)
 ```
@@ -4585,28 +4184,17 @@ had two small packages **A** and **B** with **B** using **A**. Then they
 could have `NAMESPACE` files
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | export(f1, ng1)                                                       |
-> | exportMethods("[")                                                    |
-> | exportClasses(c1)                                                     |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | export(f1, ng1) | | exportMethods("[") | | exportClasses(c1) | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 and
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | importFrom(A, ng1)                                                    |
-> | importClassesFrom(A, c1)                                              |
-> | importMethodsFrom(A, f1)                                              |
-> | export(f4, f5)                                                        |
-> | exportMethods(f6, "[")                                                |
-> | exportClasses(c1, c2)                                                 |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | importFrom(A, ng1) | | importClassesFrom(A, c1) | | importMethodsFrom(A, f1) | | export(f4, f5) | | exportMethods(f6, "[") | | exportClasses(c1, c2) | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 respectively.
@@ -4621,27 +4209,23 @@ implicit generic. But it is better practice to make use of the generics
 exported by **stats4** as this enables multiple packages to
 unambiguously set methods on those generics.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Diagnostic messages](#Diagnostic-messages), Previous: [Package
-namespaces](#Package-namespaces), Up: [Creating R
-packages](#Creating-R-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.6 Writing portable packages 
+### 1.6 Writing portable packages
 
 This section contains advice on writing packages to be used on multiple
 platforms or for distribution (for example to be submitted to a package
 repository such as CRAN).
 
-  --------------------------------------------------------------- ---- --
-  • [PDF size](#PDF-size)                                              
-  • [Check timing](#Check-timing)                                      
-  • [Encoding issues](#Encoding-issues)                                
-  • [Portable C and C++ code](#Portable-C-and-C_002b_002b-code)        
-  • [Binary distribution](#Binary-distribution)                        
-  --------------------------------------------------------------- ---- --
+---
+
+• [PDF size](#PDF-size)     
+ • [Check timing](#Check-timing)     
+ • [Encoding issues](#Encoding-issues)     
+ • [Portable C and C++ code](#Portable-C-and-C_002b_002b-code)     
+ • [Binary distribution](#Binary-distribution)
+
+---
 
 Portable packages should have simple file names: use only alphanumeric
 ASCII characters and period (`.`), and avoid those names not allowed
@@ -4660,567 +4244,538 @@ emerge when people try to install and use packages submitted to CRAN --
 many of these involve compiled code. Here are some further checks that
 you can do to make your package more portable.
 
--   If your package has a `configure` script, provide a
-    `configure.win` script to be used on Windows (an empty file
-    if no actions are needed).
-
--   If your package has a `Makevars` or `Makefile`
-    file, make sure that you use only portable make features. Such files
-    should be LF-terminated[^67^](#FOOT67) (including the final
-    line of the file) and not make use of GNU extensions. (The POSIX
-    specification is available at
-    <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html>;
-    anything not documented there should be regarded as an extension to
-    be avoided. Further advice can be found at
-    <https://www.gnu.org/software/autoconf/manual/autoconf.html#Portable-Make>.
-    ) Commonly misused GNU extensions are conditional inclusions (`ifeq`
-    and the like), `$`, `$` and similar, and
-    the use of `+=`[^68^](#FOOT68) and `:=`. Also, the use of
-    `$<` other than in implicit rules is a GNU extension, as is the `$^`
-    macro. As is the use of `.PHONY` (some other makes ignore it).
-    Unfortunately makefiles which use GNU extensions often run on other
-    platforms but do not have the intended results.
-
-    The use of `$` can be avoided by using backticks, e.g.
-
-     
-    ``` 
-    PKG_CPPFLAGS = `gsl-config --cflags`
-    ```
-    
-
-    which works in all versions of `make` known[^69^](#FOOT69)
-    to be used with R.
-
-    If you really must require GNU make, declare it in the
-    `DESCRIPTION` file by
-
-     
-    ``` 
-    SystemRequirements: GNU make
-    ```
-    
-
-    and ensure that you use the value of environment variable `MAKE`
-    (and not just `make`) in your scripts. (On some platforms GNU make
-    is available under a name such as `gmake`, and there
-    `SystemRequirements` is used to set `MAKE`.)
-
-    If you only need GNU make for parts of the package which are rarely
-    needed (for example to create bibliography files under
-    `vignettes`), use a file called `GNUmakefile`
-    rather than `Makefile` as GNU make (only) will use the
-    former.
-
-    Since the only viable make for Windows is GNU make, it is
-    permissible to use GNU extensions in files `Makevars.win`
-    or `Makefile.win`.
-
--   Bash extensions also need to be avoided in shell scripts, including
-    expressions in Makefiles (which are passed to the shell for
-    processing). Some R platforms use strict[^70^](#FOOT70)
-    Bourne shells: the R toolset on Windows and some Unix-alike OSes use
-    `ash` (<https://en.wikipedia.org/wiki/Almquist_shell>), a rather
-    minimal shell with few builtins. Beware of assuming that all the
-    POSIX command-line utilities are available, especially on Windows
-    where only a minimal set is provided for use with R. (See [The
-    command line tools](./R-admin.html#The-command-line-tools) in R
-    Installation and Administration.) One particular issue is the use of
-    `echo`, for which two behaviours are allowed
-    (<http://pubs.opengroup.org/onlinepubs/9699919799/utilities/echo.html>)
-    and both occur as defaults on R platforms: portable applications
-    should not use `-n` (as the first argument) nor escape
-    sequences. The recommended replacement for `echo -n` is the command
-    `printf`. Another common issue is the construction
-
-     
-    ``` 
-    export FOO=value
-    ```
-    
-
-    which is bash-specific (first set the variable then export it by
-    name).
-
-    Using `test -e` (or `[ -e ]`) in shell scripts is not portable: `-f`
-    is normally what is intended. Flags `-a` and `-o`
-    are nowadays declared obsolescent by POSIX and should not be used.
-
-    Use of 'brace expansion', e.g.,
-
-     
-    ``` 
-    rm -f src/*.
-    ```
-    
-
-    is not portable.
-
-    The `-o` flag for `set` in shell scripts is optional in
-    POSIX and not supported on all the platforms R is used on.
-
-    On macOS Catalina which shell `/bin/sh` invokes is user-
-    and platform-dependent: it might be `bash` version 3.2, `dash` or
-    `zsh` (for new accounts it is `zsh`, for accounts ported from an
-    earlier version it is usually `bash`).
-
--   Make use of the abilities of your compilers to check the
-    standards-conformance of your code. For example, `gcc` and
-    `gfortran`[^71^](#FOOT71) can be used with options
-    `-Wall -pedantic` to alert you to potential problems. This
-    is particularly important for C++, where `g++ -Wall -pedantic` will
-    alert you to the use of some of the GNU extensions which fail to
-    compile on most other C++ compilers. If R was not configured
-    accordingly, one can achieve this *via* personal `Makevars`
-    files. See [Customizing package
-    compilation](./R-admin.html#Customizing-package-compilation) in R
-    Installation and Administration,
-
-    Portable C++ code needs to follow the 1998 standard (and not use
-    features from C99), or to specify a C++11 compiler (see [Using C++11
-    code](#Using-C_002b_002b11-code)) where available (which is not the
-    case on all R platforms). Currently C++14 code is less portable and
-    C++17 support is patchy across R platforms.
-
-    If using Fortran with the GNU compiler, use the flags
-    `-std=f95 -Wall -pedantic` which reject most GNU extensions
-    and features from later standards. (Although R only requires Fortran
-    90, `gfortran` does not have a way to specify that standard.)
-
-    R has tested that `DOUBLE COMPLEX` works and so is preferred to
-    `COMPLEX*16`. (One can also use something like
-    `COMPLEX(KIND=KIND(0.0D0))`[^72^](#FOOT72).)
-
-    Not all common R platforms conform to the expected standards, e.g.
-    C99 for C code. One common area of problems is the `*printf`
-    functions where Windows does not support `%lld`, `%Lf` and similar
-    formats (and has its own formats such as `%I64d` for 64-bit
-    integers). It is very rare to need to output such types, and 64-bit
-    integers can usually be converted to doubles for output. However,
-    the C11 standard (section 7.8.1) includes `PRIxNN`
-    macros[^73^](#FOOT73) in C header `inttypes.h`
-    (for example `PRId64`) so the portable approach is to test for these
-    and if not available provide emulations in the package.
-
--   `R CMD check` performs some checks for non-portable compiler/linker
-    flags in `src/Makevars`. However, it cannot check the
-    meaning of such flags, and some are commonly accepted but with
-    compiler-specific meanings. There are other non-portable flags which
-    are not checked, nor are `src/Makefile` files and makefiles
-    in sub-directories. As a comment in the code says
-
-    > It is hard to think of anything apart from `-I*` and
-    > `-D*` that is safe for general use ...
-
-    although `-pthread` is pretty close to portable. (Option
-    `-U` is portable but little use on the command line as it
-    will only cancel built-in defines (not portable) and those defined
-    earlier on the command line (R does not use any).)
-
-    People have used `configure` to customize `src/Makevars`,
-    including for specific compilers. This is unsafe for several
-    reasons. First, unintended compilers might meet the check---for
-    example, several compilers other than GCC identify themselves as
-    'GCC' whilst being only partially conformant. Second, future
-    versions of compilers may behave differently (including updates to
-    quite old series) so for example `-Werror` (and
-    specializations) can make a package non-installable under a future
-    version. Third, using flags to suppress diagnostic messages can hide
-    important information for debugging on a platform not tested by the
-    package maintainer. (`R CMD check` can optionally report on unsafe
-    flags which were used.)
-
-    Avoid the use of `-march` and especially
-    `-march=native`. This allows the compiler to generate code
-    that will only run on a particular class of CPUs (that of the
-    compiling machine for '`native`'). People assume this is a
-    'minimum' CPU specification, but that is not how it is documented
-    for `gcc` (it is accepted by `clang` but apparently it is
-    undocumented what precisely it does, and it can be accepted and may
-    be ignored for other compilers). (For personal use `-mtune`
-    is safer, but still not portable enough to be used in a public
-    package.) Not even `gcc` supports '`native`' for all CPUs,
-    and it can do surprising things if it finds a CPU released later
-    than its version.
-
--   Do be very careful with passing arguments between R, C and Fortran
-    code. In particular, `long` in C will be 32-bit on some R platforms
-    (including 64-bit Windows), but 64-bit on most modern Unix and Linux
-    platforms. It is rather unlikely that the use of `long` in C code
-    has been thought through: if you need a longer type than `int` you
-    should use a configure test for a C99/C++11 type such as
-    `int_fast64_t` (and failing that,
-    `long long`[^74^](#FOOT74)) and typedef your own type, or
-    use another suitable type (such as `size_t`).
-
-    It is not safe to assume that `long` and pointer types are the same
-    size, and they are not on 64-bit Windows. If you need to convert
-    pointers to and from integers use the C99/C++11 integer types
-    `intptr_t` and `uintptr_t` (in the headers `<stdint.h>` and
-    `cstdint`: they are not required to be implemented by the standards
-    but are used in C code by R itself).
-
-    Note that `integer` in Fortran corresponds to `int` in C on all R
-    platforms.
-
--   Under no circumstances should your compiled code ever call `abort`
-    or `exit`[^75^](#FOOT75): these terminate the user's R
-    process, quite possibly losing all unsaved work. One usage that
-    could call `abort` is the `assert` macro in C or C++ functions,
-    which should never be active in production code. The normal way to
-    ensure that is to define the macro `NDEBUG`, and `R CMD INSTALL`
-    does so as part of the compilation flags. If you wish to use
-    `assert` during development. you can include `-UNDEBUG` in
-    `PKG_CPPFLAGS`. Note that your own `src/Makefile` or
-    makefiles in sub-directories may also need to define `NDEBUG`.
-
-    This applies not only to your own code but to any external software
-    you compile in or link to.
-
--   Compiled code should not write to `stdout` or
-    `stderr` and C++ and Fortran I/O should not be used. As
-    with the previous item such calls may come from external software
-    and may never be called, but package authors are often mistaken
-    about that.
-
--   Compiled code should not call the system random number generators
-    such as `rand`, `drand48` and `random`[^76^](#FOOT76), but
-    rather use the interfaces to R's RNGs described in [Random
-    numbers](#Random-numbers). In particular, if more than one package
-    initializes the system RNG (e.g. *via* `srand`), they will interfere
-    with each other.
-
-    Nor should the C++11 random number library be used, nor any other
-    third-party random number generators such as those in GSL.
-
--   Errors in memory allocation and reading/writing outside arrays are
-    very common causes of crashes (e.g., segfaults) on some machines.
-    See [Checking memory access](#Checking-memory-access) for tools
-    which can be used to look for this.
-
--   Many platforms will allow unsatisfied entry points in compiled code,
-    but will crash the application (here R) if they are ever used. Some
-    (notably Windows) will not. Looking at the output of
-
-     
-    ``` 
-    nm -pg mypkg.so
-    ```
-    
-
-    and checking if any of the symbols marked `U` is unexpected is a
-    good way to avoid this.
-
--   Linkers have a lot of freedom in how to resolve entry points in
-    dynamically-loaded code, so the results may differ by platform. One
-    area that has caused grief is packages including copies of standard
-    system software such as `libz` (especially those already linked into
-    R). In the case in point, entry point `gzgets` was sometimes
-    resolved against the old version compiled into the package,
-    sometimes against the copy compiled into R and sometimes against the
-    system dynamic library. The only safe solution is to rename the
-    entry points in the copy in the package. We have even seen problems
-    with entry point name `myprintf`, which is a system entry
-    point[^77^](#FOOT77) on some Linux systems.
-
--   Conflicts between symbols in DLLs are handled in very
-    platform-specific ways. Good ways to avoid trouble are to make as
-    many symbols as possible static (check with `nm -pg`), and to use
-    names which are clearly tied to your package (which also helps users
-    if anything does go wrong). Note that symbol names starting with
-    `R_` are regarded as part of R's namespace and should not be used in
-    packages.
-
--   It is good practice for DLLs to register their symbols (see
-    [Registering native routines](#Registering-native-routines)),
-    restrict visibility (see [Controlling
-    visibility](#Controlling-visibility)) and not allow symbol search
-    (see [Registering native routines](#Registering-native-routines)).
-    It should be possible for a DLL to have only one visible symbol,
-    `R_init_pkgname`, on suitable platforms[^78^](#FOOT78),
-    which would completely avoid symbol conflicts.
-
--   It is not portable to call compiled code in R or other packages
-    *via* `.Internal`, `.C`, `.Fortran`, `.Call` or `.External`, since
-    such interfaces are subject to change without notice and will
-    probably result in your code terminating the R process.
-
--   Do not use (hard or symbolic) file links in your package sources.
-    Where possible `R CMD build` will replace them by copies.
-
--   If you do not yourself have a Windows system, consider submitting
-    your source package to WinBuilder
-    (<https://win-builder.r-project.org/>) before distribution.
-
--   It is bad practice for package code to alter the search path using
-    `library`, `require` or `attach` and this often does not work as
-    intended. For alternatives, see [Suggested
-    packages](#Suggested-packages) and `with`.
-
--   Examples can be run interactively *via* `example` as well as in
-    batch mode when checking. So they should behave appropriately in
-    both scenarios, conditioning by `interactive()` the parts which need
-    an operator or observer. For instance, progress
-    bars[^79^](#FOOT79) are only appropriate in interactive
-    use, as is displaying help pages or calling `View()` (see below).
-
--   Be careful with the order of entries in macros such as `PKG_LIBS`.
-    Some linkers will re-order the entries, and behaviour can differ
-    between dynamic and static libraries. Generally `-L`
-    options should precede[^80^](#FOOT80) the libraries
-    (typically specified by `-l` options) to be found from
-    those directories, and libraries are searched once in the order they
-    are specified. Not all linkers allow a space after `-L` .
-
--   Care is needed with the use of `LinkingTo`. This puts one or more
-    directories on the include search path ahead of system headers but
-    (prior to R 3.4.0) after those specified in the `CPPFLAGS` macro of
-    the R build (which normally includes `-I/usr/local/include`, but
-    most platforms ignore that and include it with the system headers).
-
-    Any confusion would be avoided by having `LinkingTo` headers in a
-    directory named after the package. In any case, name conflicts of
-    headers and directories under package `include` directories
-    should be avoided, both between packages and between a package and
-    system and third-party software.
-
--   The `ar` utility is often used in makefiles to make static
-    libraries. Its modifier `u` is defined by POSIX but is disabled in
-    GNU `ar` on some recent Linux distributions which use 'deterministic
-    mode'. The safest way to make a static library is to first remove
-    any existing file of that name then use `ar -cr` and then `ranlib`
-    if needed (which is system-dependent: on most
-    systems[^81^](#FOOT81) `ar` always maintains a symbol
-    table). The POSIX standard says options should be preceded by a
-    hyphen (as in `-cr`), although most OSes accept them
-    without. Note that on some systems `ar -cr` must have at least one
-    file specified.
-
--   Some people have a need to set a locale. Locale names are not
-    portable, and e.g. '`fr_FR.utf8`' is commonly used on Linux
-    but not accepted on either Solaris or macOS.
-    '`fr_FR.UTF-8`' is more portable, being accepted on recent
-    Linux, AIX, FreeBSD, macOS and Solaris (at least). However, some
-    Linux distributions micro-package, so locales defined by **glibc**
-    (including these examples) may not be installed.
-
--   Avoid spaces in file names, not least as they can cause difficulties
-    for external tools. A recent example was a package with a
-    [**knitr**](https://CRAN.R-project.org/package=knitr) vignette that
-    used spaces in plot names: this caused some versions of `pandoc` to
-    fail with a baffling error message.
-
-    Non-ASCII filenames can also cause problems (particularly in
-    non-UTF-8 locales).
-
--   Make sure that any version requirement for Java code is both
-    declared in the '`SystemRequirements`'
-    field[^82^](#FOOT82) and tested at runtime (not least as
-    the Java installation when the package is installed might not be the
-    same as when the package is run and will not be for binary
-    packages). Java 8 is available for fewer platforms than Java 7, and
-    Java 11 for fewer still (at the time of writing, only
-    '`x86_64`' Linux, macOS, 64-bit Windows and 64-bit Solaris
-    11 from Oracle).
-
-    When specifying a minimum Java version please use the official
-    version names, which are (confusingly)
-
-     
-    ``` 
-    1.1 1.2 1.3 1.4 5.0 6 7 8 9 10 11 12 13
-    ```
-    
-
-    and as from 2018 a year.month scheme such as '`18.3`' is
-    also in use.
-
-    A suitable test for Java at least version 8 for packages using
-    [**rJava**](https://CRAN.R-project.org/package=rJava) would be
-    something like
-
-     
-    ``` 
-    .jinit()
-    jv <- .jcall("java/lang/System", "S", "getProperty", "java.runtime.version")
-    if(substr(jv, 1L, 2L) == "1.") {
-      jvn <- as.numeric(paste0(strsplit(jv, "[.]")[[1L]][1:2], collapse = "."))
-      if(jvn < 1.8) stop("Java >= 8 is needed for this package but not available")
-    }
-    ```
-    
-
-    Java 9 changed the format of this string (which used to be something
-    like '`1.8.0_162-b12`'); Java 11 gives `jv` as
-    '`11+28`' whereas Java 10.0.2 gave '`10.0.2+10`'.
-    (<http://openjdk.java.net/jeps/322> details the current scheme. Note
-    that it is necessary to allow for pre-releases like
-    '`11-ea+22`'.)
-
-    Note too that the compiler used to produce a `jar` can impose a
-    minimum Java version, often resulting in an arcane message like
-
-     
-    ``` 
-    java.lang.UnsupportedClassVersionError: ... Unsupported major.minor version 52.0
-    ```
-    
-
-    (Where <https://en.wikipedia.org/wiki/Java_class_file> maps
-    class-file version numbers to Java versions.) Compile with something
-    like `javac -target 1.6` to ensure this is avoided. (As from Java 8,
-    `javac` defaults to compiling for Java 8. Versions as old as
-    '`1.6`' are already deprecated and will give a warning with
-    Java 10's `javac`.) Note this also applies to packages distributing
-    (or even downloading) compiled Java code produced by others, so
-    their requirements need to be checked (they are often not documented
-    accurately) and accounted for. It should be possible to check the
-    class-file version *via* command-line utility `javap`, if necessary
-    after extracting the `.class` files from a `.jar`
-    archive.
-
-    Some packages have stated a requirement on a particular JDK, but a
-    package should only be requiring a JRE unless providing its own Java
-    interface.
-
--   A package with a hard-to-satisfy system requirement is by definition
-    not portable, annoyingly so if this is not declared in the
-    '`SystemRequirements`' field. The most common example is
-    the use of `pandoc`, which is only available for a very limited
-    range of platforms (and has onerous requirements to install from
-    source) and has capabilities[^83^](#FOOT83) that vary by
-    build but are not documented.
-
-    Usage of external commands should always be conditional on a test
-    for presence (perhaps using `Sys.which`), as well as declared in the
-    '`SystemRequirements`' field. A package should pass its
-    checks without warnings nor errors without the external command
-    being present.
-
-    An external command can be a (possibly optional) requirement for an
-    imported or suggested package but needed for examples, tests or
-    vignettes in the package itself. Such usages should always be
-    declared and conditional.
-
-    Interpreters for scripting languages such as Perl, Python and Ruby
-    need to be declared as system requirements and used conditionally:
-    for example macOS 10.16 has been announced not to have them. Python
-    2 has passed end-of-life and been removed from some major
-    distributions. This applies also to a Java interpreter (which macOS
-    does not have by default).
-
--   Be sure to use portable encoding names: none of `utf8`, `mac` and
-    `macroman` is. See the help for `file` for more details.
-
--   Do not invoke R by plain `R`, `Rscript` or (on Windows) `Rterm` in
-    your examples, tests, vignettes, makefiles or other scripts. As
-    pointed out in several places earlier in this manual, use something
-    like
-
-     
-    ``` 
-    "$(R_HOME)/bin/Rscript"
-    "$(R_HOME)/bin$(R_ARCH_BIN)/Rterm"
-    ```
-    
-
-    with appropriate quotes (as, although not recommended, `R_HOME` can
-    contain spaces).
-
--   Do not use `R_HOME` in makefiles except when passing them to the
-    shell. Specifically, do not use `R_HOME` in the argument to
-    `include`, as `R_HOME` can contain spaces. Quoting the argument to
-    `include` does not help. GNU `make`'s `include` accepts spaces when
-    escaped using backslashes (GNU `make` syntax required):
-
-     
-    ``` 
-    ## WARNING: requires GNU make (allowed on Windows)
-    sp =
-    sp +=
-    sq = $(subst $(sp),\ ,$1)
-    include $(call sq,$/etc$/Makeconf)
-    ```
-    
-
-    A portable and the recommended way to avoid the problem of spaces in
-    `$` is using option `-f` of `make`. This is easy to do with
-    recursive invocation of `make`, which is also the only usual
-    situation when `R_HOME` is needed in the argument for `include`.
-
-     
-    ``` 
-    $(MAKE) -f "$/etc$/Makeconf" -f Makefile.inner
-    ```
-    
+- If your package has a `configure` script, provide a
+  `configure.win` script to be used on Windows (an empty file
+  if no actions are needed).
+
+- If your package has a `Makevars` or `Makefile`
+  file, make sure that you use only portable make features. Such files
+  should be LF-terminated[^67^](#FOOT67) (including the final
+  line of the file) and not make use of GNU extensions. (The POSIX
+  specification is available at
+  <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html>;
+  anything not documented there should be regarded as an extension to
+  be avoided. Further advice can be found at
+  <https://www.gnu.org/software/autoconf/manual/autoconf.html#Portable-Make>.
+  ) Commonly misused GNU extensions are conditional inclusions (`ifeq`
+  and the like), `${shell ...}`, `${wildcard ...}` and similar, and
+  the use of `+=`[^68^](#FOOT68) and `:=`. Also, the use of
+  `$<` other than in implicit rules is a GNU extension, as is the `$^`
+  macro. As is the use of `.PHONY` (some other makes ignore it).
+  Unfortunately makefiles which use GNU extensions often run on other
+  platforms but do not have the intended results.
+
+  The use of `${shell ...}` can be avoided by using backticks, e.g.
+
+```r
+PKG_CPPFLAGS = `gsl-config --cflags`
+```
+
+which works in all versions of `make` known[^69^](#FOOT69)
+to be used with R.
+
+If you really must require GNU make, declare it in the
+`DESCRIPTION` file by
+
+```r
+SystemRequirements: GNU make
+```
+
+and ensure that you use the value of environment variable `MAKE`
+(and not just `make`) in your scripts. (On some platforms GNU make
+is available under a name such as `gmake`, and there
+`SystemRequirements` is used to set `MAKE`.)
+
+If you only need GNU make for parts of the package which are rarely
+needed (for example to create bibliography files under
+`vignettes`), use a file called `GNUmakefile`
+rather than `Makefile` as GNU make (only) will use the
+former.
+
+Since the only viable make for Windows is GNU make, it is
+permissible to use GNU extensions in files `Makevars.win`
+or `Makefile.win`.
+
+- Bash extensions also need to be avoided in shell scripts, including
+  expressions in Makefiles (which are passed to the shell for
+  processing). Some R platforms use strict[^70^](#FOOT70)
+  Bourne shells: the R toolset on Windows and some Unix-alike OSes use
+  `ash` (<https://en.wikipedia.org/wiki/Almquist_shell>), a rather
+  minimal shell with few builtins. Beware of assuming that all the
+  POSIX command-line utilities are available, especially on Windows
+  where only a minimal set is provided for use with R. (See [The
+  command line tools](./R-admin.html#The-command-line-tools) in R
+  Installation and Administration.) One particular issue is the use of
+  `echo`, for which two behaviours are allowed
+  (<http://pubs.opengroup.org/onlinepubs/9699919799/utilities/echo.html>)
+  and both occur as defaults on R platforms: portable applications
+  should not use `-n` (as the first argument) nor escape
+  sequences. The recommended replacement for `echo -n` is the command
+  `printf`. Another common issue is the construction
+
+```r
+export FOO=value
+```
+
+which is bash-specific (first set the variable then export it by
+name).
+
+Using `test -e` (or `[ -e ]`) in shell scripts is not portable: `-f`
+is normally what is intended. Flags `-a` and `-o`
+are nowadays declared obsolescent by POSIX and should not be used.
+
+Use of 'brace expansion', e.g.,
+
+```r
+rm -f src/*.{o,so,d}
+```
+
+is not portable.
+
+The `-o` flag for `set` in shell scripts is optional in
+POSIX and not supported on all the platforms R is used on.
+
+On macOS Catalina which shell `/bin/sh` invokes is user-
+and platform-dependent: it might be `bash` version 3.2, `dash` or
+`zsh` (for new accounts it is `zsh`, for accounts ported from an
+earlier version it is usually `bash`).
+
+- Make use of the abilities of your compilers to check the
+  standards-conformance of your code. For example, `gcc` and
+  `gfortran`[^71^](#FOOT71) can be used with options
+  `-Wall -pedantic` to alert you to potential problems. This
+  is particularly important for C++, where `g++ -Wall -pedantic` will
+  alert you to the use of some of the GNU extensions which fail to
+  compile on most other C++ compilers. If R was not configured
+  accordingly, one can achieve this _via_ personal `Makevars`
+  files. See [Customizing package
+  compilation](./R-admin.html#Customizing-package-compilation) in R
+  Installation and Administration,
+
+  Portable C++ code needs to follow the 1998 standard (and not use
+  features from C99), or to specify a C++11 compiler (see [Using C++11
+  code](#Using-C_002b_002b11-code)) where available (which is not the
+  case on all R platforms). Currently C++14 code is less portable and
+  C++17 support is patchy across R platforms.
+
+  If using Fortran with the GNU compiler, use the flags
+  `-std=f95 -Wall -pedantic` which reject most GNU extensions
+  and features from later standards. (Although R only requires Fortran
+  90, `gfortran` does not have a way to specify that standard.)
+
+  R has tested that `DOUBLE COMPLEX` works and so is preferred to
+  `COMPLEX*16`. (One can also use something like
+  `COMPLEX(KIND=KIND(0.0D0))`[^72^](#FOOT72).)
+
+  Not all common R platforms conform to the expected standards, e.g.
+  C99 for C code. One common area of problems is the `*printf`
+  functions where Windows does not support `%lld`, `%Lf` and similar
+  formats (and has its own formats such as `%I64d` for 64-bit
+  integers). It is very rare to need to output such types, and 64-bit
+  integers can usually be converted to doubles for output. However,
+  the C11 standard (section 7.8.1) includes `PRIxNN`
+  macros[^73^](#FOOT73) in C header `inttypes.h`
+  (for example `PRId64`) so the portable approach is to test for these
+  and if not available provide emulations in the package.
+
+- `R CMD check` performs some checks for non-portable compiler/linker
+  flags in `src/Makevars`. However, it cannot check the
+  meaning of such flags, and some are commonly accepted but with
+  compiler-specific meanings. There are other non-portable flags which
+  are not checked, nor are `src/Makefile` files and makefiles
+  in sub-directories. As a comment in the code says
+
+  > It is hard to think of anything apart from `-I*` and
+  > `-D*` that is safe for general use ...
+
+  although `-pthread` is pretty close to portable. (Option
+  `-U` is portable but little use on the command line as it
+  will only cancel built-in defines (not portable) and those defined
+  earlier on the command line (R does not use any).)
+
+  People have used `configure` to customize `src/Makevars`,
+  including for specific compilers. This is unsafe for several
+  reasons. First, unintended compilers might meet the check---for
+  example, several compilers other than GCC identify themselves as
+  'GCC' whilst being only partially conformant. Second, future
+  versions of compilers may behave differently (including updates to
+  quite old series) so for example `-Werror` (and
+  specializations) can make a package non-installable under a future
+  version. Third, using flags to suppress diagnostic messages can hide
+  important information for debugging on a platform not tested by the
+  package maintainer. (`R CMD check` can optionally report on unsafe
+  flags which were used.)
+
+  Avoid the use of `-march` and especially
+  `-march=native`. This allows the compiler to generate code
+  that will only run on a particular class of CPUs (that of the
+  compiling machine for '`native`'). People assume this is a
+  'minimum' CPU specification, but that is not how it is documented
+  for `gcc` (it is accepted by `clang` but apparently it is
+  undocumented what precisely it does, and it can be accepted and may
+  be ignored for other compilers). (For personal use `-mtune`
+  is safer, but still not portable enough to be used in a public
+  package.) Not even `gcc` supports '`native`' for all CPUs,
+  and it can do surprising things if it finds a CPU released later
+  than its version.
+
+- Do be very careful with passing arguments between R, C and Fortran
+  code. In particular, `long` in C will be 32-bit on some R platforms
+  (including 64-bit Windows), but 64-bit on most modern Unix and Linux
+  platforms. It is rather unlikely that the use of `long` in C code
+  has been thought through: if you need a longer type than `int` you
+  should use a configure test for a C99/C++11 type such as
+  `int_fast64_t` (and failing that,
+  `long long`[^74^](#FOOT74)) and typedef your own type, or
+  use another suitable type (such as `size_t`).
+
+  It is not safe to assume that `long` and pointer types are the same
+  size, and they are not on 64-bit Windows. If you need to convert
+  pointers to and from integers use the C99/C++11 integer types
+  `intptr_t` and `uintptr_t` (in the headers `<stdint.h>` and
+  `cstdint`: they are not required to be implemented by the standards
+  but are used in C code by R itself).
+
+  Note that `integer` in Fortran corresponds to `int` in C on all R
+  platforms.
+
+- Under no circumstances should your compiled code ever call `abort`
+  or `exit`[^75^](#FOOT75): these terminate the user's R
+  process, quite possibly losing all unsaved work. One usage that
+  could call `abort` is the `assert` macro in C or C++ functions,
+  which should never be active in production code. The normal way to
+  ensure that is to define the macro `NDEBUG`, and `R CMD INSTALL`
+  does so as part of the compilation flags. If you wish to use
+  `assert` during development. you can include `-UNDEBUG` in
+  `PKG_CPPFLAGS`. Note that your own `src/Makefile` or
+  makefiles in sub-directories may also need to define `NDEBUG`.
+
+  This applies not only to your own code but to any external software
+  you compile in or link to.
+
+- Compiled code should not write to `stdout` or
+  `stderr` and C++ and Fortran I/O should not be used. As
+  with the previous item such calls may come from external software
+  and may never be called, but package authors are often mistaken
+  about that.
+
+- Compiled code should not call the system random number generators
+  such as `rand`, `drand48` and `random`[^76^](#FOOT76), but
+  rather use the interfaces to R's RNGs described in [Random
+  numbers](#Random-numbers). In particular, if more than one package
+  initializes the system RNG (e.g. _via_ `srand`), they will interfere
+  with each other.
+
+  Nor should the C++11 random number library be used, nor any other
+  third-party random number generators such as those in GSL.
+
+- Errors in memory allocation and reading/writing outside arrays are
+  very common causes of crashes (e.g., segfaults) on some machines.
+  See [Checking memory access](#Checking-memory-access) for tools
+  which can be used to look for this.
+
+- Many platforms will allow unsatisfied entry points in compiled code,
+  but will crash the application (here R) if they are ever used. Some
+  (notably Windows) will not. Looking at the output of
+
+```r
+nm -pg mypkg.so
+```
+
+and checking if any of the symbols marked `U` is unexpected is a
+good way to avoid this.
+
+- Linkers have a lot of freedom in how to resolve entry points in
+  dynamically-loaded code, so the results may differ by platform. One
+  area that has caused grief is packages including copies of standard
+  system software such as `libz` (especially those already linked into
+  R). In the case in point, entry point `gzgets` was sometimes
+  resolved against the old version compiled into the package,
+  sometimes against the copy compiled into R and sometimes against the
+  system dynamic library. The only safe solution is to rename the
+  entry points in the copy in the package. We have even seen problems
+  with entry point name `myprintf`, which is a system entry
+  point[^77^](#FOOT77) on some Linux systems.
+
+- Conflicts between symbols in DLLs are handled in very
+  platform-specific ways. Good ways to avoid trouble are to make as
+  many symbols as possible static (check with `nm -pg`), and to use
+  names which are clearly tied to your package (which also helps users
+  if anything does go wrong). Note that symbol names starting with
+  `R_` are regarded as part of R's namespace and should not be used in
+  packages.
+
+- It is good practice for DLLs to register their symbols (see
+  [Registering native routines](#Registering-native-routines)),
+  restrict visibility (see [Controlling
+  visibility](#Controlling-visibility)) and not allow symbol search
+  (see [Registering native routines](#Registering-native-routines)).
+  It should be possible for a DLL to have only one visible symbol,
+  `R_init_pkgname`, on suitable platforms[^78^](#FOOT78),
+  which would completely avoid symbol conflicts.
+
+- It is not portable to call compiled code in R or other packages
+  _via_ `.Internal`, `.C`, `.Fortran`, `.Call` or `.External`, since
+  such interfaces are subject to change without notice and will
+  probably result in your code terminating the R process.
+
+- Do not use (hard or symbolic) file links in your package sources.
+  Where possible `R CMD build` will replace them by copies.
+
+- If you do not yourself have a Windows system, consider submitting
+  your source package to WinBuilder
+  (<https://win-builder.r-project.org/>) before distribution.
+
+- It is bad practice for package code to alter the search path using
+  `library`, `require` or `attach` and this often does not work as
+  intended. For alternatives, see [Suggested
+  packages](#Suggested-packages) and `with`.
+
+- Examples can be run interactively _via_ `example` as well as in
+  batch mode when checking. So they should behave appropriately in
+  both scenarios, conditioning by `interactive()` the parts which need
+  an operator or observer. For instance, progress
+  bars[^79^](#FOOT79) are only appropriate in interactive
+  use, as is displaying help pages or calling `View()` (see below).
+
+- Be careful with the order of entries in macros such as `PKG_LIBS`.
+  Some linkers will re-order the entries, and behaviour can differ
+  between dynamic and static libraries. Generally `-L`
+  options should precede[^80^](#FOOT80) the libraries
+  (typically specified by `-l` options) to be found from
+  those directories, and libraries are searched once in the order they
+  are specified. Not all linkers allow a space after `-L` .
+
+- Care is needed with the use of `LinkingTo`. This puts one or more
+  directories on the include search path ahead of system headers but
+  (prior to R 3.4.0) after those specified in the `CPPFLAGS` macro of
+  the R build (which normally includes `-I/usr/local/include`, but
+  most platforms ignore that and include it with the system headers).
+
+  Any confusion would be avoided by having `LinkingTo` headers in a
+  directory named after the package. In any case, name conflicts of
+  headers and directories under package `include` directories
+  should be avoided, both between packages and between a package and
+  system and third-party software.
+
+- The `ar` utility is often used in makefiles to make static
+  libraries. Its modifier `u` is defined by POSIX but is disabled in
+  GNU `ar` on some recent Linux distributions which use 'deterministic
+  mode'. The safest way to make a static library is to first remove
+  any existing file of that name then use `ar -cr` and then `ranlib`
+  if needed (which is system-dependent: on most
+  systems[^81^](#FOOT81) `ar` always maintains a symbol
+  table). The POSIX standard says options should be preceded by a
+  hyphen (as in `-cr`), although most OSes accept them
+  without. Note that on some systems `ar -cr` must have at least one
+  file specified.
+
+- Some people have a need to set a locale. Locale names are not
+  portable, and e.g. '`fr_FR.utf8`' is commonly used on Linux
+  but not accepted on either Solaris or macOS.
+  '`fr_FR.UTF-8`' is more portable, being accepted on recent
+  Linux, AIX, FreeBSD, macOS and Solaris (at least). However, some
+  Linux distributions micro-package, so locales defined by **glibc**
+  (including these examples) may not be installed.
+
+- Avoid spaces in file names, not least as they can cause difficulties
+  for external tools. A recent example was a package with a
+  [**knitr**](https://CRAN.R-project.org/package=knitr) vignette that
+  used spaces in plot names: this caused some versions of `pandoc` to
+  fail with a baffling error message.
+
+  Non-ASCII filenames can also cause problems (particularly in
+  non-UTF-8 locales).
+
+- Make sure that any version requirement for Java code is both
+  declared in the '`SystemRequirements`'
+  field[^82^](#FOOT82) and tested at runtime (not least as
+  the Java installation when the package is installed might not be the
+  same as when the package is run and will not be for binary
+  packages). Java 8 is available for fewer platforms than Java 7, and
+  Java 11 for fewer still (at the time of writing, only
+  '`x86_64`' Linux, macOS, 64-bit Windows and 64-bit Solaris
+  11 from Oracle).
+
+  When specifying a minimum Java version please use the official
+  version names, which are (confusingly)
+
+```r
+1.1 1.2 1.3 1.4 5.0 6 7 8 9 10 11 12 13
+```
+
+and as from 2018 a year.month scheme such as '`18.3`' is
+also in use.
+
+A suitable test for Java at least version 8 for packages using
+[**rJava**](https://CRAN.R-project.org/package=rJava) would be
+something like
+
+```r
+.jinit()
+jv <- .jcall("java/lang/System", "S", "getProperty", "java.runtime.version")
+if(substr(jv, 1L, 2L) == "1.") {
+  jvn <- as.numeric(paste0(strsplit(jv, "[.]")[[1L]][1:2], collapse = "."))
+  if(jvn < 1.8) stop("Java >= 8 is needed for this package but not available")
+}
+```
+
+Java 9 changed the format of this string (which used to be something
+like '`1.8.0_162-b12`'); Java 11 gives `jv` as
+'`11+28`' whereas Java 10.0.2 gave '`10.0.2+10`'.
+(<http://openjdk.java.net/jeps/322> details the current scheme. Note
+that it is necessary to allow for pre-releases like
+'`11-ea+22`'.)
+
+Note too that the compiler used to produce a `jar` can impose a
+minimum Java version, often resulting in an arcane message like
+
+```r
+java.lang.UnsupportedClassVersionError: ... Unsupported major.minor version 52.0
+```
+
+(Where <https://en.wikipedia.org/wiki/Java_class_file> maps
+class-file version numbers to Java versions.) Compile with something
+like `javac -target 1.6` to ensure this is avoided. (As from Java 8,
+`javac` defaults to compiling for Java 8. Versions as old as
+'`1.6`' are already deprecated and will give a warning with
+Java 10's `javac`.) Note this also applies to packages distributing
+(or even downloading) compiled Java code produced by others, so
+their requirements need to be checked (they are often not documented
+accurately) and accounted for. It should be possible to check the
+class-file version _via_ command-line utility `javap`, if necessary
+after extracting the `.class` files from a `.jar`
+archive.
+
+Some packages have stated a requirement on a particular JDK, but a
+package should only be requiring a JRE unless providing its own Java
+interface.
+
+- A package with a hard-to-satisfy system requirement is by definition
+  not portable, annoyingly so if this is not declared in the
+  '`SystemRequirements`' field. The most common example is
+  the use of `pandoc`, which is only available for a very limited
+  range of platforms (and has onerous requirements to install from
+  source) and has capabilities[^83^](#FOOT83) that vary by
+  build but are not documented.
+
+  Usage of external commands should always be conditional on a test
+  for presence (perhaps using `Sys.which`), as well as declared in the
+  '`SystemRequirements`' field. A package should pass its
+  checks without warnings nor errors without the external command
+  being present.
+
+  An external command can be a (possibly optional) requirement for an
+  imported or suggested package but needed for examples, tests or
+  vignettes in the package itself. Such usages should always be
+  declared and conditional.
+
+  Interpreters for scripting languages such as Perl, Python and Ruby
+  need to be declared as system requirements and used conditionally:
+  for example macOS 10.16 has been announced not to have them. Python
+  2 has passed end-of-life and been removed from some major
+  distributions. This applies also to a Java interpreter (which macOS
+  does not have by default).
+
+- Be sure to use portable encoding names: none of `utf8`, `mac` and
+  `macroman` is. See the help for `file` for more details.
+
+- Do not invoke R by plain `R`, `Rscript` or (on Windows) `Rterm` in
+  your examples, tests, vignettes, makefiles or other scripts. As
+  pointed out in several places earlier in this manual, use something
+  like
+
+```r
+"$(R_HOME)/bin/Rscript"
+"$(R_HOME)/bin$(R_ARCH_BIN)/Rterm"
+```
+
+with appropriate quotes (as, although not recommended, `R_HOME` can
+contain spaces).
+
+- Do not use `R_HOME` in makefiles except when passing them to the
+  shell. Specifically, do not use `R_HOME` in the argument to
+  `include`, as `R_HOME` can contain spaces. Quoting the argument to
+  `include` does not help. GNU `make`'s `include` accepts spaces when
+  escaped using backslashes (GNU `make` syntax required):
+
+```r
+## WARNING: requires GNU make (allowed on Windows)
+sp =
+sp +=
+sq = $(subst $(sp),\ ,$1)
+include $(call sq,${R_HOME}/etc${R_ARCH}/Makeconf)
+```
+
+A portable and the recommended way to avoid the problem of spaces in
+`${R_HOME}` is using option `-f` of `make`. This is easy to do with
+recursive invocation of `make`, which is also the only usual
+situation when `R_HOME` is needed in the argument for `include`.
+
+```r
+$(MAKE) -f "${R_HOME}/etc${R_ARCH}/Makeconf" -f Makefile.inner
+```
 
 Do be careful in what your tests (and examples) actually test. Bad
 practice seen in distributed packages include:
 
--   It is not reasonable to test the time taken by a command: you cannot
-    know how fast or how heavily loaded an R platform might be. At best
-    you can test a ratio of times, and even that is fraught with
-    difficulties and not advisable: the just-in-time compiler (JIT) and
-    the GC may trigger at unpredictable times, following heuristics that
-    may change without notice.
+- It is not reasonable to test the time taken by a command: you cannot
+  know how fast or how heavily loaded an R platform might be. At best
+  you can test a ratio of times, and even that is fraught with
+  difficulties and not advisable: the just-in-time compiler (JIT) and
+  the GC may trigger at unpredictable times, following heuristics that
+  may change without notice.
 
--   Do not test the exact format of R messages (from R itself or from
-    other packages): They change, and they can be translated.
+- Do not test the exact format of R messages (from R itself or from
+  other packages): They change, and they can be translated.
 
-    Packages have even tested the exact format of system error messages,
-    which are platform-dependent and perhaps locale-dependent.
+  Packages have even tested the exact format of system error messages,
+  which are platform-dependent and perhaps locale-dependent.
 
--   If you use functions such as `View`, remember that in testing there
-    is no one to look at the output. It is better to use something like
-    one of
-     
-    ``` 
-    if(interactive()) View(obj) else print(head(obj))
-    if(interactive()) View(obj) else str(obj)
-    ```
-    
+- If you use functions such as `View`, remember that in testing there
+  is no one to look at the output. It is better to use something like
+  one of
 
--   Be careful when comparing file paths. There can be multiple paths to
-    a single file, and some of these can be very long character strings.
-    If possible canonicalize paths before comparisons, but study
-    `?normalizePath` to be aware of the pitfalls.
+```r
+if(interactive()) View(obj) else print(head(obj))
+if(interactive()) View(obj) else str(obj)
+```
 
--   Only test the accuracy of results if you have done a formal error
-    analysis. Things such as checking that probabilities numerically sum
-    to one are silly: numerical tests should always have a tolerance.
-    That the tests on your platform achieve a particular tolerance says
-    little about other platforms. R is configured by default to make use
-    of long doubles where available, but they may not be available or be
-    too slow for routine use. Most R platforms use '`ix86`' or
-    '`x86_64`' CPUs: these may use extended precision registers
-    on some but not all of their FPU instructions. Thus the achieved
-    precision can depend on the compiler version and optimization
-    flags---our experience is that 32-bit builds tend to be less precise
-    than 64-bit ones. But not all platforms use those CPUs, and not
-    all[^84^](#FOOT84) which use them configure them to allow
-    the use of extended precision. In particular, ARM CPUs do not
-    (currently) have extended precision nor long doubles, and long
-    double was 64-bit on HP/PA Linux.
+- Be careful when comparing file paths. There can be multiple paths to
+  a single file, and some of these can be very long character strings.
+  If possible canonicalize paths before comparisons, but study
+  `?normalizePath` to be aware of the pitfalls.
 
-    If you must try to establish a tolerance empirically, configure and
-    build R with `--disable-long-double` and use appropriate
-    compiler flags (such as `-ffloat-store` and
-    `-fexcess-precision=standard` for `gcc`, depending on the
-    CPU type[^85^](#FOOT85)) to mitigate the effects of
-    extended-precision calculations.
+- Only test the accuracy of results if you have done a formal error
+  analysis. Things such as checking that probabilities numerically sum
+  to one are silly: numerical tests should always have a tolerance.
+  That the tests on your platform achieve a particular tolerance says
+  little about other platforms. R is configured by default to make use
+  of long doubles where available, but they may not be available or be
+  too slow for routine use. Most R platforms use '`ix86`' or
+  '`x86_64`' CPUs: these may use extended precision registers
+  on some but not all of their FPU instructions. Thus the achieved
+  precision can depend on the compiler version and optimization
+  flags---our experience is that 32-bit builds tend to be less precise
+  than 64-bit ones. But not all platforms use those CPUs, and not
+  all[^84^](#FOOT84) which use them configure them to allow
+  the use of extended precision. In particular, ARM CPUs do not
+  (currently) have extended precision nor long doubles, and long
+  double was 64-bit on HP/PA Linux.
 
-    Tests which involve random inputs or non-deterministic algorithms
-    should normally set a seed or be tested for many seeds.
+  If you must try to establish a tolerance empirically, configure and
+  build R with `--disable-long-double` and use appropriate
+  compiler flags (such as `-ffloat-store` and
+  `-fexcess-precision=standard` for `gcc`, depending on the
+  CPU type[^85^](#FOOT85)) to mitigate the effects of
+  extended-precision calculations.
 
-------------------------------------------------------------------------
+  Tests which involve random inputs or non-deterministic algorithms
+  should normally set a seed or be tested for many seeds.
 
- 
-Next: [Check timing](#Check-timing), Previous: [Writing portable
-packages](#Writing-portable-packages), Up: [Writing portable
-packages](#Writing-portable-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.6.1 PDF size 
+#### 1.6.1 PDF size
 
 There are a several tools available to reduce the size of PDF files:
 often the size can be reduced substantially with no or minimal loss in
@@ -5249,15 +4804,13 @@ for a package manual). These tools include Adobe Acrobat (not Reader),
 Apple's Preview[^86^](#FOOT86) and Ghostscript (which converts
 PDF to PDF by
 
- 
-``` 
+```r
 ps2pdf options -dAutoRotatePages=/None -dPrinted=false in.pdf out.pdf
 ```
 
 and suitable options might be
 
- 
-``` 
+```r
 -dPDFSETTINGS=/ebook
 -dPDFSETTINGS=/screen
 ```
@@ -5276,15 +4829,9 @@ Option `--compact-vignettes` to `R CMD build` defaults to value
 size, provided you have Ghostscript available (see the help for
 `tools::compactPDF`).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Encoding issues](#Encoding-issues), Previous: [PDF
-size](#PDF-size), Up: [Writing portable
-packages](#Writing-portable-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.6.2 Check timing 
+#### 1.6.2 Check timing
 
 There are several ways to find out where time is being spent in the
 check process. Start by setting the environment variable
@@ -5310,15 +4857,9 @@ corresponding log file: note that log files for successful vignette runs
 are only retained if environment variable
 `_R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_` is set to a true value.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Portable C and C++ code](#Portable-C-and-C_002b_002b-code),
-Previous: [Check timing](#Check-timing), Up: [Writing portable
-packages](#Writing-portable-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.6.3 Encoding issues 
+#### 1.6.3 Encoding issues
 
 Care is needed if your package contains non-ASCII text, and in
 particular if it is intended to be used in more than one locale. It is
@@ -5350,7 +4891,7 @@ There is a portable way to have arbitrary text in character strings
 current encoding the parser will encode the character string as UTF-8
 and mark it as such. This applies also to character strings in datasets:
 they can be prepared using '`\uxxxx`' escapes or encoded in
-UTF-8 in a UTF-8 locale, or even converted to UTF-8 *via* `iconv()`. If
+UTF-8 in a UTF-8 locale, or even converted to UTF-8 _via_ `iconv()`. If
 you do this, make sure you have '`R (>= 2.10)`' (or later) in
 the '`Depends`' field of the `DESCRIPTION` file.
 
@@ -5375,13 +4916,12 @@ surprisingly common misuse is to use a right quote in '`don't`'
 instead of the correct apostrophe.
 
 If you want to run `R CMD check` on a Unix-alike over a package that
-sets a package encoding in its `DESCRIPTION` file *and do not
-use a UTF-8 locale* you may need to specify a suitable locale *via*
+sets a package encoding in its `DESCRIPTION` file _and do not
+use a UTF-8 locale_ you may need to specify a suitable locale _via_
 environment variable `R_ENCODING_LOCALES`. The default is equivalent to
 the value
 
- 
-``` 
+```r
 "latin1=en_US:latin2=pl_PL:UTF-8=en_US.UTF-8:latin9=fr_FR.iso885915@euro"
 ```
 
@@ -5390,19 +4930,15 @@ the value
 then the package code is translated to UTF-8 for syntax checking, so it
 is strongly recommended to check in a UTF-8 locale.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Binary distribution](#Binary-distribution), Previous: [Encoding
-issues](#Encoding-issues), Up: [Writing portable
-packages](#Writing-portable-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+#### 1.6.4 Portable C and C++ code
 
-#### 1.6.4 Portable C and C++ code 
+---
 
-  ------------------------------------- ---- --
-  • [Common symbols](#Common-symbols)        
-  ------------------------------------- ---- --
+• [Common symbols](#Common-symbols)
+
+---
 
 Writing portable C and C++ code is mainly a matter of observing the
 standards (C99, C++11 or where declared C++98/14/17) and testing that
@@ -5427,21 +4963,19 @@ values, and on some compiler/OS combinations[^91^](#FOOT91)
 they are not declared otherwise. So you may need to include something
 like one of [^92^](#FOOT92)
 
- 
-``` 
+```r
 #define _XOPEN_SOURCE 600
 ```
 
 or
 
- 
-``` 
+```r
 #ifdef __GLIBC__
 # define _POSIX_C_SOURCE 200809L
 #endif
 ```
 
-before *any* headers. (`strdup` and `strncasecmp` are two such
+before _any_ headers. (`strdup` and `strncasecmp` are two such
 functions.)
 
 However, some common errors are worth pointing out here. It can be
@@ -5449,7 +4983,7 @@ helpful to look up functions at <http://www.cplusplus.com/reference/> or
 <http://en.cppreference.com/w/> and compare what is defined in the
 various standards.
 
-Both the compiler and OS (*via* system header files, which may differ by
+Both the compiler and OS (_via_ system header files, which may differ by
 architecture even for nominally the same OS) affect the compilability of
 C/C++ code. Compilers from the GCC, `clang`, Intel and Oracle Developer
 Studio suites are routinely used with R, and both `clang` and Oracle
@@ -5458,328 +4992,304 @@ of possibilities makes comprehensive empirical checking impossible, and
 regrettably compilers are patchy at best on warning about non-standard
 code.
 
--   Mathematical functions such as `sqrt` are defined in C++11 for
-    floating-point arguments: `float`, `double`, `long double` and
-    possibly more. The standard specifies what happens with an argument
-    of integer type but this is not always implemented, resulting in a
-    report of 'overloading ambiguity': this is commonly seen on Solaris,
-    but for `pow` also seen on macOS.
+- Mathematical functions such as `sqrt` are defined in C++11 for
+  floating-point arguments: `float`, `double`, `long double` and
+  possibly more. The standard specifies what happens with an argument
+  of integer type but this is not always implemented, resulting in a
+  report of 'overloading ambiguity': this is commonly seen on Solaris,
+  but for `pow` also seen on macOS.
 
-    A not-uncommonly-seen problem is to mistakenly call `floor(x/y)` or
-    `ceil(x/y)` for `int` arguments `x` and `y`. Since `x/y` does
-    integer division, the result is of type `int` and 'overloading
-    ambiguity' may be reported. Some people have (pointlessly) called
-    `floor` and `ceil` on arguments of integer type, which may have an
-    'overloading ambiguity'.
+  A not-uncommonly-seen problem is to mistakenly call `floor(x/y)` or
+  `ceil(x/y)` for `int` arguments `x` and `y`. Since `x/y` does
+  integer division, the result is of type `int` and 'overloading
+  ambiguity' may be reported. Some people have (pointlessly) called
+  `floor` and `ceil` on arguments of integer type, which may have an
+  'overloading ambiguity'.
 
-    A surprising common misuse is things like `pow(10, -3)`: this should
-    be the constant `1e-3`. Note that there are constants such as
-    `M_SQRT2` defined in `Rmath.h`[^93^](#FOOT93) for
-    `sqrt(2.0)`, frequently mis-coded as `sqrt(2)`.
+  A surprising common misuse is things like `pow(10, -3)`: this should
+  be the constant `1e-3`. Note that there are constants such as
+  `M_SQRT2` defined in `Rmath.h`[^93^](#FOOT93) for
+  `sqrt(2.0)`, frequently mis-coded as `sqrt(2)`.
 
--   Function `fabs` is defined only for floating-point types, except in
-    C++11 which has overloads for `std::fabs` in `<cmath>` for
-    integer types. Function `abs` is defined in C99's
-    `<stdlib.h>` for `int` and in C++'s `<cstdlib>`
-    for integer types, overloaded in `<cmath>` for
-    floating-point types. C++11 has additional overloads for `std::abs`
-    in `<cmath>` for integer types. The effect of calling `abs`
-    with a floating-point type is implementation-specific: it may
-    truncate to an integer. For clarity and to avoid compiler warnings,
-    use `abs` for integer types and `fabs` for double values.
+- Function `fabs` is defined only for floating-point types, except in
+  C++11 which has overloads for `std::fabs` in `<cmath>` for
+  integer types. Function `abs` is defined in C99's
+  `<stdlib.h>` for `int` and in C++'s `<cstdlib>`
+  for integer types, overloaded in `<cmath>` for
+  floating-point types. C++11 has additional overloads for `std::abs`
+  in `<cmath>` for integer types. The effect of calling `abs`
+  with a floating-point type is implementation-specific: it may
+  truncate to an integer. For clarity and to avoid compiler warnings,
+  use `abs` for integer types and `fabs` for double values.
 
--   It is an error (and make little sense, although has been seen) to
-    call macros/functions `isnan`, `isinf` and `isfinite` for integer
-    arguments: a few compilers give a compilation error. Function
-    `finite` is obsolete, and some compilers will warn about its use.
+- It is an error (and make little sense, although has been seen) to
+  call macros/functions `isnan`, `isinf` and `isfinite` for integer
+  arguments: a few compilers give a compilation error. Function
+  `finite` is obsolete, and some compilers will warn about its use.
 
--   The GNU C/C++ compilers support a large number of non-portable
-    extensions. For example, `INFINITY` (which is a *float* value in C99
-    and C++11 but not C++98), for which R provides the portable double
-    value `R_PosInf` (and `R_NegInf` for `-INFINITY`). And
-    `NAN`[^94^](#FOOT94) is just one NaN *float* value: for use
-    with R, `NA_REAL` is usually what is intended, but `R_NaN` is also
-    available.
+- The GNU C/C++ compilers support a large number of non-portable
+  extensions. For example, `INFINITY` (which is a _float_ value in C99
+  and C++11 but not C++98), for which R provides the portable double
+  value `R_PosInf` (and `R_NegInf` for `-INFINITY`). And
+  `NAN`[^94^](#FOOT94) is just one NaN _float_ value: for use
+  with R, `NA_REAL` is usually what is intended, but `R_NaN` is also
+  available.
 
-    Some (but not all) extensions are listed at
-    <https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html> and
-    <https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Extensions.html>.
+  Some (but not all) extensions are listed at
+  <https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html> and
+  <https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Extensions.html>.
 
-    Other GNU extensions which have bitten package writers is the use of
-    non-portable characters such as '`$`' in identifiers and
-    use of C++ headers under `ext`.
+  Other GNU extensions which have bitten package writers is the use of
+  non-portable characters such as '`$`' in identifiers and
+  use of C++ headers under `ext`.
 
-    The GNU Fortran compiler also supports a large number of
-    non-portable extensions, the most commonly encountered one being
-    `ISNAN`[^95^](#FOOT95). Some are listed at
-    <https://gcc.gnu.org/onlinedocs/gfortran/Extensions-implemented-in-GNU-Fortran.html>.
-    One that frequently catches package writers is that it allows
-    out-of-order declarations: in standard-conformant Fortran variables
-    must be declared (explicitly or implicitly) before use in other
-    declarations such as dimensions.
+  The GNU Fortran compiler also supports a large number of
+  non-portable extensions, the most commonly encountered one being
+  `ISNAN`[^95^](#FOOT95). Some are listed at
+  <https://gcc.gnu.org/onlinedocs/gfortran/Extensions-implemented-in-GNU-Fortran.html>.
+  One that frequently catches package writers is that it allows
+  out-of-order declarations: in standard-conformant Fortran variables
+  must be declared (explicitly or implicitly) before use in other
+  declarations such as dimensions.
 
--   Including C-style headers in C++ code is not portable. Including the
-    legacy header[^96^](#FOOT96) `math.h` in C++ code
-    may conflict with `cmath` which may be included by other
-    headers. This is particularly problematic with C++11 compilers, as
-    functions like `sqrt` and `isnan` are defined for `double` arguments
-    in `math.h` and for a range of types including `double` in
-    `cmath`. Similar issues have been seen for
-    `stdlib.h` and `cstdlib`. Including the C++
-    version first used to be a sufficient workaround but for some 2016
-    compilers only one could be included.
+- Including C-style headers in C++ code is not portable. Including the
+  legacy header[^96^](#FOOT96) `math.h` in C++ code
+  may conflict with `cmath` which may be included by other
+  headers. This is particularly problematic with C++11 compilers, as
+  functions like `sqrt` and `isnan` are defined for `double` arguments
+  in `math.h` and for a range of types including `double` in
+  `cmath`. Similar issues have been seen for
+  `stdlib.h` and `cstdlib`. Including the C++
+  version first used to be a sufficient workaround but for some 2016
+  compilers only one could be included.
 
--   Be careful to include the headers which define the functions you
-    use. Some compilers/OSes include other system headers in their
-    headers which are not required by the standards, and so code may
-    compile on such systems and not on others. (A prominent example is
-    the C++ header `<random>` which is indirectly included by
-    `<algorithm>` by `g++`. Another issue is the C header `<time.h>`
-    which is included by other headers on Linux and Windows but not
-    macOS nor Solaris.)
+- Be careful to include the headers which define the functions you
+  use. Some compilers/OSes include other system headers in their
+  headers which are not required by the standards, and so code may
+  compile on such systems and not on others. (A prominent example is
+  the C++ header `<random>` which is indirectly included by
+  `<algorithm>` by `g++`. Another issue is the C header `<time.h>`
+  which is included by other headers on Linux and Windows but not
+  macOS nor Solaris.)
 
-    Note that `malloc`, `calloc`, `realloc` and `free` are defined by
-    C99 in the header `stdlib.h` and (in the `std::` namespace)
-    by C++ header `cstdlib`. Some earlier implementations used
-    a header `malloc.h`, but that is not portable and does not
-    exist on macOS.
+  Note that `malloc`, `calloc`, `realloc` and `free` are defined by
+  C99 in the header `stdlib.h` and (in the `std::` namespace)
+  by C++ header `cstdlib`. Some earlier implementations used
+  a header `malloc.h`, but that is not portable and does not
+  exist on macOS.
 
-    This also applies to types such as `ssize_t`. The POSIX standards
-    say that is declared in headers `unistd.h` and `sys/types.h`, and
-    the latter is often included indirectly by other headers on some but
-    not all systems.
+  This also applies to types such as `ssize_t`. The POSIX standards
+  say that is declared in headers `unistd.h` and `sys/types.h`, and
+  the latter is often included indirectly by other headers on some but
+  not all systems.
 
-    Similarly for constants: for example `SIZE_MAX` is defined in
-    `stdint.h` alongside `size_t`.
+  Similarly for constants: for example `SIZE_MAX` is defined in
+  `stdint.h` alongside `size_t`.
 
--   For C++ code, be careful to specify namespaces where needed. Many
-    functions are defined by the standards to be in the `std` namespace,
-    but `g++` puts many such also in the C++ main namespace. One way to
-    do so is to use declarations such as
+- For C++ code, be careful to specify namespaces where needed. Many
+  functions are defined by the standards to be in the `std` namespace,
+  but `g++` puts many such also in the C++ main namespace. One way to
+  do so is to use declarations such as
 
-     
-    ``` 
-    using std::floor;
-    ```
-    
+```r
+using std::floor;
+```
 
-    but it is usually preferable to use explicit namespace prefixes in
-    the code.
+but it is usually preferable to use explicit namespace prefixes in
+the code.
 
-    Examples seen in CRAN packages include
+Examples seen in CRAN packages include
 
-     
-    ``` 
-    abs acos atan bind calloc ceil div exp fabs floor fmod free log malloc
-    memcpy memset pow printf qsort round sin sprintf sqrt strcmp strcpy
-    strerror strlen strncmp strtol tan trunc
-    ```
-    
+```r
+abs acos atan bind calloc ceil div exp fabs floor fmod free log malloc
+memcpy memset pow printf qsort round sin sprintf sqrt strcmp strcpy
+strerror strlen strncmp strtol tan trunc
+```
 
-    This problem is less common than it used to be, but in 2019 `clang`
-    did not have `bind` in the main namespace.
+This problem is less common than it used to be, but in 2019 `clang`
+did not have `bind` in the main namespace.
 
--   Some C++ compilers refuse to compile constructs such as
+- Some C++ compilers refuse to compile constructs such as
 
-     
-    ``` 
-          if(ptr > 0) 
-    ```
-    
+```r
+      if(ptr > 0) { ....}
+```
 
-    which compares a pointer to the integer `0`. This could just use
-    `if(ptr)` (pointer addresses cannot be negative) but if needed
-    pointers can be tested against `nullptr` (C++11) or `NULL`.
+which compares a pointer to the integer `0`. This could just use
+`if(ptr)` (pointer addresses cannot be negative) but if needed
+pointers can be tested against `nullptr` (C++11) or `NULL`.
 
--   Macros defined by the compiler/OS can cause problems. Identifiers
-    starting with an underscore followed by an upper-case letter or
-    another underscore are reserved for system macros and should not be
-    used in portable code (including not as guards in C/C++ headers).
-    Other macros, typically upper-case, may be defined by the compiler
-    or system headers and can cause problems. The most common issue
-    involves the names of the Intel CPU registers such as `CS`, `DS`,
-    `ES`, `FS`, `GS` and `SS` (and more with longer
-    abbreviations[^97^](#FOOT97)) defined on i586/x64 Solaris
-    in `<sys/regset.h>` and often included indirectly by
-    `<stdlib.h>` and other core headers. Further examples are
-    `ERR`, `VERSION`, `LITTLE_ENDIAN`, `zero` and `I` (which is defined
-    in Solaris' `<complex.h>` as a compiler intrinsic for the
-    imaginary unit). Some of these can be avoided by defining
-    `_POSIX_C_SOURCE` before including any system headers, but it is
-    better to only use all-upper-case names which have a unique prefix
-    such as the package name.
+- Macros defined by the compiler/OS can cause problems. Identifiers
+  starting with an underscore followed by an upper-case letter or
+  another underscore are reserved for system macros and should not be
+  used in portable code (including not as guards in C/C++ headers).
+  Other macros, typically upper-case, may be defined by the compiler
+  or system headers and can cause problems. The most common issue
+  involves the names of the Intel CPU registers such as `CS`, `DS`,
+  `ES`, `FS`, `GS` and `SS` (and more with longer
+  abbreviations[^97^](#FOOT97)) defined on i586/x64 Solaris
+  in `<sys/regset.h>` and often included indirectly by
+  `<stdlib.h>` and other core headers. Further examples are
+  `ERR`, `VERSION`, `LITTLE_ENDIAN`, `zero` and `I` (which is defined
+  in Solaris' `<complex.h>` as a compiler intrinsic for the
+  imaginary unit). Some of these can be avoided by defining
+  `_POSIX_C_SOURCE` before including any system headers, but it is
+  better to only use all-upper-case names which have a unique prefix
+  such as the package name.
 
--   `typedef`s in OS headers can conflict with those in the package:
-    examples include `ulong` on several OSes and `index_t` and `single`
-    on Solaris. (Note that these may conflict with other uses as
-    identifiers, e.g. defining a C++ function called `single`.)
+- `typedef`s in OS headers can conflict with those in the package:
+  examples include `ulong` on several OSes and `index_t` and `single`
+  on Solaris. (Note that these may conflict with other uses as
+  identifiers, e.g. defining a C++ function called `single`.)
 
--   If you use OpenMP, check carefully that you have followed the advice
-    in the subsection on [OpenMP support](#OpenMP-support). In
-    particular, any use of OpenMP in C/C++ code will need to use
+- If you use OpenMP, check carefully that you have followed the advice
+  in the subsection on [OpenMP support](#OpenMP-support). In
+  particular, any use of OpenMP in C/C++ code will need to use
 
-     
-    ``` 
-    #ifdef _OPENMP
-    # include <omp.h>
-    #endif
-    ```
-    
+```r
+#ifdef _OPENMP
+# include <omp.h>
+#endif
+```
 
-    Any use of OpenMP functions, e.g. `omp_set_num_threads`, also needs
-    to be conditioned.
+Any use of OpenMP functions, e.g. `omp_set_num_threads`, also needs
+to be conditioned.
 
-    And do not hardcode `-lgomp`: not only is that specific to
-    the GCC family of compilers, using the correct linker flag often
-    sets up the run-time path to the library.
+And do not hardcode `-lgomp`: not only is that specific to
+the GCC family of compilers, using the correct linker flag often
+sets up the run-time path to the library.
 
--   Package authors commonly assume things are part of C/C++ when they
-    are not: the most common example is POSIX function `strdup`. The
-    most common C library on Linux, `glibc`, will hide the declarations
-    of such extensions unless a 'feature-test macro' is defined
-    **before** (almost) any system header is included. So for `strdup`
-    you need
+- Package authors commonly assume things are part of C/C++ when they
+  are not: the most common example is POSIX function `strdup`. The
+  most common C library on Linux, `glibc`, will hide the declarations
+  of such extensions unless a 'feature-test macro' is defined
+  **before** (almost) any system header is included. So for `strdup`
+  you need
 
-     
-    ``` 
-    #define _POSIX_C_SOURCE 200809L
-    ...
-    #include <string.h>
-    ...
-    strdup call(s)
-    ```
-    
+```r
+#define _POSIX_C_SOURCE 200809L
+...
+#include <string.h>
+...
+strdup call(s)
+```
 
-    where the appropriate value can be found by `man strdup` on Linux.
-    (Use of `strncasecmp` is similar.)
+where the appropriate value can be found by `man strdup` on Linux.
+(Use of `strncasecmp` is similar.)
 
-    However, modes of `gcc` with 'GNU EXTENSIONS' (which are the
-    default, either `-std=gnu99` or `-std=gnu11`)
-    declare enough macros to ensure that missing declarations are rarely
-    seen.
+However, modes of `gcc` with 'GNU EXTENSIONS' (which are the
+default, either `-std=gnu99` or `-std=gnu11`)
+declare enough macros to ensure that missing declarations are rarely
+seen.
 
-    This applies also to constants such as `M_PI` and `M_LN2`, which are
-    part of the X/Open standard: to use these define `_XOPEN_SOURCE`
-    before including any headers, or include the R header
-    `Rmath.h`.
+This applies also to constants such as `M_PI` and `M_LN2`, which are
+part of the X/Open standard: to use these define `_XOPEN_SOURCE`
+before including any headers, or include the R header
+`Rmath.h`.
 
--   Similarly, package authors commonly assume things are part of C++
-    when they were introduced in C++11 if at all. Recent examples from
-    CRAN packages include the C99/C++11 functions
+- Similarly, package authors commonly assume things are part of C++
+  when they were introduced in C++11 if at all. Recent examples from
+  CRAN packages include the C99/C++11 functions
 
-     
-    ``` 
-    erf expm1 fmin fmax lgamma lround loglp round snprintf strcasecmp trunc
-    ```
-    
+```r
+erf expm1 fmin fmax lgamma lround loglp round snprintf strcasecmp trunc
+```
 
-    (all of which are in the `std` namespace in C++11) and the POSIX
-    functions `strdup` and `strncasecmp` and constants `M_PI` and
-    `M_LN2` (see the previous item). R has long provided `fmax2`,
-    `fmin2`, `fround`, `ftrunc`, `lgammafn` and many of the X/Open
-    constants, declared in header `Rmath.h`. Uses of `erf` can
-    be replaced by `pnorm` (see the R help page for the latter).
+(all of which are in the `std` namespace in C++11) and the POSIX
+functions `strdup` and `strncasecmp` and constants `M_PI` and
+`M_LN2` (see the previous item). R has long provided `fmax2`,
+`fmin2`, `fround`, `ftrunc`, `lgammafn` and many of the X/Open
+constants, declared in header `Rmath.h`. Uses of `erf` can
+be replaced by `pnorm` (see the R help page for the latter).
 
--   Using `alloca` portably is tricky: it is neither an ISO C/C++ nor a
-    POSIX function. An adequately portable preamble is
-     
-    ``` 
-    #ifdef __GNUC__
-    /* Includes GCC, clang and Intel compilers */
-    # undef alloca
-    # define alloca(x) __builtin_alloca((x))
-    #elif defined(__sun) || defined(_AIX)
-    /* this is necessary (and sufficient) for Solaris 10 and AIX 6: */
-    # include <alloca.h>
-    #endif
-    ```
-    
+- Using `alloca` portably is tricky: it is neither an ISO C/C++ nor a
+  POSIX function. An adequately portable preamble is
 
--   Compiler writers feel free to implement features from later
-    standards than the one specified, so for example they may implement
-    or warn on C++14 or C++17 features. Portable code will not use such
-    features -- it can be hard to know what they are but the most common
-    warnings are
+```r
+#ifdef __GNUC__
+/* Includes GCC, clang and Intel compilers */
+# undef alloca
+# define alloca(x) __builtin_alloca((x))
+#elif defined(__sun) || defined(_AIX)
+/* this is necessary (and sufficient) for Solaris 10 and AIX 6: */
+# include <alloca.h>
+#endif
+```
 
-     
-    ``` 
-    'register' storage class specifier is deprecated and incompatible with C++17
+- Compiler writers feel free to implement features from later
+  standards than the one specified, so for example they may implement
+  or warn on C++14 or C++17 features. Portable code will not use such
+  features -- it can be hard to know what they are but the most common
+  warnings are
 
-    ISO C++11 does not allow conversion from string literal to ‘char *’
-    ```
-    
+```r
+'register' storage class specifier is deprecated and incompatible with C++17
 
-    (where conversion should be to `const char *`). Keyword `register`
-    was not mentioned in C++98, deprecated in C++11 and removed in
-    C++17.
+ISO C++11 does not allow conversion from string literal to ‘char *’
+```
 
-    There are quite a lot of other C++98 features deprecated in C++11
-    and removed in C++17, and `clang` 9 and later warn about them.
-    Examples include `bind1st`/`bind2nd` (use `std::bind` or
-    lambdas[^98^](#FOOT98)) `std::auto_ptr` (replaced by
-    `std::unique_ptr`), `std:;mem_fun_ref` and `std::ptr_fun`.
+(where conversion should be to `const char *`). Keyword `register`
+was not mentioned in C++98, deprecated in C++11 and removed in
+C++17.
 
--   Be careful about including C headers in C++ code. Issues include
+There are quite a lot of other C++98 features deprecated in C++11
+and removed in C++17, and `clang` 9 and later warn about them.
+Examples include `bind1st`/`bind2nd` (use `std::bind` or
+lambdas[^98^](#FOOT98)) `std::auto_ptr` (replaced by
+`std::unique_ptr`), `std:;mem_fun_ref` and `std::ptr_fun`.
 
-    -   Use of the `register` storage class specifier (see the previous
-        item).
-    -   The C99 keyword `restrict` is not part
-        of[^99^](#FOOT99) any C++ standard and is rejected by
-        some C++ compilers.
-    -   Inclusion by such headers of C-style headers such as
-        `math.h` (see above).
+- Be careful about including C headers in C++ code. Issues include
 
-    The most portable way to interface to other software with a C API is
-    to use C code (which can normally be mixed with C++ code in a
-    package).
+  - Use of the `register` storage class specifier (see the previous
+    item).
+  - The C99 keyword `restrict` is not part
+    of[^99^](#FOOT99) any C++ standard and is rejected by
+    some C++ compilers.
+  - Inclusion by such headers of C-style headers such as
+    `math.h` (see above).
 
--   `reinterpret_cast` in C++ is not safe for pointers: for example the
-    types may have different alignment requirements. Use `memcpy` to
-    copy the contents to a fresh variable of the destination type.
+  The most portable way to interface to other software with a C API is
+  to use C code (which can normally be mixed with C++ code in a
+  package).
 
--   Avoid platform-specific code if at all possible, but if you need to
-    test for a platform ensure that all platforms are covered. For
-    example, `__unix__` is not defined on all Unix-alikes, in particular
-    not on macOS. A reasonably portable way to condition code for a
-    Unix-alike is
+- `reinterpret_cast` in C++ is not safe for pointers: for example the
+  types may have different alignment requirements. Use `memcpy` to
+  copy the contents to a fresh variable of the destination type.
 
-     
-    ``` 
-    #if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
-    #endif
-    ```
-    
+- Avoid platform-specific code if at all possible, but if you need to
+  test for a platform ensure that all platforms are covered. For
+  example, `__unix__` is not defined on all Unix-alikes, in particular
+  not on macOS. A reasonably portable way to condition code for a
+  Unix-alike is
 
-    but
+```r
+#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+#endif
+```
 
-     
-    ``` 
-    #ifdef _WIN32
-    // Windows-specific code
-    #else
-    // Unix-alike code
-    #endif
-    ```
-    
+but
 
-    would be better. For a Unix-alike it is much better to use
-    `configure` to test for the functionality needed than make
-    assumptions about OSes (and people all too frequently forget R is
-    used on platforms other than Linux, Windows and macOS --- and some
-    forget macOS).
+```r
+#ifdef _WIN32
+// Windows-specific code
+#else
+// Unix-alike code
+#endif
+```
+
+would be better. For a Unix-alike it is much better to use
+`configure` to test for the functionality needed than make
+assumptions about OSes (and people all too frequently forget R is
+used on platforms other than Linux, Windows and macOS --- and some
+forget macOS).
 
 Some additional information for C++ is available at
 <http://journal.r-project.org/archive/2011-2/RJournal_2011-2_Plummer.pdf>
 by Martyn Plummer.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Portable C and C++ code](#Portable-C-and-C_002b_002b-code),
-Up: [Portable C and C++ code](#Portable-C-and-C_002b_002b-code)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.6.4.1 Common symbols 
+#### 1.6.4.1 Common symbols
 
 Most OSes (including all those commonly used for R) have the concept of
 'tentative definitions' where global C variables are defined without an
@@ -5795,8 +5305,7 @@ header files need to be declared `extern`. A commonly used idiom
 a header, say `globals.h` (and nowhere else), and then in one
 (and one only) source file use
 
- 
-``` 
+```r
 #define extern
 # include "globals.h"
 #undef extern
@@ -5815,14 +5324,9 @@ packages are if possible checked with that flag to ensure portability.
 This is not pertinent to C++ which does not permit tentative
 definitions.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Portable C and C++ code](#Portable-C-and-C_002b_002b-code),
-Up: [Writing portable packages](#Writing-portable-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.6.5 Binary distribution 
+#### 1.6.5 Binary distribution
 
 If you want to distribute a binary version of a package on Windows or
 macOS, there are further checks you need to do to check it is portable:
@@ -5853,131 +5357,109 @@ source packages containing binary files as the latter are a security
 risk. If you want to distribute a source package which needs external
 software on Windows or macOS, options include
 
--   To arrange for installation of the package to download the
-    additional software from a URL, as e.g. package
-    [**Cairo**](https://CRAN.R-project.org/package=Cairo) does.
--   (For CRAN.) To negotiate with Uwe Ligges to host the additional
-    components on WinBuilder, and write a `configure.win` file
-    to install them.
+- To arrange for installation of the package to download the
+  additional software from a URL, as e.g. package
+  [**Cairo**](https://CRAN.R-project.org/package=Cairo) does.
+- (For CRAN.) To negotiate with Uwe Ligges to host the additional
+  components on WinBuilder, and write a `configure.win` file
+  to install them.
 
 Be aware that license requirements will need to be met so you may need
 to supply the sources for the additional components (and will if your
 package has a GPL-like license).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Internationalization](#Internationalization), Previous: [Writing
-portable packages](#Writing-portable-packages), Up: [Creating R
-packages](#Creating-R-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.7 Diagnostic messages 
+### 1.7 Diagnostic messages
 
 Diagnostic messages can be made available for translation, so it is
 important to write them in a consistent style. Using the tools described
 in the next section to extract all the messages can give a useful
 overview of your consistency (or lack of it). Some guidelines follow.
 
--   Messages are sentence fragments, and not viewed in isolation. So it
-    is conventional not to capitalize the first word and not to end with
-    a period (or other punctuation).
+- Messages are sentence fragments, and not viewed in isolation. So it
+  is conventional not to capitalize the first word and not to end with
+  a period (or other punctuation).
 
--   Try not to split up messages into small pieces. In C error messages
-    use a single format string containing all English words in the
-    messages.
+- Try not to split up messages into small pieces. In C error messages
+  use a single format string containing all English words in the
+  messages.
 
-    In R error messages do not construct a message with `paste` (such
-    messages will not be translated) but *via* multiple arguments to
-    `stop` or `warning`, or *via* `gettextf`.
+  In R error messages do not construct a message with `paste` (such
+  messages will not be translated) but _via_ multiple arguments to
+  `stop` or `warning`, or _via_ `gettextf`.
 
--   Do not use colloquialisms such as "can't" and "don't".
+- Do not use colloquialisms such as "can't" and "don't".
 
--   Conventionally single quotation marks are used for quotations such
-    as
+- Conventionally single quotation marks are used for quotations such
+  as
 
-     
-    ``` 
-    'ord' must be a positive integer, at most the number of knots
-    ```
-    
+```r
+'ord' must be a positive integer, at most the number of knots
+```
 
-    and double quotation marks when referring to an R character string
-    or a class, such as
+and double quotation marks when referring to an R character string
+or a class, such as
 
-     
-    ``` 
-    'format' must be "normal" or "short" - using "normal"
-    ```
-    
+```r
+'format' must be "normal" or "short" - using "normal"
+```
 
-    Since ASCII does not contain directional quotation marks, it is best
-    to use '`'`' and let the translator (including automatic
-    translation) use directional quotations where available. The range
-    of quotation styles is immense: unfortunately we cannot reproduce
-    them in a portable `texinfo` document. But as a taster, some
-    languages use 'up' and 'down' (comma) quotes rather than left or
-    right quotes, and some use guillemets (and some use what Adobe calls
-    'guillemotleft' to start and others use it to end).
+Since ASCII does not contain directional quotation marks, it is best
+to use '`'`' and let the translator (including automatic
+translation) use directional quotations where available. The range
+of quotation styles is immense: unfortunately we cannot reproduce
+them in a portable `texinfo` document. But as a taster, some
+languages use 'up' and 'down' (comma) quotes rather than left or
+right quotes, and some use guillemets (and some use what Adobe calls
+'guillemotleft' to start and others use it to end).
 
-    In R messages it is also possible to use `sQuote` or `dQuote` as in
+In R messages it is also possible to use `sQuote` or `dQuote` as in
 
-     
-    ``` 
-            stop(gettextf("object must be of class %s or %s",
-                          dQuote("manova"), dQuote("maov")),
-                 domain = NA)
-    ```
-    
+```r
+        stop(gettextf("object must be of class %s or %s",
+                      dQuote("manova"), dQuote("maov")),
+             domain = NA)
+```
 
--   Occasionally messages need to be singular or plural (and in other
-    languages there may be no such concept or several plural forms --
-    Slovenian has four). So avoid constructions such as was once used in
-    `library`
+- Occasionally messages need to be singular or plural (and in other
+  languages there may be no such concept or several plural forms --
+  Slovenian has four). So avoid constructions such as was once used in
+  `library`
 
-     
-    ``` 
-    if((length(nopkgs) > 0) && !missing(lib.loc)) {
-        if(length(nopkgs) > 1)
-            warning("libraries ",
-                    paste(sQuote(nopkgs), collapse = ", "),
-                    " contain no packages")
-        else
-            warning("library ", paste(sQuote(nopkgs)),
-                    " contains no package")
-    }
-    ```
-    
+```r
+if((length(nopkgs) > 0) && !missing(lib.loc)) {
+    if(length(nopkgs) > 1)
+        warning("libraries ",
+                paste(sQuote(nopkgs), collapse = ", "),
+                " contain no packages")
+    else
+        warning("library ", paste(sQuote(nopkgs)),
+                " contains no package")
+}
+```
 
-    and was replaced by
+and was replaced by
 
-     
-    ``` 
-    if((length(nopkgs) > 0) && !missing(lib.loc)) {
-        pkglist <- paste(sQuote(nopkgs), collapse = ", ")
-        msg <- sprintf(ngettext(length(nopkgs),
-                                "library %s contains no packages",
-                                "libraries %s contain no packages",
-                                domain = "R-base"),
-                       pkglist)
-        warning(msg, domain=NA)
-    }
-    ```
-    
+```r
+if((length(nopkgs) > 0) && !missing(lib.loc)) {
+    pkglist <- paste(sQuote(nopkgs), collapse = ", ")
+    msg <- sprintf(ngettext(length(nopkgs),
+                            "library %s contains no packages",
+                            "libraries %s contain no packages",
+                            domain = "R-base"),
+                   pkglist)
+    warning(msg, domain=NA)
+}
+```
 
-    Note that it is much better to have complete clauses as here, since
-    in another language one might need to say 'There is no package in
-    library %s' or 'There are no packages in libraries %s'.
+Note that it is much better to have complete clauses as here, since
+in another language one might need to say 'There is no package in
+library %s' or 'There are no packages in libraries %s'.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [CITATION files](#CITATION-files), Previous: [Diagnostic
-messages](#Diagnostic-messages), Up: [Creating R
-packages](#Creating-R-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.8 Internationalization 
+### 1.8 Internationalization
 
 There are mechanisms to translate the R- and C-level error and warning
 messages. There are only available if R is compiled with NLS support
@@ -5989,88 +5471,70 @@ The procedures make use of `msgfmt` and `xgettext` which are part of GNU
 pre-compiled binaries at
 <https://www.stats.ox.ac.uk/pub/Rtools/goodies/gettext-tools.zip>.
 
-  ----------------------------------------------------- ---- --
-  • [C-level messages](#C_002dlevel-messages)                
-  • [R messages](#R-messages)                                
-  • [Preparing translations](#Preparing-translations)        
-  ----------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [C-level messages](#C_002dlevel-messages)     
+ • [R messages](#R-messages)     
+ • [Preparing translations](#Preparing-translations)
 
- 
-Next: [R messages](#R-messages), Previous:
-[Internationalization](#Internationalization), Up:
-[Internationalization](#Internationalization)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.8.1 C-level messages 
+---
+
+#### 1.8.1 C-level messages
 
 The process of enabling translations is
 
--   In a header file that will be included in all the C (or C++ or
-    Objective C/C++) files containing messages that should be
-    translated, declare
-     
-    ``` 
-    #include <R.h>  /* to include Rconfig.h */
+- In a header file that will be included in all the C (or C++ or
+  Objective C/C++) files containing messages that should be
+  translated, declare
 
-    #ifdef ENABLE_NLS
-    #include <libintl.h>
-    #define _(String) dgettext ("pkg", String)
-    /* replace pkg as appropriate */
-    #else
-    #define _(String) (String)
-    #endif
-    ```
-    
+```r
+#include <R.h>  /* to include Rconfig.h */
 
--   For each message that should be translated, wrap it in `_(...)`, for
-    example
+#ifdef ENABLE_NLS
+#include <libintl.h>
+#define _(String) dgettext ("pkg", String)
+/* replace pkg as appropriate */
+#else
+#define _(String) (String)
+#endif
+```
 
-     
-    ``` 
-    error(_("'ord' must be a positive integer"));
-    ```
-    
+- For each message that should be translated, wrap it in `_(...)`, for
+  example
 
-    If you want to use different messages for singular and plural forms,
-    you need to add
+```r
+error(_("'ord' must be a positive integer"));
+```
 
-     
-    ``` 
-    #ifndef ENABLE_NLS
-    #define dngettext(pkg, String, StringP, N) (N > 1 ? StringP : String)
-    #endif
-    ```
-    
+If you want to use different messages for singular and plural forms,
+you need to add
 
-    and mark strings by
+```r
+#ifndef ENABLE_NLS
+#define dngettext(pkg, String, StringP, N) (N > 1 ? StringP : String)
+#endif
+```
 
-     
-    ``` 
-    dngettext("pkg", <singular string>, <plural string>, n)
-    ```
-    
+and mark strings by
 
--   In the package's `src` directory run
-     
-    ``` 
-    xgettext --keyword=_ -o pkg.pot *.c
-    ```
-    
+```r
+dngettext("pkg", <singular string>, <plural string>, n)
+```
+
+- In the package's `src` directory run
+
+  ```r
+  xgettext --keyword=_ -o pkg.pot *.c
+  ```
 
 The file `src/pkg.pot` is the template file, and conventionally
 this is shipped as `po/pkg.pot`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Preparing translations](#Preparing-translations), Previous:
-[C-level messages](#C_002dlevel-messages), Up:
-[Internationalization](#Internationalization)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.8.2 R messages 
+#### 1.8.2 R messages
 
 Mechanisms are also available to support the automatic translation of R
 `stop`, `warning` and `message` messages. They make use of message
@@ -6093,14 +5557,9 @@ same name: see example in the previous section. It is safest to use
 earlier versions of R unless they are calls directly from a function in
 the package.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [R messages](#R-messages), Up:
-[Internationalization](#Internationalization)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.8.3 Preparing translations 
+#### 1.8.3 Preparing translations
 
 Once the template files have been created, translations can be made.
 Conventional translations have file extension `.po` and are
@@ -6125,8 +5584,7 @@ directional forms in suitable (e.g. UTF-8) locales.)
 If the package has C source files in its `src` directory that
 are marked for translation, use
 
- 
-``` 
+```r
 touch pkgdir/po/pkg.pot
 ```
 
@@ -6141,7 +5599,7 @@ If the package sources are updated, the same command will update the
 template files, merge the changes into the translation `.po`
 files and then installed the updated translations. You will often see
 that merging marks translations as 'fuzzy' and this is reported in the
-coverage statistics. As fuzzy translations are *not* used, this is an
+coverage statistics. As fuzzy translations are _not_ used, this is an
 indication that the translation files need human attention.
 
 The merged translations are run through `tools::checkPofile` to check
@@ -6151,17 +5609,9 @@ reported and the broken translations are not installed.
 This function needs the GNU `gettext-tools` installed and on the path:
 see its help page.
 
- 
+---
 
-------------------------------------------------------------------------
-
- 
-Next: [Package types](#Package-types), Previous:
-[Internationalization](#Internationalization), Up: [Creating R
-packages](#Creating-R-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.9 CITATION files 
+### 1.9 CITATION files
 
 An installed file named `CITATION` will be used by the
 `citation()` function. (It should be in the `inst` subdirectory
@@ -6183,13 +5633,12 @@ A `CITATION` file will contain calls to function `bibentry`.
 
 Here is that for [**nlme**](https://CRAN.R-project.org/package=nlme):
 
- 
-``` 
+```r
 year <- sub("-.*", "", meta$Date)
 note <- sprintf("R package version %s", meta$Version)
 
 bibentry(bibtype = "Manual",
-         title = ": Linear and Nonlinear Mixed Effects Models",
+         title = "{nlme}: Linear and Nonlinear Mixed Effects Models",
          author = c(person("Jose", "Pinheiro"),
                     person("Douglas", "Bates"),
                     person("Saikat", "DebRoy"),
@@ -6208,12 +5657,11 @@ which can be provided.
 
 In case a bibentry contains LaTeX markup (e.g., for accented characters
 or mathematical symbols), it may be necessary to provide a text
-representation to be used for printing *via* the `textVersion` argument
+representation to be used for printing _via_ the `textVersion` argument
 to `bibentry`. E.g., earlier versions of
 [**nlme**](https://CRAN.R-project.org/package=nlme) additionally used
 
- 
-``` 
+```r
          textVersion =
          paste0("Jose Pinheiro, Douglas Bates, Saikat DebRoy,",
                 "Deepayan Sarkar and the R Core Team (",
@@ -6230,33 +5678,24 @@ file does not contain calls to functions such as `packageDescription`
 which assume the package is installed in a library tree on the package
 search path.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Services](#Services), Previous: [CITATION
-files](#CITATION-files), Up: [Creating R packages](#Creating-R-packages)
- 
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.10 Package types 
+### 1.10 Package types
 
 The `DESCRIPTION` file has an optional field `Type` which if
 missing is assumed to be '`Package`', the sort of extension
 discussed so far in this chapter. Currently one other type is
 recognized; there used also to be a '`Translation`' type.
 
-  ------------------------- ---- --
-  • [Frontend](#Frontend)        
-  ------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Frontend](#Frontend)
 
- 
-Previous: [Package types](#Package-types), Up: [Package
-types](#Package-types)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.10.1 Frontend 
+---
+
+#### 1.10.1 Frontend
 
 This is a rather general mechanism, designed for adding new front-ends
 such as the former **gnomeGUI** package (see the `Archive` area
@@ -6272,14 +5711,9 @@ will check the type and skip it.
 Many packages of this type need write permission for the R installation
 directory.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Package types](#Package-types), Up: [Creating R
-packages](#Creating-R-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.11 Services 
+### 1.11 Services
 
 Several members of the R project have set up services to assist those
 writing R packages, particularly those intended for public distribution.
@@ -6292,51 +5726,41 @@ R-Forge ([R-Forge.r-project.org](https://R-Forge.r-project.org)) and
 RForge ([www.rforge.net](https://www.rforge.net)) are similar services
 with similar names. Both provide source-code management through SVN,
 daily building and checking, mailing lists and a repository that can be
-accessed *via* `install.packages` (they can be selected by
+accessed _via_ `install.packages` (they can be selected by
 `setRepositories` and the GUI menus that use it). Package developers
 have the opportunity to present their work on the basis of project
 websites or news announcements. Mailing lists, forums or wikis provide
 useRs with convenient instruments for discussions and for exchanging
 information between developers and/or interested useRs.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Tidying and profiling R code](#Tidying-and-profiling-R-code),
-Previous: [Creating R packages](#Creating-R-packages), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 2 Writing R documentation files
 
-2 Writing R documentation files 
--------------------------------
+---
 
-  --------------------------------------------------------------------- ---- --
-  • [Rd format](#Rd-format)                                                  
-  • [Sectioning](#Sectioning)                                                
-  • [Marking text](#Marking-text)                                            
-  • [Lists and tables](#Lists-and-tables)                                    
-  • [Cross-references](#Cross_002dreferences)                                
-  • [Mathematics](#Mathematics)                                              
-  • [Figures](#Figures)                                                      
-  • [Insertions](#Insertions)                                                
-  • [Indices](#Indices)                                                      
-  • [Platform-specific sections](#Platform_002dspecific-sections)            
-  • [Conditional text](#Conditional-text)                                    
-  • [Dynamic pages](#Dynamic-pages)                                          
-  • [User-defined macros](#User_002ddefined-macros)                          
-  • [Encoding](#Encoding)                                                    
-  • [Processing documentation files](#Processing-documentation-files)        
-  • [Editing Rd files](#Editing-Rd-files)                                    
-  --------------------------------------------------------------------- ---- --
+• [Rd format](#Rd-format)     
+ • [Sectioning](#Sectioning)     
+ • [Marking text](#Marking-text)     
+ • [Lists and tables](#Lists-and-tables)     
+ • [Cross-references](#Cross_002dreferences)     
+ • [Mathematics](#Mathematics)     
+ • [Figures](#Figures)     
+ • [Insertions](#Insertions)     
+ • [Indices](#Indices)     
+ • [Platform-specific sections](#Platform_002dspecific-sections)     
+ • [Conditional text](#Conditional-text)     
+ • [Dynamic pages](#Dynamic-pages)     
+ • [User-defined macros](#User_002ddefined-macros)     
+ • [Encoding](#Encoding)     
+ • [Processing documentation files](#Processing-documentation-files)     
+ • [Editing Rd files](#Editing-Rd-files)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Sectioning](#Sectioning), Previous: [Writing R documentation
-files](#Writing-R-documentation-files), Up: [Writing R documentation
-files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 2.1 Rd format 
+### 2.1 Rd format
 
 R objects are documented in files written in "R documentation" (Rd)
 format, a simple markup language much of which closely resembles
@@ -6347,7 +5771,7 @@ in the **tools** package called by the script `Rdconv` in
 
 The R distribution contains more than 1300 such files which can be found
 in the `src/library/pkg/man` directories of the R source tree,
-where `pkg` stands for one of the standard packages which are
+where `pkg`{.variable} stands for one of the standard packages which are
 included in the R distribution.
 
 As an example, let us look at a simplified version of
@@ -6355,41 +5779,9 @@ As an example, let us look at a simplified version of
 `load`.
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | % File src/library/base/man/load.Rd                                   |
-> | \name                                                           |
-> | \alias                                                          |
-> | \title                                         |
-> | \description{                                                         |
-> |   Reload the datasets written to a file with the function             |
-> |   \code.                                                        |
-> | }                                                                     |
-> | \usage{                                                               |
-> | load(file, envir = parent.frame())                                    |
-> | }                                                                     |
-> | \arguments{                                                           |
-> |   \item{a connection or a character string giving the           |
-> |     name of the file to load.}                                        |
-> |   \item{the environment where the data should be               |
-> |     loaded.}                                                          |
-> | }                                                                     |
-> | \seealso{                                                             |
-> |   \code}.                                                 |
-> | }                                                                     |
-> | \examples{                                                            |
-> | ## save all data                                                      |
-> | save(list = ls(), file= "all.RData")                                  |
-> |                                                                       |
-> | ## restore the saved values to the current environment                |
-> | load("all.RData")                                                     |
-> |                                                                       |
-> | ## restore the saved values to the workspace                          |
-> | load("all.RData", .GlobalEnv)                                         |
-> | }                                                                     |
-> | \keyword                                                        |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | % File src/library/base/man/load.Rd | | \name{load} | | \alias{load} | | \title{Reload Saved Datasets} | | \description{ | | Reload the datasets written to a file with the function | | \code{save}. | | } | | \usage{ | | load(file, envir = parent.frame()) | | } | | \arguments{ | | \item{file}{a connection or a character string giving the | | name of the file to load.} | | \item{envir}{the environment where the data should be | | loaded.} | | } | | \seealso{ | | \code{\link{save}}. | | } | | \examples{ | | ## save all data | | save(list = ls(), file= "all.RData") | | | | ## restore the saved values to the current environment | | load("all.RData") | | | | ## restore the saved values to the workspace | | load("all.RData", .GlobalEnv) | | } | | \keyword{file} | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 An `Rd` file consists of three parts. The header gives basic
@@ -6400,7 +5792,7 @@ function's arguments and return value, as in the above example).
 Finally, there is an optional footer with keyword information. The
 header is mandatory.
 
-Information is given within a series of *sections* with standard names
+Information is given within a series of _sections_ with standard names
 (and user-defined sections are also allowed). Unless otherwise
 specified[^101^](#FOOT101) these should occur only once in an
 `Rd` file (in any order), and the processing software will
@@ -6410,7 +5802,7 @@ a warning.
 See ["Guidelines for Rd
 files"](https://developer.r-project.org/Rds.html) for guidelines for
 writing documentation in `Rd` format which should be useful for
-package writers.  The R generic function `prompt` is
+package writers. The R generic function `prompt` is
 used to construct a bare-bones `Rd` file ready for manual
 editing. Methods are defined for documenting functions (which fill in
 the proper function and argument names) and data frames. There are also
@@ -6423,7 +5815,7 @@ detailed technical discussion of current `Rd` syntax, see
 
 `Rd` files consist of four types of text input. The most common
 is LaTeX-like, with the backslash used as a prefix on markup (e.g.
-`\alias`), and braces used to indicate arguments (e.g. ``). The
+`\alias`), and braces used to indicate arguments (e.g. `{load}`). The
 least common type of text is 'verbatim' text, where no markup other than
 the comment marker (`%`) is processed. There is also a rare variant of
 'verbatim' text (used in `\eqn`, `\deqn`, `\figure`, and `\newcommand`)
@@ -6448,30 +5840,27 @@ always do, except in the 'verbatim' variant. For the complete list of
 macros and rules for escapes, see ["Parsing Rd
 files"](https://developer.r-project.org/parseRd.pdf).
 
-  ----------------------------------------------------------------------------- ---- --
-  • [Documenting functions](#Documenting-functions)                                  
-  • [Documenting data sets](#Documenting-data-sets)                                  
-  • [Documenting S4 classes and methods](#Documenting-S4-classes-and-methods)        
-  • [Documenting packages](#Documenting-packages)                                    
-  ----------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Documenting functions](#Documenting-functions)     
+ • [Documenting data sets](#Documenting-data-sets)     
+ • [Documenting S4 classes and methods](#Documenting-S4-classes-and-methods)     
+ • [Documenting packages](#Documenting-packages)
 
- 
-Next: [Documenting data sets](#Documenting-data-sets), Previous: [Rd
-format](#Rd-format), Up: [Rd format](#Rd-format)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 2.1.1 Documenting functions 
+---
+
+#### 2.1.1 Documenting functions
 
 The basic markup commands used for documenting R objects (in particular,
 functions) are given in this subsection.
 
-`\name`
+`\name{name}`
 
-:   
+:
 
-    `name` typically[^102^](#FOOT102) is the
+    `name`{.variable} typically[^102^](#FOOT102) is the
     basename of the `Rd` file containing the documentation. It
     is the "name" of the `Rd` object represented by the file
     and has to be unique in a package. To avoid problems with indexing
@@ -6484,13 +5873,13 @@ functions) are given in this subsection.
     in alphabetic[^103^](#FOOT103) order of the `\name`
     entries.
 
-`\alias`
+`\alias{topic}`
 
-:   
+:
 
     The `\alias` sections specify all "topics" the file documents. This
     information is collected into index data bases for lookup by the
-    on-line (plain text and HTML) help systems. The `topic`
+    on-line (plain text and HTML) help systems. The `topic`{.variable}
     can contain spaces, but (for historical reasons) leading and
     trailing spaces will be stripped. Percent and left brace need to be
     escaped by a backslash.
@@ -6501,16 +5890,15 @@ functions) are given in this subsection.
     quantile function and generation of random variates for the normal
     distribution, and hence starts with
 
-     
-    ``` 
-    \name
-    \alias
-    \alias
-    \alias
-    \alias
-    \alias
+
+    ``` r
+    \name{Normal}
+    \alias{Normal}
+    \alias{dnorm}
+    \alias{pnorm}
+    \alias{qnorm}
+    \alias{rnorm}
     ```
-    
 
     Also, it is often convenient to have several different ways to refer
     to an R object, and an `\alias` does not need to be the name of an
@@ -6520,9 +5908,9 @@ functions) are given in this subsection.
     so desired it needs to have an explicit `\alias` entry (as in this
     example).
 
-`\title`
+`\title{Title}`
 
-:   
+:
 
     Title information for the `Rd` file. This should be
     capitalized and not end in a period; try to limit its length to at
@@ -6534,18 +5922,18 @@ functions) are given in this subsection.
 
     There must be one (and only one) `\title` section in a help file.
 
-`\description`
+`\description{…}`
 
-:   
+:
 
     A short description of what the function(s) do(es) (one paragraph, a
     few lines only). (If a description is too long and cannot easily be
     shortened, the file probably tries to document too much at once.)
     This is mandatory except for package-overview files.
 
-`\usage`
+`\usage{fun(arg1, arg2, …)}`
 
-:   
+:
 
     One or more lines showing the synopsis of the function(s) and
     variables documented in the file. These are set in typewriter font.
@@ -6559,50 +5947,47 @@ functions) are given in this subsection.
     depending on the named arguments specified, use section `\details`.
     E.g., `abline.Rd` contains
 
-     
-    ``` 
+
+    ``` r
     \details{
       Typical usages are
     \preformatted{abline(a, b, untf = FALSE, \dots)
     ......
     }
     ```
-    
 
-    
 
-    Use `\method` to indicate the name of an S3 method
-    for the generic function `generic` for objects inheriting
+
+    Use `\method{generic}{class}` to indicate the name of an S3 method
+    for the generic function `generic`{.variable} for objects inheriting
     from class `"class"`. In the printed versions, this will come out as
-    `generic` (reflecting the understanding that methods
+    `generic`{.variable} (reflecting the understanding that methods
     should not be invoked directly but *via* method dispatch), but
     `codoc()` and other QC tools always have access to the full name.
 
     For example, `print.ts.Rd` contains
 
-     
-    ``` 
+
+    ``` r
     \usage{
-    \method(x, calendar, \dots)
+    \method{print}{ts}(x, calendar, \dots)
     }
     ```
-    
 
     which will print as
 
-     
-    ``` 
+
+    ``` r
     Usage:
 
          ## S3 method for class ‘ts’:
          print(x, calendar, ...)
     ```
-    
 
     Usage for replacement functions should be given in the style of
     `dim(x) <- value` rather than explicitly indicating the name of the
     replacement function (`"dim<-"` in the above). Similarly, one can
-    use `\method(arglist) <- value` to indicate the
+    use `\method{generic}{class}(arglist) <- value` to indicate the
     usage of an S3 replacement method for the generic replacement
     function `"generic<-"` for objects inheriting from class `"class"`.
 
@@ -6612,20 +5997,19 @@ functions) are given in this subsection.
     the above rules, using the appropriate function names. E.g.,
     `Extract.factor.Rd` contains
 
-     
-    ``` 
+
+    ``` r
     \usage{
-    \method(x, \dots, drop = FALSE)
-    \method(x, \dots)
-    \method(x, \dots) <- value
+    \method{[}{factor}(x, \dots, drop = FALSE)
+    \method{[[}{factor}(x, \dots)
+    \method{[}{factor}(x, \dots) <- value
     }
     ```
-    
 
     which will print as
 
-     
-    ``` 
+
+    ``` r
     Usage:
 
          ## S3 method for class ‘factor’:
@@ -6635,68 +6019,65 @@ functions) are given in this subsection.
          ## S3 replacement method for class ‘factor’:
          x[...] <- value
     ```
-    
 
-    
+
 
     `\S3method` is accepted as an alternative to `\method`.
 
-`\arguments`
+`\arguments{…}`
 
-:   
+:
 
     Description of the function's arguments, using an entry of the form
 
-     
-    ``` 
-    \item
+
+    ``` r
+    \item{arg_i}{Description of arg_i.}
     ```
-    
 
     for each element of the argument list. (Note that there is no
     whitespace between the three parts of the entry.) There may be
     optional text outside the `\item` entries, for example to give
     general information about groups of parameters.
 
-`\details`
+`\details{…}`
 
-:   
+:
 
     A detailed if possible precise description of the functionality
     provided, extending the basic information in the `\description`
     slot.
 
-`\value`
+`\value{…}`
 
-:   
+:
 
     Description of the function's return value.
 
     If a list with multiple values is returned, you can use entries of
     the form
 
-     
-    ``` 
-    \item
+
+    ``` r
+    \item{comp_i}{Description of comp_i.}
     ```
-    
 
     for each component of the list returned. Optional text may
     precede[^104^](#FOOT104) this list (see for example the
     help for `rle`). Note that `\value` is implicitly a `\describe`
     environment, so that environment should not be used for listing
-    components, just individual `\item` entries.
+    components, just individual `\item{}{}` entries.
 
-`\references`
+`\references{…}`
 
-:   
+:
 
     A section with references to the literature. Use `\url{}` or
-    `\href` for web pointers.
+    `\href{}{}` for web pointers.
 
-`\note`
+`\note{...}`
 
-:   
+:
 
     Use this for a special note you want to have pointed out. Multiple
     `\note` sections are allowed, but might be confusing to the end
@@ -6704,8 +6085,8 @@ functions) are given in this subsection.
 
     For example, `pie.Rd` contains
 
-     
-    ``` 
+
+    ``` r
     \note{
       Pie charts are a very bad way of displaying information.
       The eye is good at judging linear measures and bad at
@@ -6713,40 +6094,37 @@ functions) are given in this subsection.
       ......
     }
     ```
-    
 
-`\author`
+`\author{…}`
 
-:   
+:
 
     Information about the author(s) of the `Rd` file. Use
-    `\email' or
+    `\email{}` without extra delimiters (such as '`( )`' or
     '`< >`') to specify email addresses, or `\url{}` or
-    `\href` for web pointers.
+    `\href{}{}` for web pointers.
 
-`\seealso`
+`\seealso{…}`
 
-:   
+:
 
-    Pointers to related R objects, using `\code}` to refer to
+    Pointers to related R objects, using `\code{\link{...}}` to refer to
     them (`\code` is the correct markup for R object names, and `\link`
     produces hyperlinks in output formats which support this. See
     [Marking text](#Marking-text), and
     [Cross-references](#Cross_002dreferences)).
 
-    
+`\examples{…}`
 
-`\examples`
-
-:   Examples of how to use the function. Code in this section is set in
-    typewriter font without reformatting and is run by `example()`
-    unless marked otherwise (see below).
+: Examples of how to use the function. Code in this section is set in
+typewriter font without reformatting and is run by `example()`
+unless marked otherwise (see below).
 
     Examples are not only useful for documentation purposes, but also
     provide test code used for diagnostic checking of R code. By
     default, text inside `\examples{}` will be displayed in the output
     of the help page and run by `example()` and by `R CMD check`. You
-    can use `\dontrun for text that should
+    can use `\dontrun{}`  for text that should
     only be shown, but not run, and `\dontshow{}`
      for extra commands for testing that should
     not be shown to users, but will be run by `example()`. (Previously
@@ -6757,13 +6135,12 @@ functions) are given in this subsection.
 
     For example,
 
-     
-    ``` 
+
+    ``` r
     x <- runif(10)       # Shown and run.
-    \dontrun    # Only shown.
-    \dontshow    # Only run.
+    \dontrun{plot(x)}    # Only shown.
+    \dontshow{log(x)}    # Only run.
     ```
-    
 
     Thus, example code not included in `\dontrun` must be executable! In
     addition, it should not use any system-specific features or require
@@ -6798,28 +6175,25 @@ functions) are given in this subsection.
 
     Output from code between comments
 
-     
-    ``` 
+
+    ``` r
     ## IGNORE_RDIFF_BEGIN
     ## IGNORE_RDIFF_END
     ```
-    
 
     is ignored when comparing check output to reference output (a
     `-Ex.Rout.save` file). This markup can also be used for
     scripts under `tests`.
 
-    
+`\keyword{key}`
 
-`\keyword`
-
-:   There can be zero or more `\keyword` sections per file. Each
-    `\keyword` section should specify a single keyword, preferably one
-    of the standard keywords as listed in file `KEYWORDS` in
-    the R documentation directory (default `R_HOME/doc`). Use
-    e.g. `RShowDoc("KEYWORDS")` to inspect the standard keywords from
-    within R. There can be more than one `\keyword` entry if the R
-    object being documented falls into more than one category, or none.
+: There can be zero or more `\keyword` sections per file. Each
+`\keyword` section should specify a single keyword, preferably one
+of the standard keywords as listed in file `KEYWORDS` in
+the R documentation directory (default `R_HOME/doc`). Use
+e.g. `RShowDoc("KEYWORDS")` to inspect the standard keywords from
+within R. There can be more than one `\keyword` entry if the R
+object being documented falls into more than one category, or none.
 
     Do strongly consider using `\concept` (see [Indices](#Indices))
     instead of `\keyword` if you are about to use more than very few
@@ -6837,15 +6211,9 @@ functions) are given in this subsection.
     *via* `help.start()` provides single-click access only to a
     pre-defined list of keywords.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Documenting S4 classes and
-methods](#Documenting-S4-classes-and-methods), Previous: [Documenting
-functions](#Documenting-functions), Up: [Rd format](#Rd-format)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 2.1.2 Documenting data sets 
+#### 2.1.2 Documenting data sets
 
 The structure of `Rd` files which document R data sets is
 slightly different. Sections such as `\arguments` and `\value` are not
@@ -6856,42 +6224,24 @@ As an example, let us look at
 standard R data set `rivers`.
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | \name                                                         |
-> | \docType                                                        |
-> | \alias                                                        |
-> | \title                        |
-> | \description{                                                         |
-> |   This data set gives the lengths (in miles) of 141 \dQuote    |
-> |   rivers in North America, as compiled by the US Geological           |
-> |   Survey.                                                             |
-> | }                                                                     |
-> | \usage                                                        |
-> | \format                        |
-> | \source             |
-> | \references{                                                          |
-> |   McNeil, D. R. (1977) \emph.              |
-> |   New York: Wiley.                                                    |
-> | }                                                                     |
-> | \keyword                                                    |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | \name{rivers} | | \docType{data} | | \alias{rivers} | | \title{Lengths of Major North American Rivers} | | \description{ | | This data set gives the lengths (in miles) of 141 \dQuote{major} | | rivers in North America, as compiled by the US Geological | | Survey. | | } | | \usage{rivers} | | \format{A vector containing 141 observations.} | | \source{World Almanac and Book of Facts, 1975, page 406.} | | \references{ | | McNeil, D. R. (1977) \emph{Interactive Data Analysis}. | | New York: Wiley. | | } | | \keyword{datasets} | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 This uses the following additional markup commands.
 
-`\docType`
+`\docType{…}`
 
-:   Indicates the "type" of the documentation object. Always
-    '`data`' for data sets, and '`package`' for
-    `pkg-package.Rd` overview files. Documentation for S4
-    methods and classes uses '`methods`' (from
-    `promptMethods()`) and '`class`' (from `promptClass()`).
+: Indicates the "type" of the documentation object. Always
+'`data`' for data sets, and '`package`' for
+`pkg-package.Rd` overview files. Documentation for S4
+methods and classes uses '`methods`' (from
+`promptMethods()`) and '`class`' (from `promptClass()`).
 
-`\format`
+`\format{…}`
 
-:   
+:
 
     A description of the format of the data set (as a vector, matrix,
     data frame, time series, ...). For matrices and data frames this
@@ -6899,33 +6249,27 @@ This uses the following additional markup commands.
     table. See [Lists and tables](#Lists-and-tables), for more
     information.
 
-`\source`
+`\source{…}`
 
-:   
+:
 
     Details of the original source (a reference or URL, see [Specifying
     URLs](#Specifying-URLs)). In addition, section `\references` could
     give secondary sources and usages.
 
-Note also that when documenting data set `bar`,
+Note also that when documenting data set `bar`{.variable},
 
--   The `\usage` entry is always `bar` or (for packages which do not use
-    lazy-loading of data) `data(bar)`. (In particular, only document a
-    *single* data object per `Rd` file.)
--   The `\keyword` entry should always be '`datasets`'.
+- The `\usage` entry is always `bar` or (for packages which do not use
+  lazy-loading of data) `data(bar)`. (In particular, only document a
+  _single_ data object per `Rd` file.)
+- The `\keyword` entry should always be '`datasets`'.
 
 If `bar` is a data frame, documenting it as a data set can be initiated
-*via* `prompt(bar)`. Otherwise, the `promptData` function may be used.
+_via_ `prompt(bar)`. Otherwise, the `promptData` function may be used.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Documenting packages](#Documenting-packages), Previous:
-[Documenting data sets](#Documenting-data-sets), Up: [Rd
-format](#Rd-format)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 2.1.3 Documenting S4 classes and methods 
+#### 2.1.3 Documenting S4 classes and methods
 
 There are special ways to use the '`?`' operator, namely
 '`class?topic`' and '`methods?topic`', to access
@@ -6933,13 +6277,12 @@ documentation for S4 classes and methods, respectively. This mechanism
 depends on conventions for the topic names used in `\alias` entries. The
 topic names for S4 classes and methods respectively are of the form
 
- 
-``` 
+```r
 class-class
 generic,signature_list-method
 ```
 
-where `signature_list` contains the names of the classes in
+where `signature_list`{.variable} contains the names of the classes in
 the signature of the method (without quotes) separated by '`,`'
 (without whitespace), with '`ANY`' used for arguments without
 an explicit specification. E.g., '`genericFunction-class`' is
@@ -6955,12 +6298,11 @@ explicit function declaration (in a `\usage` section) for an S4 method
 (e.g., if it has "surprising arguments" to be mentioned explicitly), one
 can use the special markup
 
- 
-``` 
-\S4method(argument_list)
+```r
+\S4method{generic}{signature_list}(argument_list)
 ```
 
-(e.g., '`\S4method(from, to)`').
+(e.g., '`\S4method{coerce}{ANY,NULL}(from, to)`').
 
 To make full use of the potential of the on-line documentation system,
 all user-visible S4 classes and methods in a package should at least
@@ -6971,21 +6313,14 @@ the function, the package is responsible for documenting the methods it
 creates, but not for the function itself or the default method.
 
 An S4 replacement method is documented in the same way as an S3 one: see
-the description of `\method` in [Documenting
-functions](#Documenting-functions).
+the description of `\method` in [Documenting functions](#Documenting-functions).
 
 See `help("Documentation", package = "methods")` for more information on
 using and creating on-line documentation for S4 classes and methods.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Documenting S4 classes and
-methods](#Documenting-S4-classes-and-methods), Up: [Rd
-format](#Rd-format)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 2.1.4 Documenting packages 
+#### 2.1.4 Documenting packages
 
 Packages may have an overview help page with an `\alias`
 `pkgname-package`, e.g. '`utils-package`' for the **utils**
@@ -7002,7 +6337,7 @@ content.
 
 Apart from the mandatory `\name` and `\title` and the `pkgname-package`
 alias, the only requirement for the package overview page is that it
-include a `\docType` statement. All other content is optional.
+include a `\docType{package}` statement. All other content is optional.
 We suggest that it should be a short overview, to give a reader
 unfamiliar with the package enough information to get started. More
 extensive documentation is better placed into a package vignette (see
@@ -7010,25 +6345,19 @@ extensive documentation is better placed into a package vignette (see
 from this page, or into individual man pages for the functions,
 datasets, or classes.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Marking text](#Marking-text), Previous: [Rd format](#Rd-format),
-Up: [Writing R documentation files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.2 Sectioning 
+### 2.2 Sectioning
 
 To begin a new paragraph or leave a blank line in an example, just
 insert an empty line (as in (La)TeX). To break a line, use `\cr`.
 
 In addition to the predefined sections (such as `\description{}`,
 `\value{}`, etc.), you can "define" arbitrary ones by
-`\section`.  For example
+`\section{section_title}{…}`. For example
 
- 
-``` 
-\section{
+```r
+\section{Warning}{
   You must not call this function unless …
 }
 ```
@@ -7051,66 +6380,60 @@ position in the output (before `\note`, `\seealso` and the examples), no
 matter where they appear in the input (but in the same order amongst
 themselves as in the input).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Lists and tables](#Lists-and-tables), Previous:
-[Sectioning](#Sectioning), Up: [Writing R documentation
-files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.3 Marking text 
+### 2.3 Marking text
 
 The following logical markup commands are available for emphasizing or
 quoting text.
 
-`\emph`
-:   
+`\emph{text}`
+:
 
-`\strong`
+`\strong{text}`
 
-:   
+:
 
-    Emphasize `text` using *italic* and **bold** font if
+    Emphasize `text`{.variable} using *italic* and **bold** font if
     possible; `\strong` is regarded as stronger (more emphatic).
 
-`\bold`
+`\bold{text}`
 
-:   
+:
 
-    Set `text` in **bold** font where possible.
+    Set `text`{.variable} in **bold** font where possible.
 
-`\sQuote`
-:   
+`\sQuote{text}`
+:
 
-`\dQuote`
+`\dQuote{text}`
 
-:   
+:
 
-    Portably single or double quote `text` (without
+    Portably single or double quote `text`{.variable} (without
     hard-wiring the characters used for quotation marks).
 
 Each of the above commands takes LaTeX-like input, so other macros may
-be used within `text`.
+be used within `text`{.variable}.
 
 The following logical markup commands are available for indicating
 specific kinds of text. Except as noted, these take 'verbatim' text
 input, and so other macros may not be used within them. Some characters
 will need to be escaped (see [Insertions](#Insertions)).
 
-`\code`
+`\code{text}`
 
-:   
+:
 
     Indicate text that is a literal example of a piece of an R program,
     e.g., a fragment of R code or the name of an R object. Text is
     entered in R-like syntax, and displayed using `typewriter` font
     where possible. Macros `\var` and `\link` are interpreted within
-    `text`.
+    `text`{.variable}.
 
-`\preformatted`
+`\preformatted{text}`
 
-:   
+:
 
     Indicate text that is a literal example of a piece of a program.
     Text is displayed using `typewriter` font where possible.
@@ -7122,55 +6445,55 @@ will need to be escaped (see [Insertions](#Insertions)).
     be nested within other markup macros other than `\dQuote` and
     `\sQuote`, as errors or bad formatting may result.
 
-`\kbd`
+`\kbd{keyboard-characters}`
 
-:   
+:
 
-    Indicate keyboard input, using [slanted typewriter] font if
+    Indicate keyboard input, using [slanted typewriter]{.kbd} font if
     possible, so users can distinguish the characters they are supposed
     to type from computer output. Text is entered 'verbatim'.
 
-`\samp`
+`\samp{text}`
 
-:   
+:
 
     Indicate text that is a literal example of a sequence of characters,
     entered 'verbatim'. No wrapping or reformatting will occur.
     Displayed using `typewriter` font where possible.
 
-`\verb`
+`\verb{text}`
 
-:   
+:
 
     Indicate text that is a literal example of a sequence of characters,
     with no interpretation of e.g. `\var`, but which will be included
     within word-wrapped text. Displayed using `typewriter` font if
     possible.
 
-`\pkg`
+`\pkg{package_name}`
 
-:   
+:
 
     Indicate the name of an R package. LaTeX-like.
 
-`\file`
+`\file{file_name}`
 
-:   
+:
 
     Indicate the name of a file. Text is LaTeX-like, so backslash needs
     to be escaped. Displayed using a distinct font where possible.
 
-`\email`
+`\email{email_address}`
 
-:   
+:
 
     Indicate an electronic mail address. LaTeX-like, will be rendered as
     a hyperlink in HTML and PDF conversion. Displayed using `typewriter`
     font where possible.
 
-`\url`
+`\url{uniform_resource_locator}`
 
-:   
+:
 
     Indicate a uniform resource locator (URL) for the World Wide Web.
     The argument is handled as 'verbatim' text (with percent and braces
@@ -7181,9 +6504,9 @@ will need to be escaped (see [Insertions](#Insertions)).
 
     Displayed using `typewriter` font where possible.
 
-`\href`
+`\href{uniform_resource_locator}{text}`
 
-:   
+:
 
     Indicate a hyperlink to the World Wide Web. The first argument is
     handled as 'verbatim' text (with percent and braces escaped by
@@ -7197,67 +6520,59 @@ will need to be escaped (see [Insertions](#Insertions)).
     work correctly in versions of R before 3.1.3 and are best
     avoided---use `URLdecode()` to decode them.
 
-`\var`
+`\var{metasyntactic_variable}`
 
-:   
+:
 
     Indicate a metasyntactic variable. In some cases this will be
     rendered distinctly, e.g. in italic, but not in
     all[^106^](#FOOT106). LaTeX-like.
 
-`\env`
+`\env{environment_variable}`
 
-:   
+:
 
     Indicate an environment variable. 'Verbatim'. Displayed using
     `typewriter` font where possible
 
-`\option`
+`\option{option}`
 
-:   
+:
 
     Indicate a command-line option. 'Verbatim'. Displayed using
     `typewriter` font where possible.
 
-`\command`
+`\command{command_name}`
 
-:   
+:
 
     Indicate the name of a command. LaTeX-like, so `\var` is
     interpreted. Displayed using `typewriter` font where possible.
 
-`\dfn`
+`\dfn{term}`
 
-:   
+:
 
     Indicate the introductory or defining use of a term. LaTeX-like.
 
-`\cite`
+`\cite{reference}`
 
-:   
+:
 
     Indicate a reference without a direct cross-reference *via* `\link`
     (see [Cross-references](#Cross_002dreferences)), such as the name of
     a book. LaTeX-like.
 
-`\acronym`
+`\acronym{acronym}`
 
-:   
+:
 
     Indicate an acronym (an abbreviation written in all capital
     letters), such as GNU. LaTeX-like.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Cross-references](#Cross_002dreferences), Previous: [Marking
-text](#Marking-text), Up: [Writing R documentation
-files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.4 Lists and tables 
-
- 
+### 2.4 Lists and tables
 
 The `\itemize` and `\enumerate` commands take a single argument, within
 which there may be one or more `\item` commands. The text following each
@@ -7268,8 +6583,7 @@ number (`\enumerate`).
 Note that unlike argument lists, `\item` in these formats is followed by
 a space and the text (not enclosed in braces). For example
 
- 
-``` 
+```r
   \enumerate{
     \item A database consists of one or more records, each with one or
     more named fields.
@@ -7293,9 +6607,8 @@ left-justification, '`r`' for right-justification or
 arbitrary number of lines separated by `\cr`, and with fields separated
 by `\tab`. For example:
 
- 
-``` 
-  \tabular{
+```r
+  \tabular{rlll}{
     [,1] \tab Ozone   \tab numeric \tab Ozone (ppb)\cr
     [,2] \tab Solar.R \tab numeric \tab Solar R (lang)\cr
     [,3] \tab Wind    \tab numeric \tab Wind (mph)\cr
@@ -7310,21 +6623,13 @@ alignments in the first argument, and they must be non-empty (but can
 contain only spaces). (There is no whitespace between `\tabular` and the
 first argument, nor between the two arguments.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Mathematics](#Mathematics), Previous: [Lists and
-tables](#Lists-and-tables), Up: [Writing R documentation
-files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 2.5 Cross-references
 
-### 2.5 Cross-references 
-
- 
-
-The markup `\link` (usually in the combination `\code}`)
-produces a hyperlink to the help for `foo`. Here
-`foo` is a *topic*, that is the argument of `\alias` markup
+The markup `\link{foo}` (usually in the combination `\code{\link{foo}}`)
+produces a hyperlink to the help for `foo`{.variable}. Here
+`foo`{.variable} is a _topic_, that is the argument of `\alias` markup
 in another `Rd` file (possibly in another package). Hyperlinks
 are supported in some of the formats to which `Rd` files are
 converted, for example HTML and PDF, but ignored in others, e.g. the
@@ -7338,17 +6643,17 @@ extracting a topic from a `\alias`, they are not stripped when looking
 up the topic of a `\link`.
 
 You can specify a link to a different topic than its name by
-`\link[=dest]` which links to topic `dest` with name
-`name`. This can be used to refer to the documentation for
-S3/4 classes, for example `\code"}` would be a
+`\link[=dest]{name}` which links to topic `dest`{.variable} with name
+`name`{.variable}. This can be used to refer to the documentation for
+S3/4 classes, for example `\code{"\link[=abc-class]{abc}"}` would be a
 way to refer to the documentation of an S4 class `"abc"` defined in your
-package, and `\code"}` to the S3 `"terms"`
+package, and `\code{"\link[=terms.object]{terms}"}` to the S3 `"terms"`
 class (in package **stats**). To make these easy to read in the source
-file, `\code"}` expands to the form given above.
+file, `\code{"\linkS4class{abc}"}` expands to the form given above.
 
 There are two other forms of optional argument specified as
-`\link[pkg]` and `\link[pkg:bar]` to link to the package
-**`pkg`**, to *files* `foo.html` and
+`\link[pkg]{foo}` and `\link[pkg:bar]{foo}` to link to the package
+**`pkg`{.variable}**, to _files_ `foo.html` and
 `bar.html` respectively. These are rarely needed, perhaps to
 refer to not-yet-installed packages (but there the HTML help system will
 resolve the link at run time) or in the normally undesirable event that
@@ -7361,53 +6666,40 @@ which topics are in which files in an uninstalled package). The **only**
 reason to use these forms for base and recommended packages is to force
 a reference to a package that might be further down the search path.
 Because they have been frequently misused, the HTML help system looks
-for topic `foo` in package **`pkg`** if it does not find file
+for topic `foo` in package **`pkg`{.variable}** if it does not find file
 `foo.html`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Figures](#Figures), Previous:
-[Cross-references](#Cross_002dreferences), Up: [Writing R documentation
-files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.6 Mathematics 
-
- 
+### 2.6 Mathematics
 
 Mathematical formulae should be set beautifully for printed
 documentation yet we still want something useful for text and HTML
-online help. To this end, the two commands `\eqn` and
-`\deqn` are used. Whereas `\eqn` is used for "inline"
+online help. To this end, the two commands `\eqn{latex}{ascii}` and
+`\deqn{latex}{ascii}` are used. Whereas `\eqn` is used for "inline"
 formulae (corresponding to TeX's `$…$`), `\deqn` gives "displayed
 equations" (as in LaTeX's `displaymath` environment, or TeX's `$$…$$`).
 Both arguments are treated as 'verbatim' text.
 
-Both commands can also be used as `\eqn` (only *one*
-argument) which then is used for both `latex` and
-`ascii`. No whitespace is allowed between command and the
+Both commands can also be used as `\eqn{latexascii}` (only _one_
+argument) which then is used for both `latex`{.variable} and
+`ascii`{.variable}. No whitespace is allowed between command and the
 first argument, nor between the first and second arguments.
 
 The following example is from `Poisson.Rd`:
 
- 
-``` 
-  \deqn}}{%
+```r
+  \deqn{p(x) = \frac{\lambda^x e^{-\lambda}}{x!}}{%
         p(x) = \lambda^x exp(-\lambda)/x!}
-  for \eqn.
+  for \eqn{x = 0, 1, 2, \ldots}.
 ```
 
 For text on-line help we get
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> |     p(x) = lambda^x exp(-lambda)/x!                                   |
-> |                                                                       |
-> | for x = 0, 1, 2, ....                                                 |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | p(x) = lambda^x exp(-lambda)/x! | | | | for x = 0, 1, 2, .... | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 Greek letters (both cases) will be rendered in HTML if preceded by a
@@ -7417,31 +6709,24 @@ backslash, `\dots` and `\ldots` will be rendered as ellipses and
 Note that only basic LaTeX can be used, there being no provision to
 specify LaTeX style files such as the AMS extensions.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Insertions](#Insertions), Previous: [Mathematics](#Mathematics),
-Up: [Writing R documentation files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.7 Figures 
-
- 
+### 2.7 Figures
 
 To include figures in help pages, use the `\figure` markup. There are
 three forms.
 
-The two commonly used simple forms are `\figure` and
-`\figure`. This will include a copy of the
+The two commonly used simple forms are `\figure{filename}` and
+`\figure{filename}{alternate text}`. This will include a copy of the
 figure in either HTML or LaTeX output. In text output, the alternate
 text will be displayed instead. (When the second argument is omitted,
 the filename will be used.) Both the filename and the alternate text
 will be parsed verbatim, and should not include special characters that
 are significant in HTML or LaTeX.
 
-The expert form is `\figure`. (The word
+The expert form is `\figure{filename}{options: string}`. (The word
 '`options:`' must be typed exactly as shown and followed by at
-least one space.) In this form, the `string` is copied into
+least one space.) In this form, the `string`{.variable} is copied into
 the HTML `img` tag as attributes following the `src` attribute, or into
 the second argument of the `\Figure` macro in LaTeX, which by default is
 used as options to an `\includegraphics` call. As it is unlikely that
@@ -7451,10 +6736,9 @@ make sure that legal HTML/LaTeX is used. For example, to include a logo
 in both HTML (using the simple form) and LaTeX (using the expert form),
 the following could be used:
 
- 
-``` 
-\if}
-\if}
+```r
+\if{html}{\figure{Rlogo.svg}{options: width=100 alt="R logo"}}
+\if{latex}{\figure{Rlogo.pdf}{options: width=0.5in}}
 ```
 
 The files containing the figures should be stored in the directory
@@ -7466,18 +6750,13 @@ most HTML browsers, but might be the best choice in reference manuals.)
 Specify the filename relative to `man/figures` in the `\figure`
 directive.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Indices](#Indices), Previous: [Figures](#Figures), Up: [Writing R
-documentation files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 2.8 Insertions
 
-### 2.8 Insertions 
-
-Use `\R` for the R system itself. Use `\dots`  for
+Use `\R` for the R system itself. Use `\dots` for
 the dots in function argument lists '`…`', and `\ldots`
- for ellipsis dots in ordinary
+for ellipsis dots in ordinary
 text.[^108^](#FOOT108) These can be followed by `{}`, and
 should be unless followed by whitespace.
 
@@ -7490,82 +6769,66 @@ You can produce a backslash ('`\`') by escaping it by another
 backslash. (Note that `\cr` is used for generating line breaks.)
 
 The "comment" character '`%`' and unpaired
-braces[^109^](#FOOT109) *almost always* need to be escaped by
+braces[^109^](#FOOT109) _almost always_ need to be escaped by
 '`\`', and '`\\`' can be used for backslash and needs
 to be when there are two or more adjacent backslashes. In R-like code
 quoted strings are handled slightly differently; see ["Parsing Rd
 files"](https://developer.r-project.org/parseRd.pdf) for details -- in
 particular braces should not be escaped in quoted strings.
 
-All of '`%  \`' should be escaped in LaTeX-like text.
+All of '`% { } \`' should be escaped in LaTeX-like text.
 
 Text which might need to be represented differently in different
-encodings should be marked by `\enc`, e.g. `\enc`
+encodings should be marked by `\enc`, e.g. `\enc{Jöreskog}{Joreskog}`
 (with no whitespace between the braces) where the first argument will be
 used where encodings are allowed and the second should be ASCII (and is
 used for e.g. the text conversion in locales that cannot represent the
 encoded form). (This is intended to be used for individual words, not
 whole sentences or paragraphs.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Platform-specific sections](#Platform_002dspecific-sections),
-Previous: [Insertions](#Insertions), Up: [Writing R documentation
-files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 2.9 Indices
 
-### 2.9 Indices 
-
-The `\alias` command (see [Documenting
-functions](#Documenting-functions)) is used to specify the "topics"
-documented, which should include *all* R objects in a package such as
+The `\alias` command (see [Documenting functions](#Documenting-functions)) is used to specify the "topics"
+documented, which should include _all_ R objects in a package such as
 functions and variables, data sets, and S4 classes and methods (see
-[Documenting S4 classes and
-methods](#Documenting-S4-classes-and-methods)). The on-line help system
+[Documenting S4 classes and methods](#Documenting-S4-classes-and-methods)). The on-line help system
 searches the index data base consisting of all alias topics.
 
 In addition, it is possible to provide "concept index entries" using
 `\concept`, which can be used for `help.search()` lookups. E.g., file
 `cor.test.Rd` in the standard package **stats** contains
 
- 
-``` 
-\concept
-\concept
-\concept
+```r
+\concept{Kendall correlation coefficient}
+\concept{Pearson correlation coefficient}
+\concept{Spearman correlation coefficient}
 ```
 
-so that e.g. [??Spearman] will succeed in finding the help page
+so that e.g. [??Spearman]{.kbd} will succeed in finding the help page
 for the test for association between paired samples using Spearman's
 rho.
 
 (Note that `help.search()` only uses "sections" of documentation objects
 with no additional markup.)
 
-Each `\concept` entry should give a *single* index term (word or
+Each `\concept` entry should give a _single_ index term (word or
 phrase), and not use any Rd markup.
 
-If you want to cross reference such items from other help files *via*
+If you want to cross reference such items from other help files _via_
 `\link`, you need to use `\alias` and not `\concept`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Conditional text](#Conditional-text), Previous:
-[Indices](#Indices), Up: [Writing R documentation
-files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.10 Platform-specific documentation 
+### 2.10 Platform-specific documentation
 
 Sometimes the documentation needs to differ by platform. Currently two
 OS-specific options are available, '`unix`' and
 '`windows`', and lines in the help source file can be enclosed
 in
 
- 
-``` 
+```r
 #ifdef OS
    ...
 #endif
@@ -7573,8 +6836,7 @@ in
 
 or
 
- 
-``` 
+```r
 #ifndef OS
    ...
 #endif
@@ -7590,25 +6852,17 @@ documented are only relevant to one platform, platform-specific
 `Rd` files can be put in a `unix` or
 `windows` subdirectory.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Dynamic pages](#Dynamic-pages), Previous: [Platform-specific
-sections](#Platform_002dspecific-sections), Up: [Writing R documentation
-files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.11 Conditional text 
-
-  
+### 2.11 Conditional text
 
 Occasionally the best content for one output format is different from
 the best content for another. For this situation, the
-`\if` or `\ifelse` markup is
-used. Here `format` is a comma separated list of formats in
-which the `text` should be rendered. The
-`alternate` will be rendered if the format does not match.
-Both `text` and `alternate` may be any sequence of
+`\if{format}{text}` or `\ifelse{format}{text}{alternate}` markup is
+used. Here `format`{.variable} is a comma separated list of formats in
+which the `text`{.variable} should be rendered. The
+`alternate`{.variable} will be rendered if the format does not match.
+Both `text`{.variable} and `alternate`{.variable} may be any sequence of
 text and markup.
 
 Currently the following formats are recognized: `example`, `html`,
@@ -7618,29 +6872,20 @@ displayed example in some other format.) Also accepted are `TRUE`
 (matching all formats) and `FALSE` (matching no formats). These could be
 the output of the `\Sexpr` macro (see [Dynamic pages](#Dynamic-pages)).
 
-The `\out` macro would usually be used within the
-`text` part of `\if`. It causes the renderer to
+The `\out{literal}` macro would usually be used within the
+`text`{.variable} part of `\if{format}{text}`. It causes the renderer to
 output the literal text exactly, with no attempt to escape special
 characters. For example, use the following to output the markup
 necessary to display the Greek letter in LaTeX or HTML, and the text
 string `alpha` in other formats:
 
- 
-``` 
-\ifelse}}}
+```r
+\ifelse{latex}{\out{$\alpha$}}{\ifelse{html}{\out{&alpha;}}{alpha}}
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [User-defined macros](#User_002ddefined-macros), Previous:
-[Conditional text](#Conditional-text), Up: [Writing R documentation
-files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.12 Dynamic pages 
-
-  
+### 2.12 Dynamic pages
 
 Two macros supporting dynamically generated man pages are `\Sexpr` and
 `\RdOpts`. These are modelled after Sweave, and are intended to contain
@@ -7654,62 +6899,62 @@ time, package install time, or man page rendering time.
 The options follow the same format as in Sweave, but different options
 are supported. Currently the allowed options and their defaults are:
 
--   `eval=TRUE` Whether the R code should be evaluated.
+- `eval=TRUE` Whether the R code should be evaluated.
 
--   `echo=FALSE` Whether the R code should be echoed. If `TRUE`, a
-    display will be given in a preformatted block. For example,
-    `\Sexpr[echo=TRUE]` will be displayed as
-     
-    ``` 
-    > x <- 1
-    ```
-    
+- `echo=FALSE` Whether the R code should be echoed. If `TRUE`, a
+  display will be given in a preformatted block. For example,
+  `\Sexpr[echo=TRUE]{ x <- 1 }` will be displayed as
 
--   `keep.source=TRUE` Whether to keep the author's formatting when
-    displaying the code, or throw it away and use a deparsed version.
+```r
+> x <- 1
+```
 
--   `results=text` How should the results be displayed? The
-    possibilities are:
-    -   \- `results=text` Apply `as.character()` to the result of the
-        code, and insert it as a text element.
-    -   \- `results=verbatim` Print the results of the code just as if
-        it was executed at the console, and include the printed results
-        verbatim. (Invisible results will not print.)
-    -   \- `results=rd` The result is assumed to be a character vector
-        containing markup to be passed to `parse_Rd()`, with the result
-        inserted in place. This could be used to insert computed
-        aliases, for instance. `parse_Rd()` is called first with
-        `fragment = FALSE` to allow a single Rd section macro to be
-        inserted. If that fails, it is called again with
-        `fragment = TRUE`, the older behavior.
-    -   \- `results=hide` Insert no output.
+- `keep.source=TRUE` Whether to keep the author's formatting when
+  displaying the code, or throw it away and use a deparsed version.
 
--   `strip.white=TRUE` Remove leading and trailing white space from each
-    line of output if `strip.white=TRUE`. With `strip.white=all`, also
-    remove blank lines.
+- `results=text` How should the results be displayed? The
+  possibilities are:
 
--   `stage=install` Control when this macro is run. Possible values are
+  - \- `results=text` Apply `as.character()` to the result of the
+    code, and insert it as a text element.
+  - \- `results=verbatim` Print the results of the code just as if
+    it was executed at the console, and include the printed results
+    verbatim. (Invisible results will not print.)
+  - \- `results=rd` The result is assumed to be a character vector
+    containing markup to be passed to `parse_Rd()`, with the result
+    inserted in place. This could be used to insert computed
+    aliases, for instance. `parse_Rd()` is called first with
+    `fragment = FALSE` to allow a single Rd section macro to be
+    inserted. If that fails, it is called again with
+    `fragment = TRUE`, the older behavior.
+  - \- `results=hide` Insert no output.
 
-    -   \- `stage=build` The macro is run when building a source
-        tarball.
-    -   \- `stage=install` The macro is run when installing from source.
-    -   \- `stage=render` The macro is run when displaying the help
-        page.
+- `strip.white=TRUE` Remove leading and trailing white space from each
+  line of output if `strip.white=TRUE`. With `strip.white=all`, also
+  remove blank lines.
 
-    Conditionals such as `#ifdef` (see [Platform-specific
-    sections](#Platform_002dspecific-sections)) are applied after the
-    `build` macros but before the `install` macros. In some situations
-    (e.g. installing directly from a source directory without a tarball,
-    or building a binary package) the above description is not literally
-    accurate, but authors can rely on the sequence being `build`,
-    `#ifdef`, `install`, `render`, with all stages executed.
+- `stage=install` Control when this macro is run. Possible values are
 
-    Code is only run once in each stage, so a `\Sexpr[results=rd]` macro
-    can output an `\Sexpr` macro designed for a later stage, but not for
-    the current one or any earlier stage.
+  - \- `stage=build` The macro is run when building a source
+    tarball.
+  - \- `stage=install` The macro is run when installing from source.
+  - \- `stage=render` The macro is run when displaying the help
+    page.
 
--   `width, height, fig` These options are currently allowed but
-    ignored.
+  Conditionals such as `#ifdef` (see [Platform-specific
+  sections](#Platform_002dspecific-sections)) are applied after the
+  `build` macros but before the `install` macros. In some situations
+  (e.g. installing directly from a source directory without a tarball,
+  or building a binary package) the above description is not literally
+  accurate, but authors can rely on the sequence being `build`,
+  `#ifdef`, `install`, `render`, with all stages executed.
+
+  Code is only run once in each stage, so a `\Sexpr[results=rd]` macro
+  can output an `\Sexpr` macro designed for a later stage, but not for
+  the current one or any earlier stage.
+
+- `width, height, fig` These options are currently allowed but
+  ignored.
 
 The `\RdOpts` macro is used to set new defaults for options to apply to
 following uses of `\Sexpr`.
@@ -7717,16 +6962,9 @@ following uses of `\Sexpr`.
 For more details, see the online document ["Parsing Rd
 files"](https://developer.r-project.org/parseRd.pdf).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Encoding](#Encoding), Previous: [Dynamic pages](#Dynamic-pages),
-Up: [Writing R documentation files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.13 User-defined macros 
-
- 
+### 2.13 User-defined macros
 
 The `\newcommand` and `\renewcommand` macros allow new macros to be
 defined within an Rd file. These are similar but not identical to the
@@ -7758,49 +6996,43 @@ A number of macros are defined in the file
 and these will normally be available in all `.Rd` files. For
 example, that file contains the definition
 
- 
-``` 
-\newcommand}
+```r
+\newcommand{\PR}{\Sexpr[results=rd]{tools:::Rd_expr_PR(#1)}}
 ```
 
 which defines `\PR` to be a single argument macro; then code (typically
 used in the `NEWS.Rd` file) like
 
- 
-``` 
-\PR
+```r
+\PR{1234}
 ```
 
 will expand to
 
- 
-``` 
-\Sexpr[results=rd]
+```r
+\Sexpr[results=rd]{tools:::Rd_expr_PR(1234)}
 ```
 
 when parsed.
 
 Some macros that might be of general use are:
 
-`\CRANpkg` 
+`\CRANpkg{pkg}`
 
-:   A package on CRAN
+: A package on CRAN
 
-`\sspace` 
+`\sspace`
 
-:   A single space (used after a period that does not end a sentence).
+: A single space (used after a period that does not end a sentence).
 
-`\doi` 
+`\doi{numbers}`
 
-:   A digital object identifier (DOI).
+: A digital object identifier (DOI).
 
 See the `system.Rd` file in `share/Rd/macros` for more
 details and macro definitions, including macros `\packageTitle`,
 `\packageDescription`, `\packageAuthor`, `\packageMaintainer`,
 `\packageDESCRIPTION` and `\packageIndices`.
- 
- 
- 
 
 Packages may also define their own common macros; these would be stored
 in an `.Rd` file in `man/macros` in the package source
@@ -7809,19 +7041,13 @@ installed. A package may also use the macros from a different package by
 listing the other package in the '`RdMacros`' field in the
 `DESCRIPTION` file.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Processing documentation files](#Processing-documentation-files),
-Previous: [User-defined macros](#User_002ddefined-macros), Up: [Writing
-R documentation files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.14 Encoding 
+### 2.14 Encoding
 
 Rd files are text files and so it is impossible to deduce the encoding
 they are written in unless ASCII: files with 8-bit characters could be
-UTF-8, Latin-1, Latin-9, KOI8-R, EUC-JP, *etc*. So an `\encoding{}`
+UTF-8, Latin-1, Latin-9, KOI8-R, EUC-JP, _etc_. So an `\encoding{}`
 section must be used to specify the encoding if it is not ASCII. (The
 `\encoding{}` section must be on a line by itself, and in particular one
 containing no non-ASCII characters. The encoding declared in the
@@ -7851,39 +7077,31 @@ support the declared encoding.
 The LaTeX conversion converts the file to UTF-8 from the declared
 encoding, and includes a
 
- 
-``` 
-\inputencoding
+```r
+\inputencoding{utf8}
 ```
 
 command, and this needs to be matched by a suitable invocation of the
-`\usepackage` command. The R utility `R CMD Rd2pdf` looks at
+`\usepackage{inputenc}` command. The R utility `R CMD Rd2pdf` looks at
 the converted code and includes the encodings used: it might for example
 use
 
- 
-``` 
-\usepackage[utf8]
+```r
+\usepackage[utf8]{inputenc}
 ```
 
 (Use of `utf8` as an encoding requires LaTeX dated 2003/12/01 or later.
 Also, the use of Cyrillic characters in '`UTF-8`' appears to
-also need '`\usepackage[T2A]`', and `R CMD Rd2pdf`
+also need '`\usepackage[T2A]{fontenc}`', and `R CMD Rd2pdf`
 includes this conditionally on the file `t2aenc.def` being
 present and environment variable `_R_CYRILLIC_TEX_` being set.)
 
 Note that this mechanism works best with Latin letters: the coverage of
 UTF-8 in LaTeX is quite low.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Editing Rd files](#Editing-Rd-files), Previous:
-[Encoding](#Encoding), Up: [Writing R documentation
-files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.15 Processing documentation files 
+### 2.15 Processing documentation files
 
 There are several commands to process Rd files from the system command
 line.
@@ -7899,8 +7117,6 @@ directory with the sources of a package. In the latter case, a reference
 manual for all documented objects in the package is created, including
 the information in the `DESCRIPTION` files.
 
- 
-
 `R CMD Sweave` and `R CMD Stangle` process vignette-like documentation
 files (e.g. Sweave vignettes with extension '`.Snw`' or
 '`.Rnw`', or other non-Sweave vignettes). `R CMD Stangle` is
@@ -7908,23 +7124,17 @@ used to extract the R code fragments.
 
 The exact usage and a detailed list of available options for all of
 these commands can be obtained by running `R CMD command --help`, e.g.,
-[R CMD Rdconv \--help]. All available commands can be listed using
-[R \--help] (or [Rcmd \--help] under Windows).
+[R CMD Rdconv \--help]{.kbd}. All available commands can be listed using
+[R \--help]{.kbd} (or [Rcmd \--help]{.kbd} under Windows).
 
 All of these work under Windows. You may need to have installed the the
 tools to build packages from source as described in the "R Installation
 and Administration" manual, although typically all that is needed is a
 LaTeX installation.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Processing documentation
-files](#Processing-documentation-files), Up: [Writing R documentation
-files](#Writing-R-documentation-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.16 Editing Rd files 
+### 2.16 Editing Rd files
 
 It can be very helpful to prepare `.Rd` files using a editor
 which knows about their syntax and will highlight commands, indent to
@@ -7945,37 +7155,27 @@ are rather similar to LaTeX files.
 Some R front-ends provide editing support for `.Rd` files, for
 example RStudio (<https://www.rstudio.com/>).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Debugging](#Debugging), Previous: [Writing R documentation
-files](#Writing-R-documentation-files), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 3 Tidying and profiling R code
 
-3 Tidying and profiling R code 
-------------------------------
+---
 
-  ----------------------------------------------------------------------- ---- --
-  • [Tidying R code](#Tidying-R-code)                                          
-  • [Profiling R code for speed](#Profiling-R-code-for-speed)                  
-  • [Profiling R code for memory use](#Profiling-R-code-for-memory-use)        
-  • [Profiling compiled code](#Profiling-compiled-code)                        
-  ----------------------------------------------------------------------- ---- --
+• [Tidying R code](#Tidying-R-code)     
+ • [Profiling R code for speed](#Profiling-R-code-for-speed)     
+ • [Profiling R code for memory use](#Profiling-R-code-for-memory-use)     
+ • [Profiling compiled code](#Profiling-compiled-code)
+
+---
 
 R code which is worth preserving in a package and perhaps making
 available for others to use is worth documenting, tidying up and perhaps
 optimizing. The last two of these activities are the subject of this
 chapter.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Profiling R code for speed](#Profiling-R-code-for-speed),
-Previous: [Tidying and profiling R code](#Tidying-and-profiling-R-code),
-Up: [Tidying and profiling R code](#Tidying-and-profiling-R-code)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 3.1 Tidying R code 
+### 3.1 Tidying R code
 
 R treats function code loaded from packages and code entered by users
 differently. By default code entered by users has the source code stored
@@ -7998,11 +7198,10 @@ We can subvert the keeping of source in two ways.
     loaded into R.
 2.  The stored source code can be removed by calling the
     `removeSource()` function, for example by
-     
-    ``` 
+
+    ```r
     myfun <- removeSource(myfun)
     ```
-    
 
 In each case if we then list the function we will get the standard
 layout.
@@ -8010,14 +7209,13 @@ layout.
 Suppose we have a file of functions `myfuns.R` that we want to
 tidy up. Create a file `tidy.R` containing
 
- 
-``` 
+```r
 source("myfuns.R", keep.source = FALSE)
 dump(ls(all = TRUE), file = "new.myfuns.R")
 ```
 
 and run R with this as the source file, for example by [R \--vanilla \<
-tidy.R] or by pasting into an R session. Then the file
+tidy.R]{.kbd} or by pasting into an R session. Then the file
 `new.myfuns.R` will contain the functions in alphabetical order
 in the standard layout. Warning: comments in your functions will be
 lost.
@@ -8027,23 +7225,13 @@ Although the deparsing cannot do so, we recommend the consistent use of
 the preferred assignment operator '`<-`' (rather than
 '`=`') for assignment. Many package authors use a version of
 Emacs (on a Unix-alike or Windows) to edit R code, using the ESS\[S\]
-mode of the ESS Emacs package. See [R coding
-standards](./R-ints.html#R-coding-standards) in R Internals for style
+mode of the ESS Emacs package. See [R coding standards](./R-ints.html#R-coding-standards) in R Internals for style
 options within the ESS\[S\] mode recommended for the source code of R
 itself.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Profiling R code for memory
-use](#Profiling-R-code-for-memory-use), Previous: [Tidying R
-code](#Tidying-R-code), Up: [Tidying and profiling R
-code](#Tidying-and-profiling-R-code)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 3.2 Profiling R code for speed 
-
- 
+### 3.2 Profiling R code for speed
 
 It is possible to profile R code on Windows and
 most[^111^](#FOOT111) Unix-alike versions of R.
@@ -8059,8 +7247,7 @@ function `summaryRprof` or the command-line utility
 As an example, consider the following code (from Venables & Ripley,
 2002, pp. 225--6).
 
- 
-``` 
+```r
 library(MASS); library(boot)
 storm.fm <- nls(Time ~ b*Viscosity/(Wt - c), stormer,
                 start = c(b=30.401, c=2.2183))
@@ -8079,8 +7266,7 @@ Rprof(NULL)
 
 Having run this we can summarize the results by
 
- 
-``` 
+```r
 R CMD Rprof boot.out
 
 Each sample represents 0.02 seconds.
@@ -8090,10 +7276,11 @@ Total seconds: time spent in function and callees.
 Self seconds: time spent in function alone.
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
    %       total       %        self
  total    seconds     self    seconds    name
  100.0     25.22       0.2      0.04     "boot"
@@ -8112,10 +7299,11 @@ Self seconds: time spent in function alone.
  ...
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
    %        self        %      total
   self    seconds     total   seconds    name
    5.7      1.44       7.5      1.88     "inherits"
@@ -8142,7 +7330,7 @@ output files can be very large if long runs are profiled at the default
 sampling interval.
 
 Profiling short runs can sometimes give misleading results. R from time
-to time performs *garbage collection* to reclaim unused memory, and this
+to time performs _garbage collection_ to reclaim unused memory, and this
 takes an appreciable amount of time which profiling will charge to
 whichever function happens to provoke it. It may be useful to compare
 profiling code immediately after a call to `gc()` with a profiling run
@@ -8154,17 +7342,9 @@ CRAN packages
 [**profr**](https://CRAN.R-project.org/package=profr): in particular
 these allow call graphs to be studied.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Profiling compiled code](#Profiling-compiled-code), Previous:
-[Profiling R code for speed](#Profiling-R-code-for-speed), Up: [Tidying
-and profiling R code](#Tidying-and-profiling-R-code)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 3.3 Profiling R code for memory use 
-
- 
+### 3.3 Profiling R code for memory use
 
 Measuring memory use in R code is useful either when the code takes more
 memory than is conveniently available or when memory allocation and
@@ -8186,8 +7366,7 @@ from the operating system.
 
 Some memory allocation is obvious in interpreted code, for example,
 
- 
-``` 
+```r
 y <- x + 1
 ```
 
@@ -8198,8 +7377,7 @@ function it is not immediately copied. Copying occurs (if necessary)
 only when the argument is modified. This can lead to surprising memory
 use. For example, in the 'survey' package we have
 
- 
-``` 
+```r
 print.svycoxph <- function (x, ...)
 {
     print(x$survey.design, varnames = FALSE, design.summaries = FALSE, ...)
@@ -8217,24 +7395,17 @@ The main reason that memory-use profiling is difficult is garbage
 collection. Memory is allocated at well-defined times in an R program,
 but is freed whenever the garbage collector happens to run.
 
-  ----------------------------------------------------------------- ---- --
-  • [Memory statistics from Rprof](#Memory-statistics-from-Rprof)        
-  • [Tracking memory allocations](#Tracking-memory-allocations)          
-  • [Tracing copies of an object](#Tracing-copies-of-an-object)          
-  ----------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Memory statistics from Rprof](#Memory-statistics-from-Rprof)     
+ • [Tracking memory allocations](#Tracking-memory-allocations)     
+ • [Tracing copies of an object](#Tracing-copies-of-an-object)
 
- 
-Next: [Tracking memory allocations](#Tracking-memory-allocations),
-Previous: [Profiling R code for memory
-use](#Profiling-R-code-for-memory-use), Up: [Profiling R code for memory
-use](#Profiling-R-code-for-memory-use)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 3.3.1 Memory statistics from `Rprof` 
+---
 
- 
+#### 3.3.1 Memory statistics from `Rprof`
 
 The sampling profiler `Rprof` described in the previous section can be
 given the option `memory.profiling=TRUE`. It then writes out the total R
@@ -8252,16 +7423,9 @@ smaller amount of memory. Changing the memory limits with `mem.limits()`
 may also be useful, to see how the code would run under different memory
 conditions.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Tracing copies of an object](#Tracing-copies-of-an-object),
-Previous: [Memory statistics from Rprof](#Memory-statistics-from-Rprof),
-Up: [Profiling R code for memory use](#Profiling-R-code-for-memory-use)
- 
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.3.2 Tracking memory allocations 
+#### 3.3.2 Tracking memory allocations
 
 The second method of memory profiling uses a memory-allocation profiler,
 `Rprofmem()`, which writes out a stack trace to an output file every
@@ -8271,8 +7435,7 @@ functions for this output are still being designed.
 
 Running the example from the previous section with
 
- 
-``` 
+```r
 > Rprofmem("boot.memprof",threshold=1000)
 > storm.boot <- boot(rs, storm.bf, R = 4999)
 > Rprofmem(NULL)
@@ -8281,22 +7444,14 @@ Running the example from the previous section with
 shows that apart from some initial and final work in `boot` there are no
 vector allocations over 1000 bytes.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Tracking memory allocations](#Tracking-memory-allocations),
-Up: [Profiling R code for memory use](#Profiling-R-code-for-memory-use)
- 
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.3.3 Tracing copies of an object 
-
- 
+#### 3.3.3 Tracing copies of an object
 
 The third method of memory profiling involves tracing copies made of a
 specific (presumably large) R object. Calling `tracemem` on an object
 marks it so that a message is printed to standard output when the object
-is copied *via* `duplicate` or coercion to another type, or when a new
+is copied _via_ `duplicate` or coercion to another type, or when a new
 object of the same size is created in arithmetic operations. The main
 reason that this can be misleading is that copying of subsets or
 components of an object is not tracked. It may be helpful to use
@@ -8304,8 +7459,7 @@ components of an object is not tracked. It may be helpful to use
 
 In the example above we can run `tracemem` on the data frame `st`
 
- 
-``` 
+```r
 > tracemem(st)
 [1] "<0x9abd5e0>"
 > storm.boot <- boot(rs, storm.bf, R = 4)
@@ -8331,23 +7485,16 @@ The object is duplicated fifteen times, three times for each of the
 duplications happen inside `nls`. Stepping through `storm.bf` in the
 debugger shows that all three happen in the line
 
- 
-``` 
+```r
 st$Time <- st$fit + rs[i]
 ```
 
 Data frames are slower than matrices and this is an example of why.
 Using `tracemem(st$Viscosity)` does not reveal any additional copying.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Profiling R code for memory
-use](#Profiling-R-code-for-memory-use), Up: [Tidying and profiling R
-code](#Tidying-and-profiling-R-code)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 3.4 Profiling compiled code 
+### 3.4 Profiling compiled code
 
 Profiling compiled code is highly system-specific, but this section
 contains some hints gleaned from various R users. Some methods need to
@@ -8355,34 +7502,29 @@ be different for a compiled executable and for dynamic/shared
 libraries/objects as used by R packages. We know of no good way to
 profile DLLs on Windows.
 
-  ----------------------- ---- --
-  • [Linux](#Linux)            
-  • [Solaris](#Solaris)        
-  • [macOS](#macOS)            
-  ----------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Linux](#Linux)     
+ • [Solaris](#Solaris)     
+ • [macOS](#macOS)
 
- 
-Next: [Solaris](#Solaris), Previous: [Profiling compiled
-code](#Profiling-compiled-code), Up: [Profiling compiled
-code](#Profiling-compiled-code)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 3.4.1 Linux 
+---
+
+#### 3.4.1 Linux
 
 Options include using `sprof` for a shared object, and `oprofile` (see
 <http://oprofile.sourceforge.net/>) and `perf` (see
 <https://perf.wiki.kernel.org/index.php/Tutorial>) for any executable or
 shared object.
 
-#### 3.4.1.1 sprof 
+#### 3.4.1.1 sprof
 
 You can select shared objects to be profiled with `sprof` by setting the
 environment variable `LD_PROFILE`. For example
 
- 
-``` 
+```r
 % setenv LD_PROFILE /path/to/R_HOME/library/stats/libs/stats.so
 R
 ... run the boot example
@@ -8405,7 +7547,7 @@ rm /var/tmp/path/to/R_HOME/library/stats/libs/stats.so.profile
 It is possible that root access is needed to create the directories used
 for the profile data.
 
-#### 3.4.1.2 oprofile and operf 
+#### 3.4.1.2 oprofile and operf
 
 The `oprofile` project has two modes of operation. In what is now called
 'legacy' mode, it is uses a daemon to collect information on a process
@@ -8418,8 +7560,7 @@ Here is an example on `x86_64` Linux using R 3.0.2. File
 `pvec.R` contains the part of the examples from `pvec` in
 package **parallel**:
 
- 
-``` 
+```r
 library(parallel)
 N <- 1e6
 dates <- sprintf('%04d-%02d-%02d', as.integer(2000+rnorm(N)),
@@ -8429,16 +7570,14 @@ system.time(a <- as.POSIXct(dates, format = "%Y-%m-%d"))
 
 with timings from the final step
 
- 
-``` 
+```r
    user  system elapsed
   0.371   0.237   0.612
 ```
 
 R-level profiling by `Rprof` shows
 
- 
-``` 
+```r
                      self.time self.pct total.time total.pct
 "strptime"                1.70    41.06       1.70     41.06
 "as.POSIXct.POSIXlt"      1.40    33.82       1.42     34.30
@@ -8450,8 +7589,7 @@ so the conversion from character to `POSIXlt` takes most of the time.
 
 This can be run under `operf` and analysed by
 
- 
-``` 
+```r
 operf R -f pvec.R
 opreport
 opreport -l /path/to/R_HOME/bin/exec/R
@@ -8462,8 +7600,7 @@ opreport -l /lib64/libc.so.6
 
 The first report shows where (which library etc) the time was spent:
 
- 
-``` 
+```r
 CPU_CLK_UNHALT...|
   samples|      %|
 ------------------
@@ -8483,8 +7620,7 @@ The rest of the output is voluminous, and only extracts are shown below.
 
 Most of the time within R is spent in
 
- 
-``` 
+```r
 samples  %        image name symbol name
 10397    28.5123  R           R_gc_internal
 5683     15.5848  R           do_sprintf
@@ -8508,7 +7644,7 @@ calls to `wcsftime` dominated, so those calls were cached for R 3.0.3:
 the time spent in `no-vmlinux` (the kernel) was reduced dramatically.
 
 On platforms which support it, call graphs can be produced by
-`opcontrol --callgraph` if collected *via* `operf --callgraph`.
+`opcontrol --callgraph` if collected _via_ `operf --callgraph`.
 
 The profiling data is by default stored in sub-directory
 `oprofile_data` of the current directory, which can be removed
@@ -8517,8 +7653,7 @@ at the end of the session.
 Another example, from [**sm**](https://CRAN.R-project.org/package=sm)
 version 2.2-5.4. The example for `sm.variogram` took a long time:
 
- 
-``` 
+```r
 system.time(example(sm.variogram))
 ...
    user  system elapsed
@@ -8528,8 +7663,7 @@ system.time(example(sm.variogram))
 including a lot of system time. Profiling just the slow part, the second
 plot, showed
 
- 
-``` 
+```r
   samples|      %|
 ------------------
    381845 99.9885 R
@@ -8544,13 +7678,12 @@ plot, showed
 
 so the system time was almost all in the Linux kernel. It is possible to
 dig deeper if you have a matching uncompressed kernel with debug symbols
-to specify *via* `--vmlinux`: we did not.
+to specify _via_ `--vmlinux`: we did not.
 
 In 'legacy' mode `oprofile` works by running a daemon which collects
 information. The daemon must be started as root, e.g.
 
- 
-``` 
+```r
 % su
 % opcontrol --no-vmlinux
 % (optional, some platforms) opcontrol --callgraph=5
@@ -8560,8 +7693,7 @@ information. The daemon must be started as root, e.g.
 
 Then as a user
 
- 
-``` 
+```r
 % R
 ... run the boot example
 % opcontrol --dump
@@ -8593,42 +7725,25 @@ samples  %        symbol name
 Shutting down the profiler and clearing the records needs to be done as
 root.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [macOS](#macOS), Previous: [Linux](#Linux), Up: [Profiling
-compiled code](#Profiling-compiled-code)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.4.2 Solaris 
+#### 3.4.2 Solaris
 
 On 64-bit (only) Solaris, the standard profiling tool `gprof` collects
 information from shared objects compiled with `-pg`.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Solaris](#Solaris), Up: [Profiling compiled
-code](#Profiling-compiled-code)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.4.3 macOS 
+#### 3.4.3 macOS
 
 Developers have recommended `sample` (or `Sampler.app`, which is a GUI
 version), `Shark` (in version of `Xcode` up to those for Snow Leopard),
 and `Instruments` (part of `Xcode`, see
 <https://developer.apple.com/library/content/documentation/DeveloperTools/Conceptual/InstrumentsUserGuide/index.html>).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [System and foreign language
-interfaces](#System-and-foreign-language-interfaces), Previous: [Tidying
-and profiling R code](#Tidying-and-profiling-R-code), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-4 Debugging 
------------
+## 4 Debugging
 
 This chapter covers the debugging of R extensions, starting with the
 ways to get useful error information and moving on to how to deal with
@@ -8641,22 +7756,19 @@ notes from 2002 provided by Roger Peng at
 <http://www.biostat.jhsph.edu/~rpeng/docs/R-debug-tools.pdf> which
 provide complementary examples to those given here.)
 
-  --------------------------------------------------------------------- ---- --
-  • [Browsing](#Browsing)                                                    
-  • [Debugging R code](#Debugging-R-code)                                    
-  • [Checking memory access](#Checking-memory-access)                        
-  • [Debugging compiled code](#Debugging-compiled-code)                      
-  • [Using Link-time Optimization](#Using-Link_002dtime-Optimization)        
-  --------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Browsing](#Browsing)     
+ • [Debugging R code](#Debugging-R-code)     
+ • [Checking memory access](#Checking-memory-access)     
+ • [Debugging compiled code](#Debugging-compiled-code)     
+ • [Using Link-time Optimization](#Using-Link_002dtime-Optimization)
 
- 
-Next: [Debugging R code](#Debugging-R-code), Previous:
-[Debugging](#Debugging), Up: [Debugging](#Debugging)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 4.1 Browsing 
+---
+
+### 4.1 Browsing
 
 Most of the R-level debugging facilities are based around the built-in
 browser. This can be used directly by inserting a call to `browser()`
@@ -8664,8 +7776,7 @@ into the code of a function (for example, using `fix(my_function)` ).
 When code execution reaches that point in the function, control returns
 to the R console with a special prompt. For example
 
- 
-``` 
+```r
 > fix(summary.data.frame) ## insert browser() call after for() loop
 > summary(women)
 Called from: summary.data.frame(women)
@@ -8690,38 +7801,36 @@ At the browser prompt one can enter any R expression, so for example
 an object will[^113^](#FOOT113) print it. The following
 commands are also accepted
 
--   `n`
+- `n`
 
-    Enter 'step-through' mode. In this mode, hitting return executes the
-    next line of code (more precisely one line and any continuation
-    lines). Typing `c` will continue to the end of the current context,
-    e.g. to the end of the current loop or function.
+  Enter 'step-through' mode. In this mode, hitting return executes the
+  next line of code (more precisely one line and any continuation
+  lines). Typing `c` will continue to the end of the current context,
+  e.g. to the end of the current loop or function.
 
--   `c`
+- `c`
 
-    In normal mode, this quits the browser and continues execution, and
-    just return works in the same way. `cont` is a synonym.
+  In normal mode, this quits the browser and continues execution, and
+  just return works in the same way. `cont` is a synonym.
 
--   `where`
+- `where`
 
-    This prints the call stack. For example
+  This prints the call stack. For example
 
-     
-    ``` 
-    > summary(women)
-    Called from: summary.data.frame(women)
-    Browse[1]> where
-    where 1: summary.data.frame(women)
-    where 2: summary(women)
+```r
+> summary(women)
+Called from: summary.data.frame(women)
+Browse[1]> where
+where 1: summary.data.frame(women)
+where 2: summary(women)
 
-    Browse[1]>
-    ```
-    
+Browse[1]>
+```
 
--   `Q`
+- `Q`
 
-    Quit both the browser and the current expression, and return to the
-    top-level prompt.
+  Quit both the browser and the current expression, and return to the
+  top-level prompt.
 
 Errors in code executed at the browser prompt will normally return
 control to the browser prompt. Objects can be altered by assignment, and
@@ -8729,14 +7838,9 @@ will keep their changed values when the browser is exited. If really
 necessary, objects can be assigned to the workspace from the browser
 prompt (by using `<<-` if the name is not already in scope).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Checking memory access](#Checking-memory-access), Previous:
-[Browsing](#Browsing), Up: [Debugging](#Debugging)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 4.2 Debugging R code 
+### 4.2 Debugging R code
 
 Suppose your R program gives an error message. The first thing to find
 out is what R was doing at the time of the error, and the most useful
@@ -8746,8 +7850,7 @@ R mailing lists as being in some package when `traceback()` would show
 that the error was being reported by some other package or base R. Here
 is an example from the regression suite.
 
- 
-``` 
+```r
 > success <- c(13,12,11,14,14,11,13,11,12)
 > failure <- c(0,0,0,0,0,0,0,2,2)
 > resp <- cbind(success, failure)
@@ -8772,8 +7875,7 @@ calls, which can be limited by setting `option`
 Sometimes the traceback will indicate that the error was detected inside
 compiled code, for example (from `?nls`)
 
- 
-``` 
+```r
 Error in nls(y ~ a + b * x, start = list(a = 0.12345, b = 0.54321), trace = TRUE) :
         step factor 0.000488281 reduced below ‘minFactor’ of 0.000976563
 >  traceback()
@@ -8786,8 +7888,7 @@ This will be the case if the innermost call is to `.C`, `.Fortran`,
 code to evaluate R expressions, this need not be the innermost call, as
 in
 
- 
-``` 
+```r
 > traceback()
 9: gm(a, b, x)
 8: .Call(R_numeric_deriv, expr, theta, rho, dir)
@@ -8812,8 +7913,7 @@ in
 Occasionally `traceback()` does not help, and this can be the case if S4
 method dispatch is involved. Consider the following example
 
- 
-``` 
+```r
 > xyd <- new("xyloc", x=runif(20), y=runif(20))
 Error in as.environment(pkg) : no item called "package:S4nswv"
 on the search list
@@ -8827,14 +7927,13 @@ an error when called from internal dispatch for function ‘initialize’
 which does not help much, as there is no call to `as.environment` in
 `initialize` (and the note "called from internal dispatch" tells us so).
 In this case we searched the R sources for the quoted call, which
-occurred in only one place, `methods.asEnvironmentPackage`. So now we
+occurred in only one place, `methods:::.asEnvironmentPackage`. So now we
 knew where the error was occurring. (This was an unusually opaque
 example.)
 
 The error message
 
- 
-``` 
+```r
 evaluation nested too deeply: infinite recursion / options(expressions=)?
 ```
 
@@ -8842,8 +7941,7 @@ can be hard to handle with the default value (5000). Unless you know
 that there actually is deep recursion going on, it can help to set
 something like
 
- 
-``` 
+```r
 options(expressions=500)
 ```
 
@@ -8855,12 +7953,11 @@ error, but it is not obvious where it is coming from. Setting
 
 Once we have located the error, we have some choices. One way to proceed
 is to find out more about what was happening at the time of the crash by
-looking a *post-mortem* dump. To do so, set 
+looking a _post-mortem_ dump. To do so, set
 `options(error=dump.frames)` and run the code again. Then invoke
 `debugger()` and explore the dump. Continuing our example:
 
- 
-``` 
+```r
 > options(error = dump.frames)
 > glm(resp ~ 0 + predictor, family = binomial(link ="log"))
 Error: no valid set of coefficients has been found: please supply starting values
@@ -8869,10 +7966,9 @@ Error: no valid set of coefficients has been found: please supply starting value
 which is the same as before, but an object called `last.dump` has
 appeared in the workspace. (Such objects can be large, so remove it when
 it is no longer needed.) We can examine this at a later time by calling
-the function `debugger`. 
+the function `debugger`.
 
- 
-``` 
+```r
 > debugger()
 Message:  Error: no valid set of coefficients has been found: please supply starting values
 Available environments had calls:
@@ -8890,8 +7986,7 @@ browser in that frame. So we select the function call which spawned the
 error message, and explore some of the variables (and execute two
 function calls).
 
- 
-``` 
+```r
 Enter an environment number, or 0 to exit  Selection: 2
 Browsing in the environment with call:
    glm.fit(x = X, y = Y, weights = weights, start = start, etas
@@ -8933,19 +8028,17 @@ Because `last.dump` can be looked at later or even in another R session,
 post-mortem debugging is possible even for batch usage of R. We do need
 to arrange for the dump to be saved: this can be done either using the
 command-line flag `--save` to save the workspace at the end of
-the run, or *via* a setting such as
+the run, or _via_ a setting such as
 
- 
-``` 
-> options(error = quote())
+```r
+> options(error = quote({dump.frames(to.file=TRUE); q()}))
 ```
 
 See the help on `dump.frames` for further options and a worked example.
 
 An alternative error action is to use the function `recover()`:
 
- 
-``` 
+```r
 > options(error = recover)
 > glm(resp ~ 0 + predictor, family = binomial(link = "log"))
 Error: no valid set of coefficients has been found: please supply starting values
@@ -8971,8 +8064,7 @@ that is to use `debug`. This inserts a call to the browser at the
 beginning of the function, starting in step-through mode. So in our
 example we could use
 
- 
-``` 
+```r
 > debug(glm.fit)
 > glm(resp ~ 0 + predictor, family = binomial(link ="log"))
 debugging in: glm.fit(x = X, y = Y, weights = weights, start = start, etastart = etastart,
@@ -9005,7 +8097,7 @@ browsing: it is possible to step into another function that is itself
 being debugged or contains a call to `browser()`.)
 
 `debug` can be used for hidden functions and S3 methods by e.g.
-`debug(statspredict.Arima)`. (It cannot be used for S4 methods, but
+`debug(stats:::predict.Arima)`. (It cannot be used for S4 methods, but
 an alternative is given on the help page for `debug`.) Sometimes you
 want to debug a function defined inside another function, e.g. the
 function `arimafn` defined inside `arima`. To do so, set `debug` on the
@@ -9014,42 +8106,15 @@ function has been defined. Then call `debug` on the inner function (and
 use `c` to get out of step-through mode in the outer function).
 
 To remove debugging of a function, call `undebug` with the argument
-previously given to `debug`; debugging otherwise lasts for the rest of
-the R session (or until the function is edited or otherwise replaced).
-
-`trace` can be used to temporarily insert debugging code into a
-function, for example to insert a call to `browser()` just before the
-point of the error. To return to our running example
-
- 
-``` 
-## first get a numbered listing of the expressions of the function
-> page(as.list(body(glm.fit)), method="print")
-> trace(glm.fit, browser, at=22)
-Tracing function "glm.fit" in package "stats"
-[1] "glm.fit"
-> glm(resp ~ 0 + predictor, family = binomial(link ="log"))
-Tracing glm.fit(x = X, y = Y, weights = weights, start = start,
-   etastart = etastart,  .... step 22
-Called from: eval(expr, envir, enclos)
-Browse[1]> n
-## and single-step from here.
-> untrace(glm.fit)
-```
 
 For your own functions, it may be as easy to use `fix` to insert
 temporary code, but `trace` can help with functions in a namespace (as
 can `fixInNamespace`). Alternatively, use `trace(,edit=TRUE)` to insert
 code visually.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Debugging compiled code](#Debugging-compiled-code), Previous:
-[Debugging R code](#Debugging-R-code), Up: [Debugging](#Debugging)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 4.3 Checking memory access 
+### 4.3 Checking memory access
 
 Errors in memory allocation and reading/writing outside arrays are very
 common causes of crashes (e.g., segfaults) on some machines. Often the
@@ -9063,38 +8128,34 @@ Java-using packages: some at least of these seem to be intentional, and
 some are related to passing characters to Fortran.
 
 Some of these tools can detect mismatched allocation and deallocation.
-C++ programmers should note that memory allocated by `new ` must be
-freed by `delete `, other uses of `new` by `delete`, and memory
+C++ programmers should note that memory allocated by `new []` must be
+freed by `delete []`, other uses of `new` by `delete`, and memory
 allocated by `malloc`, `calloc` and `realloc` by `free`. Some platforms
 will tolerate mismatches (perhaps with memory leaks) but others will
 segfault.
 
-  ------------------------------------------------------------------------------- ---- --
-  • [Using gctorture](#Using-gctorture)                                                
-  • [Using valgrind](#Using-valgrind)                                                  
-  • [Using Address Sanitizer](#Using-Address-Sanitizer)                                
-  • [Using Undefined Behaviour Sanitizer](#Using-Undefined-Behaviour-Sanitizer)        
-  • [Other analyses with 'clang'](#Other-analyses-with-_0060clang_0027)                
-  • [Using 'Dr. Memory'](#Using-_0060Dr_002e-Memory_0027)                              
-  • [Fortran array bounds checking](#Fortran-array-bounds-checking)                    
-  ------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Using gctorture](#Using-gctorture)     
+ • [Using valgrind](#Using-valgrind)     
+ • [Using Address Sanitizer](#Using-Address-Sanitizer)     
+ • [Using Undefined Behaviour Sanitizer](#Using-Undefined-Behaviour-Sanitizer)     
+ • [Other analyses with 'clang'](#Other-analyses-with-_0060clang_0027)     
+ • [Using 'Dr. Memory'](#Using-_0060Dr_002e-Memory_0027)     
+ • [Fortran array bounds checking](#Fortran-array-bounds-checking)
 
- 
-Next: [Using valgrind](#Using-valgrind), Previous: [Checking memory
-access](#Checking-memory-access), Up: [Checking memory
-access](#Checking-memory-access)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 4.3.1 Using gctorture 
+---
+
+#### 4.3.1 Using gctorture
 
 We can help to detect memory problems in R objects earlier by running
 garbage collection as often as possible. This is achieved by
 `gctorture(TRUE)`, which as described on its help page
 
 > Provokes garbage collection on (nearly) every memory allocation.
-> Intended to ferret out memory protection bugs. Also makes R run *very*
+> Intended to ferret out memory protection bugs. Also makes R run _very_
 > slowly, unfortunately.
 
 The reference to 'memory protection' is to missing C-level calls to
@@ -9104,56 +8165,15 @@ still in use. But it can also help with other memory-related errors.
 
 Normally running under `gctorture(TRUE)` will just produce a crash
 earlier in the R program, hopefully close to the actual cause. See the
-next section for how to decipher such crashes.
 
-It is possible to run all the examples, tests and vignettes covered by
-`R CMD check` under `gctorture(TRUE)` by using the option
-`--use-gct`.
-
-The function `gctorture2` provides more refined control over the GC
-torture process. Its arguments `step`, `wait` and `inhibit_release` are
-documented on its help page. Environment variables can also be used at
-the start of the R session to turn on GC torture: `R_GCTORTURE`
-corresponds to the `step` argument to `gctorture2`, `R_GCTORTURE_WAIT`
-to `wait`, and `R_GCTORTURE_INHIBIT_RELEASE` to `inhibit_release`.
-
-If R is configured with `--enable-strict-barrier` then a
-variety of tests for the integrity of the write barrier are enabled. In
-addition tests to help detect protect issues are enabled:
-
--   All GCs are full GCs.
--   New nodes in small node pages are marked as `NEWSXP` on creation.
--   After a GC all free nodes that are not of type `NEWSXP` are marked
-    as type `FREESXP` and their previous type is recorded.
--   Most calls to accessor functions check their `SEXP` inputs and
-    `SEXP` outputs and signal an error if a `FREESXP` is found. The
-    address of the node and the old type are included in the error
-    message.
-
-`R CMD check --use-gct` can be set to use `gctorture2(n)` rather than
-`gctorture(TRUE)` by setting environment variable `_R_CHECK_GCT_N_` to a
-positive integer value to be used as `n`.
-
-Used with a debugger and with `gctorture` or `gctorture2` this mechanism
-can be helpful in isolating memory protect problems.
-
-------------------------------------------------------------------------
-
- 
-Next: [Using Address Sanitizer](#Using-Address-Sanitizer), Previous:
-[Using gctorture](#Using-gctorture), Up: [Checking memory
-access](#Checking-memory-access)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 4.3.2 Using valgrind 
+#### 4.3.2 Using valgrind
 
 If you have access to Linux on a common CPU type or supported versions
 of macOS or Solaris you can use `valgrind` (<http://www.valgrind.org/>,
 pronounced to rhyme with 'tinned') to check for possible problems. To
 run some examples under `valgrind` use something like
 
- 
-``` 
+```r
 R -d valgrind --vanilla < mypkg-Ex.R
 R -d "valgrind --tool=memcheck --leak-check=full" --vanilla < mypkg-Ex.R
 ```
@@ -9175,7 +8195,7 @@ On platforms where `valgrind` is installed you can build a version of R
 with extra instrumentation to help `valgrind` detect errors in the use
 of memory allocated from the R heap. The `configure` option is
 `--with-valgrind-instrumentation=level`, where
-`level` is 0, 1 or 2. Level 0 is the default and does not add
+`level`{.variable} is 0, 1 or 2. Level 0 is the default and does not add
 anything. Level 1 will detect some uses[^114^](#FOOT114) of
 uninitialised memory and has little impact on speed (compared to level
 0). Level 2 will detect many other memory-use
@@ -9185,8 +8205,7 @@ more effective (and even slower).
 
 An example of `valgrind` output is
 
- 
-``` 
+```r
 ==12539== Invalid read of size 4
 ==12539==    at 0x1CDF6CBE: csc_compTr (Mutils.c:273)
 ==12539==    by 0x1CE07E1E: tsc_transpose (dtCMatrix.c:25)
@@ -9232,8 +8251,7 @@ It is possible to run all the examples, tests and vignettes covered by
 `valgrind` options some other way, for example by having a
 `~/.valgrindrc` file containing
 
- 
-``` 
+```r
 --leak-check=full
 --track-origins=yes
 ```
@@ -9254,16 +8272,9 @@ This section has described the use of `memtest`, the default (and most
 useful) of `valgrind`'s tools. There are others described in its
 documentation: `helgrind` can be useful for threaded programs.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using Undefined Behaviour
-Sanitizer](#Using-Undefined-Behaviour-Sanitizer), Previous: [Using
-valgrind](#Using-valgrind), Up: [Checking memory
-access](#Checking-memory-access)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 4.3.3 Using the Address Sanitizer 
+#### 4.3.3 Using the Address Sanitizer
 
 `AddressSanitizer` ('ASan') is a tool with similar aims to the memory
 checker in `valgrind`. It is available with suitable
@@ -9278,7 +8289,7 @@ More thorough checks of C++ code are done if the C++ library has been
 `libc++` for use with `clang` and gives rise to
 '`container-overflow`'[^118^](#FOOT118) reports.
 
-It requires code to have been compiled *and linked* with
+It requires code to have been compiled _and linked_ with
 `-fsanitize=address` and compiling with
 `-fno-omit-frame-pointer` will give more legible reports. It has a
 runtime penalty of 2--3x, extended compilation times and uses
@@ -9295,8 +8306,7 @@ it is available but not on the path or has been
 renamed[^120^](#FOOT120), one can use an environment variable,
 e.g.
 
- 
-``` 
+```r
 ASAN_SYMBOLIZER_PATH=/path/to/llvm-symbolizer
 ```
 
@@ -9308,8 +8318,7 @@ to get line-number reports.)
 The simplest way to make use of this is to build a version of R with
 something like
 
- 
-``` 
+```r
 CC="gcc -std=gnu99 -fsanitize=address"
 CFLAGS="-fno-omit-frame-pointer -g -O2 -Wall -pedantic -mtune=native"
 ```
@@ -9318,8 +8327,7 @@ which will ensure that the `libasan` run-time library is compiled into
 the R executable. However this check can be enabled on a per-package
 basis by using a `~/.R/Makevars` file like
 
- 
-``` 
+```r
 CC = gcc -std=gnu99 -fsanitize=address -fno-omit-frame-pointer
 CXX = g++ -fsanitize=address -fno-omit-frame-pointer
 FC = gfortran -fsanitize=address
@@ -9330,8 +8338,7 @@ specification to ensure it is used for linking. These settings will not
 be honoured by packages which ignore `~/.R/Makevars`.) It will
 be necessary to build R with
 
- 
-``` 
+```r
 MAIN_LDFLAGS = -fsanitize=address
 ```
 
@@ -9339,17 +8346,16 @@ to link the runtime libraries into the R executable if it was not
 specified as part of '`CC`' when R was built. (For some builds
 without OpenMP, `-pthread` is also required.)
 
-For options available *via* the environment variable `ASAN_OPTIONS` see
+For options available _via_ the environment variable `ASAN_OPTIONS` see
 <https://code.google.com/p/address-sanitizer/wiki/AddressSanitizerFLags>.
-With `gcc` additional control is available *via* the `--param`
+With `gcc` additional control is available _via_ the `--param`
 flag: see its `man` page.
 
 For more detailed information on an error, R can be run under a debugger
 with a breakpoint set before the address sanitizer report is produced:
 for `gdb` or `lldb` you could use
 
- 
-``` 
+```r
 break __asan_report_error
 ```
 
@@ -9361,8 +8367,8 @@ More recent versions[^122^](#FOOT122) added the flag
 <https://github.com/google/sanitizers/wiki/AddressSanitizerUseAfterScope>.
 
 One of the checks done by ASAN is that `malloc/free` and in C++
-`new/delete` and `new/delete` are used consistently (rather than say
-`free` being used to dealloc memory allocated by `new`). This matters
+`new/delete` and `new[]/delete[]` are used consistently (rather than say
+`free` being used to dealloc memory allocated by `new[]`). This matters
 on some systems but not all: unfortunately on some of those where it
 does not matter, system libraries[^123^](#FOOT123) are not
 consistent. The check can be suppressed by including
@@ -9373,18 +8379,15 @@ problems in the system software and not the package nor R. A couple of
 reports have been of 'heap-use-after-free' errors in the X11 libraries
 called from Tcl/Tk.
 
-  ------------------------------------------------- ---- --
-  • [Using Leak Sanitizer](#Using-Leak-Sanitizer)        
-  ------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Using Leak Sanitizer](#Using-Leak-Sanitizer)
 
- 
-Previous: [Using Address Sanitizer](#Using-Address-Sanitizer), Up:
-[Using Address Sanitizer](#Using-Address-Sanitizer)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 4.3.3.1 Using the Leak Sanitizer 
+---
+
+#### 4.3.3.1 Using the Leak Sanitizer
 
 For `x86_64` Linux there is a leak sanitizer, 'LSan': see
 <https://code.google.com/p/address-sanitizer/wiki/LeakSanitizer>. This
@@ -9394,8 +8397,7 @@ available is compiled in as part of ASan.
 One way to invoke this from an ASan-enabled build is by the environment
 variable
 
- 
-``` 
+```r
 ASAN_OPTIONS='detect_leaks=1'
 ```
 
@@ -9410,24 +8412,16 @@ include running R as part of building R itself).
 To disable this, allocation-mismatch checking and some strict C++
 checking use
 
- 
-``` 
+```r
 setenv ASAN_OPTIONS ‘alloc_dealloc_mismatch=0:detect_leaks=0:detect_odr_violation=0’
 ```
 
 LSan also has a 'stand-alone' mode where it is compiled in using
 `-fsanitize=leak` and avoids the run-time overhead of ASan.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Other analyses with
-'clang'](#Other-analyses-with-_0060clang_0027), Previous: [Using Address
-Sanitizer](#Using-Address-Sanitizer), Up: [Checking memory
-access](#Checking-memory-access)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 4.3.4 Using the Undefined Behaviour Sanitizer 
+#### 4.3.4 Using the Undefined Behaviour Sanitizer
 
 'Undefined behaviour' is where the language standard does not require
 particular behaviour from the compiler. Examples include division by
@@ -9454,8 +8448,7 @@ For `clang` see
 <https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html#ubsan-checks>.
 The current set is (on a single line):
 
- 
-``` 
+```r
 -fsanitize=alignment,bool,bounds,builtin,enum,float-cast-overflow,
 float-divide-by-zero,function,implicit-unsigned-integer-truncation,
 implicit-signed-integer-truncation,implicit-integer-sign-change,
@@ -9467,8 +8460,7 @@ signed-integer-overflow,unreachable,unsigned-integer-overflow,vla-bound,vptr
 (plus the more specific versions `shift-base` and `shift-exponent`) a
 subset of which could be combined with `address`, or use something like
 
- 
-``` 
+```r
 -fsanitize=undefined -fno-sanitize=float-divide-by-zero
 ```
 
@@ -9476,8 +8468,7 @@ Options `function`, `return` and `vptr` apply only to C++: to use `vptr`
 its run-time library needs to be linked into the main R executable by
 building the latter with something like
 
- 
-``` 
+```r
 MAIN_LD="clang++ -fsanitize=undefined"
 ```
 
@@ -9486,12 +8477,11 @@ such divisions as part of IEC 60559 arithmetic.
 
 For GCC see
 <https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html> (or
-the manual for your version of GCC, installed or *via*
+the manual for your version of GCC, installed or _via_
 <https://gcc.gnu.org/onlinedocs/>: look for 'Program Instrumentation
 Options') for the options supported by GCC: 6 and 7 supported
 
- 
-``` 
+```r
 -fsanitize=alignment,bool,bounds,enum,integer-divide-by-zero,
 nonnull-attribute,null,object-size,return,returns-nonnull-attribute,
 shift,signed-integer-overflow,unreachable,vla-bound,vptr
@@ -9500,8 +8490,7 @@ shift,signed-integer-overflow,unreachable,vla-bound,vptr
 plus the more specific versions `shift-base` and `shift-exponent` and
 non-default options
 
- 
-``` 
+```r
 bound-strict,float-cast-overflow,float-divide-by-zero
 ```
 
@@ -9514,8 +8503,7 @@ adds options `-fsanitize=pointer-overflow` and
 
 Other useful flags include
 
- 
-``` 
+```r
 -no-fsanitize-recover
 ```
 
@@ -9523,17 +8511,15 @@ which causes the first report to be fatal (it always is for the
 `unreachable` and `return` suboptions). For more detailed information on
 where the runtime error occurs, using
 
- 
-``` 
-setenv UBSAN_OPTIONS ‘print_stacktrace=1’ 
+```r
+setenv UBSAN_OPTIONS ‘print_stacktrace=1’
 ```
 
 will include a traceback in the report. Beyond that, R can be run under
 a debugger with a breakpoint set before the sanitizer report is
 produced: for `gdb` or `lldb` you could use
 
- 
-``` 
+```r
 break __ubsan_handle_float_cast_overflow
 break __ubsan_handle_float_cast_overflow_abort
 ```
@@ -9552,16 +8538,9 @@ It may or may not be possible to build R itself with
 `-fsanitize=undefined`: when last tried it worked with `clang`
 but there were problems with OpenMP-using code with `gcc`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using 'Dr. Memory'](#Using-_0060Dr_002e-Memory_0027), Previous:
-[Using Undefined Behaviour
-Sanitizer](#Using-Undefined-Behaviour-Sanitizer), Up: [Checking memory
-access](#Checking-memory-access)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 4.3.5 Other analyses with 'clang' 
+#### 4.3.5 Other analyses with 'clang'
 
 Recent versions of `clang` on '`x86_64`' Linux have
 'ThreadSanitizer' (<https://code.google.com/p/thread-sanitizer/>), a
@@ -9574,16 +8553,9 @@ similar functionality to tools in `valgrind`.
 `clang` has a 'Static Analyser' which can be run on the source files
 during compilation: see <https://clang-analyzer.llvm.org/>.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Fortran array bounds checking](#Fortran-array-bounds-checking),
-Previous: [Other analyses with
-'clang'](#Other-analyses-with-_0060clang_0027), Up: [Checking memory
-access](#Checking-memory-access)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 4.3.6 Using 'Dr. Memory' 
+#### 4.3.6 Using 'Dr. Memory'
 
 'Dr. Memory' from <http://www.drmemory.org/> is a memory checker for
 (currently) 32-bit Windows, Linux and macOS with similar aims to
@@ -9591,22 +8563,16 @@ access](#Checking-memory-access)  
 executables[^125^](#FOOT125) and detects memory access errors,
 uninitialized reads and memory leaks.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Using 'Dr. Memory'](#Using-_0060Dr_002e-Memory_0027), Up:
-[Checking memory access](#Checking-memory-access)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 4.3.7 Fortran array bounds checking 
+#### 4.3.7 Fortran array bounds checking
 
 Most of the Fortran compilers used with R allow code to be compiled with
 checking of array bounds: for example `gfortran` has option
 `-fbounds-check` and Oracle Developer Studio has `-C`.
 This will give an error when the upper or lower bound is exceeded, e.g.
 
- 
-``` 
+```r
 At line 97 of file .../src/appl/dqrdc2.f
 Fortran runtime error: Index ‘1’ of dimension 1 of array ‘x’ above upper bound of 0
 ```
@@ -9618,8 +8584,7 @@ reported (as may `*` dimensions)
 It is easy to arrange to use this check on just the code in your
 package: add to `~/.R/Makevars` something like (for `gfortran`)
 
- 
-``` 
+```r
 FFLAGS = -g -O2 -mtune=native -fbounds-check
 ```
 
@@ -9627,18 +8592,11 @@ when you run `R CMD check`.
 
 This may report errors with the way that Fortran character variables are
 passed, particularly when Fortran subroutines are called from C code and
-character lengths are not passed (see [Fortran character
-strings](#Fortran-character-strings)).
+character lengths are not passed (see [Fortran character strings](#Fortran-character-strings)).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using Link-time Optimization](#Using-Link_002dtime-Optimization),
-Previous: [Checking memory access](#Checking-memory-access), Up:
-[Debugging](#Debugging)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 4.4 Debugging compiled code 
+### 4.4 Debugging compiled code
 
 Sooner or later programmers will be faced with the need to debug
 compiled code loaded into R. This section is geared to platforms using
@@ -9651,8 +8609,7 @@ illegal memory access (a 'segfault' or 'bus error'), illegal instruction
 or similar. Unix-alike versions of R use a signal handler which aims to
 give some basic information. For example
 
- 
-``` 
+```r
  *** caught segfault ***
 address 0x20000028, cause ‘memory not mapped’
 
@@ -9680,7 +8637,7 @@ it.)
 A fairly common cause of such crashes is a package which uses `.C` or
 `.Fortran` and writes beyond (at either end) one of the arguments it is
 passed. There is a good way to detect this: using
-`options(CBoundsCheck = TRUE)` (which can be selected *via* the
+`options(CBoundsCheck = TRUE)` (which can be selected _via_ the
 environment variable `R_C_BOUNDS_CHECK=yes)` changes the way `.C` and
 `.Fortran` work to check if the compiled code writes in the 64 bytes at
 either end of an argument.
@@ -9690,8 +8647,7 @@ that in its own code, but it may happen in third-party compiled code.
 For modern POSIX-compliant OSes R can safely catch that and return to
 the top-level prompt, so one gets something like
 
- 
-``` 
+```r
 > .C("aaa")
 Error: segfault from C stack overflow
 >
@@ -9704,8 +8660,7 @@ shell from which R is launched.
 
 If you have a crash which gives a core dump you can use something like
 
- 
-``` 
+```r
 gdb /path/to/R/bin/exec/R core.12345
 ```
 
@@ -9713,8 +8668,7 @@ to examine the core dump. If core dumps are disabled or to catch errors
 that do not generate a dump one can run R directly under a debugger by
 for example
 
- 
-``` 
+```r
 $ R -d gdb --vanilla
 ...
 gdb> run
@@ -9724,8 +8678,7 @@ at which point R will run normally, and hopefully the debugger will
 catch the error and return to its prompt. This can also be used to catch
 infinite loops or interrupt very long-running code. For a simple example
 
- 
-``` 
+```r
 > for(i in 1:1e7) x <- rnorm(100)
 [hit Ctrl-C]
 Program received signal SIGINT, Interrupt.
@@ -9749,8 +8702,7 @@ this is helpful if an alternative front-end is in use or to investigate
 a task that seems to be taking far too long. This is done by something
 like
 
- 
-``` 
+```r
 gdb -p pid
 ```
 
@@ -9760,51 +8712,42 @@ execution.
 
 Some "tricks" worth knowing follow:
 
-  ------------------------------------------------- ---- --
-  • [Finding entry points](#Finding-entry-points)        
-  • [Inspecting R objects](#Inspecting-R-objects)        
-  ------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Finding entry points](#Finding-entry-points)     
+ • [Inspecting R objects](#Inspecting-R-objects)
 
- 
-Next: [Inspecting R objects](#Inspecting-R-objects), Previous:
-[Debugging compiled code](#Debugging-compiled-code), Up: [Debugging
-compiled code](#Debugging-compiled-code)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 4.4.1 Finding entry points in dynamically loaded code 
+---
+
+#### 4.4.1 Finding entry points in dynamically loaded code
 
 Under most compilation environments, compiled code dynamically loaded
 into R cannot have breakpoints set within it until it is loaded. To use
 a symbolic debugger on such dynamically loaded code under Unix-alikes
 use
 
--   Call the debugger on the R executable, for example by [R -d
-    gdb].
--   Start R.
--   At the R prompt, use `dyn.load` or `library` to load your shared
-    object.
--   Send an interrupt signal. This will put you back to the debugger
-    prompt.
--   Set the breakpoints in your code.
--   Continue execution of R by typing [signal 0[RET]].
+- Call the debugger on the R executable, for example by [R -d
+  gdb]{.kbd}.
+- Start R.
+- At the R prompt, use `dyn.load` or `library` to load your shared
+  object.
+- Send an interrupt signal. This will put you back to the debugger
+  prompt.
+- Set the breakpoints in your code.
+- Continue execution of R by typing [signal 0[RET]{.key}]{.kbd}.
 
 Under Windows signals may not be able to be used, and if so the
 procedure is more complicated. See the rw-FAQ.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Finding entry points](#Finding-entry-points), Up: [Debugging
-compiled code](#Debugging-compiled-code)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 4.4.2 Inspecting R objects when debugging 
+#### 4.4.2 Inspecting R objects when debugging
 
 The key to inspecting R objects from compiled code is the function
 `PrintValue(SEXP s)` which uses the normal R printing mechanisms to
-print the R object pointed to by `s`, or the safer version
+print the R object pointed to by `s`{.variable}, or the safer version
 `R_PV(SEXP s)` which will only print 'objects'.
 
 One way to make use of `PrintValue` is to insert suitable calls into the
@@ -9813,8 +8756,7 @@ code to be debugged.
 Another way is to call `R_PV` from the symbolic debugger. (`PrintValue`
 is hidden as `Rf_PrintValue`.) For example, from `gdb` we can use
 
- 
-``` 
+```r
 (gdb) p R_PV(ab)
 ```
 
@@ -9824,17 +8766,15 @@ suitable breakpoint in the convolution C code.
 To examine an arbitrary R object we need to work a little harder. For
 example, let
 
- 
-``` 
+```r
 R> DF <- data.frame(a = 1:3, b = 4:6)
 ```
 
-By setting a breakpoint at `do_get` and typing [get(\"DF\")] at
+By setting a breakpoint at `do_get` and typing [get(\"DF\")]{.kbd} at
 the R prompt, one can find out the address in memory of `DF`, for
 example
 
- 
-``` 
+```r
 Value returned is $1 = (SEXPREC *) 0x40583e1c
 (gdb) p *$1
 $2 = {
@@ -9848,12 +8788,12 @@ $2 = {
         f = 0x40634700, z = 0x40634700, s = 0x40634700},
       truelength = 1075851272,
     },
-    primsxp = ,
-    symsxp = ,
-    listsxp = ,
-    envsxp = ,
-    closxp = ,
-    promsxp = 
+    primsxp = {offset = 2},
+    symsxp = {pname = 0x2, value = 0x40634700, internal = 0x40203008},
+    listsxp = {carval = 0x2, cdrval = 0x40634700, tagval = 0x40203008},
+    envsxp = {frame = 0x2, enclos = 0x40634700},
+    closxp = {formals = 0x2, body = 0x40634700, env = 0x40203008},
+    promsxp = {value = 0x2, expr = 0x40634700, env = 0x40203008}
   }
 }
 ```
@@ -9863,8 +8803,7 @@ $2 = {
 Using `R_PV()` one can "inspect" the values of the various elements of
 the SEXP, for example,
 
- 
-``` 
+```r
 (gdb) p R_PV($1->attrib)
 $names
 [1] "a" "b"
@@ -9881,8 +8820,7 @@ $3 = void
 To find out where exactly the corresponding information is stored, one
 needs to go "deeper":
 
- 
-``` 
+```r
 (gdb) set $a = $1->attrib
 (gdb) p $a->u.listsxp.tagval->u.symsxp.pname->u.vecsxp.type.c
 $4 = 0x405d40e8 "names"
@@ -9898,14 +8836,13 @@ Another alternative is the `R_inspect` function which shows the
 low-level structure of the objects recursively (addresses differ from
 the above as this example is created on another machine):
 
- 
-``` 
+```r
 (gdb) p R_inspect($1)
 @100954d18 19 VECSXP g0c2 [OBJ,NAM(2),ATT] (len=2, tl=0)
   @100954d50 13 INTSXP g0c2 [NAM(2)] (len=3, tl=0) 1,2,3
   @100954d88 13 INTSXP g0c2 [NAM(2)] (len=3, tl=0) 4,5,6
 ATTRIB:
-  @102a70140 02 LISTSXP g0c0 
+  @102a70140 02 LISTSXP g0c0 []
     TAG: @10083c478 01 SYMSXP g0c0 [MARK,NAM(2),gp=0x4000] "names"
     @100954dc0 16 STRSXP g0c2 [NAM(2)] (len=2, tl=0)
       @10099df28 09 CHARSXP g0c1 [MARK,gp=0x21] "a"
@@ -9919,8 +8856,7 @@ ATTRIB:
 
 In general the representation of each object follows the format:
 
- 
-``` 
+```r
 @<address> <type-nr> <type-name> <gc-info> [<flags>] ...
 ```
 
@@ -9930,25 +8866,18 @@ parameters: maximum depth and the maximal number of elements that will
 be printed for scalar vectors. The defaults in `R_inspect` are currently
 -1 (no limit) and 5 respectively.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Debugging compiled code](#Debugging-compiled-code), Up:
-[Debugging](#Debugging)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 4.5 Using Link-time Optimization
 
-### 4.5 Using Link-time Optimization 
-
-Where supported, *link time optimization* provides a comprehensive way
+Where supported, _link time optimization_ provides a comprehensive way
 to check the consistency of calls between Fortran files or between C and
-Fortran. See [Link-Time
-Optimization](./R-admin.html#Link_002dTime-Optimization) in R
+Fortran. See [Link-Time Optimization](./R-admin.html#Link_002dTime-Optimization) in R
 Installation and Administration.
 
 For example:
 
- 
-``` 
+```r
 boot.f:61: warning: type of ‘ddot’ does not match original declaration [-Wlto-type-mismatch]
         y(j,i)=ddot(p,x(j,1),n,b(1,j,i),1)
 crq.f:1023: note: return value type mismatch
@@ -9956,8 +8885,7 @@ crq.f:1023: note: return value type mismatch
 
 where the package author forgot to declare
 
- 
-``` 
+```r
       double precision ddot
       external ddot
 ```
@@ -9966,8 +8894,7 @@ in `boot.f`.
 
 Further examples:
 
- 
-``` 
+```r
 rkpk2.f:77:5: warning: type of ‘dstup’ does not match original declaration [-Wlto-type-mismatch]
       *info, wk)
 rkpk1.f:2565:5: note: type mismatch in parameter 14
@@ -9977,8 +8904,7 @@ rkpk1.f:2565:5: note: ‘dstup’ was previously declared here
 
 where the fourteenth argument `dum` was missing in the call.
 
- 
-``` 
+```r
 reg.f:78:33: warning: type of ‘dqrdc’ does not match original declaration [-Wlto-type-mismatch]
        call dqrdc (sr, nobs, nobs, nnull, wk, dum, dum, 0)
 dstup.f:20: note: ‘dqrdc’ was previously declared here
@@ -9995,8 +8921,7 @@ detected by concatenating the Fortran files and compiling the result,
 sometimes with clearer diagnostics than provided by LTO. For our last
 two examples this gives
 
- 
-``` 
+```r
 all.f:2966:72:
 
       *info, work1)
@@ -10006,8 +8931,7 @@ Warning: Missing actual argument for argument ‘dum’ at (1)
 
 and
 
- 
-``` 
+```r
 all.f:1663:72:
 
       *ipvtwk), wk(ikwk), wk(iwork1), wk(iwork2), info)
@@ -10015,48 +8939,36 @@ all.f:1663:72:
 Warning: Type mismatch in argument ‘jpvt’ at (1); passed REAL(8) to INTEGER(4)
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [The R API](#The-R-API), Previous: [Debugging](#Debugging), Up:
-[Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 5 System and foreign language interfaces
 
-5 System and foreign language interfaces 
-----------------------------------------
+---
 
-  ----------------------------------------------------------------------------------------------- ---- --
-  • [Operating system access](#Operating-system-access)                                                
-  • [Interface functions .C and .Fortran](#Interface-functions-_002eC-and-_002eFortran)                
-  • [dyn.load and dyn.unload](#dyn_002eload-and-dyn_002eunload)                                        
-  • [Registering native routines](#Registering-native-routines)                                        
-  • [Creating shared objects](#Creating-shared-objects)                                                
-  • [Interfacing C++ code](#Interfacing-C_002b_002b-code)                                              
-  • [Fortran I/O](#Fortran-I_002fO)                                                                    
-  • [Linking to other packages](#Linking-to-other-packages)                                            
-  • [Handling R objects in C](#Handling-R-objects-in-C)                                                
-  • [Interface functions .Call and .External](#Interface-functions-_002eCall-and-_002eExternal)        
-  • [Evaluating R expressions from C](#Evaluating-R-expressions-from-C)                                
-  • [Parsing R code from C](#Parsing-R-code-from-C)                                                    
-  • [External pointers and weak references](#External-pointers-and-weak-references)                    
-  • [Vector accessor functions](#Vector-accessor-functions)                                            
-  • [Character encoding issues](#Character-encoding-issues)                                            
-  ----------------------------------------------------------------------------------------------- ---- --
+• [Operating system access](#Operating-system-access)     
+ • [Interface functions .C and .Fortran](#Interface-functions-_002eC-and-_002eFortran)     
+ • [dyn.load and dyn.unload](#dyn_002eload-and-dyn_002eunload)     
+ • [Registering native routines](#Registering-native-routines)     
+ • [Creating shared objects](#Creating-shared-objects)     
+ • [Interfacing C++ code](#Interfacing-C_002b_002b-code)     
+ • [Fortran I/O](#Fortran-I_002fO)     
+ • [Linking to other packages](#Linking-to-other-packages)     
+ • [Handling R objects in C](#Handling-R-objects-in-C)     
+ • [Interface functions .Call and .External](#Interface-functions-_002eCall-and-_002eExternal)     
+ • [Evaluating R expressions from C](#Evaluating-R-expressions-from-C)     
+ • [Parsing R code from C](#Parsing-R-code-from-C)     
+ • [External pointers and weak references](#External-pointers-and-weak-references)     
+ • [Vector accessor functions](#Vector-accessor-functions)     
+ • [Character encoding issues](#Character-encoding-issues)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Interface functions .C and
-.Fortran](#Interface-functions-_002eC-and-_002eFortran), Previous:
-[System and foreign language
-interfaces](#System-and-foreign-language-interfaces), Up: [System and
-foreign language interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 5.1 Operating system access 
+### 5.1 Operating system access
 
-Access to operating system functions is *via* the R functions `system`
-and `system2`.   The details will
+Access to operating system functions is _via_ the R functions `system`
+and `system2`. The details will
 differ by platform (see the on-line help), and about all that can safely
 be assumed is that the first argument will be a string `command` that
 will be passed for execution (not necessarily by a shell) and the second
@@ -10067,30 +8979,20 @@ On POSIX-compliant OSes these commands pass a command-line to a shell:
 Windows is not POSIX-compliant and there is a separate function `shell`
 to do so.
 
-The function `system.time`  is available for
+The function `system.time` is available for
 timing. Timing on child processes is only available on Unix-alikes, and
 may not be reliable there.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [dyn.load and dyn.unload](#dyn_002eload-and-dyn_002eunload),
-Previous: [Operating system access](#Operating-system-access), Up:
-[System and foreign language
-interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.2 Interface functions `.C` and `.Fortran` 
-
- 
+### 5.2 Interface functions `.C` and `.Fortran`
 
 These two functions provide an interface to compiled code that has been
-linked into R, either at build time or *via* `dyn.load` (see [dyn.load
+linked into R, either at build time or _via_ `dyn.load` (see [dyn.load
 and dyn.unload](#dyn_002eload-and-dyn_002eunload)). They are primarily
 intended for compiled C and Fortran code respectively, but the `.C`
 function can be used with other languages which can generate C
-interfaces, for example C++ (see [Interfacing C++
-code](#Interfacing-C_002b_002b-code)).
+interfaces, for example C++ (see [Interfacing C++ code](#Interfacing-C_002b_002b-code)).
 
 The first argument to each function is a character string specifying the
 symbol name as known[^126^](#FOOT126) to C or Fortran, that is
@@ -10108,14 +9010,11 @@ The following table gives the mapping between the modes of R atomic
 vectors and the types of arguments to a C function or Fortran
 subroutine.
 
->   R storage mode   C type              Fortran type
->   ---------------- ------------------- --------------------
->   `logical`        `int *`             `INTEGER`
->   `integer`        `int *`             `INTEGER`
->   `double`         `double *`          `DOUBLE PRECISION`
->   `complex`        `Rcomplex *`        `DOUBLE COMPLEX`
->   `character`      `char **`           `CHARACTER(255)`
->   `raw`            `unsigned char *`   none
+> R storage mode C type Fortran type
+>
+> ---
+>
+> `logical` `int *` `INTEGER` > `integer` `int *` `INTEGER` > `double` `double *` `DOUBLE PRECISION` > `complex` `Rcomplex *` `DOUBLE COMPLEX` > `character` `char **` `CHARACTER(255)` > `raw` `unsigned char *` none
 
 On all R platforms `int` and `INTEGER` are 32-bit. Code ported from
 S-PLUS (which uses `long *` for `logical` and `integer`) will not work
@@ -10171,8 +9070,7 @@ To fix ideas, let us consider a very simple example which convolves two
 finite sequences. (This is hard to do fast in interpreted R code, but
 easy in C code.) We could do this using `.C` by
 
- 
-``` 
+```r
 void convolve(double *a, int *na, double *b, int *nb, double *ab)
 {
     int nab = *na + *nb - 1;
@@ -10187,8 +9085,7 @@ void convolve(double *a, int *na, double *b, int *nb, double *ab)
 
 called from R by
 
- 
-``` 
+```r
 conv <- function(a, b)
     .C("convolve",
        as.double(a),
@@ -10209,7 +9106,7 @@ array are copied to create new elements of a character vector. This
 means that the contents of the character strings of the `char **` array
 can be changed, including to `\0` to shorten the string, but the strings
 cannot be lengthened. It is possible[^127^](#FOOT127) to
-allocate a new string *via* `R_alloc` and replace an entry in the
+allocate a new string _via_ `R_alloc` and replace an entry in the
 `char **` array by the new string. However, when character vectors are
 used other than in a read-only way, the `.Call` interface is much to be
 preferred.
@@ -10226,28 +9123,18 @@ integer code: similarly Fortran code that wants to generate diagnostic
 messages could pass an integer code to a C or R wrapper which would
 convert it to a character string.
 
-It is possible to pass some R objects other than atomic vectors *via*
+It is possible to pass some R objects other than atomic vectors _via_
 `.C`, but this is only supported for historical compatibility: use the
 `.Call` or `.External` interfaces for such objects. Any C/C++ code that
-includes `Rinternals.h` should be called *via* `.Call` or
+includes `Rinternals.h` should be called _via_ `.Call` or
 `.External`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Registering native routines](#Registering-native-routines),
-Previous: [Interface functions .C and
-.Fortran](#Interface-functions-_002eC-and-_002eFortran), Up: [System and
-foreign language interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.3 `dyn.load` and `dyn.unload` 
-
- 
+### 5.3 `dyn.load` and `dyn.unload`
 
 Compiled code to be used with R is loaded as a shared object
-(Unix-alikes including macOS, see [Creating shared
-objects](#Creating-shared-objects) for more information) or DLL
+(Unix-alikes including macOS, see [Creating shared objects](#Creating-shared-objects) for more information) or DLL
 (Windows).
 
 The shared object/DLL is loaded by `dyn.load` and unloaded by
@@ -10263,8 +9150,7 @@ path to the object. Programmers should not assume a specific file
 extension for the object/DLL (such as `.so`) but use a
 construction like
 
- 
-``` 
+```r
 file.path(path1, path2, paste0("mylib", .Platform$dynlib.ext))
 ```
 
@@ -10275,15 +9161,14 @@ home directory.
 
 Loading is most often done automatically based on the `useDynLib()`
 declaration in the `NAMESPACE` file, but may be done explicitly
-*via* a call to `library.dynam`.  This has
+_via_ a call to `library.dynam`. This has
 the form
 
- 
-``` 
+```r
 library.dynam("libname", package, lib.loc)
 ```
 
-where `libname` is the object/DLL name *with the extension omitted*.
+where `libname` is the object/DLL name _with the extension omitted_.
 Note that the first argument, `chname`, should **not** be `package`
 since this will not work if the package is installed under another name.
 
@@ -10298,11 +9183,10 @@ is either loaded or unloaded. This can be used, for example, to register
 native routines with R's dynamic symbol mechanism, initialize some data
 in the native code, or initialize a third party library. On loading a
 DLL, R will look for a routine within that DLL named `R_init_lib` where
-`lib` is the name of the DLL file with the extension removed.
+`lib`{.variable} is the name of the DLL file with the extension removed.
 For example, in the command
 
- 
-``` 
+```r
 library.dynam("mylib", package, lib.loc)
 ```
 
@@ -10324,64 +9208,25 @@ The following example shows templates for the initialization and unload
 routines for the `mylib` DLL.
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | #include <R_ext/Rdynload.h>                                           |
-> |                                                                       |
-> | void                                                                  |
-> | R_init_mylib(DllInfo *info)                                           |
-> | {                                                                     |
-> |   /* Register routines,                                               |
-> |      allocate resources. */                                           |
-> | }                                                                     |
-> |                                                                       |
-> | void                                                                  |
-> | R_unload_mylib(DllInfo *info)                                         |
-> | {                                                                     |
-> |   /* Release resources. */                                            |
-> | }                                                                     |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | #include <R_ext/Rdynload.h> | | | | void | | R_init_mylib(DllInfo *info) | | { | | /* Register routines, | | allocate resources. */ | | } | | | | void | | R_unload_mylib(DllInfo *info) | | { | | /* Release resources. */ | | } | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 If a shared object/DLL is loaded more than once the most recent version
 is used.[^128^](#FOOT128) More generally, if the same symbol
 name appears in several shared objects, the most recently loaded
 occurrence is used. The `PACKAGE` argument and registration (see the
-next section) provide good ways to avoid any ambiguity in which
-occurrence is meant.
 
-On Unix-alikes the paths used to resolve dynamically linked dependent
-libraries are fixed (for security reasons) when the process is launched,
-so `dyn.load` will only look for such libraries in the locations set by
-the `R` shell script (*via* `etc/ldpaths`) and in the
-OS-specific defaults.
+### 5.4 Registering native routines
 
-Windows allows more control (and less security) over where dependent
-DLLs are looked for. On all versions this includes the `PATH`
-environment variable, but with lowest priority: note that it does not
-include the directory from which the DLL was loaded. It is possible to
-add a single path with quite high priority *via* the `DLLpath` argument
-to `dyn.load`. This is (by default) used by `library.dynam` to include
-the package's `libs/i386` or `libs/x64` directory in
-the DLL search path.
+---
 
-------------------------------------------------------------------------
+• [Speed considerations](#Speed-considerations)     
+ • [Converting a package to use registration](#Converting-a-package-to-use-registration)     
+ • [Linking to native routines in other packages](#Linking-to-native-routines-in-other-packages)
 
- 
-Next: [Creating shared objects](#Creating-shared-objects), Previous:
-[dyn.load and dyn.unload](#dyn_002eload-and-dyn_002eunload), Up: [System
-and foreign language
-interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.4 Registering native routines 
-
-  ------------------------------------------------------------------------------------------------- ---- --
-  • [Speed considerations](#Speed-considerations)                                                        
-  • [Converting a package to use registration](#Converting-a-package-to-use-registration)                
-  • [Linking to native routines in other packages](#Linking-to-native-routines-in-other-packages)        
-  ------------------------------------------------------------------------------------------------- ---- --
+---
 
 By 'native' routine, we mean an entry point in compiled code.
 
@@ -10399,7 +9244,7 @@ name.
 
 Registering routines has two main advantages: it provides a
 faster[^130^](#FOOT130) way to find the address of the entry
-point *via* tables stored in the DLL at compilation time, and it
+point _via_ tables stored in the DLL at compilation time, and it
 provides a run-time check that the entry point is called with the right
 number of arguments and, optionally, the right argument types.
 
@@ -10415,12 +9260,11 @@ describing the routines for each of the 4 different interfaces: `.C`,
 `NULL`-terminated array of the element types given in the following
 table:
 
->   ------------- -----------------------
->   `.C`          `R_CMethodDef`
->   `.Call`       `R_CallMethodDef`
->   `.Fortran`    `R_FortranMethodDef`
->   `.External`   `R_ExternalMethodDef`
->   ------------- -----------------------
+> ---
+>
+> `.C` `R_CMethodDef` > `.Call` `R_CallMethodDef` > `.Fortran` `R_FortranMethodDef` > `.External` `R_ExternalMethodDef`
+>
+> ---
 
 Currently, the `R_ExternalMethodDef` type is the same as
 `R_CallMethodDef` type and contains fields for the name of the routine
@@ -10429,23 +9273,21 @@ by which it can be accessed in R, a pointer to the actual native symbol
 expects to be passed from R. For example, if we had a routine named
 `myCall` defined as
 
- 
-``` 
+```r
 SEXP myCall(SEXP a, SEXP b, SEXP c);
 ```
 
 we would describe this as
 
- 
-``` 
-static const R_CallMethodDef callMethods  = {
-  ,
-  
+```r
+static const R_CallMethodDef callMethods[]  = {
+  {"myCall", (DL_FUNC) &myCall, 3},
+  {NULL, NULL, 0}
 };
 ```
 
 along with any other routines for the `.Call` interface. For routines
-with a variable number of arguments invoked *via* the `.External`
+with a variable number of arguments invoked _via_ the `.External`
 interface, one specifies `-1` for the number of arguments which tells R
 not to check the actual number passed.
 
@@ -10460,33 +9302,28 @@ type `R_NativePrimitiveArgType` which is just an unsigned integer.) The
 R types and corresponding type identifiers are provided in the following
 table:
 
->   ------------- -------------
->   `numeric`     `REALSXP`
->   `integer`     `INTSXP`
->   `logical`     `LGLSXP`
->   `single`      `SINGLESXP`
->   `character`   `STRSXP`
->   `list`        `VECSXP`
->   ------------- -------------
+> ---
+>
+> `numeric` `REALSXP` > `integer` `INTSXP` > `logical` `LGLSXP` > `single` `SINGLESXP` > `character` `STRSXP` > `list` `VECSXP`
+>
+> ---
 
 Consider a C routine, `myC`, declared as
 
- 
-``` 
+```r
 void myC(double *x, int *n, char **names, int *status);
 ```
 
 We would register it as
 
- 
-``` 
-static R_NativePrimitiveArgType myC_t = {
+```r
+static R_NativePrimitiveArgType myC_t[] = {
     REALSXP, INTSXP, STRSXP, LGLSXP
 };
 
-static const R_CMethodDef cMethods = {
-   ,
-   
+static const R_CMethodDef cMethods[] = {
+   {"myC", (DL_FUNC) &myC, 4, myC_t},
+   {NULL, NULL, 0, NULL}
 };
 ```
 
@@ -10499,8 +9336,7 @@ actually register them with R. We do this by calling
 the routines accessed by the `.C` and `.Call` we would use the following
 code:
 
- 
-``` 
+```r
 void
 R_init_myLib(DllInfo *info)
 {
@@ -10519,7 +9355,7 @@ is no other facility for unregistering a symbol.
 
 Examples of registering routines can be found in the different packages
 in the R source tree (e.g., **stats** and **graphics**). Also, there is
-a brief, high-level introduction in *R News* (volume 1/3, September
+a brief, high-level introduction in _R News_ (volume 1/3, September
 2001, pages 20--23,
 <https://www.r-project.org/doc/Rnews/Rnews_2001-3.pdf>).
 
@@ -10528,8 +9364,7 @@ this is arranged in the `useDynLib` call in the package's
 `NAMESPACE` file (see [useDynLib](#useDynLib)). So for example
 the **stats** package has
 
- 
-``` 
+```r
 # Refer to all C/Fortran routines by their name prefixed by C_
 useDynLib(stats, .registration = TRUE, .fixes = "C_")
 ```
@@ -10537,8 +9372,7 @@ useDynLib(stats, .registration = TRUE, .fixes = "C_")
 in its `NAMESPACE` file, and then `ansari.test`'s default
 methods can contain
 
- 
-``` 
+```r
         pansari <- function(q, m, n)
             .C(C_pansari, as.integer(length(q)), p = as.double(q),
                 as.integer(m), as.integer(n))$p
@@ -10550,8 +9384,7 @@ used, and ensures that the entry point in the package is the one used
 
 `R_init_` routines are often of the form
 
- 
-``` 
+```r
 void attribute_visible R_init_mypkg(DllInfo *dll)
 {
     R_registerRoutines(dll, CEntries, CallEntries, FortEntries,
@@ -10562,7 +9395,7 @@ void attribute_visible R_init_mypkg(DllInfo *dll)
 }
 ```
 
-  The
+The
 `R_useDynamicSymbols` call says the DLL is not to be searched for entry
 points specified by character strings so `.C` etc calls will only find
 registered symbols: the `R_forceSymbols` call only allows `.C` etc calls
@@ -10576,8 +9409,7 @@ In more detail, if a package `mypkg` contains entry points `reg` and
 `unreg` and the first is registered as a 0-argument `.Call` routine, we
 could use (from code in the package)
 
- 
-``` 
+```r
 .Call("reg")
 .Call("unreg")
 ```
@@ -10586,8 +9418,7 @@ Without or with registration, these will both work. If `R_init_mypkg`
 calls `R_useDynamicSymbols(dll, FALSE)`, only the first will work. If in
 addition to registration the `NAMESPACE` file contains
 
- 
-``` 
+```r
 useDynLib(mypkg, .registration = TRUE, .fixes = "C_")
 ```
 
@@ -10597,18 +9428,11 @@ then we can call `.Call(C_reg)`. Finally, if `R_init_mypkg` also calls
 our own `.Call` calls go directly to the intended code in our package
 and that no one else accidentally finds our entry points. (Should
 someone need to call our code from outside the package, for example for
-debugging, they can use `.Call(mypkgC_reg)`.)
+debugging, they can use `.Call(mypkg:::C_reg)`.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Converting a package to use
-registration](#Converting-a-package-to-use-registration), Previous:
-[Registering native routines](#Registering-native-routines), Up:
-[Registering native routines](#Registering-native-routines)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.4.1 Speed considerations 
+#### 5.4.1 Speed considerations
 
 Sometimes registering native routines or using a `PACKAGE` argument can
 make a large difference. The results can depend quite markedly on the OS
@@ -10618,15 +9442,13 @@ loaded into R at the time.
 To fix ideas, first consider `x86_64` OS 10.7 and R 2.15.2. A simple
 `.Call` function might be
 
- 
-``` 
+```r
 foo <- function(x) .Call("foo", x)
 ```
 
 with C code
 
- 
-``` 
+```r
 #include <Rinternals.h>
 
 SEXP foo(SEXP x)
@@ -10639,8 +9461,7 @@ If we compile with by `R CMD SHLIB foo.c`, load the code by
 `dyn.load("foo.so")` and run `foo(pi)` it took around 22 microseconds
 (us). Specifying the DLL by
 
- 
-``` 
+```r
 foo2 <- function(x) .Call("foo", x, PACKAGE = "foo")
 ```
 
@@ -10653,16 +9474,6 @@ reduces the running time as `"foo"` will be preferentially looked for
 needs to fathom out the appropriate DLL each time it is invoked but it
 does not need to search all DLLs), and with the `PACKAGE` argument it is
 again about 1.7 us.
-
-Next suppose the package has registered the native routine `foo`. Then
-`foo()` still has to find the appropriate DLL but can get to the entry
-point in the DLL faster, in about 4.2 us. And `foo2()` now takes about 1
-us. If we register the symbols in the `NAMESPACE` file and use
-
- 
-``` 
-foo3 <- function(x) .Call(C_foo, x)
-```
 
 then the address for the native routine is looked up just once when the
 package is loaded, and `foo3(pi)` takes about 0.8 us.
@@ -10687,7 +9498,7 @@ symbols and do not allow symbol search, so in a new session `foo()` can
 only look in `foo.so` and may be as fast as `foo2()`. This will
 no longer apply when many contributed packages are loaded, and generally
 those last loaded are searched first. For example, consider R 3.3.2 on
-x86\_64 Linux. In an empty R session, both `foo()` and `foo2()` took
+x86_64 Linux. In an empty R session, both `foo()` and `foo2()` took
 about 0.75 us; however after packages
 [**igraph**](https://CRAN.R-project.org/package=igraph) and
 [**spatstat**](https://CRAN.R-project.org/package=spatstat) had been
@@ -10696,133 +9507,115 @@ still took about 0.80 us. Using registration in a package reduced this
 to 0.55 us and `foo3()` took 0.40 us, times which were unchanged when
 further packages were loaded.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Linking to native routines in other
-packages](#Linking-to-native-routines-in-other-packages), Previous:
-[Speed considerations](#Speed-considerations), Up: [Registering native
-routines](#Registering-native-routines)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.4.2 Example: converting a package to use registration 
+#### 5.4.2 Example: converting a package to use registration
 
 The **splines** package was converted to use symbol registration in
 2001, but we can use it as an example[^131^](#FOOT131) of what
 needs to be done for a small package.
 
--   Find the relevant entry points. This is somewhat OS-specific, but
-    something like the following should be possible at the OS
-    command-line
+- Find the relevant entry points. This is somewhat OS-specific, but
+  something like the following should be possible at the OS
+  command-line
 
-     
-    ``` 
-    nm -g /path/to/splines.so | grep " T "
-    0000000000002670 T _spline_basis
-    0000000000001ec0 T _spline_value
-    ```
-    
+```r
+nm -g /path/to/splines.so | grep " T "
+0000000000002670 T _spline_basis
+0000000000001ec0 T _spline_value
+```
 
-    This indicates that there are two relevant entry points. (They may
-    or may not have a leading underscore, as here. Fortran entry points
-    will have a trailing underscore.) Check in the R code that they are
-    called by the package and how: in this case they are used by
-    `.Call`.
+This indicates that there are two relevant entry points. (They may
+or may not have a leading underscore, as here. Fortran entry points
+will have a trailing underscore.) Check in the R code that they are
+called by the package and how: in this case they are used by
+`.Call`.
 
-    Alternatively, examine the package's R code for all `.C`,
-    `.Fortran`, `.Call` and `.External` calls.
+Alternatively, examine the package's R code for all `.C`,
+`.Fortran`, `.Call` and `.External` calls.
 
--   Construct the registration table. First write skeleton registration
-    code, conventionally in file `src/init.c` (or at the end of
-    the only C source file in the package: if included in a C++ file the
-    '`R_init`' function would need to be declared
-    `extern "C"`):
+- Construct the registration table. First write skeleton registration
+  code, conventionally in file `src/init.c` (or at the end of
+  the only C source file in the package: if included in a C++ file the
+  '`R_init`' function would need to be declared
+  `extern "C"`):
 
-     
-    ``` 
-    #include <stdlib.h> // for NULL
-    #include <R_ext/Rdynload.h>
+```r
+#include <stdlib.h> // for NULL
+#include <R_ext/Rdynload.h>
 
-    #define CALLDEF(name, n)  
+#define CALLDEF(name, n)
 
-    static const R_CallMethodDef R_CallDef = {
-       CALLDEF(spline_basis, ?),
-       CALLDEF(spline_value, ?),
-       
-    };
+static const R_CallMethodDef R_CallDef[] = {
+   CALLDEF(spline_basis, ?),
+   CALLDEF(spline_value, ?),
+   {NULL, NULL, 0}
+};
 
-    void R_init_splines(DllInfo *dll)
-    {
-        R_registerRoutines(dll, NULL, R_CallDef, NULL, NULL);
-    }
-    ```
-    
+void R_init_splines(DllInfo *dll)
+{
+    R_registerRoutines(dll, NULL, R_CallDef, NULL, NULL);
+}
+```
 
-    and then replace the `?` in the skeleton with the actual numbers of
-    arguments. You will need to add declarations (also known as
-    'prototypes') of the functions unless appending to the only C source
-    file. Some packages will already have these in a header file, or you
-    could create one and include it in `init.c`, for example
-    `splines.h` containing
+and then replace the `?` in the skeleton with the actual numbers of
+arguments. You will need to add declarations (also known as
+'prototypes') of the functions unless appending to the only C source
+file. Some packages will already have these in a header file, or you
+could create one and include it in `init.c`, for example
+`splines.h` containing
 
-     
-    ``` 
-    #include <Rinternals.h> // for SEXP
-    extern SEXP spline_basis(SEXP knots, SEXP order, SEXP xvals, SEXP derivs);
-    extern SEXP spline_value(SEXP knots, SEXP coeff, SEXP order, SEXP x, SEXP deriv);
-    ```
-    
+```r
+#include <Rinternals.h> // for SEXP
+extern SEXP spline_basis(SEXP knots, SEXP order, SEXP xvals, SEXP derivs);
+extern SEXP spline_value(SEXP knots, SEXP coeff, SEXP order, SEXP x, SEXP deriv);
+```
 
-    Tools are available to extract declarations, at least for C and C++
-    code: see the help file for
-    `package_native_routine_registration_skeleton` in package **tools**.
-    Here we could have used
+Tools are available to extract declarations, at least for C and C++
+code: see the help file for
+`package_native_routine_registration_skeleton` in package **tools**.
+Here we could have used
 
-     
-    ``` 
-    cproto -I/path/to/R/include -e splines.c
-    ```
-    
+```r
+cproto -I/path/to/R/include -e splines.c
+```
 
-    For examples of registering other types of calls, see packages
-    **graphics** and **stats**. In particular, when registering entry
-    points for `.Fortran` one needs declarations as if called from C,
-    such as
+For examples of registering other types of calls, see packages
+**graphics** and **stats**. In particular, when registering entry
+points for `.Fortran` one needs declarations as if called from C,
+such as
 
-     
-    ``` 
-    #include <R_ext/RS.h>
-    void F77_NAME(supsmu)(int *n, double *x, double *y,
-                          double *w, int *iper, double *span, double *alpha,
-                          double *smo, double *sc, double *edf);
-    ```
-    
+```r
+#include <R_ext/RS.h>
+void F77_NAME(supsmu)(int *n, double *x, double *y,
+                      double *w, int *iper, double *span, double *alpha,
+                      double *smo, double *sc, double *edf);
+```
 
-    `gfortran` 9.2[^132^](#FOOT132) and later can help
-    generate such prototypes with its flag
-    `-fc-prototypes-external` (although one will need to
-    replace the hard-coded trailing underscore with the `F77_NAME`
-    macro).
+`gfortran` 9.2[^132^](#FOOT132) and later can help
+generate such prototypes with its flag
+`-fc-prototypes-external` (although one will need to
+replace the hard-coded trailing underscore with the `F77_NAME`
+macro).
 
-    One can get away with inaccurate argument lists in the declarations:
-    it is easy to specify the arguments for `.Call` (all `SEXP`) and
-    `.External` (one `SEXP`) and as the arguments for `.C` and
-    `.Fortran` are all pointers, specifying them as `void *` suffices.
-    (For most platforms one can omit all the arguments, although
-    link-time optimization will warn.)
+One can get away with inaccurate argument lists in the declarations:
+it is easy to specify the arguments for `.Call` (all `SEXP`) and
+`.External` (one `SEXP`) and as the arguments for `.C` and
+`.Fortran` are all pointers, specifying them as `void *` suffices.
+(For most platforms one can omit all the arguments, although
+link-time optimization will warn.)
 
--   (Optional but highly recommended.) Restrict `.Call` etc to use the
-    symbols you chose to register by editing `src/init.c` to
-    contain
-     
-    ``` 
-    void R_init_splines(DllInfo *dll)
-    {
-        R_registerRoutines(dll, NULL, R_CallDef, NULL, NULL);
-        R_useDynamicSymbols(dll, FALSE);
-    }
-    ```
-    
+- (Optional but highly recommended.) Restrict `.Call` etc to use the
+  symbols you chose to register by editing `src/init.c` to
+  contain
+
+  ```r
+  void R_init_splines(DllInfo *dll)
+  {
+      R_registerRoutines(dll, NULL, R_CallDef, NULL, NULL);
+      R_useDynamicSymbols(dll, FALSE);
+  }
+  ```
 
 A skeleton for the steps so far can be made using
 `package_native_routine_registration_skeleton` in package **tools**.
@@ -10831,162 +9624,116 @@ code.
 
 The remaining steps are optional but recommended.
 
--   Edit the `NAMESPACE` file to create R objects for the
-    registered symbols:
-     
-    ``` 
-    useDynLib(splines, .registration = TRUE, .fixes = "C_")
-    ```
-    
+- Edit the `NAMESPACE` file to create R objects for the
+  registered symbols:
 
--   Find all the relevant calls in the R code and edit them to use the R
-    objects. This entailed changing the lines
+```r
+useDynLib(splines, .registration = TRUE, .fixes = "C_")
+```
 
-     
-    ``` 
-    temp <- .Call("spline_basis", knots, ord, x, derivs, PACKAGE = "splines")
-    y[accept] <- .Call("spline_value", knots, coeff, ord, x[accept], deriv, PACKAGE = "splines")
-    y = .Call("spline_value", knots, coef(object), ord, x, deriv, PACKAGE = "splines")
-    ```
-    
+- Find all the relevant calls in the R code and edit them to use the R
+  objects. This entailed changing the lines
 
-    to
+```r
+temp <- .Call("spline_basis", knots, ord, x, derivs, PACKAGE = "splines")
+y[accept] <- .Call("spline_value", knots, coeff, ord, x[accept], deriv, PACKAGE = "splines")
+y = .Call("spline_value", knots, coef(object), ord, x, deriv, PACKAGE = "splines")
+```
 
-     
-    ``` 
-    temp <- .Call(C_spline_basis, knots, ord, x, derivs)
-    y[accept] <- .Call(C_spline_value, knots, coeff, ord, x[accept], deriv)
-    y = .Call(C_spline_value, knots, coef(object), ord, x, deriv)
-    ```
-    
+to
 
-    Check that there is no `exportPattern` directive which
-    unintentionally exports the newly created R objects.
+```r
+temp <- .Call(C_spline_basis, knots, ord, x, derivs)
+y[accept] <- .Call(C_spline_value, knots, coeff, ord, x[accept], deriv)
+y = .Call(C_spline_value, knots, coef(object), ord, x, deriv)
+```
 
--   Restrict `.Call` to use the R symbols by editing
-    `src/init.c` to contain
-     
-    ``` 
-    void R_init_splines(DllInfo *dll)
-    {
-        R_registerRoutines(dll, NULL, R_CallDef, NULL, NULL);
-        R_useDynamicSymbols(dll, FALSE);
-        R_forceSymbols(dll, TRUE);
-    }
-    ```
-    
+Check that there is no `exportPattern` directive which
+unintentionally exports the newly created R objects.
 
--   Consider visibility. On some OSes we can hide entry points from the
-    loader, which precludes any possible name clashes and calling them
-    accidentally (usually with incorrect arguments and crashing the R
-    process). If we repeat the first step we now see
+- Restrict `.Call` to use the R symbols by editing
+  `src/init.c` to contain
 
-     
-    ``` 
-    nm -g /path/to/splines.so | grep " T "
-    0000000000002e00 T _R_init_splines
-    00000000000025e0 T _spline_basis
-    0000000000001e20 T _spline_value
-    ```
-    
+```r
+void R_init_splines(DllInfo *dll)
+{
+    R_registerRoutines(dll, NULL, R_CallDef, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+    R_forceSymbols(dll, TRUE);
+}
+```
 
-    If there were any entry points not intended to be used by the
-    package we should try to avoid exporting them, for example by making
-    them `static`. Now that the two relevant entry points are only
-    accessed *via* the registration table, we can hide them. There are
-    two ways to do so on some Unix-alikes. We can hide individual entry
-    points *via*
+- Consider visibility. On some OSes we can hide entry points from the
+  loader, which precludes any possible name clashes and calling them
+  accidentally (usually with incorrect arguments and crashing the R
+  process). If we repeat the first step we now see
 
-     
-    ``` 
-    #include <R_ext/Visibility.h>
+```r
+nm -g /path/to/splines.so | grep " T "
+0000000000002e00 T _R_init_splines
+00000000000025e0 T _spline_basis
+0000000000001e20 T _spline_value
+```
 
-    SEXP attribute_hidden
-    spline_basis(SEXP knots, SEXP order, SEXP xvals, SEXP derivs)
-    …
+If there were any entry points not intended to be used by the
+package we should try to avoid exporting them, for example by making
+them `static`. Now that the two relevant entry points are only
+accessed _via_ the registration table, we can hide them. There are
+two ways to do so on some Unix-alikes. We can hide individual entry
+points _via_
 
-    SEXP attribute_hidden
-    spline_value(SEXP knots, SEXP coeff, SEXP order, SEXP x, SEXP deriv)
-    …
-    ```
-    
+```r
+#include <R_ext/Visibility.h>
 
-    Alternatively, we can change the default visibility for all C
-    symbols by including
+SEXP attribute_hidden
+spline_basis(SEXP knots, SEXP order, SEXP xvals, SEXP derivs)
+…
 
-     
-    ``` 
-    PKG_CFLAGS = $(C_VISIBILITY)
-    ```
-    
+SEXP attribute_hidden
+spline_value(SEXP knots, SEXP coeff, SEXP order, SEXP x, SEXP deriv)
+…
+```
 
-    in `src/Makevars`, and then we need to allow registration
-    by declaring `R_init_splines` to be visible:
+Alternatively, we can change the default visibility for all C
+symbols by including
 
-     
-    ``` 
-    #include <R_ext/Visibility.h>
+```r
+PKG_CFLAGS = $(C_VISIBILITY)
+```
 
-    void attribute_visible
-    R_init_splines(DllInfo *dll)
-    …
-    ```
-    
+in `src/Makevars`, and then we need to allow registration
+by declaring `R_init_splines` to be visible:
 
-    See [Controlling visibility](#Controlling-visibility) for more
-    details, including using Fortran code and ways to restrict
-    visibility on Windows.
+```r
+#include <R_ext/Visibility.h>
 
--   We end up with a file `src/init.c` containing
+void attribute_visible
+R_init_splines(DllInfo *dll)
+…
+```
 
-    > +-----------------------------------------------------------------------+
-    > |                                                          |
-    > | ```                                                         |
-    > | #include <stdlib.h>                                                   |
-    > | #include <R_ext/Rdynload.h>                                           |
-    > | #include <R_ext/Visibility.h>  // optional                            |
-    > |                                                                       |
-    > | #include "splines.h"                                                  |
-    > |                                                                       |
-    > | #define CALLDEF(name, n)                   |
-    > |                                                                       |
-    > | static const R_CallMethodDef R_CallDef = {                          |
-    > |     CALLDEF(spline_basis, 4),                                         |
-    > |     CALLDEF(spline_value, 5),                                         |
-    > |                                                        |
-    > | };                                                                    |
-    > |                                                                       |
-    > | void                                                                  |
-    > | attribute_visible  // optional                                        |
-    > | R_init_splines(DllInfo *dll)                                          |
-    > | {                                                                     |
-    > |     R_registerRoutines(dll, NULL, R_CallDef, NULL, NULL);             |
-    > |     R_useDynamicSymbols(dll, FALSE);                                  |
-    > |     R_forceSymbols(dll, TRUE);                                        |
-    > | }                                                                     |
-    > | ```                                                                   |
-    > |                                                                    |
-    > +-----------------------------------------------------------------------+
+See [Controlling visibility](#Controlling-visibility) for more
+details, including using Fortran code and ways to restrict
+visibility on Windows.
 
-------------------------------------------------------------------------
+- We end up with a file `src/init.c` containing
 
- 
-Previous: [Converting a package to use
-registration](#Converting-a-package-to-use-registration), Up:
-[Registering native routines](#Registering-native-routines)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+  > +-----------------------------------------------------------------------+
+  > | |
+  > | `r | | #include <stdlib.h> | | #include <R_ext/Rdynload.h> | | #include <R_ext/Visibility.h> // optional | | | | #include "splines.h" | | | | #define CALLDEF(name, n) | | | | static const R_CallMethodDef R_CallDef[] = { | | CALLDEF(spline_basis, 4), | | CALLDEF(spline_value, 5), | | {NULL, NULL, 0} | | }; | | | | void | | attribute_visible // optional | | R_init_splines(DllInfo *dll) | | { | | R_registerRoutines(dll, NULL, R_CallDef, NULL, NULL); | | R_useDynamicSymbols(dll, FALSE); | | R_forceSymbols(dll, TRUE); | | } | |` |
+  > | ::: |
+  > +-----------------------------------------------------------------------+
 
-#### 5.4.3 Linking to native routines in other packages 
+---
+
+#### 5.4.3 Linking to native routines in other packages
 
 In addition to registering C routines to be called by R, it can at times
 be useful for one package to make some of its C routines available to be
 called by C code in another package. The interface consists of two
 routines declared in header `R_ext/Rdynload.h` as
 
- 
-
- 
-``` 
+```r
 void R_RegisterCCallable(const char *package, const char *name,
                          DL_FUNC fptr);
 DL_FUNC R_GetCCallable(const char *package, const char *name);
@@ -10995,8 +9742,7 @@ DL_FUNC R_GetCCallable(const char *package, const char *name);
 A package **packA** that wants to make a C routine `myCfun` available to
 C code in other packages would include the call
 
- 
-``` 
+```r
 R_RegisterCCallable("packA", "myCfun", myCfun);
 ```
 
@@ -11004,8 +9750,7 @@ in its initialization function `R_init_packA`. A package **packB** that
 wants to use this routine would retrieve the function pointer with a
 call of the form
 
- 
-``` 
+```r
 p_myCfun = R_GetCCallable("packA", "myCfun");
 ```
 
@@ -11030,18 +9775,9 @@ CRAN examples of the use of this mechanism include
 [**xts**](https://CRAN.R-project.org/package=xts) linking to
 [**zoo**](https://CRAN.R-project.org/package=zoo).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Interfacing C++ code](#Interfacing-C_002b_002b-code), Previous:
-[Registering native routines](#Registering-native-routines), Up: [System
-and foreign language
-interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.5 Creating shared objects 
-
- 
+### 5.5 Creating shared objects
 
 Shared objects for loading into R can be created using `R CMD SHLIB`.
 This accepts as arguments a list of files which must be object files
@@ -11050,22 +9786,21 @@ C or Objective C++ (with extensions `.c`, `.cc` or
 `.cpp`, `.f` (fixed-form Fortran), `.f90` or
 `.f95` (free-form), `.m`, and `.mm` or
 `.M`, respectively), or commands to be passed to the linker.
-See [R CMD SHLIB \--help] (or the R help for `SHLIB`) for usage
+See [R CMD SHLIB \--help]{.kbd} (or the R help for `SHLIB`) for usage
 information. Note that files intended for the Fortran pre-processor with
 extension `.F` are not accepted.
 
 If compiling the source files does not work "out of the box", you can
 specify additional flags by setting some of the variables
- `PKG_CPPFLAGS` (for the C/C++ preprocessor,
+`PKG_CPPFLAGS` (for the C/C++ preprocessor,
 mainly '`-I`', '`-D`' and '`-U`' flags),
- 
- 
- `PKG_CFLAGS`, `PKG_CXXFLAGS`,
+
+`PKG_CFLAGS`, `PKG_CXXFLAGS`,
 `PKG_FFLAGS`, `PKG_OBJCFLAGS`, and `PKG_OBJCXXFLAGS` (for the C, C++,
 Fortran, Objective C, and Objective C++ compilers, respectively) in the
 file `Makevars` in the compilation directory (or, of course,
 create the object files directly from the command line).
- Similarly, variable `PKG_LIBS` in
+Similarly, variable `PKG_LIBS` in
 `Makevars` can be used for additional '`-l`' and
 '`-L`' flags to be passed to the linker when building the
 shared object. (Supplying linker commands as arguments to `R CMD SHLIB`
@@ -11080,24 +9815,21 @@ Flags that are already set (for example in file
 variable `MAKEFLAGS` (at least for systems using a POSIX-compliant
 `make`), as in (Bourne shell syntax)
 
- 
-``` 
+```r
 MAKEFLAGS="CFLAGS=-O3" R CMD SHLIB *.c
 ```
 
 It is also possible to set such variables in personal
 `Makevars` files, which are read after the local
 `Makevars` and the system makefiles or in a site-wide
-`Makevars.site` file. See [Customizing package
-compilation](./R-admin.html#Customizing-package-compilation) in R
+`Makevars.site` file. See [Customizing package compilation](./R-admin.html#Customizing-package-compilation) in R
 Installation and Administration,
 
 Note that as `R CMD SHLIB` uses Make, it will not remake a shared object
 just because the flags have changed, and if `test.c` and
 `test.f` both exist in the current directory
 
- 
-``` 
+```r
 R CMD SHLIB test.f
 ```
 
@@ -11142,59 +9874,30 @@ packages no longer work. In particular, undocumented environment or
 `make` variables are not for use by package writers and are subject to
 change without notice.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Fortran I/O](#Fortran-I_002fO), Previous: [Creating shared
-objects](#Creating-shared-objects), Up: [System and foreign language
-interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.6 Interfacing C++ code 
+### 5.6 Interfacing C++ code
 
 Suppose we have the following hypothetical C++ library, consisting of
 the two files `X.h` and `X.cpp`, and implementing the
 two classes `X` and `Y` which we want to use in R.
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | // X.h                                                                |
-> |                                                                       |
-> | class X {                                                             |
-> | public: X (); ~X ();                                                  |
-> | };                                                                    |
-> |                                                                       |
-> | class Y {                                                             |
-> | public: Y (); ~Y ();                                                  |
-> | };                                                                    |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | // X.h | | | | class X { | | public: X (); ~X (); | | }; | | | | class Y { | | public: Y (); ~Y (); | | }; | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | // X.cpp                                                              |
-> |                                                                       |
-> | #include <R.h>                                                        |
-> | #include "X.h"                                                        |
-> |                                                                       |
-> | static Y y;                                                           |
-> |                                                                       |
-> | X::X()                                |
-> | X::~X()                               |
-> | Y::Y()                                |
-> | Y::~Y()                               |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | // X.cpp | | | | #include <R.h> | | #include "X.h" | | | | static Y y; | | | | X::X() { REprintf("constructor X\n"); } | | X::~X() { REprintf("destructor X\n"); } | | Y::Y() { REprintf("constructor Y\n"); } | | Y::~Y() { REprintf("destructor Y\n"); } | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 To use with R, the only thing we have to do is writing a wrapper
 function and ensuring that the function is enclosed in
 
- 
-``` 
+```r
 extern "C" {
 
 }
@@ -11203,21 +9906,9 @@ extern "C" {
 For example,
 
 > +-----------------------------------------------------------------------+
-> |                                                          |
-> | ```                                                         |
-> | // X_main.cpp:                                                        |
-> |                                                                       |
-> | #include "X.h"                                                        |
-> |                                                                       |
-> | extern "C" {                                                          |
-> |                                                                       |
-> | void X_main () {                                                      |
-> |   X x;                                                                |
-> | }                                                                     |
-> |                                                                       |
-> | } // extern "C"                                                       |
-> | ```                                                                   |
-> |                                                                    |
+> | |
+> | `r | | // X_main.cpp: | | | | #include "X.h" | | | | extern "C" { | | | | void X_main () { | | X x; | | } | | | | } // extern "C" | |` |
+> | ::: |
 > +-----------------------------------------------------------------------+
 
 Compiling and linking should be done with the C++ compiler-linker
@@ -11226,26 +9917,25 @@ C++ initialization code (and hence the constructor of the static
 variable `Y`) are not called. On a properly configured system, one can
 simply use
 
- 
-``` 
+```r
 R CMD SHLIB X.cpp X_main.cpp
 ```
 
 to create the shared object, typically `X.so` (the file name
 extension may be different on your platform). Now starting R yields
 
- 
-``` 
+```r
 R version 2.14.1 Patched (2012-01-16 r58124)
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ...
 Type    "q()" to quit R.
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
 R> dyn.load(paste("X", .Platform$dynlib.ext, sep = ""))
 constructor Y
 R> .C("X_main")
@@ -11276,7 +9966,7 @@ please check your package there.
 
 Legacy header `S.h` cannot be used with C++.
 
-#### 5.6.1 External C++ code 
+#### 5.6.1 External C++ code
 
 Quite a lot of external C++ software is header-only (e.g. most of the
 Boost 'libraries' including all those supplied by package
@@ -11294,7 +9984,7 @@ more problems! The C++ interface uses name-mangling and the
 ABI[^136^](#FOOT136) may depend on the compiler, version and
 even C++ defines[^137^](#FOOT137), so requires the package C++
 code to be compiled in exactly the same way as the library (and what
-that was is often undocumented). Examples include use of `g++` *vs*
+that was is often undocumented). Examples include use of `g++` _vs_
 `clang++` or Solaris' `CC`, and the two ABIs available for C++11 in
 `g++` with different defaults for GCC 4.9 and 5.x in some Linux
 distributions.
@@ -11313,15 +10003,9 @@ code). Also, the C++ interfaces are often optional in the software build
 or packaged separately and so users installing from package sources are
 far less likely to already have them installed.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Linking to other packages](#Linking-to-other-packages), Previous:
-[Interfacing C++ code](#Interfacing-C_002b_002b-code), Up: [System and
-foreign language interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.7 Fortran I/O 
+### 5.7 Fortran I/O
 
 We have already warned against the use of C++ iostreams not least
 because output is not guaranteed to appear on the R console, and this
@@ -11339,8 +10023,7 @@ initialized (typically when the package is loaded) the C `stdout` and
 `src/modules/lapack/init_win.c` shows how to mitigate this. In
 a package this would look something like
 
- 
-``` 
+```r
 #ifdef _WIN32
 # include <fcntl.h>
 #endif
@@ -11359,15 +10042,9 @@ void R_init_mypkgname(DllInfo *dll)
 
 in the file used for native symbol registration.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Handling R objects in C](#Handling-R-objects-in-C), Previous:
-[Fortran I/O](#Fortran-I_002fO), Up: [System and foreign language
-interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.8 Linking to other packages 
+### 5.8 Linking to other packages
 
 It is not in general possible to link a DLL in package **packA** to a
 DLL provided by package **packB** (for the security reasons mentioned in
@@ -11383,20 +10060,16 @@ backwards-compatible.
 Shipping a static library in package **packB** for other packages to
 link to avoids most of the difficulties.
 
-  ----------------------------------- ---- --
-  • [Unix-alikes](#Unix_002dalikes)        
-  • [Windows](#Windows)                    
-  ----------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Unix-alikes](#Unix_002dalikes)     
+ • [Windows](#Windows)
 
- 
-Next: [Windows](#Windows), Previous: [Linking to other
-packages](#Linking-to-other-packages), Up: [Linking to other
-packages](#Linking-to-other-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 5.8.1 Unix-alikes 
+---
+
+#### 5.8.1 Unix-alikes
 
 It is possible to link a shared object in package **packA** to a library
 provided by package **packB** under limited circumstances on a
@@ -11414,11 +10087,10 @@ find the static library at install time for package **packA**. The only
 issue is to find package **packB**, and for that we can ask R by
 something like (long lines broken for display here)
 
- 
-``` 
+```r
 PKGB_PATH=‘echo ’library(packB);
   cat(system.file("lib",  package="packB", mustWork=TRUE))' \
- | "$/bin/R" --vanilla --slave`
+ | "${R_HOME}/bin/R" --vanilla --slave`
 PKG_LIBS="$(PKGB_PATH)$(R_ARCH)/libpackB.a"
 ```
 
@@ -11426,11 +10098,10 @@ For a dynamic library `packB/lib/libpackB.so`
 (`packB/lib/libpackB.dylib` on macOS: note that you cannot link
 to a shared object, `.so`, on that platform) we could use
 
- 
-``` 
+```r
 PKGB_PATH=‘echo ’library(packB);
   cat(system.file("lib", package="packB", mustWork=TRUE))' \
- | "$/bin/R" --vanilla --slave`
+ | "${R_HOME}/bin/R" --vanilla --slave`
 PKG_LIBS=-L"$(PKGB_PATH)$(R_ARCH)" -lpackB
 ```
 
@@ -11446,11 +10117,10 @@ not be changed nor the package updated to a changed API). On systems
 with the `gcc` or `clang` and the GNU linker (e.g. Linux) and some
 others this can be done by e.g.
 
- 
-``` 
+```r
 PKGB_PATH=‘echo ’library(packB);
   cat(system.file("lib", package="packB", mustWork=TRUE)))' \
- | "$/bin/R" --vanilla --slave`
+ | "${R_HOME}/bin/R" --vanilla --slave`
 PKG_LIBS=-L"$(PKGB_PATH)$(R_ARCH)" -Wl,-rpath,"$(PKGB_PATH)$(R_ARCH)" -lpackB
 ```
 
@@ -11466,14 +10136,9 @@ Making headers provided by package **packB** available to the code to be
 compiled in package **packA** can be done by the `LinkingTo` mechanism
 (see [Registering native routines](#Registering-native-routines)).
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Unix-alikes](#Unix_002dalikes), Up: [Linking to other
-packages](#Linking-to-other-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.8.2 Windows 
+#### 5.8.2 Windows
 
 Suppose package **packA** wants to make use of compiled code provided by
 **packB** in DLL `packB/libs/exB.dll`, possibly the package's
@@ -11481,100 +10146,84 @@ DLL `packB/libs/packB.dll`. (This can be extended to linking to
 more than one package in a similar way.) There are three issues to be
 addressed:
 
--   Making headers provided by package **packB** available to the code
-    to be compiled in package **packA**.
+- Making headers provided by package **packB** available to the code
+  to be compiled in package **packA**.
 
-    This is done by the `LinkingTo` mechanism (see [Registering native
-    routines](#Registering-native-routines)).
+  This is done by the `LinkingTo` mechanism (see [Registering native
+  routines](#Registering-native-routines)).
 
--   preparing `packA.dll` to link to `packB/libs/exB.dll`.
+- preparing `packA.dll` to link to `packB/libs/exB.dll`.
 
-    This needs an entry in `Makevars.win` of the form
+  This needs an entry in `Makevars.win` of the form
 
-     
-    ``` 
-    PKG_LIBS= -L<something> -lexB
-    ```
-    
+```r
+PKG_LIBS= -L<something> -lexB
+```
 
-    and one possibility is that `<something>` is the path to the
-    installed `pkgB/libs` directory. To find that we need to
-    ask R where it is by something like
+and one possibility is that `<something>` is the path to the
+installed `pkgB/libs` directory. To find that we need to
+ask R where it is by something like
 
-     
-    ``` 
-    PKGB_PATH=‘echo ’library(packB);
-      cat(system.file("libs", package="packB", mustWork=TRUE))' \
-     | rterm --vanilla --slave`
-    PKG_LIBS= -L"$(PKGB_PATH)$(R_ARCH)" -lexB
-    ```
-    
+```r
+PKGB_PATH=‘echo ’library(packB);
+  cat(system.file("libs", package="packB", mustWork=TRUE))' \
+ | rterm --vanilla --slave`
+PKG_LIBS= -L"$(PKGB_PATH)$(R_ARCH)" -lexB
+```
 
-    Another possibility is to use an import library, shipping with
-    package **packA** an exports file `exB.def`. Then
-    `Makevars.win` could contain
+Another possibility is to use an import library, shipping with
+package **packA** an exports file `exB.def`. Then
+`Makevars.win` could contain
 
-     
-    ``` 
-    PKG_LIBS= -L. -lexB
+```r
+PKG_LIBS= -L. -lexB
 
-    all: $(SHLIB) before
+all: $(SHLIB) before
 
-    before: libexB.dll.a
-    libexB.dll.a: exB.def
-    ```
-    
+before: libexB.dll.a
+libexB.dll.a: exB.def
+```
 
-    and then installing package **packA** will make and use the import
-    library for `exB.dll`. (One way to prepare the exports file
-    is to use `pexports.exe`.)
+and then installing package **packA** will make and use the import
+library for `exB.dll`. (One way to prepare the exports file
+is to use `pexports.exe`.)
 
--   loading `packA.dll` which depends on `exB.dll`.
+- loading `packA.dll` which depends on `exB.dll`.
 
-    If `exB.dll` was used by package **packB** (because it is in fact
-    `packB.dll` or `packB.dll` depends on it) and
-    **packB** has been loaded before **packA**, then nothing more needs
-    to be done as `exB.dll` will already be loaded into the R
-    executable. (This is the most common scenario.)
+  If `exB.dll` was used by package **packB** (because it is in fact
+  `packB.dll` or `packB.dll` depends on it) and
+  **packB** has been loaded before **packA**, then nothing more needs
+  to be done as `exB.dll` will already be loaded into the R
+  executable. (This is the most common scenario.)
 
-    More generally, we can use the `DLLpath` argument to `library.dynam`
-    to ensure that `exB.dll` is found, for example by setting
+  More generally, we can use the `DLLpath` argument to `library.dynam`
+  to ensure that `exB.dll` is found, for example by setting
 
-     
-    ``` 
-    library.dynam("packA", pkg, lib,
-                  DLLpath = system.file("libs", package="packB"))
-    ```
-    
+```r
+library.dynam("packA", pkg, lib,
+              DLLpath = system.file("libs", package="packB"))
+```
 
-    Note that `DLLpath` can only set one path, and so for linking to two
-    or more packages you would need to resort to setting environment
-    variable `PATH`.
+Note that `DLLpath` can only set one path, and so for linking to two
+or more packages you would need to resort to setting environment
+variable `PATH`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Interface functions .Call and
-.External](#Interface-functions-_002eCall-and-_002eExternal), Previous:
-[Linking to other packages](#Linking-to-other-packages), Up: [System and
-foreign language interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.9 Handling R objects in C 
+### 5.9 Handling R objects in C
 
 Using C code to speed up the execution of an R function is often very
-fruitful. Traditionally this has been done *via* the `.C` function in R.
+fruitful. Traditionally this has been done _via_ the `.C` function in R.
 However, if a user wants to write C code using internal R data
 structures, then that can be done using the `.Call` and `.External`
 functions. The syntax for the calling function in R in each case is
 similar to that of `.C`, but the two functions have different C
 interfaces. Generally the `.Call` interface is simpler to use, but
-`.External` is a little more general. 
+`.External` is a little more general.
 
 A call to `.Call` is very similar to `.C`, for example
 
- 
-``` 
+```r
 .Call("convolve2", a, b)
 ```
 
@@ -11582,8 +10231,7 @@ The first argument should be a character string giving a C symbol name
 of code that has already been loaded into R. Up to 65 R objects can
 passed as arguments. The C side of the interface is
 
- 
-``` 
+```r
 #include <R.h>
 #include <Rinternals.h>
 
@@ -11593,15 +10241,13 @@ SEXP convolve2(SEXP a, SEXP b)
 
 A call to `.External` is almost identical
 
- 
-``` 
+```r
 .External("convolveE", a, b)
 ```
 
 but the C side of the interface is different, having only one argument
 
- 
-``` 
+```r
 #include <R.h>
 #include <Rinternals.h>
 
@@ -11612,7 +10258,7 @@ SEXP convolveE(SEXP args)
 Here `args` is a `LISTSXP`, a Lisp-style pairlist from which the
 arguments can be extracted.
 
-In each case the R objects are available for manipulation *via* a set of
+In each case the R objects are available for manipulation _via_ a set of
 functions and macros defined in the header file `Rinternals.h`
 or some S-compatibility macros[^139^](#FOOT139) See [Interface
 functions .Call and
@@ -11645,12 +10291,11 @@ make use of the source code for inspirational examples.
 
 It is necessary to know something about how R objects are handled in C
 code. All the R objects you will deal with will be handled with the type
-*SEXP*[^141^](#FOOT141), which is a pointer to a structure
-with typedef `SEXPREC`. Think of this structure as a *variant type* that
+_SEXP_[^141^](#FOOT141), which is a pointer to a structure
+with typedef `SEXPREC`. Think of this structure as a _variant type_ that
 can handle all the usual types of R objects, that is vectors of various
 modes, functions, environments, language objects and so on. The details
-are given later in this section and in [R Internal
-Structures](./R-ints.html#R-Internal-Structures) in R Internals, but for
+are given later in this section and in [R Internal Structures](./R-ints.html#R-Internal-Structures) in R Internals, but for
 most purposes the programmer does not need to know them. Think rather of
 a model such as that used by Visual Basic, in which R objects are handed
 around in C code (as they are in interpreted R code) as the variant
@@ -11658,34 +10303,28 @@ type, and the appropriate part is extracted for, for example, numerical
 calculations, only when it is needed. As in interpreted R code, much use
 is made of coercion to force the variant object to the right type.
 
-  ------------------------------------------------------------------- ---- --
-  • [Garbage Collection](#Garbage-Collection)                              
-  • [Allocating storage](#Allocating-storage)                              
-  • [Details of R types](#Details-of-R-types)                              
-  • [Attributes](#Attributes)                                              
-  • [Classes](#Classes)                                                    
-  • [Handling lists](#Handling-lists)                                      
-  • [Handling character data](#Handling-character-data)                    
-  • [Finding and setting variables](#Finding-and-setting-variables)        
-  • [Some convenience functions](#Some-convenience-functions)              
-  • [Named objects and copying](#Named-objects-and-copying)                
-  ------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Garbage Collection](#Garbage-Collection)     
+ • [Allocating storage](#Allocating-storage)     
+ • [Details of R types](#Details-of-R-types)     
+ • [Attributes](#Attributes)     
+ • [Classes](#Classes)     
+ • [Handling lists](#Handling-lists)     
+ • [Handling character data](#Handling-character-data)     
+ • [Finding and setting variables](#Finding-and-setting-variables)     
+ • [Some convenience functions](#Some-convenience-functions)     
+ • [Named objects and copying](#Named-objects-and-copying)
 
- 
-Next: [Allocating storage](#Allocating-storage), Previous: [Handling R
-objects in C](#Handling-R-objects-in-C), Up: [Handling R objects in
-C](#Handling-R-objects-in-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 5.9.1 Handling the effects of garbage collection 
+---
 
-  
+#### 5.9.1 Handling the effects of garbage collection
 
 We need to know a little about the way R handles memory allocation. The
 memory allocated for R objects is not freed by the user; instead, the
-memory is from time to time *garbage collected*. That is, some or all of
+memory is from time to time _garbage collected_. That is, some or all of
 the allocated memory not being used is freed or marked as re-usable.
 
 The R object types are represented by a C structure defined by a typedef
@@ -11698,9 +10337,9 @@ using the object by using the `PROTECT` macro on a pointer to the
 object. This tells R that the object is in use so it is not destroyed
 during garbage collection. Notice that it is the object which is
 protected, not the pointer variable. It is a common mistake to believe
-that if you invoked `PROTECT(p)` at some point then `p` is
+that if you invoked `PROTECT(p)` at some point then `p`{.variable} is
 protected from then on, but that is not true once a new object is
-assigned to `p`.
+assigned to `p`{.variable}.
 
 Protecting an R object automatically protects all the R objects pointed
 to in the corresponding `SEXPREC`, for example all elements of a
@@ -11710,15 +10349,14 @@ The programmer is solely responsible for housekeeping the calls to
 `PROTECT`. There is a corresponding macro `UNPROTECT` that takes as
 argument an `int` giving the number of objects to unprotect when they
 are no longer needed. The protection mechanism is stack-based, so
-`UNPROTECT(n)` unprotects the last `n` objects which were
+`UNPROTECT(n)` unprotects the last `n`{.variable} objects which were
 protected. The calls to `PROTECT` and `UNPROTECT` must balance when the
 user's code returns. R will warn about `"stack imbalance in .Call"` (or
 `.External`) if the housekeeping is wrong.
 
 Here is a small example of creating an R numeric vector in C code:
 
- 
-``` 
+```r
 #include <R.h>
 #include <Rinternals.h>
 
@@ -11752,7 +10390,7 @@ Protection is not needed for objects which R already knows are in use.
 In particular, this applies to function arguments.
 
 There is a less-used macro `UNPROTECT_PTR(s)` that unprotects the object
-pointed to by the `SEXP` `s`, even if it is not the top item
+pointed to by the `SEXP` `s`{.variable}, even if it is not the top item
 on the pointer protection stack. This macro was introduced for use in
 the parser, where the code interfacing with the R heap is generated and
 the generator cannot be configured to insert proper calls to `PROTECT`
@@ -11762,18 +10400,15 @@ multiple times. It has been superseded by multi-set based functions
 `R_PreserveInMSet` and `R_ReleaseFromMSet`, which protect objects in a
 multi-set created by `R_NewPreciousMSet` and typically itself protected
 using `PROTECT`. These functions should not be needed outside parsers.
- 
- 
 
 Sometimes an object is changed (for example duplicated, coerced or
 grown) yet the current value needs to be protected. For these cases
 `PROTECT_WITH_INDEX` saves an index of the protection location that can
 be used to replace the protected value using `REPROTECT`.
-  For example
+For example
 (from the internal code for `optim`)
 
- 
-``` 
+```r
     PROTECT_INDEX ipx;
 
     ....
@@ -11785,8 +10420,6 @@ Note that it is dangerous to mix `UNPROTECT_PTR` also with
 `PROTECT_WITH_INDEX`, as the former changes the protection locations of
 objects that were protected after the one being unprotected.
 
- 
-
 There is another way to avoid the affects of garbage collection: a call
 to `R_PreserveObject` adds an object to an internal list of objects not
 to be collects, and a subsequent call to `R_ReleaseObject` removes it
@@ -11797,15 +10430,9 @@ they are no longer needed (and this often requires the use of a
 finalizer). It is less efficient that the normal protection mechanism,
 and should be used sparingly.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Details of R types](#Details-of-R-types), Previous: [Garbage
-Collection](#Garbage-Collection), Up: [Handling R objects in
-C](#Handling-R-objects-in-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.9.2 Allocating storage 
+#### 5.9.2 Allocating storage
 
 For many purposes it is sufficient to allocate R objects and manipulate
 those. There are quite a few `allocXxx` functions defined in
@@ -11819,47 +10446,40 @@ lists, expressions and character vectors (the cases where the elements
 are themselves R objects).
 
 If storage is required for C objects during the calculations this is
-best allocating by calling `R_alloc`; see [Memory
-allocation](#Memory-allocation). All of these memory allocation routines
+best allocating by calling `R_alloc`; see [Memory allocation](#Memory-allocation). All of these memory allocation routines
 do their own error-checking, so the programmer may assume that they will
 raise an error and not return if the memory cannot be allocated.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Attributes](#Attributes), Previous: [Allocating
-storage](#Allocating-storage), Up: [Handling R objects in
-C](#Handling-R-objects-in-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.9.3 Details of R types 
+#### 5.9.3 Details of R types
 
 Users of the `Rinternals.h` macros will need to know how the R
 types are known internally. The different R data types are represented
-in C by *SEXPTYPE*. Some of these are familiar from R and some are
+in C by _SEXPTYPE_. Some of these are familiar from R and some are
 internal data types. The usual R object modes are given in the table.
 
->   SEXPTYPE    R equivalent
->   ----------- ------------------------------------
->   `REALSXP`   numeric with storage mode `double`
->   `INTSXP`    integer
->   `CPLXSXP`   complex
->   `LGLSXP`    logical
->   `STRSXP`    character
->   `VECSXP`    list (generic vector)
->   `LISTSXP`   pairlist
->   `DOTSXP`    a '`…`' object
->   `NILSXP`    NULL
->   `SYMSXP`    name/symbol
->   `CLOSXP`    function or function closure
->   `ENVSXP`    environment
+> SEXPTYPE R equivalent
+>
+> ---
+>
+> `REALSXP` numeric with storage mode `double` > `INTSXP` integer
+> `CPLXSXP` complex
+> `LGLSXP` logical
+> `STRSXP` character
+> `VECSXP` list (generic vector)
+> `LISTSXP` pairlist
+> `DOTSXP` a '`…`' object
+> `NILSXP` NULL
+> `SYMSXP` name/symbol
+> `CLOSXP` function or function closure
+> `ENVSXP` environment
 
 Among the important internal `SEXPTYPE`s are `LANGSXP`, `CHARSXP`,
 `PROMSXP`, etc. (**N.B.**: although it is possible to return objects of
 internal types, it is unsafe to do so as assumptions are made about how
 they are handled which may be violated at user-level evaluation.) More
-details are given in [R Internal
-Structures](./R-ints.html#R-Internal-Structures) in R Internals.
+details are given in [R Internal Structures](./R-ints.html#R-Internal-Structures) in R Internals.
 
 Unless you are very sure about the type of the arguments, the code
 should check the data types. Sometimes it may also be necessary to check
@@ -11867,8 +10487,8 @@ data types of objects created by evaluating an R expression in the C
 code. You can use functions like `isReal`, `isInteger` and `isString` to
 do type checking. See the header file `Rinternals.h` for
 definitions of other such functions. All of these take a `SEXP` as
-argument and return 1 or 0 to indicate `TRUE` or
-`FALSE`.
+argument and return 1 or 0 to indicate `TRUE`{.variable} or
+`FALSE`{.variable}.
 
 What happens if the `SEXP` is not of the correct type? Sometimes you
 have no other option except to generate an error. You can use the
@@ -11877,19 +10497,18 @@ the correct type. For example, if you find that an `SEXP` is of the type
 `INTEGER`, but you need a `REAL` object, you can change the type by
 using
 
- 
-``` 
+```r
 newSexp = PROTECT(coerceVector(oldSexp, REALSXP));
 ```
 
-Protection is needed as a new *object* is created; the object formerly
+Protection is needed as a new _object_ is created; the object formerly
 pointed to by the `SEXP` is still protected but now
 unused.[^142^](#FOOT142)
 
 All the coercion functions do their own error-checking, and generate
 `NA`s with a warning or stop with an error as appropriate.
 
-Note that these coercion functions are *not* the same as calling
+Note that these coercion functions are _not_ the same as calling
 `as.numeric` (and so on) in R code, as they do not dispatch on the class
 of the object. Thus it is normally preferable to do the coercion in the
 calling R code.
@@ -11900,15 +10519,9 @@ suffice to take us a long way in interfacing R objects to numerical
 algorithms, but we may need to know a little more to create useful
 return objects.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Classes](#Classes), Previous: [Details of R
-types](#Details-of-R-types), Up: [Handling R objects in
-C](#Handling-R-objects-in-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.9.4 Attributes 
+#### 5.9.4 Attributes
 
 Many R objects have attributes: some of the most useful are classes and
 the `dim` and `dimnames` that mark objects as matrices or arrays. It can
@@ -11918,8 +10531,7 @@ To illustrate this, let us write code to take the outer product of two
 vectors (which `outer` and `%o%` already do). As usual the R code is
 simple
 
- 
-``` 
+```r
 out <- function(x, y)
 {
     storage.mode(x) <- storage.mode(y) <- "double"
@@ -11932,8 +10544,7 @@ possibly with names. This time we do the coercion in the calling R code.
 
 C code to do the computations is
 
- 
-``` 
+```r
 #include <R.h>
 #include <Rinternals.h>
 
@@ -11957,13 +10568,12 @@ considerably faster to store the result and index that.
 
 However, we would like to set the `dimnames` of the result. We can use
 
- 
-``` 
+```r
 #include <R.h>
 #include <Rinternals.h>
 ```
 
-``` 
+```r
 SEXP out(SEXP x, SEXP y)
 {
     int nx = length(x), ny = length(y);
@@ -11982,17 +10592,18 @@ SEXP out(SEXP x, SEXP y)
     setAttrib(ans, R_DimNamesSymbol, dimnames);
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
     UNPROTECT(2);
     return ans;
 }
 ```
 
 This example introduces several new features. The `getAttrib` and
-`setAttrib`   functions get and
+`setAttrib` functions get and
 set individual attributes. Their second argument is a `SEXP` defining
 the name in the symbol table of the attribute we want; these and many
 such symbols are defined in the header file `Rinternals.h`.
@@ -12003,12 +10614,11 @@ There are shortcuts here too: the functions `namesgets`, `dimgets` and
 are functions such as `GetMatrixDimnames` and `GetArrayDimnames`.
 
 What happens if we want to add an attribute that is not pre-defined? We
-need to add a symbol for it *via* a call to 
+need to add a symbol for it _via_ a call to
 `install`. Suppose for illustration we wanted to add an attribute
 `"version"` with value `3.0`. We could use
 
- 
-``` 
+```r
     SEXP version;
     version = PROTECT(allocVector(REALSXP, 1));
     REAL(version)[0] = 3.0;
@@ -12021,8 +10631,7 @@ way to retrieve the symbol from the symbol table if it is already
 installed. However, the lookup takes a non-trivial amount of time, so
 consider code such as
 
- 
-``` 
+```r
 static SEXP VerSymbol = NULL;
 ...
     if (VerSymbol == NULL) VerSymbol = install("version");
@@ -12032,29 +10641,21 @@ if it is to be done frequently.
 
 This example can be simplified by another convenience function:
 
- 
-``` 
+```r
     SEXP version = PROTECT(ScalarReal(3.0));
     setAttrib(ans, install("version"), version);
     UNPROTECT(1);
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Handling lists](#Handling-lists), Previous:
-[Attributes](#Attributes), Up: [Handling R objects in
-C](#Handling-R-objects-in-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.9.5 Classes 
+#### 5.9.5 Classes
 
 In R the class is just the attribute named `"class"` so it can be
 handled as such, but there is a shortcut `classgets`. Suppose we want to
 give the return value in our example the class `"mat"`. We can use
 
- 
-``` 
+```r
 #include <R.h>
 #include <Rinternals.h>
       ....
@@ -12071,33 +10672,25 @@ give the return value in our example the class `"mat"`. We can use
 As the value is a character vector, we have to know how to create that
 from a C character array, which we do using the function `mkChar`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Handling character data](#Handling-character-data), Previous:
-[Classes](#Classes), Up: [Handling R objects in
-C](#Handling-R-objects-in-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.9.6 Handling lists 
+#### 5.9.6 Handling lists
 
 Some care is needed with lists, as R moved early on from using LISP-like
 lists (now called "pairlists") to S-like generic vectors. As a result,
 the appropriate test for an object of mode `list` is `isNewList`, and we
-need `allocVector(VECSXP, n`) and *not* `allocList(n)`.
+need `allocVector(VECSXP, n`) and _not_ `allocList(n)`.
 
 List elements can be retrieved or set by direct access to the elements
 of the generic vector. Suppose we have a list object
 
- 
-``` 
+```r
 a <- list(f = 1, g = 2, h = 3)
 ```
 
 Then we can access `a$g` as `a[[2]]` by
 
- 
-``` 
+```r
     double g;
       ....
     g = REAL(VECTOR_ELT(a, 1))[0];
@@ -12106,8 +10699,7 @@ Then we can access `a$g` as `a[[2]]` by
 This can rapidly become tedious, and the following function (based on
 one in package **stats**) is very useful:
 
- 
-``` 
+```r
 /* get the list element named str, or return NULL */
 
 SEXP getListElement(SEXP list, const char *str)
@@ -12115,10 +10707,11 @@ SEXP getListElement(SEXP list, const char *str)
     SEXP elmt = R_NilValue, names = getAttrib(list, R_NamesSymbol);
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
     for (int i = 0; i < length(list); i++)
         if(strcmp(CHAR(STRING_ELT(names, i)), str) == 0) {
            elmt = VECTOR_ELT(list, i);
@@ -12130,21 +10723,14 @@ SEXP getListElement(SEXP list, const char *str)
 
 and enables us to say
 
- 
-``` 
+```r
   double g;
   g = REAL(getListElement(a, "g"))[0];
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Finding and setting variables](#Finding-and-setting-variables),
-Previous: [Handling lists](#Handling-lists), Up: [Handling R objects in
-C](#Handling-R-objects-in-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.9.7 Handling character data 
+#### 5.9.7 Handling character data
 
 R character vectors are stored as `STRSXP`s, a vector type like `VECSXP`
 where every element is of type `CHARSXP`. The `CHARSXP` elements of
@@ -12160,8 +10746,6 @@ also allows compilers to issue warnings about improper use). Since
 global cache of `CHARSXP`s so that there is only ever one `CHARSXP`
 representing a given string in memory.
 
- 
-
 You can obtain a `CHARSXP` by calling `mkChar` and providing a
 nul-terminated C-style string. This function will return a pre-existing
 `CHARSXP` if one with a matching string already exists, otherwise it
@@ -12173,25 +10757,16 @@ Note that R character strings are restricted to `2^31 - 1` bytes, and
 hence so should the input to `mkChar` be (C allows longer strings on
 64-bit platforms).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Some convenience functions](#Some-convenience-functions),
-Previous: [Handling character data](#Handling-character-data), Up:
-[Handling R objects in C](#Handling-R-objects-in-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.9.8 Finding and setting variables 
-
- 
+#### 5.9.8 Finding and setting variables
 
 It will be usual that all the R objects needed in our C computations are
 passed as arguments to `.Call` or `.External`, but it is possible to
 find the values of R objects from within the C given their names. The
 following code is the equivalent of `get(name, envir = rho)`.
 
- 
-``` 
+```r
 SEXP getvar(SEXP name, SEXP rho)
 {
     SEXP ans;
@@ -12206,19 +10781,16 @@ SEXP getvar(SEXP name, SEXP rho)
 }
 ```
 
-The main work is done by  `findVar`, but to use it we
+The main work is done by `findVar`, but to use it we
 need to install `name` as a name in the symbol table. As we wanted the
 value for internal use, we return `NULL`.
 
 Similar functions with syntax
 
- 
-``` 
+```r
 void defineVar(SEXP symbol, SEXP value, SEXP rho)
 void setVar(SEXP symbol, SEXP value, SEXP rho)
 ```
-
- 
 
 can be used to assign values to R variables. `defineVar` creates a new
 binding or changes the value of an existing binding in the specified
@@ -12232,25 +10804,18 @@ binding with the specified value is created in the global environment.
 This corresponds to
 `assign(symbol, value, envir = rho, inherits = TRUE)`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Named objects and copying](#Named-objects-and-copying), Previous:
-[Finding and setting variables](#Finding-and-setting-variables), Up:
-[Handling R objects in C](#Handling-R-objects-in-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.9.9 Some convenience functions 
+#### 5.9.9 Some convenience functions
 
 Some operations are done so frequently that there are convenience
-functions to handle them. (All these are provided *via* the header file
+functions to handle them. (All these are provided _via_ the header file
 `Rinternals.h`.)
 
 Suppose we wanted to pass a single logical argument `ignore_quotes`: we
 could use
 
- 
-``` 
+```r
     int ign = asLogical(ignore_quotes);
     if(ign == NA_LOGICAL) error("'ignore_quotes' must be TRUE or FALSE");
 ```
@@ -12263,8 +10828,7 @@ of an input vector after the first.
 
 To return a length-one real vector we can use
 
- 
-``` 
+```r
     double x;
 
     ...
@@ -12289,29 +10853,26 @@ constructs a pairlist from `u` followed by `v` (which is a pairlist or
 Functions `list1` to `list6` construct a pairlist from one to six items,
 and `lang1` to `lang6` do the same for a language object (a function to
 call plus zero to five arguments). Functions `elt` and `lastElt` find
-the `i`th element and the last element of a pairlist, and
-`nthcdr` returns a pointer to the `n`th position in the
-pairlist (whose `CAR` is the `n`th item).
+the `i`{.variable}th element and the last element of a pairlist, and
+`nthcdr` returns a pointer to the `n`{.variable}th position in the
+pairlist (whose `CAR` is the `n`{.variable}th item).
 
 Functions `str2type` and `type2str` map R length-one character strings
 to and from `SEXPTYPE` numbers, and `type2char` maps numbers to C
 character strings.
 
-  ----------------------------------------------------------------------------------- ---- --
-  • [Semi-internal convenience functions](#Semi_002dinternal-convenience-functions)        
-  ----------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Semi-internal convenience functions](#Semi_002dinternal-convenience-functions)
 
- 
-Previous: [Some convenience functions](#Some-convenience-functions), Up:
-[Some convenience functions](#Some-convenience-functions)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 5.9.9.1 Semi-internal convenience functions 
+---
+
+#### 5.9.9.1 Semi-internal convenience functions
 
 There is quite a collection of functions that may be used in your C code
-*if* you are willing to adapt to rare "API" changes. These typically
+_if_ you are willing to adapt to rare "API" changes. These typically
 contain "workhorses" of their R counterparts.
 
 Functions `any_duplicated` and `any_duplicated3` are fast versions of
@@ -12319,21 +10880,13 @@ R's `any(duplicated(.))`.
 
 Function `R_compute_identical` corresponds to R's `identical` function.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Some convenience functions](#Some-convenience-functions), Up:
-[Handling R objects in C](#Handling-R-objects-in-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.9.10 Named objects and copying 
-
- 
+#### 5.9.10 Named objects and copying
 
 When assignments are done in R such as
 
- 
-``` 
+```r
 x <- 1:10
 y <- x
 ```
@@ -12351,30 +10904,30 @@ However, at least some of this copying is unneeded. In the first
 assignment shown, `x <- 1:10`, R first creates an object with value
 `1:10` and then assigns it to `x` but if `x` is modified no copy is
 necessary as the temporary object with value `1:10` cannot be referred
-to again. R distinguishes between named and unnamed objects *via* a
-field in a `SEXPREC` that can be accessed *via* the macros `NAMED` and
+to again. R distinguishes between named and unnamed objects _via_ a
+field in a `SEXPREC` that can be accessed _via_ the macros `NAMED` and
 `SET_NAMED`. This can take values
 
 `0`
 
-:   The object is not bound to any symbol
+: The object is not bound to any symbol
 
 `1`
 
-:   The object has been bound to exactly one symbol
+: The object has been bound to exactly one symbol
 
 `>= 2`
 
-:   The object has potentially been bound to two or more symbols, and
-    one should act as if another variable is currently bound to this
-    value. The maximal value is `NAMEDMAX`.
+: The object has potentially been bound to two or more symbols, and
+one should act as if another variable is currently bound to this
+value. The maximal value is `NAMEDMAX`.
 
 Note the past tenses: R does not do full reference counting and there
 may currently be fewer bindings.
 
 It is safe to modify the value of any `SEXP` for which `NAMED(foo)` is
 zero, and if `NAMED(foo)` is two or more, the value should be duplicated
-(*via* a call to `duplicate`) before any modification. Note that it is
+(_via_ a call to `duplicate`) before any modification. Note that it is
 the responsibility of the author of the code making the modification to
 do the duplication, even if it is `x` whose value is being modified
 after `y <- x`.
@@ -12384,16 +10937,14 @@ ignored (and duplication done whenever `NAMED(foo) > 0`). (This
 optimization is not currently usable in user code.) It is intended for
 use within replacement functions. Suppose we used
 
- 
-``` 
+```r
 x <- 1:10
 foo(x) <- 3
 ```
 
 which is computed as
 
- 
-``` 
+```r
 x <- 1:10
 x <- "foo<-"(x, 3)
 ```
@@ -12410,26 +10961,19 @@ and `MARK_NOT_MUTABLE`. These currently correspond to
 
 `MAYBE_REFERENCED(x)`
 
-:   `NAMED(x) > 0`
+: `NAMED(x) > 0`
 
 `MAYBE_SHARED(x)`
 
-:   `NAMED(x) > 1`
+: `NAMED(x) > 1`
 
 `MARK_NOT_MUTABLE(x)`
 
-:   `SET_NAMED(x, NAMEDMAX)`
+: `SET_NAMED(x, NAMEDMAX)`
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Evaluating R expressions from
-C](#Evaluating-R-expressions-from-C), Previous: [Handling R objects in
-C](#Handling-R-objects-in-C), Up: [System and foreign language
-interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.10 Interface functions `.Call` and `.External` 
+### 5.10 Interface functions `.Call` and `.External`
 
 In this section we consider the details of the R/C interfaces.
 
@@ -12438,37 +10982,29 @@ based on the interface of the same name in S version 4, and `.External`
 is based on R's `.Internal`. `.External` is more complex but allows a
 variable number of arguments.
 
-  ------------------------------------------------------------- ---- --
-  • [Calling .Call](#Calling-_002eCall)                              
-  • [Calling .External](#Calling-_002eExternal)                      
-  • [Missing and special values](#Missing-and-special-values)        
-  ------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Calling .Call](#Calling-_002eCall)     
+ • [Calling .External](#Calling-_002eExternal)     
+ • [Missing and special values](#Missing-and-special-values)
 
- 
-Next: [Calling .External](#Calling-_002eExternal), Previous: [Interface
-functions .Call and
-.External](#Interface-functions-_002eCall-and-_002eExternal), Up:
-[Interface functions .Call and
-.External](#Interface-functions-_002eCall-and-_002eExternal)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 5.10.1 Calling `.Call` 
+---
+
+#### 5.10.1 Calling `.Call`
 
 Let us convert our finite convolution example to use `.Call`. The
 calling function in R is
 
- 
-``` 
+```r
 conv <- function(a, b) .Call("convolve2", a, b)
 ```
 
 which could hardly be simpler, but as we shall see all the type coercion
 is transferred to the C code, which is
 
- 
-``` 
+```r
 #include <R.h>
 #include <Rinternals.h>
 
@@ -12491,21 +11027,14 @@ SEXP convolve2(SEXP a, SEXP b)
 }
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Missing and special values](#Missing-and-special-values),
-Previous: [Calling .Call](#Calling-_002eCall), Up: [Interface functions
-.Call and .External](#Interface-functions-_002eCall-and-_002eExternal)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.10.2 Calling `.External` 
+#### 5.10.2 Calling `.External`
 
 We can use the same example to illustrate `.External`. The R code
 changes only by replacing `.Call` by `.External`
 
- 
-``` 
+```r
 conv <- function(a, b) .External("convolveE", a, b)
 ```
 
@@ -12513,8 +11042,7 @@ but the main change is how the arguments are passed to the C code, this
 time as a single SEXP. The only change to the C code is how we handle
 the arguments.
 
- 
-``` 
+```r
 #include <R.h>
 #include <Rinternals.h>
 
@@ -12533,8 +11061,7 @@ SEXP convolveE(SEXP args)
 Once again we do not need to protect the arguments, as in the R side of
 the interface they are objects that are already in use. The macros
 
- 
-``` 
+```r
   first = CADR(args);
   second = CADDR(args);
   third = CADDDR(args);
@@ -12542,11 +11069,10 @@ the interface they are objects that are already in use. The macros
 ```
 
 provide convenient ways to access the first four arguments. More
-generally we can use the   `CDR` and `CAR`
+generally we can use the `CDR` and `CAR`
 macros as in
 
- 
-``` 
+```r
   args = CDR(args); a = CAR(args);
   args = CDR(args); b = CAR(args);
 ```
@@ -12562,8 +11088,7 @@ can by using the `TAG` macro and using something like the following
 example, that prints the names and the first value of its arguments if
 they are vector types.
 
- 
-``` 
+```r
 SEXP showArgs(SEXP args)
 {
     args = CDR(args); /* skip ‘name’ */
@@ -12577,21 +11102,21 @@ SEXP showArgs(SEXP args)
         }
 ```
 
-``` 
+```r
         switch(TYPEOF(el)) {
         case REALSXP:
             Rprintf("[%d] ‘%s’ %f\n", i+1, name, REAL(el)[0]);
             break;
 ```
 
-``` 
+```r
         case LGLSXP:
         case INTSXP:
             Rprintf("[%d] ‘%s’ %d\n", i+1, name, INTEGER(el)[0]);
             break;
 ```
 
-``` 
+```r
         case CPLXSXP:
         {
             Rcomplex cpl = COMPLEX(el)[0];
@@ -12600,14 +11125,14 @@ SEXP showArgs(SEXP args)
             break;
 ```
 
-``` 
+```r
         case STRSXP:
             Rprintf("[%d] ‘%s’ %s\n", i+1, name,
                    CHAR(STRING_ELT(el, 0)));
            break;
 ```
 
-``` 
+```r
         default:
             Rprintf("[%d] ‘%s’ R type\n", i+1, name);
        }
@@ -12618,32 +11143,22 @@ SEXP showArgs(SEXP args)
 
 This can be called by the wrapper function
 
- 
-``` 
+```r
 showArgs <- function(...) invisible(.External("showArgs", ...))
 ```
 
 Note that this style of programming is convenient but not necessary, as
 an alternative style is
 
- 
-``` 
+```r
 showArgs1 <- function(...) invisible(.Call("showArgs1", list(...)))
 ```
 
 The (very similar) C code is in the scripts.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Calling .External](#Calling-_002eExternal), Up: [Interface
-functions .Call and
-.External](#Interface-functions-_002eCall-and-_002eExternal)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.10.3 Missing and special values 
-
- 
+#### 5.10.3 Missing and special values
 
 One piece of error-checking the `.C` call does (unless `NAOK` is true)
 is to check for missing (`NA`) and IEEE special values (`Inf`, `-Inf`
@@ -12658,8 +11173,7 @@ will re-write the code to handle `NA`s using macros defined in
 The code changes are the same in any of the versions of `convolve2` or
 `convolveE`:
 
- 
-``` 
+```r
     ...
   for(int i = 0; i < na; i++)
     for(int j = 0; j < nb; j++)
@@ -12669,8 +11183,6 @@ The code changes are the same in any of the versions of `convolve2` or
             xab[i + j] += xa[i] * xb[j];
     ...
 ```
-
- 
 
 Note that the `ISNA` macro, and the similar macros `ISNAN` (which checks
 for `NaN` or `NA`) and `R_FINITE` (which is false for `NA` and all the
@@ -12682,22 +11194,13 @@ These and `NA_REAL` can be used to set elements of R vectors to `NA`.
 The constants `R_NaN`, `R_PosInf` and `R_NegInf` can be used to set
 `double`s to the special values.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Parsing R code from C](#Parsing-R-code-from-C), Previous:
-[Interface functions .Call and
-.External](#Interface-functions-_002eCall-and-_002eExternal), Up:
-[System and foreign language
-interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.11 Evaluating R expressions from C 
+### 5.11 Evaluating R expressions from C
 
 The main function we will use is
 
- 
-``` 
+```r
 SEXP eval(SEXP expr, SEXP rho);
 ```
 
@@ -12709,16 +11212,14 @@ functions).
 To see how this might be applied, here is a simplified internal version
 of `lapply` for expressions, used as
 
- 
-``` 
+```r
 a <- list(a = 1:5, b = rnorm(10), test = runif(100))
 .Call("lapply", a, quote(sum(x)), new.env())
 ```
 
 with C code
 
- 
-``` 
+```r
 SEXP lapply(SEXP list, SEXP expr, SEXP rho)
 {
     int n = length(list);
@@ -12738,13 +11239,12 @@ SEXP lapply(SEXP list, SEXP expr, SEXP rho)
 ```
 
 It would be closer to `lapply` if we could pass in a function rather
-than an expression. One way to do this is *via* interpreted R code as in
+than an expression. One way to do this is _via_ interpreted R code as in
 the next example, but it is possible (if somewhat obscure) to do this in
 C code. The following is based on the code in
 `src/main/optimize.c`.
 
- 
-``` 
+```r
 SEXP lapply2(SEXP list, SEXP fn, SEXP rho)
 {
     int n = length(list);
@@ -12767,8 +11267,7 @@ SEXP lapply2(SEXP list, SEXP fn, SEXP rho)
 
 used by
 
- 
-``` 
+```r
 .Call("lapply2", a, sum, new.env())
 ```
 
@@ -12780,8 +11279,7 @@ As a more comprehensive example of constructing an R call in C code and
 evaluating, consider the following fragment of `printAttributes` in
 `src/main/print.c`.
 
- 
-``` 
+```r
     /* Need to construct a call to
        print(CAR(a), digits=digits)
        based on the R_print structure, then eval(call, env).
@@ -12816,28 +11314,22 @@ code (see `rho` above). In special cases it is possible that the C code
 may need to obtain the current evaluation environment which can be done
 via `R_GetCurrentEnv()` function.
 
-  --------------------------------------------------------------------------- ---- --
-  • [Zero-finding](#Zero_002dfinding)                                              
-  • [Calculating numerical derivatives](#Calculating-numerical-derivatives)        
-  --------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Zero-finding](#Zero_002dfinding)     
+ • [Calculating numerical derivatives](#Calculating-numerical-derivatives)
 
- 
-Next: [Calculating numerical
-derivatives](#Calculating-numerical-derivatives), Previous: [Evaluating
-R expressions from C](#Evaluating-R-expressions-from-C), Up: [Evaluating
-R expressions from C](#Evaluating-R-expressions-from-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 5.11.1 Zero-finding 
+---
+
+#### 5.11.1 Zero-finding
 
 In this section we re-work the example of Becker, Chambers & Wilks
 (1988, pp.\~205--10) on finding a zero of a univariate function. The R
 code and an example are
 
- 
-``` 
+```r
 zero <- function(f, guesses, tol = 1e-7) {
     f.check <- function(x) {
         x <- f(x)
@@ -12855,8 +11347,7 @@ zero(cube1, c(0, 5))
 where this time we do the coercion and error-checking in the R code. The
 C code is
 
- 
-``` 
+```r
 SEXP mkans(double x)
 {
     // no need for PROTECT() here, as REAL(.) does not allocate:
@@ -12866,10 +11357,11 @@ SEXP mkans(double x)
 }
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
 double feval(double x, SEXP f, SEXP rho)
 {
     // a version with (too) much PROTECT()ion .. "better safe than sorry"
@@ -12882,10 +11374,11 @@ double feval(double x, SEXP f, SEXP rho)
 }
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
 SEXP zero(SEXP f, SEXP guesses, SEXP stol, SEXP rho)
 {
     double x0 = REAL(guesses)[0], x1 = REAL(guesses)[1],
@@ -12893,10 +11386,11 @@ SEXP zero(SEXP f, SEXP guesses, SEXP stol, SEXP rho)
     double f0, f1, fc, xc;
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
     if(tol <= 0.0) error("non-positive tol value");
     f0 = feval(x0, f, rho); f1 = feval(x1, f, rho);
     if(f0 == 0.0) return mkans(x0);
@@ -12904,10 +11398,11 @@ SEXP zero(SEXP f, SEXP guesses, SEXP stol, SEXP rho)
     if(f0*f1 > 0.0) error("x[0] and x[1] have the same sign");
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
     for(;;) {
         xc = 0.5*(x0+x1);
         if(fabs(x0-x1) < tol) return  mkans(xc);
@@ -12922,14 +11417,9 @@ SEXP zero(SEXP f, SEXP guesses, SEXP stol, SEXP rho)
 }
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Zero-finding](#Zero_002dfinding), Up: [Evaluating R
-expressions from C](#Evaluating-R-expressions-from-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 5.11.2 Calculating numerical derivatives 
+#### 5.11.2 Calculating numerical derivatives
 
 We will use a longer example (by Saikat DebRoy) to illustrate the use of
 evaluation and `.External`. This calculates numerical derivatives,
@@ -12938,8 +11428,7 @@ may be needed as part of a larger C calculation.
 
 An interpreted R version and an example are
 
- 
-``` 
+```r
 numeric.deriv <- function(expr, theta, rho=sys.frame(sys.parent()))
 {
     eps <- sqrt(.Machine$double.eps)
@@ -12966,15 +11455,13 @@ names and `rho` the environment to be used.
 
 For the compiled version the call from R will be
 
- 
-``` 
+```r
 .External("numeric_deriv", expr, theta, rho)
 ```
 
 with example usage
 
- 
-``` 
+```r
 .External("numeric_deriv", quote(sin(omega*x*y)),
           c("x", "y"), .GlobalEnv)
 ```
@@ -12984,8 +11471,7 @@ caller.
 
 Here is the complete C code which we will explain section by section.
 
- 
-``` 
+```r
 #include <R.h> /* for DOUBLE_EPS */
 #include <Rinternals.h>
 
@@ -12996,10 +11482,11 @@ SEXP numeric_deriv(SEXP args)
     int i, start;
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
     expr = CADR(args);
     if(!isString(theta = CADDR(args)))
         error("theta should be of type character");
@@ -13007,19 +11494,21 @@ SEXP numeric_deriv(SEXP args)
         error("rho should be an environment");
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
     ans = PROTECT(coerceVector(eval(expr, rho), REALSXP));
     gradient = PROTECT(allocMatrix(REALSXP, LENGTH(ans), LENGTH(theta)));
     rgr = REAL(gradient); rans = REAL(ans);
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
     for(i = 0, start = 0; i < LENGTH(theta); i++, start += LENGTH(ans)) {
         par = PROTECT(findVar(installChar(STRING_ELT(theta, i)), rho));
         tt = REAL(par)[0];
@@ -13034,10 +11523,11 @@ SEXP numeric_deriv(SEXP args)
     }
 ```
 
-``` 
+```r
+
 ```
 
-``` 
+```r
     dimnames = PROTECT(allocVector(VECSXP, 2));
     SET_VECTOR_ELT(dimnames, 1,  theta);
     dimnamesgets(gradient, dimnames);
@@ -13049,8 +11539,7 @@ SEXP numeric_deriv(SEXP args)
 
 The code to handle the arguments is
 
- 
-``` 
+```r
     expr = CADR(args);
     if(!isString(theta = CADDR(args)))
         error("theta should be of type character");
@@ -13067,15 +11556,13 @@ correct mode.
 The first step in the code is to evaluate the expression in the
 environment `rho`, by
 
- 
-``` 
+```r
     ans = PROTECT(coerceVector(eval(expr, rho), REALSXP));
 ```
 
 We then allocate space for the calculated derivative by
 
- 
-``` 
+```r
     gradient = PROTECT(allocMatrix(REALSXP, LENGTH(ans), LENGTH(theta)));
 ```
 
@@ -13084,8 +11571,7 @@ here we want it to be `REALSXP`. The other two arguments are the numbers
 of rows and columns. (Note that `LENGTH` is intended to be used for
 vectors: `length` is more generally applicable.)
 
- 
-``` 
+```r
     for(i = 0, start = 0; i < LENGTH(theta); i++, start += LENGTH(ans)) {
         par = PROTECT(findVar(installChar(STRING_ELT(theta, i)), rho));
 ```
@@ -13098,8 +11584,7 @@ actual character representation[^144^](#FOOT144) of it: it
 returns a pointer. We then install the name and use `findVar` to find
 its value.
 
- 
-``` 
+```r
         tt = REAL(par)[0];
         xx = fabs(tt);
         delta = (xx < 1) ? eps : xx*eps;
@@ -13114,8 +11599,7 @@ derivative. Then we change the value stored in `par` (in environment
 Because we are directly dealing with original R memory locations here, R
 does the evaluation for the changed parameter value.
 
- 
-``` 
+```r
         for(int j = 0; j < LENGTH(ans); j++)
             rgr[j + start] = (REAL(ans1)[j] - rans[j])/delta;
         REAL(par)[0] = tt;
@@ -13126,8 +11610,7 @@ does the evaluation for the changed parameter value.
 Now, we compute the `i`'th column of the gradient matrix. Note how it is
 accessed: R stores matrices by column (like Fortran).
 
- 
-``` 
+```r
     dimnames = PROTECT(allocVector(VECSXP, 2));
     SET_VECTOR_ELT(dimnames, 1, theta);
     dimnamesgets(gradient, dimnames);
@@ -13145,17 +11628,9 @@ allocating a list (a `VECSXP`) whose first element, the row names, is
 attribute of `ans`, unprotect the remaining protected locations and
 return the answer `ans`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [External pointers and weak
-references](#External-pointers-and-weak-references), Previous:
-[Evaluating R expressions from C](#Evaluating-R-expressions-from-C), Up:
-[System and foreign language
-interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.12 Parsing R code from C 
+### 5.12 Parsing R code from C
 
 Suppose an R extension want to accept an R expression from the user and
 evaluate it. The previous section covered evaluation, but the expression
@@ -13166,8 +11641,7 @@ R's parse interface is declared in header file
 An example of the usage can be found in the (example) Windows package
 **windlgs** included in the R source tree. The essential part is
 
- 
-``` 
+```r
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Parse.h>
@@ -13213,26 +11687,21 @@ object (as in the example above). If a `srcfile` object was used, a
 `srcref` objects of the same length as the expression, to allow it to be
 echoed with its original formatting.
 
-  --------------------------------------------------------------- ---- --
-  • [Accessing source references](#Accessing-source-references)        
-  --------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Accessing source references](#Accessing-source-references)
 
- 
-Previous: [Parsing R code from C](#Parsing-R-code-from-C), Up: [Parsing
-R code from C](#Parsing-R-code-from-C)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 5.12.1 Accessing source references 
+---
+
+#### 5.12.1 Accessing source references
 
 The source references added by the parser are recorded by R's evaluator
 as it evaluates code. Two functions make these available to debuggers
-running C code: 
- 
+running C code:
 
- 
-``` 
+```r
 SEXP R_GetCurrentSrcref(int skip);
 ```
 
@@ -13243,8 +11712,7 @@ the `srcref` object, counting from the top of the stack. If `skip < 0`,
 `abs(skip)` locations are counted up from the bottom of the stack. If
 too few or no source references are found, `NULL` is returned.
 
- 
-``` 
+```r
 SEXP R_GetSrcFilename(SEXP srcref);
 ```
 
@@ -13252,15 +11720,9 @@ This function extracts the filename from the source reference for
 display, returning a length 1 character vector containing the filename.
 If no name is found, `""` is returned.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Vector accessor functions](#Vector-accessor-functions), Previous:
-[Parsing R code from C](#Parsing-R-code-from-C), Up: [System and foreign
-language interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.13 External pointers and weak references 
+### 5.13 External pointers and weak references
 
 The `SEXPTYPE`s `EXTPTRSXP` and `WEAKREFSXP` can be encountered at R
 level, but are created in C code.
@@ -13275,8 +11737,7 @@ semantics, for example an attribute or an element of a list.)
 
 An external pointer is created by
 
- 
-``` 
+```r
 SEXP R_MakeExternalPtr(void *p, SEXP tag, SEXP prot);
 ```
 
@@ -13292,16 +11753,14 @@ represents, if that memory is allocated from the R heap. Both `tag` and
 An alternative way as from R 3.4.0 to create an external pointer from a
 function pointer is
 
- 
-``` 
+```r
 typedef void * (*R_DL_FUNC)();
 SEXP R_MakeExternalPtrFn(R_DL_FUNC p, SEXP tag, SEXP prot);
 ```
 
-The elements of an external pointer can be accessed and set *via*
+The elements of an external pointer can be accessed and set _via_
 
- 
-``` 
+```r
 void *R_ExternalPtrAddr(SEXP s);
 DL_FUNC R_ExternalPtrAddrFn(SEXP s);
 SEXP R_ExternalPtrTag(SEXP s);
@@ -13314,12 +11773,11 @@ void R_SetExternalPtrProtected(SEXP s, SEXP p);
 
 Clearing a pointer sets its value to the C `NULL` pointer.
 
-An external pointer object can have a *finalizer*, a piece of code to be
+An external pointer object can have a _finalizer_, a piece of code to be
 run when the object is garbage collected. This can be R code or C code,
 and the various interfaces are, respectively.
 
- 
-``` 
+```r
 void R_RegisterFinalizerEx(SEXP s, SEXP fun, Rboolean onexit);
 
 typedef void (*R_CFinalizer_t)(SEXP);
@@ -13351,15 +11809,14 @@ on entities without preventing the garbage collection of the entities
 once they become unreachable.
 
 A weak reference contains a key and a value. The value is reachable is
-if it either reachable directly or *via* weak references with reachable
+if it either reachable directly or _via_ weak references with reachable
 keys. Once a value is determined to be unreachable during garbage
 collection, the key and value are set to `R_NilValue` and the finalizer
 will be run later in the garbage collection.
 
 Weak reference objects are created by one of
 
- 
-``` 
+```r
 SEXP R_MakeWeakRef(SEXP key, SEXP val, SEXP fin, Rboolean onexit);
 SEXP R_MakeWeakRefC(SEXP key, SEXP val, R_CFinalizer_t fin,
                     Rboolean onexit);
@@ -13367,12 +11824,11 @@ SEXP R_MakeWeakRefC(SEXP key, SEXP val, R_CFinalizer_t fin,
 
 where the R or C finalizer are specified in exactly the same way as for
 an external pointer object (whose finalization interface is implemented
-*via* weak references).
+_via_ weak references).
 
-The parts can be accessed *via*
+The parts can be accessed _via_
 
- 
-``` 
+```r
 SEXP R_WeakRefKey(SEXP w);
 SEXP R_WeakRefValue(SEXP w);
 void R_RunWeakRefFinalizer(SEXP w);
@@ -13384,30 +11840,25 @@ that is used to add finalizers to external pointers which can now be
 done more directly. At the time of writing no CRAN or Bioconductor
 package uses weak references.
 
-  --------------------------------------------------------------- ---- --
-  • [An external pointer example](#An-external-pointer-example)        
-  --------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [An external pointer example](#An-external-pointer-example)
 
- 
-Previous: [External pointers and weak
-references](#External-pointers-and-weak-references), Up: [External
-pointers and weak references](#External-pointers-and-weak-references)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 5.13.1 An example 
+---
+
+#### 5.13.1 An example
 
 Package [**RODBC**](https://CRAN.R-project.org/package=RODBC) uses
-external pointers to maintain its *channels*, connections to databases.
+external pointers to maintain its _channels_, connections to databases.
 There can be several connections open at once, and the status
 information for each is stored in a C structure (pointed to by
-`thisHandle` in the code extract below) that is returned *via* an
+`thisHandle` in the code extract below) that is returned _via_ an
 external pointer as part of the RODBC 'channel' (as the `"handle_ptr"`
 attribute). The external pointer is created by
 
- 
-``` 
+```r
     SEXP ans, ptr;
     ans = PROTECT(allocVector(INTSXP, 1));
     ptr = R_MakeExternalPtr(thisHandle, install("RODBC_channel"), R_NilValue);
@@ -13429,8 +11880,7 @@ finalizer is `TRUE`, the finalizer will be run at the end of the R
 session (unless it crashes). This is used to close and clean up the
 connection to the database. The finalizer code is simply
 
- 
-``` 
+```r
 static void chanFinalizer(SEXP ptr)
 {
     if(!R_ExternalPtrAddr(ptr)) return;
@@ -13446,19 +11896,12 @@ R's connections provide another example of using external pointers, in
 that case purely to be able to use a finalizer to close and destroy the
 connection if it is no longer is use.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Character encoding issues](#Character-encoding-issues), Previous:
-[External pointers and weak
-references](#External-pointers-and-weak-references), Up: [System and
-foreign language interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.14 Vector accessor functions 
+### 5.14 Vector accessor functions
 
 The vector accessors like `REAL` and `INTEGER` and `VECTOR_ELT` are
-*functions* when used in R extensions. (For efficiency they may be
+_functions_ when used in R extensions. (For efficiency they may be
 macros or inline functions when used in the R source code, apart from
 `SET_STRING_ELT` and `SET_VECTOR_ELT` which are always functions.)
 
@@ -13483,17 +11926,9 @@ does not define '`USE_RINTERNALS`' should not be affected by
 these changes, but code that does define '`USE_RINTERNALS`' may
 need to be adjusted.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Vector accessor functions](#Vector-accessor-functions), Up:
-[System and foreign language
-interfaces](#System-and-foreign-language-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.15 Character encoding issues 
-
- 
+### 5.15 Character encoding issues
 
 `CHARSXP`s can be marked as coming from a known encoding (Latin-1 or
 UTF-8). This is mainly intended for human-readable output, and most
@@ -13515,13 +11950,10 @@ Both `translateChar` and `translateCharUTF8` will translate any input,
 using escapes such as '`<A9>`' and '`<U+0093>`' to
 represent untranslatable parts of the input.
 
- 
+There is a public interface to the encoding marked on `CHARXSXPs` _via_
 
-There is a public interface to the encoding marked on `CHARXSXPs` *via*
-
- 
-``` 
-typedef enum  cetype_t;
+```r
+typedef enum {CE_NATIVE, CE_UTF8, CE_LATIN1, CE_BYTES, CE_SYMBOL, CE_ANY} cetype_t;
 cetype_t getCharCE(SEXP);
 SEXP mkCharCE(const char *, cetype_t);
 ```
@@ -13539,8 +11971,7 @@ the comments under `mkChar` about the length of input allowed.)
 
 Function
 
- 
-``` 
+```r
 const char *reEnc(const char *x, cetype_t ce_in, cetype_t ce_out,
                   int subst);
 ```
@@ -13555,44 +11986,38 @@ no output.
 
 There is also
 
- 
-``` 
+```r
 SEXP mkCharLenCE(const char *, size_t, cetype_t);
 ```
 
 to create marked character strings of a given length.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Generic functions and methods](#Generic-functions-and-methods),
-Previous: [System and foreign language
-interfaces](#System-and-foreign-language-interfaces), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 6 The R API: entry points for C code
 
-6 The R API: entry points for C code 
-------------------------------------
+---
 
-  ----------------------------------------------------------------------------------- ---- --
-  • [Memory allocation](#Memory-allocation)                                                
-  • [Error signaling](#Error-signaling)                                                    
-  • [Random numbers](#Random-numbers)                                                      
-  • [Missing and IEEE values](#Missing-and-IEEE-values)                                    
-  • [Printing](#Printing)                                                                  
-  • [Calling C from Fortran and vice versa](#Calling-C-from-Fortran-and-vice-versa)        
-  • [Numerical analysis subroutines](#Numerical-analysis-subroutines)                      
-  • [Optimization](#Optimization)                                                          
-  • [Integration](#Integration)                                                            
-  • [Utility functions](#Utility-functions)                                                
-  • [Re-encoding](#Re_002dencoding)                                                        
-  • [Condition handling and cleanup code](#Condition-handling-and-cleanup-code)            
-  • [Allowing interrupts](#Allowing-interrupts)                                            
-  • [Platform and version information](#Platform-and-version-information)                  
-  • [Inlining C functions](#Inlining-C-functions)                                          
-  • [Controlling visibility](#Controlling-visibility)                                      
-  • [Standalone Mathlib](#Standalone-Mathlib)                                              
-  • [Organization of header files](#Organization-of-header-files)                          
-  ----------------------------------------------------------------------------------- ---- --
+• [Memory allocation](#Memory-allocation)     
+ • [Error signaling](#Error-signaling)     
+ • [Random numbers](#Random-numbers)     
+ • [Missing and IEEE values](#Missing-and-IEEE-values)     
+ • [Printing](#Printing)     
+ • [Calling C from Fortran and vice versa](#Calling-C-from-Fortran-and-vice-versa)     
+ • [Numerical analysis subroutines](#Numerical-analysis-subroutines)     
+ • [Optimization](#Optimization)     
+ • [Integration](#Integration)     
+ • [Utility functions](#Utility-functions)     
+ • [Re-encoding](#Re_002dencoding)     
+ • [Condition handling and cleanup code](#Condition-handling-and-cleanup-code)     
+ • [Allowing interrupts](#Allowing-interrupts)     
+ • [Platform and version information](#Platform-and-version-information)     
+ • [Inlining C functions](#Inlining-C-functions)     
+ • [Controlling visibility](#Controlling-visibility)     
+ • [Standalone Mathlib](#Standalone-Mathlib)     
+ • [Organization of header files](#Organization-of-header-files)
+
+---
 
 There are a large number of entry points in the R executable/DLL that
 can be called from C code (and some that can be called from Fortran
@@ -13602,8 +12027,7 @@ be changed with considerable notice.
 The recommended procedure to use these is to include the header file
 `R.h` in your C code by
 
- 
-``` 
+```r
 #include <R.h>
 ```
 
@@ -13616,86 +12040,72 @@ Most of these header files, including all those included by
 `R.h`, can be used from C++ code.
 
 > **Note:** Because R re-maps many of its external names to avoid
-> clashes with user code, it is *essential* to include the appropriate
+> clashes with user code, it is _essential_ to include the appropriate
 > header files when using these entry points.
 
 This remapping can cause problems[^146^](#FOOT146), and can be
 eliminated by defining `R_NO_REMAP` and prepending '`Rf_`' to
-*all* the function names used from `Rinternals.h` and
+_all_ the function names used from `Rinternals.h` and
 `R_ext/Error.h`. These problems can usually be avoided by
 including other headers (such as system headers and those for external
 software used by the package) before `R.h`.
 
 We can classify the entry points as
 
-*API*
+_API_
 
-:   Entry points which are documented in this manual and declared in an
-    installed header file. These can be used in distributed packages and
-    will only be changed after deprecation.
+: Entry points which are documented in this manual and declared in an
+installed header file. These can be used in distributed packages and
+will only be changed after deprecation.
 
-*public*
+_public_
 
-:   Entry points declared in an installed header file that are exported
-    on all R platforms but are not documented and subject to change
-    without notice.
+: Entry points declared in an installed header file that are exported
+on all R platforms but are not documented and subject to change
+without notice.
 
-*private*
+_private_
 
-:   Entry points that are used when building R and exported on all R
-    platforms but are not declared in the installed header files. Do not
-    use these in distributed code.
+: Entry points that are used when building R and exported on all R
+platforms but are not declared in the installed header files. Do not
+use these in distributed code.
 
-*hidden*
+_hidden_
 
-:   Entry points that are where possible (Windows and some modern
-    Unix-alike compilers/loaders when using R as a shared library) not
-    exported.
+: Entry points that are where possible (Windows and some modern
+Unix-alike compilers/loaders when using R as a shared library) not
+exported.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Error signaling](#Error-signaling), Previous: [The R
-API](#The-R-API), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 6.1 Memory allocation
 
-### 6.1 Memory allocation 
+---
 
-  ----------------------------------------------------------------- ---- --
-  • [Transient storage allocation](#Transient-storage-allocation)        
-  • [User-controlled memory](#User_002dcontrolled-memory)                
-  ----------------------------------------------------------------- ---- --
+• [Transient storage allocation](#Transient-storage-allocation)     
+ • [User-controlled memory](#User_002dcontrolled-memory)
+
+---
 
 There are two types of memory allocation available to the C programmer,
 one in which R manages the clean-up and the other in which user has full
 control (and responsibility).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [User-controlled memory](#User_002dcontrolled-memory), Previous:
-[Memory allocation](#Memory-allocation), Up: [Memory
-allocation](#Memory-allocation)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.1.1 Transient storage allocation 
-
-  
-  
+#### 6.1.1 Transient storage allocation
 
 Here R will reclaim the memory at the end of the call to `.C`, `.Call`
 or `.External`. Use
 
- 
-``` 
+```r
 char *R_alloc(size_t n, int size)
 ```
 
-which allocates `n` units of `size` bytes each. A
+which allocates `n`{.variable} units of `size`{.variable} bytes each. A
 typical usage (from package **stats**) is
 
- 
-``` 
+```r
 x = (int *) R_alloc(nrows(merge)+2, sizeof(int));
 ```
 
@@ -13705,26 +12115,23 @@ x = (int *) R_alloc(nrows(merge)+2, sizeof(int));
 There is a similar call, `S_alloc` (for compatibility with older
 versions of S) which zeroes the memory allocated,
 
- 
-``` 
+```r
 char *S_alloc(long n, int size)
 ```
 
 and
 
- 
-``` 
+```r
 char *S_realloc(char *p, long new, long old, int size)
 ```
 
-which changes the allocation size from `old` to
-`new` units, and zeroes the additional units.
+which changes the allocation size from `old`{.variable} to
+`new`{.variable} units, and zeroes the additional units.
 
 For compatibility with current versions of S, header `S.h`
 (only) defines wrapper macros equivalent to
 
- 
-``` 
+```r
 type* Salloc(long n, int type)
 type* Srealloc(char *p, long new, long old, int type)
 ```
@@ -13734,8 +12141,7 @@ This memory is taken from the heap, and released at the end of the `.C`,
 current position with a call to `vmaxget` and subsequently clearing
 memory allocated by a call to `vmaxset`. An example might be
 
- 
-``` 
+```r
 void *vmax = vmaxget()
 // a loop involving the use of R_alloc at each iteration
 vmaxset(vmax)
@@ -13750,8 +12156,7 @@ The memory returned is only guaranteed to be aligned as required for
 `double` pointers: take precautions if casting to a pointer which needs
 more. There is also
 
- 
-``` 
+```r
 long double *R_allocLD(size_t n)
 ```
 
@@ -13761,16 +12166,9 @@ which is guaranteed to have the 16-byte alignment needed for
 These functions should only be used in code called by `.C` etc, never
 from front-ends. They are not thread-safe.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Transient storage allocation](#Transient-storage-allocation),
-Up: [Memory allocation](#Memory-allocation)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.1.2 User-controlled memory 
-
-  
+#### 6.1.2 User-controlled memory
 
 The other form of memory allocation is an interface to `malloc`, the
 interface providing R error signaling. This memory lasts until freed by
@@ -13778,8 +12176,7 @@ the user and is additional to the memory allocated for the R workspace.
 
 The interface functions are
 
- 
-``` 
+```r
 type* Calloc(size_t n, type)
 type* Realloc(any *p, size_t n, type)
 void Free(any *p)
@@ -13788,7 +12185,7 @@ void Free(any *p)
 providing analogues of `calloc`, `realloc` and `free`. If there is an
 error during allocation it is handled by R, so if these routines return
 the memory has been successfully allocated or freed. `Free` will set the
-pointer `p` to `NULL`. (Some but not all versions of S do
+pointer `p`{.variable} to `NULL`. (Some but not all versions of S do
 so.)
 
 Users should arrange to `Free` this memory when no longer needed,
@@ -13806,20 +12203,14 @@ Memory obtained by these functions should be aligned in the same way as
 These entry points need to be prefixed by `R_` if `STRICT_R_HEADERS` has
 been defined.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Random numbers](#Random-numbers), Previous: [Memory
-allocation](#Memory-allocation), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.2 Error signaling 
+### 6.2 Error signaling
 
 The basic error signaling routines are the equivalents of `stop` and
 `warning` in R code, and use the same interface.
 
- 
-``` 
+```r
 void error(const char * format, ...);
 void warning(const char * format, ...);
 ```
@@ -13832,8 +12223,7 @@ giving the error message. (Don't do this if the string contains
 If `STRICT_R_HEADERS` is not defined there is also an S-compatibility
 interface which uses calls of the form
 
- 
-``` 
+```r
 PROBLEM ...... ERROR
 MESSAGE ...... WARN
 PROBLEM ...... RECOVER(NULL_ENTRY)
@@ -13844,50 +12234,34 @@ the last two being the forms available in all S versions. Here
 '`......`' is a set of arguments to `printf`, so can be a
 string or a format string followed by arguments separated by commas.
 
-  ----------------------------------------------------------------- ---- --
-  • [Error signaling from Fortran](#Error-signaling-from-Fortran)        
-  ----------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Error signaling from Fortran](#Error-signaling-from-Fortran)
 
- 
-Previous: [Error signaling](#Error-signaling), Up: [Error
-signaling](#Error-signaling)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 6.2.1 Error signaling from Fortran 
+---
+
+#### 6.2.1 Error signaling from Fortran
 
 There are two interface function provided to call `error` and `warning`
 from Fortran code, in each case with a simple character string argument.
 They are defined as
 
- 
-``` 
+```r
 subroutine rexit(message)
 subroutine rwarn(message)
 ```
 
 Messages of more than 255 characters are truncated, with a warning.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Missing and IEEE values](#Missing-and-IEEE-values), Previous:
-[Error signaling](#Error-signaling), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.3 Random number generation 
-
- 
- 
- 
- 
- 
+### 6.3 Random number generation
 
 The interface to R's internal random number generation routines is
 
- 
-``` 
+```r
 double unif_rand();
 double norm_rand();
 double exp_rand();
@@ -13897,15 +12271,13 @@ double R_unif_index(double);
 giving one uniform, normal or exponential pseudo-random variate.
 However, before these are used, the user must call
 
- 
-``` 
+```r
 GetRNGstate();
 ```
 
 and after all the required variates have been generated, call
 
- 
-``` 
+```r
 PutRNGstate();
 ```
 
@@ -13921,35 +12293,24 @@ the kind of RNG or set the seed except by evaluating calls to the R
 functions.
 
 The C code behind R's `rxxx` functions can be accessed by including the
-header file `Rmath.h`; See [Distribution
-functions](#Distribution-functions). Those calls generate a single
+header file `Rmath.h`; See [Distribution functions](#Distribution-functions). Those calls generate a single
 variate and should also be enclosed in calls to `GetRNGstate` and
 `PutRNGstate`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Printing](#Printing), Previous: [Random
-numbers](#Random-numbers), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.4 Missing and IEEE special values 
-
- 
-  
-  
+### 6.4 Missing and IEEE special values
 
 A set of functions is provided to test for `NA`, `Inf`, `-Inf` and
-`NaN`. These functions are accessed *via* macros:
+`NaN`. These functions are accessed _via_ macros:
 
- 
-``` 
+```r
 ISNA(x)        True for R’s NA only
 ISNAN(x)       True for R’s NA and IEEE NaN
 R_FINITE(x)    False for Inf, -Inf, NA, NaN
 ```
 
-and *via* function `R_IsNaN` which is true for `NaN` but not `NA`.
+and _via_ function `R_IsNaN` which is true for `NaN` but not `NA`.
 
 Do use `R_FINITE` rather than `isfinite` or `finite`; the latter is
 often mendacious and `isfinite` is only available on a some platforms,
@@ -13962,22 +12323,13 @@ code a function call is used.)
 You can check for `Inf` or `-Inf` by testing equality to `R_PosInf` or
 `R_NegInf`, and set (but not test) an `NA` as `NA_REAL`.
 
-All of the above apply to *double* variables only. For integer variables
+All of the above apply to _double_ variables only. For integer variables
 there is a variable accessed by the macro `NA_INTEGER` which can used to
 set or test for missingness.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Calling C from Fortran and vice
-versa](#Calling-C-from-Fortran-and-vice-versa), Previous: [Missing and
-IEEE values](#Missing-and-IEEE-values), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.5 Printing 
-
-  
- 
+### 6.5 Printing
 
 The most useful function for printing from a C routine compiled into R
 is `Rprintf`. This is used in exactly the same way as `printf`, but is
@@ -13999,17 +12351,15 @@ Another circumstance when it may be important to use these functions is
 when using parallel computation on a cluster of computational nodes, as
 their output will be re-directed/logged appropriately.
 
-  --------------------------------------------------- ---- --
-  • [Printing from Fortran](#Printing-from-Fortran)        
-  --------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Printing from Fortran](#Printing-from-Fortran)
 
- 
-Previous: [Printing](#Printing), Up: [Printing](#Printing)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 6.5.1 Printing from Fortran 
+---
+
+#### 6.5.1 Printing from Fortran
 
 On many systems Fortran `write` and `print` statements can be used, but
 the output may not interleave well with that of C, and will be invisible
@@ -14018,32 +12368,26 @@ on GUI interfaces. They are not portable and best avoided.
 Three subroutines are provided to ease the output of information from
 Fortran code.
 
- 
-``` 
+```r
 subroutine dblepr(label, nchar, data, ndata)
 subroutine realpr(label, nchar, data, ndata)
 subroutine intpr (label, nchar, data, ndata)
 ```
 
-Here `label` is a character label of up to 255 characters,
-`nchar` is its length (which can be `-1` if the whole label
-is to be used), and `data` is an array of length at least
-`ndata` of the appropriate type (`double precision`, `real`
+Here `label`{.variable} is a character label of up to 255 characters,
+`nchar`{.variable} is its length (which can be `-1` if the whole label
+is to be used), and `data`{.variable} is an array of length at least
+`ndata`{.variable} of the appropriate type (`double precision`, `real`
 and `integer` respectively). These routines print the label on one line
-and then print `data` as if it were an R vector on subsequent
-line(s). They work with zero `ndata`, and so can be used to
+and then print `data`{.variable} as if it were an R vector on subsequent
+line(s). They work with zero `ndata`{.variable}, and so can be used to
 print a label alone. Note though that some compilers will give an error
-or warning unless `data` is an array: others will accept a
-scalar when `ndata` has value one or zero.
+or warning unless `data`{.variable} is an array: others will accept a
+scalar when `ndata`{.variable} has value one or zero.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Numerical analysis subroutines](#Numerical-analysis-subroutines),
-Previous: [Printing](#Printing), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.6 Calling C from Fortran and vice versa 
+### 6.6 Calling C from Fortran and vice versa
 
 Naming conventions for symbols generated by Fortran differ by platform:
 it is not safe to assume that Fortran names appear to C with a trailing
@@ -14052,23 +12396,23 @@ a set of macros[^148^](#FOOT148) that should be used.
 
 `F77_SUB(name)`
 
-:   to define a function in C to be called from Fortran
+: to define a function in C to be called from Fortran
 
 `F77_NAME(name)`
 
-:   to declare a Fortran routine in C before use
+: to declare a Fortran routine in C before use
 
 `F77_CALL(name)`
 
-:   to call a Fortran routine from C
+: to call a Fortran routine from C
 
 `F77_COMDECL(name)`
 
-:   to declare a Fortran common block in C
+: to declare a Fortran common block in C
 
 `F77_COM(name)`
 
-:   to access a Fortran common block from C
+: to access a Fortran common block from C
 
 On most current platforms these are all the same, but it is unwise to
 rely on this. Note that names containing underscores were not legal in
@@ -14079,19 +12423,17 @@ the macros.)
 For example, suppose we want to call R's normal random numbers from
 Fortran. We need a C wrapper along the lines of
 
- 
-``` 
+```r
 #include <R.h>
 
-void F77_SUB(rndstart)(void) 
-void F77_SUB(rndend)(void) 
-double F77_SUB(normrnd)(void) 
+void F77_SUB(rndstart)(void) { GetRNGstate(); }
+void F77_SUB(rndend)(void) { PutRNGstate(); }
+double F77_SUB(normrnd)(void) { return norm_rand(); }
 ```
 
 to be called from Fortran as in
 
- 
-``` 
+```r
       subroutine testit()
       double precision normrnd, x
       call rndstart()
@@ -14103,23 +12445,21 @@ to be called from Fortran as in
 
 Note that this is not guaranteed to be portable, for the return
 conventions might not be compatible between the C and Fortran compilers
-used. (Passing values *via* arguments is safer.)
+used. (Passing values _via_ arguments is safer.)
 
 The standard packages, for example **stats**, are a rich source of
 further examples.
 
-Where supported, *link time optimization* provides a reliable way to
-check the consistency of calls to C from Fortran or *vice versa*. See
+Where supported, _link time optimization_ provides a reliable way to
+check the consistency of calls to C from Fortran or _vice versa_. See
 [Link-Time Optimization](./R-admin.html#Link_002dTime-Optimization) in R
 Installation and Administration. One place where this occurs is the
-registration of `.Fortran` calls in C code (see [Registering native
-routines](#Registering-native-routines)). For example
+registration of `.Fortran` calls in C code (see [Registering native routines](#Registering-native-routines)). For example
 
- 
-``` 
+```r
 init.c:10:13: warning: type of ‘vsom_’ does not match original
  declaration [-Wlto-type-mismatch]
-  extern void F77_NAME(vsom)(void *, void *, void *, void *, 
+  extern void F77_NAME(vsom)(void *, void *, void *, void *,
     void *, void *, void *, void *, void *);
 vsom.f90:20:33: note: type mismatch in parameter 9
    subroutine vsom(neurons,dt,dtrows,dtcols,xdim,ydim,alpha,train)
@@ -14129,35 +12469,29 @@ vsom.f90:20:33: note: ‘vsom’ was previously declared here
 shows that a subroutine has been registered with 9 arguments (as that is
 what the `.Fortran` call used) but only has 8.
 
-  ----------------------------------------------------------- ---- --
-  • [Fortran character strings](#Fortran-character-strings)        
-  • [Fortran LOGICAL](#Fortran-LOGICAL)                            
-  ----------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Fortran character strings](#Fortran-character-strings)     
+ • [Fortran LOGICAL](#Fortran-LOGICAL)
 
- 
-Next: [Fortran LOGICAL](#Fortran-LOGICAL), Previous: [Calling C from
-Fortran and vice versa](#Calling-C-from-Fortran-and-vice-versa), Up:
-[Calling C from Fortran and vice
-versa](#Calling-C-from-Fortran-and-vice-versa)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 6.6.1 Fortran character strings 
+---
 
-Passing character strings from C to Fortran or *vice versa* is not
+#### 6.6.1 Fortran character strings
+
+Passing character strings from C to Fortran or _vice versa_ is not
 portable, but can be done with care. The internal representations are
 different: a character array in C (or C++) is nul-terminated so its
 length can be computed by `strlen`. Fortran character arrays are
 typically stored as an array of bytes and a length. This matters when
-passing strings from C to Fortran or *vice versa*: in many cases one has
+passing strings from C to Fortran or _vice versa_: in many cases one has
 been able to get away with passing the string but not the length.
 However, in 2019 this changed for `gfortran`, starting with version 9
 but backported to versions 7 and 8. Several months later, `gfortran` 9.2
 introduced an option
 
- 
-``` 
+```r
 -ftail-call-workaround
 ```
 
@@ -14169,8 +12503,7 @@ console (one could use `intpr` with dummy data, but it might be the
 basis of a custom reporting function). Suppose the equivalent in Fortran
 would be
 
- 
-``` 
+```r
       subroutine rmsg(msg)
       character*(*) msg
       print *.msg
@@ -14180,23 +12513,20 @@ would be
 in file `rmsg.f`. Using `gfortran` 9.2 and later we can extract
 the C view by
 
- 
-``` 
+```r
 gfortran -c -fc-prototypes-external rmsg.f
 ```
 
 which gives
 
- 
-``` 
+```r
 void rmsg_ (char *msg, size_t msg_len);
 ```
 
 (where `size_t` applies to version 8 and later). We could re-write that
 portably in C as
 
- 
-``` 
+```r
 #define USE_FC_LEN_T
 #include <Rconfig.h> // included by R.h, so define USE_FC_LEN_T early
 
@@ -14205,7 +12535,7 @@ void F77_NAME(rmsg)(char *msg, FC_LEN_T msg_len)
     char cmsg[msg_len+1];
     strncpy(cmsg, msg, msg_len);
     cmsg[msg_len] = ‘\0’; // nul-terminate the string, to be sure
-    // do something with ‘cmsg’ 
+    // do something with ‘cmsg’
 }
 ```
 
@@ -14214,8 +12544,7 @@ just assume that `msg` is nul-terminated (not guaranteed, but people
 have been getting away with it for many years), so the complete C side
 might be
 
- 
-``` 
+```r
 #define USE_FC_LEN_T
 #include <Rconfig.h>
 
@@ -14225,12 +12554,12 @@ void F77_NAME(rmsg)(char *msg, FC_LEN_T msg_len)
     char cmsg[msg_len+1];
     strncpy(cmsg, msg, msg_len);
     cmsg[msg_len] = ‘\0’;
-    // do something with ‘cmsg’ 
+    // do something with ‘cmsg’
 }
 #else
 void F77_NAME(rmsg)(char *msg)
 {
-    // do something with ‘msg’ 
+    // do something with ‘msg’
 }
 #endif
 ```
@@ -14239,8 +12568,7 @@ An alternative is to use Fortran 2003
 features[^149^](#FOOT149) to set up the Fortran routine to
 pass a C-compatible character string. We could use something like
 
- 
-``` 
+```r
       module cfuncs
         use iso_c_binding, only: c_char, c_null_char
         interface
@@ -14260,8 +12588,7 @@ pass a C-compatible character string. We could use something like
 
 where the C side is simply
 
- 
-``` 
+```r
 void cmsg(const char *msg)
 {
     // do something with nul-terminated string ‘msg’
@@ -14272,8 +12599,7 @@ Passing a variable-length string from C to Fortran is trickier, but all
 the uses in BLAS and LAPACK are of a single character, and for these we
 can write a wrapper in Fortran along the lines of
 
- 
-``` 
+```r
       subroutine c_dgemm(transa, transb, m, n, k, alpha,
      +     a, lda, b, ldb, beta, c, ldc)
      +     bind(C, name = ‘Cdgemm’)
@@ -14288,8 +12614,7 @@ can write a wrapper in Fortran along the lines of
 
 which is then called from C with declaration
 
- 
-``` 
+```r
 void
 Cdgemm(const char *transa, const char *transb, const int *m,
        const int *n, const int *k, const double *alpha,
@@ -14300,8 +12625,7 @@ Cdgemm(const char *transa, const char *transb, const int *m,
 Alternatively, do as R does as from version 3.6.2 and pass the character
 length(s) from C to Fortran. A portable way to do this is
 
- 
-``` 
+```r
 // before any R headers, or define in PKG_CPPFLAGS
 #define USE_FC_LEN_T
 #include <Rconfig.h>
@@ -14310,7 +12634,7 @@ length(s) from C to Fortran. A portable way to do this is
 # define FCONE
 #endif
 ...
-        F77_CALL(dgemm)("N", "T", &nrx, &ncy, &ncx, &one, x, 
+        F77_CALL(dgemm)("N", "T", &nrx, &ncy, &ncx, &one, x,
                         &nrx, y, &nry, &zero, z, &nrx FCONE FCONE);
 ```
 
@@ -14318,33 +12642,21 @@ length(s) from C to Fortran. A portable way to do this is
 is strongly recommended that packages which call from C/C++ BLAS/LAPACK
 routines with character arguments adopt this approach.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Fortran character strings](#Fortran-character-strings), Up:
-[Calling C from Fortran and vice
-versa](#Calling-C-from-Fortran-and-vice-versa)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.6.2 Fortran LOGICAL 
+#### 6.6.2 Fortran LOGICAL
 
 Passing Fortran LOGICAL variables to/from C/C++ is potentially
 compiler-dependent. Fortran compilers have long used a 32-bit integer
 type so it is pretty portable to use `int *` on the C/C++ side. However,
-recent versions of `gfortran` *via* the option
+recent versions of `gfortran` _via_ the option
 `-fc-prototypes-external` say the C equivalent is
 `int_least32_t *`: 'Link-Time Optimization' will report `int *` as a
 mismatch.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Optimization](#Optimization), Previous: [Calling C from Fortran
-and vice versa](#Calling-C-from-Fortran-and-vice-versa), Up: [The R
-API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.7 Numerical analysis subroutines 
+### 6.7 Numerical analysis subroutines
 
 R contains a large number of mathematical functions for its own use, for
 example numerical linear algebra computations and special functions.
@@ -14361,22 +12673,18 @@ available and documented in the following subsections. Many of these are
 C interfaces to the code behind R functions, so the R function
 documentation may give further details.
 
-  ----------------------------------------------------- ---- --
-  • [Distribution functions](#Distribution-functions)        
-  • [Mathematical functions](#Mathematical-functions)        
-  • [Numerical Utilities](#Numerical-Utilities)              
-  • [Mathematical constants](#Mathematical-constants)        
-  ----------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Distribution functions](#Distribution-functions)     
+ • [Mathematical functions](#Mathematical-functions)     
+ • [Numerical Utilities](#Numerical-Utilities)     
+ • [Mathematical constants](#Mathematical-constants)
 
- 
-Next: [Mathematical functions](#Mathematical-functions), Previous:
-[Numerical analysis subroutines](#Numerical-analysis-subroutines), Up:
-[Numerical analysis subroutines](#Numerical-analysis-subroutines)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 6.7.1 Distribution functions 
+---
+
+#### 6.7.1 Distribution functions
 
 The routines used to calculate densities, cumulative distribution
 functions and quantile functions for the standard statistical
@@ -14385,8 +12693,7 @@ distributions are available as entry points.
 The arguments for the entry points follow the pattern of those for the
 normal distribution:
 
- 
-``` 
+```r
 double dnorm(double x, double mu, double sigma, int give_log);
 double pnorm(double x, double mu, double sigma, int lower_tail,
              int give_log);
@@ -14397,19 +12704,18 @@ double rnorm(double mu, double sigma);
 
 That is, the first argument gives the position for the density and CDF
 and probability for the quantile function, followed by the
-distribution's parameters. Argument `lower_tail` should be
+distribution's parameters. Argument `lower_tail`{.variable} should be
 `TRUE` (or `1`) for normal use, but can be `FALSE` (or `0`) if the
 probability of the upper tail is desired or specified.
 
-Finally, `give_log` should be non-zero if the result is
-required on log scale, and `log_p` should be non-zero if
-`p` has been specified on log scale.
+Finally, `give_log`{.variable} should be non-zero if the result is
+required on log scale, and `log_p`{.variable} should be non-zero if
+`p`{.variable} has been specified on log scale.
 
-Note that you directly get the cumulative (or "integrated") *hazard*
+Note that you directly get the cumulative (or "integrated") _hazard_
 function, H(t) = - log(1 - F(t)), by using
 
- 
-``` 
+```r
 - pdist(t, ..., /*lower_tail = */ FALSE, /* give_log = */ TRUE)
 ```
 
@@ -14417,10 +12723,10 @@ or shorter (and more cryptic) `- pdist(t, ..., 0, 1)`.
 
 The random-variate generation routine `rnorm` returns one normal
 variate. See [Random numbers](#Random-numbers), for the protocol in
-using the random-variate routines. 
+using the random-variate routines.
 
 Note that these argument sequences are (apart from the names and that
-`rnorm` has no `n`) mainly the same as the corresponding R
+`rnorm` has no `n`{.variable}) mainly the same as the corresponding R
 functions of the same name, so the documentation of the R functions can
 be used. Note that the exponential and gamma distributions are
 parametrized by `scale` rather than `rate`.
@@ -14430,32 +12736,34 @@ by '`d`', '`p`', '`q`' or '`r`'
 apart from the exceptions noted) and distribution-specific arguments for
 the complete set of distributions.
 
->   ------------------------- -------------- ------------------------------
->   beta                      `beta`         `a`, `b`
->   non-central beta          `nbeta`        `a`, `b`, `ncp`
->   binomial                  `binom`        `n`, `p`
->   Cauchy                    `cauchy`       `location`, `scale`
->   chi-squared               `chisq`        `df`
->   non-central chi-squared   `nchisq`       `df`, `ncp`
->   exponential               `exp`          `scale` (and **not** `rate`)
->   F                         `f`            `n1`, `n2`
->   non-central F             `nf`           `n1`, `n2`, `ncp`
->   gamma                     `gamma`        `shape`, `scale`
->   geometric                 `geom`         `p`
->   hypergeometric            `hyper`        `NR`, `NB`, `n`
->   logistic                  `logis`        `location`, `scale`
->   lognormal                 `lnorm`        `logmean`, `logsd`
->   negative binomial         `nbinom`       `size`, `prob`
->   normal                    `norm`         `mu`, `sigma`
->   Poisson                   `pois`         `lambda`
->   Student's t               `t`            `n`
->   non-central t             `nt`           `df`, `delta`
->   Studentized range         `tukey` (\*)   `rr`, `cc`, `df`
->   uniform                   `unif`         `a`, `b`
->   Weibull                   `weibull`      `shape`, `scale`
->   Wilcoxon rank sum         `wilcox`       `m`, `n`
->   Wilcoxon signed rank      `signrank`     `n`
->   ------------------------- -------------- ------------------------------
+> ---
+>
+> beta `beta` `a`, `b`
+> non-central beta `nbeta` `a`, `b`, `ncp`
+> binomial `binom` `n`, `p`
+> Cauchy `cauchy` `location`, `scale`
+> chi-squared `chisq` `df`
+> non-central chi-squared `nchisq` `df`, `ncp`
+> exponential `exp` `scale` (and **not** `rate`)
+> F `f` `n1`, `n2`
+> non-central F `nf` `n1`, `n2`, `ncp`
+> gamma `gamma` `shape`, `scale`
+> geometric `geom` `p`
+> hypergeometric `hyper` `NR`, `NB`, `n`
+> logistic `logis` `location`, `scale`
+> lognormal `lnorm` `logmean`, `logsd`
+> negative binomial `nbinom` `size`, `prob`
+> normal `norm` `mu`, `sigma`
+> Poisson `pois` `lambda`
+> Student's t `t` `n`
+> non-central t `nt` `df`, `delta`
+> Studentized range `tukey` (\*) `rr`, `cc`, `df`
+> uniform `unif` `a`, `b`
+> Weibull `weibull` `shape`, `scale`
+> Wilcoxon rank sum `wilcox` `m`, `n`
+> Wilcoxon signed rank `signrank` `n`
+>
+> ---
 
 Entries marked with an asterisk only have '`p`' and
 '`q`' functions available, and none of the non-central
@@ -14469,15 +12777,14 @@ and similarly for the signed rank functions.
 For the negative binomial distribution ('`nbinom`'), in
 addition to the `(size, prob)` parametrization, the alternative
 `(size, mu)` parametrization is provided as well by functions
-'`[dpqr]nbinom_mu()`', see [?NegBinomial] in R.
+'`[dpqr]nbinom_mu()`', see [?NegBinomial]{.kbd} in R.
 
 Functions `dpois_raw(x, *)` and `dbinom_raw(x, *)` are versions of the
 Poisson and binomial probability mass functions which work continuously
 in `x`, whereas `dbinom(x,*)` and `dpois(x,*)` only return non zero
 values for integer `x`.
 
- 
-``` 
+```r
 double dbinom_raw(double x, double n, double p, double q, int give_log)
 double dpois_raw (double x, double lambda, int give_log)
 ```
@@ -14485,149 +12792,102 @@ double dpois_raw (double x, double lambda, int give_log)
 Note that `dbinom_raw()` gets both p and q = 1-p which may be
 advantageous when one of them is close to 1.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Numerical Utilities](#Numerical-Utilities), Previous:
-[Distribution functions](#Distribution-functions), Up: [Numerical
-analysis subroutines](#Numerical-analysis-subroutines)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+#### 6.7.2 Mathematical functions
 
-#### 6.7.2 Mathematical functions 
+Function: _double_ **gammafn** _(double `x`{.variable})_\
+Function: _double_ **lgammafn** _(double `x`{.variable})_\
+Function: _double_ **digamma** _(double `x`{.variable})_\
+Function: _double_ **trigamma** _(double `x`{.variable})_\
+Function: _double_ **tetragamma** _(double `x`{.variable})_\
+Function: _double_ **pentagamma** _(double `x`{.variable})_\
+Function: _double_ **psigamma** _(double `x`{.variable}, double `deriv`{.variable})_
 
-  
-  
- 
+: The Gamma function, the natural logarithm of its absolute value and
+first four derivatives and the n-th derivative of Psi, the digamma
+function, which is the derivative of `lgammafn`. In other words,
+`digamma(x)` is the same as `psigamma(x,0)`,
+`trigamma(x) == psigamma(x,1)`, etc.
 
-Function: *double* **gammafn** *(double `x`)*\
-Function: *double* **lgammafn** *(double `x`)*\
-Function: *double* **digamma** *(double `x`)*\
-Function: *double* **trigamma** *(double `x`)*\
-Function: *double* **tetragamma** *(double `x`)*\
-Function: *double* **pentagamma** *(double `x`)*\
-Function: *double* **psigamma** *(double `x`, double `deriv`)*
+Function: _double_ **beta** _(double `a`{.variable}, double `b`{.variable})_\
+Function: _double_ **lbeta** _(double `a`{.variable}, double `b`{.variable})_
 
-:   The Gamma function, the natural logarithm of its absolute value and
-    first four derivatives and the n-th derivative of Psi, the digamma
-    function, which is the derivative of `lgammafn`. In other words,
-    `digamma(x)` is the same as `psigamma(x,0)`,
-    `trigamma(x) == psigamma(x,1)`, etc.
+: The (complete) Beta function and its natural logarithm.
 
-  
+Function: _double_ **choose** _(double `n`{.variable}, double `k`{.variable})_\
+Function: _double_ **lchoose** _(double `n`{.variable}, double `k`{.variable})_
 
-Function: *double* **beta** *(double `a`, double `b`)*\
-Function: *double* **lbeta** *(double `a`, double `b`)*
+: The number of combinations of `k`{.variable} items chosen from from
+`n`{.variable} and the natural logarithm of its absolute value,
+generalized to arbitrary real `n`{.variable}. `k`{.variable} is
+rounded to the nearest integer (with a warning if needed).
 
-:   The (complete) Beta function and its natural logarithm.
+Function: _double_ **bessel_i** _(double `x`{.variable}, double `nu`{.variable}, double `expo`{.variable})_\
+Function: _double_ **bessel_j** _(double `x`{.variable}, double `nu`{.variable})_\
+Function: _double_ **bessel_k** _(double `x`{.variable}, double `nu`{.variable}, double `expo`{.variable})_\
+Function: _double_ **bessel_y** _(double `x`{.variable}, double `nu`{.variable})_
 
- 
+: Bessel functions of types I, J, K and Y with index `nu`{.variable}.
+For `bessel_i` and `bessel_k` there is the option to return
+[exp(-]{.nolinebreak}`x`{.variable}) I(`x`{.variable}; `nu`{.variable})
+or exp(`x`{.variable}) K(`x`{.variable}; `nu`{.variable}) if
+`expo`{.variable} is 2. (Use `expo == 1` for unscaled values.)
 
-Function: *double* **choose** *(double `n`, double `k`)*\
-Function: *double* **lchoose** *(double `n`, double `k`)*
+---
 
-:   The number of combinations of `k` items chosen from from
-    `n` and the natural logarithm of its absolute value,
-    generalized to arbitrary real `n`. `k` is
-    rounded to the nearest integer (with a warning if needed).
-
-  
- 
-
-Function: *double* **bessel\_i** *(double `x`, double `nu`, double `expo`)*\
-Function: *double* **bessel\_j** *(double `x`, double `nu`)*\
-Function: *double* **bessel\_k** *(double `x`, double `nu`, double `expo`)*\
-Function: *double* **bessel\_y** *(double `x`, double `nu`)*
-
-:   Bessel functions of types I, J, K and Y with index `nu`.
-    For `bessel_i` and `bessel_k` there is the option to return
-    [exp(-]`x`) I(`x`; `nu`)
-    or exp(`x`) K(`x`; `nu`) if
-    `expo` is 2. (Use `expo == 1` for unscaled values.)
-
-------------------------------------------------------------------------
-
- 
-Next: [Mathematical constants](#Mathematical-constants), Previous:
-[Mathematical functions](#Mathematical-functions), Up: [Numerical
-analysis subroutines](#Numerical-analysis-subroutines)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.7.3 Numerical Utilities 
+#### 6.7.3 Numerical Utilities
 
 There are a few other numerical utility functions available as entry
 points.
 
-Function: *double* **R\_pow** *(double `x`, double `y`)*\
-Function: *double* **R\_pow\_di** *(double `x`, int `i`)*
+Function: _double_ **R_pow** _(double `x`{.variable}, double `y`{.variable})_\
+Function: _double_ **R_pow_di** _(double `x`{.variable}, int `i`{.variable})_
 
-:   `R_pow(x, y)` and `R_pow_di(x, i)` compute `x^y` and `x^i`,
-    respectively using `R_FINITE` checks and returning the proper result
-    (the same as R) for the cases where `x`, `y`
-    or `i` are 0 or missing or infinite or `NaN`.
+: `R_pow(x, y)` and `R_pow_di(x, i)` compute `x^y` and `x^i`,
+respectively using `R_FINITE` checks and returning the proper result
+(the same as R) for the cases where `x`{.variable}, `y`{.variable}
+or `i`{.variable} are 0 or missing or infinite or `NaN`.
 
-```
-<!-- -->
-```
+Function: _double_ **log1p** _(double `x`{.variable})_
 
-Function: *double* **log1p** *(double `x`)*
-
-:   Computes `log(1 + x)` (*log 1 **p**lus x*), accurately even for
-    small `x`, i.e., \|x\| \<\< 1.
+: Computes `log(1 + x)` (_log 1 **p**lus x_), accurately even for
+small `x`{.variable}, i.e., \|x\| \<\< 1.
 
     This should be provided by your platform, in which case it is not
     included in `Rmath.h`, but is (probably) in
     `math.h` which `Rmath.h` includes (except under
     C++, so it may not be declared for C++98).
 
-```
-<!-- -->
-```
+Function: _double_ **log1pmx** _(double `x`{.variable})_
 
-Function: *double* **log1pmx** *(double `x`)*
+: Computes `log(1 + x) - x` (\*log 1 **p**lus x **m**inus **x\***),
+accurately even for small `x`{.variable}, i.e., \|x\| \<\< 1.
 
-:   Computes `log(1 + x) - x` (*log 1 **p**lus x **m**inus **x***),
-    accurately even for small `x`, i.e., \|x\| \<\< 1.
+Function: _double_ **log1pexp** _(double `x`{.variable})_
 
-```
-<!-- -->
-```
+: Computes `log(1 + exp(x))` (\*log 1 **p**lus **exp\***), accurately,
+notably for large `x`{.variable}, e.g., x \> 720.
 
-Function: *double* **log1pexp** *(double `x`)*
+Function: _double_ **expm1** _(double `x`{.variable})_
 
-:   Computes `log(1 + exp(x))` (*log 1 **p**lus **exp***), accurately,
-    notably for large `x`, e.g., x \> 720.
-
-```
-<!-- -->
-```
-
-Function: *double* **expm1** *(double `x`)*
-
-:   Computes `exp(x) - 1` (*exp x **m**inus 1*), accurately even for
-    small `x`, i.e., \|x\| \<\< 1.
+: Computes `exp(x) - 1` (_exp x **m**inus 1_), accurately even for
+small `x`{.variable}, i.e., \|x\| \<\< 1.
 
     This should be provided by your platform, in which case it is not
     included in `Rmath.h`, but is (probably) in
     `math.h` which `Rmath.h` includes (except under
     C++, so it may not be declared for C++98).
 
-```
-<!-- -->
-```
+Function: _double_ **lgamma1p** _(double `x`{.variable})_
 
-Function: *double* **lgamma1p** *(double `x`)*
+: Computes `log(gamma(x + 1))` (_log(gamma(1 **p**lus x))_),
+accurately even for small `x`{.variable}, i.e., 0 \< x \< 0.5.
 
-:   Computes `log(gamma(x + 1))` (*log(gamma(1 **p**lus x))*),
-    accurately even for small `x`, i.e., 0 \< x \< 0.5.
+Function: _double_ **cospi** _(double `x`{.variable})_
 
-```
-<!-- -->
-```
-
-Function: *double* **cospi** *(double `x`)*
-
-:   Computes `cos(pi * x)` (where `pi` is 3.14159\...), accurately,
-    notably for half integer `x`.
+: Computes `cos(pi * x)` (where `pi` is 3.14159\...), accurately,
+notably for half integer `x`{.variable}.
 
     This might be provided by your platform[^150^](#FOOT150),
     in which case it is not included in `Rmath.h`, but is in
@@ -14635,128 +12895,83 @@ Function: *double* **cospi** *(double `x`)*
     neither `math.h` nor `cmath` is included before
     `Rmath.h` or define
 
-     
-    ``` 
+
+    ``` r
     #define __STDC_WANT_IEC_60559_FUNCS_EXT__ 1
     ```
-    
 
     before the first inclusion.)
 
-```
-<!-- -->
-```
+Function: _double_ **sinpi** _(double `x`{.variable})_
 
-Function: *double* **sinpi** *(double `x`)*
-
-:   Computes `sin(pi * x)` accurately, notably for (half) integer
-    `x`.
+: Computes `sin(pi * x)` accurately, notably for (half) integer
+`x`{.variable}.
 
     This might be provided by your platform, in which case it is not
     included in `Rmath.h`, but is in `math.h` which
     `Rmath.h` includes (but see the comments for `cospi`).
 
-```
-<!-- -->
-```
+Function: _double_ **tanpi** _(double `x`{.variable})_
 
-Function: *double* **tanpi** *(double `x`)*
-
-:   Computes `tan(pi * x)` accurately, notably for (half) integer
-    `x`.
+: Computes `tan(pi * x)` accurately, notably for (half) integer
+`x`{.variable}.
 
     This might be provided by your platform, in which case it is not
     included in `Rmath.h`, but is in `math.h` which
     `Rmath.h` includes (but see the comments for `cospi`).
 
-```
-<!-- -->
-```
+Function: _double_ **logspace_add** _(double `logx`{.variable}, double `logy`{.variable})_\
+Function: _double_ **logspace_sub** _(double `logx`{.variable}, double `logy`{.variable})_\
+Function: _double_ **logspace_sum** _(const double\* `logx`{.variable}, int `n`{.variable})_
 
-Function: *double* **logspace\_add** *(double `logx`, double `logy`)*\
-Function: *double* **logspace\_sub** *(double `logx`, double `logy`)*\
-Function: *double* **logspace\_sum** *(const double\* `logx`, int `n`)*
+: Compute the log of a sum or difference from logs of terms, i.e., "x + y" as `log (exp(logx) + exp(logy))` and "x - y" as
+`log (exp(logx) - exp(logy))`, and "sum_i x\[i\]" as
+`log (sum[i = 1:n exp(logx[i])] )` without causing unnecessary
+overflows or throwing away too much accuracy.
 
-:   Compute the log of a sum or difference from logs of terms, i.e., "x
-    + y" as `log (exp(logx) + exp(logy))` and "x - y" as
-    `log (exp(logx) - exp(logy))`, and "sum\_i x\[i\]" as
-    `log (sum[i = 1:n exp(logx[i])] )` without causing unnecessary
-    overflows or throwing away too much accuracy.
+Function: _int_ **imax2** _(int `x`{.variable}, int `y`{.variable})_\
+Function: _int_ **imin2** _(int `x`{.variable}, int `y`{.variable})_\
+Function: _double_ **fmax2** _(double `x`{.variable}, double `y`{.variable})_\
+Function: _double_ **fmin2** _(double `x`{.variable}, double `y`{.variable})_
 
-```
-<!-- -->
-```
+: Return the larger (`max`) or smaller (`min`) of two integer or
+double numbers, respectively. Note that `fmax2` and `fmin2` differ
+from C99/C++11's `fmax` and `fmin` when one of the arguments is a
+`NaN`: these versions return `NaN`.
 
-Function: *int* **imax2** *(int `x`, int `y`)*\
-Function: *int* **imin2** *(int `x`, int `y`)*\
-Function: *double* **fmax2** *(double `x`, double `y`)*\
-Function: *double* **fmin2** *(double `x`, double `y`)*
+Function: _double_ **sign** _(double `x`{.variable})_
 
-:   Return the larger (`max`) or smaller (`min`) of two integer or
-    double numbers, respectively. Note that `fmax2` and `fmin2` differ
-    from C99/C++11's `fmax` and `fmin` when one of the arguments is a
-    `NaN`: these versions return `NaN`.
+: Compute the _signum_ function, where sign(`x`{.variable}) is 1, 0,
+or _-1_, when `x`{.variable} is positive, 0, or negative,
+respectively, and `NaN` if `x` is a `NaN`.
 
-```
-<!-- -->
-```
+Function: _double_ **fsign** _(double `x`{.variable}, double `y`{.variable})_
 
-Function: *double* **sign** *(double `x`)*
+: Performs "transfer of sign" and is defined as \|x\| \* sign(y).
 
-:   Compute the *signum* function, where sign(`x`) is 1, 0,
-    or *-1*, when `x` is positive, 0, or negative,
-    respectively, and `NaN` if `x` is a `NaN`.
+Function: _double_ **fprec** _(double `x`{.variable}, double `digits`{.variable})_
 
-```
-<!-- -->
-```
-
-Function: *double* **fsign** *(double `x`, double `y`)*
-
-:   Performs "transfer of sign" and is defined as \|x\| \* sign(y).
-
-```
-<!-- -->
-```
-
-Function: *double* **fprec** *(double `x`, double `digits`)*
-
-:   Returns the value of `x` rounded to `digits`
-    decimal digits (after the decimal point).
+: Returns the value of `x`{.variable} rounded to `digits`{.variable}
+decimal digits (after the decimal point).
 
     This is the function used by R's `signif()`.
 
-```
-<!-- -->
-```
+Function: _double_ **fround** _(double `x`{.variable}, double `digits`{.variable})_
 
-Function: *double* **fround** *(double `x`, double `digits`)*
-
-:   Returns the value of `x` rounded to `digits`
-    *significant* decimal digits.
+: Returns the value of `x`{.variable} rounded to `digits`{.variable}
+_significant_ decimal digits.
 
     This is the function used by R's `round()`. (Note that C99/C++11
     provide a `round` function but C++98 need not.)
 
-```
-<!-- -->
-```
+Function: _double_ **ftrunc** _(double `x`{.variable})_
 
-Function: *double* **ftrunc** *(double `x`)*
+: Returns the value of `x`{.variable} truncated (to an integer value)
+towards zero.
 
-:   Returns the value of `x` truncated (to an integer value)
-    towards zero.
+---
 
-------------------------------------------------------------------------
-
- 
-Previous: [Numerical Utilities](#Numerical-Utilities), Up: [Numerical
-analysis subroutines](#Numerical-analysis-subroutines)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.7.4 Mathematical constants 
-
- 
+#### 6.7.4 Mathematical constants
 
 R has a set of commonly used mathematical constants encompassing
 constants defined by POSIX and usually[^151^](#FOOT151) found
@@ -14766,37 +12981,37 @@ These are defined to (at least) 30 digits accuracy in
 `Rmath.h`. The following definitions use `ln(x)` for the
 natural logarithm (`log(x)` in R).
 
->   Name               Definition (`ln = log`)   round(*value*, 7)
->   ------------------ ------------------------- -------------------
->   `M_E`              *e*                       2.7182818
->   `M_LOG2E`          log2(*e*)                 1.4426950
->   `M_LOG10E`         log10(*e*)                0.4342945
->   `M_LN2`            ln(2)                     0.6931472
->   `M_LN10`           ln(10)                    2.3025851
->   `M_PI`             pi                        3.1415927
->   `M_PI_2`           pi/2                      1.5707963
->   `M_PI_4`           pi/4                      0.7853982
->   `M_1_PI`           1/pi                      0.3183099
->   `M_2_PI`           2/pi                      0.6366198
->   `M_2_SQRTPI`       2/sqrt(pi)                1.1283792
->   `M_SQRT2`          sqrt(2)                   1.4142136
->   `M_SQRT1_2`        1/sqrt(2)                 0.7071068
->   `M_SQRT_3`         sqrt(3)                   1.7320508
->   `M_SQRT_32`        sqrt(32)                  5.6568542
->   `M_LOG10_2`        log10(2)                  0.3010300
->   `M_2PI`            2\*pi                     6.2831853
->   `M_SQRT_PI`        sqrt(pi)                  1.7724539
->   `M_1_SQRT_2PI`     1/sqrt(2\*pi)             0.3989423
->   `M_SQRT_2dPI`      sqrt(2/pi)                0.7978846
->   `M_LN_SQRT_PI`     ln(sqrt(pi))              0.5723649
->   `M_LN_SQRT_2PI`    ln(sqrt(2\*pi))           0.9189385
->   `M_LN_SQRT_PId2`   ln(sqrt(pi/2))            0.2257914
+> Name Definition (`ln = log`) round(_value_, 7)
+>
+> ---
+>
+> `M_E` _e_ 2.7182818
+> `M_LOG2E` log2(_e_) 1.4426950
+> `M_LOG10E` log10(_e_) 0.4342945
+> `M_LN2` ln(2) 0.6931472
+> `M_LN10` ln(10) 2.3025851
+> `M_PI` pi 3.1415927
+> `M_PI_2` pi/2 1.5707963
+> `M_PI_4` pi/4 0.7853982
+> `M_1_PI` 1/pi 0.3183099
+> `M_2_PI` 2/pi 0.6366198
+> `M_2_SQRTPI` 2/sqrt(pi) 1.1283792
+> `M_SQRT2` sqrt(2) 1.4142136
+> `M_SQRT1_2` 1/sqrt(2) 0.7071068
+> `M_SQRT_3` sqrt(3) 1.7320508
+> `M_SQRT_32` sqrt(32) 5.6568542
+> `M_LOG10_2` log10(2) 0.3010300
+> `M_2PI` 2\*pi 6.2831853
+> `M_SQRT_PI` sqrt(pi) 1.7724539
+> `M_1_SQRT_2PI` 1/sqrt(2\*pi) 0.3989423
+> `M_SQRT_2dPI` sqrt(2/pi) 0.7978846
+> `M_LN_SQRT_PI` ln(sqrt(pi)) 0.5723649
+> `M_LN_SQRT_2PI` ln(sqrt(2\*pi)) 0.9189385
+> `M_LN_SQRT_PId2` ln(sqrt(pi/2)) 0.2257914
 
 There are a set of constants (`PI`, `DOUBLE_EPS`) (and so on) defined
 (unless `STRICT_R_HEADERS` is defined) in the included header
 `R_ext/Constants.h`, mainly for compatibility with S.
-
- 
 
 Further, the included header `R_ext/Boolean.h` has enumeration
 constants `TRUE` and `FALSE` of type `Rboolean` in order to provide a
@@ -14804,22 +13019,15 @@ way of using "logical" variables in C consistently. This can conflict
 with other software: for example it conflicts with the headers in IJG's
 `jpeg-9` (but not earlier versions).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Integration](#Integration), Previous: [Numerical analysis
-subroutines](#Numerical-analysis-subroutines), Up: [The R
-API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.8 Optimization 
+### 6.8 Optimization
 
 The C code underlying `optim` can be accessed directly. The user needs
 to supply a function to compute the function to be minimized, of the
 type
 
- 
-``` 
+```r
 typedef double optimfn(int n, double *par, void *ex);
 ```
 
@@ -14829,8 +13037,7 @@ routine, normally used to carry auxiliary information.
 
 Some of the methods also require a gradient function
 
- 
-``` 
+```r
 typedef void optimgr(int n, double *par, double *gr, void *ex);
 ```
 
@@ -14840,50 +13047,49 @@ the result.
 
 The interfaces (defined in header `R_ext/Applic.h`) are
 
--   Nelder Mead: 
-     
-    ``` 
-    void nmmin(int n, double *xin, double *x, double *Fmin, optimfn fn,
-               int *fail, double abstol, double intol, void *ex,
-               double alpha, double beta, double gamma, int trace,
-               int *fncount, int maxit);
-    ```
-    
--   BFGS: 
-     
-    ``` 
-    void vmmin(int n, double *x, double *Fmin,
-               optimfn fn, optimgr gr, int maxit, int trace,
-               int *mask, double abstol, double reltol, int nREPORT,
-               void *ex, int *fncount, int *grcount, int *fail);
-    ```
-    
--   Conjugate gradients: 
-     
-    ``` 
-    void cgmin(int n, double *xin, double *x, double *Fmin,
-               optimfn fn, optimgr gr, int *fail, double abstol,
-               double intol, void *ex, int type, int trace,
-               int *fncount, int *grcount, int maxit);
-    ```
-    
--   Limited-memory BFGS with bounds: 
-     
-    ``` 
-    void lbfgsb(int n, int lmm, double *x, double *lower,
-                double *upper, int *nbd, double *Fmin, optimfn fn,
-                optimgr gr, int *fail, void *ex, double factr,
-                double pgtol, int *fncount, int *grcount,
-                int maxit, char *msg, int trace, int nREPORT);
-    ```
-    
--   Simulated annealing: 
-     
-    ``` 
-    void samin(int n, double *x, double *Fmin, optimfn fn, int maxit,
-               int tmax, double temp, int trace, void *ex);
-    ```
-    
+- Nelder Mead:
+
+  ```r
+  void nmmin(int n, double *xin, double *x, double *Fmin, optimfn fn,
+             int *fail, double abstol, double intol, void *ex,
+             double alpha, double beta, double gamma, int trace,
+             int *fncount, int maxit);
+  ```
+
+- BFGS:
+
+  ```r
+  void vmmin(int n, double *x, double *Fmin,
+             optimfn fn, optimgr gr, int maxit, int trace,
+             int *mask, double abstol, double reltol, int nREPORT,
+             void *ex, int *fncount, int *grcount, int *fail);
+  ```
+
+- Conjugate gradients:
+
+  ```r
+  void cgmin(int n, double *xin, double *x, double *Fmin,
+             optimfn fn, optimgr gr, int *fail, double abstol,
+             double intol, void *ex, int type, int trace,
+             int *fncount, int *grcount, int maxit);
+  ```
+
+- Limited-memory BFGS with bounds:
+
+  ```r
+  void lbfgsb(int n, int lmm, double *x, double *lower,
+              double *upper, int *nbd, double *Fmin, optimfn fn,
+              optimgr gr, int *fail, void *ex, double factr,
+              double pgtol, int *fncount, int *grcount,
+              int maxit, char *msg, int trace, int nREPORT);
+  ```
+
+- Simulated annealing:
+
+  ```r
+  void samin(int n, double *x, double *Fmin, optimfn fn, int maxit,
+             int tmax, double temp, int trace, void *ex);
+  ```
 
 Many of the arguments are common to the various methods. `n` is the
 number of parameters, `x` or `xin` is the starting parameters on entry
@@ -14892,25 +13098,19 @@ and `x` the final parameters on exit, with final value returned in
 `optim`: see the source code `src/appl/lbfgsb.c` for the values
 of `nbd`, which specifies which bounds are to be used.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Utility functions](#Utility-functions), Previous:
-[Optimization](#Optimization), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.9 Integration 
+### 6.9 Integration
 
 The C code underlying `integrate` can be accessed directly. The user
-needs to supply a *vectorizing* C function to compute the function to be
+needs to supply a _vectorizing_ C function to compute the function to be
 integrated, of the type
 
- 
-``` 
+```r
 typedef void integr_fn(double *x, int n, void *ex);
 ```
 
-where `x` is both input and output and has length `n`, i.e., a C
+where `x[]` is both input and output and has length `n`, i.e., a C
 function, say `fn`, of type `integr_fn` must basically do
 `for(i in 1:n) x[i] := f(x[i], ex)`. The vectorization requirement can
 be used to speed up the integrand instead of calling it `n` times. Note
@@ -14922,26 +13122,25 @@ There are interfaces (defined in header `R_ext/Applic.h`) for
 integrals over finite and infinite intervals (or "ranges" or
 "integration boundaries").
 
--   Finite: 
-     
-    ``` 
-    void Rdqags(integr_fn f, void *ex, double *a, double *b,
-                double *epsabs, double *epsrel,
-                double *result, double *abserr, int *neval, int *ier,
-                int *limit, int *lenw, int *last,
-                int *iwork, double *work);
-    ```
-    
--   Infinite: 
-     
-    ``` 
-    void Rdqagi(integr_fn f, void *ex, double *bound, int *inf,
-                double *epsabs, double *epsrel,
-                double *result, double *abserr, int *neval, int *ier,
-                int *limit, int *lenw, int *last,
-                int *iwork, double *work);
-    ```
-    
+- Finite:
+
+  ```r
+  void Rdqags(integr_fn f, void *ex, double *a, double *b,
+              double *epsabs, double *epsrel,
+              double *result, double *abserr, int *neval, int *ier,
+              int *limit, int *lenw, int *last,
+              int *iwork, double *work);
+  ```
+
+- Infinite:
+
+  ```r
+  void Rdqagi(integr_fn f, void *ex, double *bound, int *inf,
+              double *epsabs, double *epsrel,
+              double *result, double *abserr, int *neval, int *ier,
+              int *limit, int *lenw, int *last,
+              int *iwork, double *work);
+  ```
 
 Only the 3rd and 4th argument differ for the two integrators; for the
 finite range integral using `Rdqags`, `a` and `b` are the integration
@@ -14952,15 +13151,15 @@ range,
 
 `inf = 1`
 
-:   corresponds to (bound, +Inf),
+: corresponds to (bound, +Inf),
 
 `inf = -1`
 
-:   corresponds to (-Inf, bound),
+: corresponds to (-Inf, bound),
 
 `inf = 2`
 
-:   corresponds to (-Inf, +Inf),
+: corresponds to (-Inf, +Inf),
 
 `f` and `ex` define the integrand function, see above; `epsabs` and
 `epsrel` specify the absolute and relative accuracy requested, `result`,
@@ -14972,8 +13171,7 @@ definition. `limit` corresponds to `integrate(..., subdivisions = *)`.
 It seems you should always define the two work arrays and the length of
 the second one as
 
- 
-``` 
+```r
     lenw = 4 * limit;
     iwork =   (int *) R_alloc(limit, sizeof(int));
     work = (double *) R_alloc(lenw,  sizeof(double));
@@ -14982,30 +13180,25 @@ the second one as
 The comments in the source code in `src/appl/integrate.c` give
 more details, particularly about reasons for failure (`ier >= 1`).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Re-encoding](#Re_002dencoding), Previous:
-[Integration](#Integration), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.10 Utility functions 
+### 6.10 Utility functions
 
 R has a fairly comprehensive set of sort routines which are made
 available to users' C code. The following is declared in header file
 `Rinternals.h`.
 
-Function: *void* **R\_orderVector** *(int\* `indx`, int `n`, SEXP `arglist`, Rboolean `nalast`, Rboolean `decreasing`)*\
-Function: *void* **R\_orderVector1** *(int\* `indx`, int `n`, SEXP `x`, Rboolean `nalast`, Rboolean `decreasing`)*
+Function: _void_ **R_orderVector** _(int\* `indx`{.variable}, int `n`{.variable}, SEXP `arglist`{.variable}, Rboolean `nalast`{.variable}, Rboolean `decreasing`{.variable})_\
+Function: _void_ **R_orderVector1** _(int\* `indx`{.variable}, int `n`{.variable}, SEXP `x`{.variable}, Rboolean `nalast`{.variable}, Rboolean `decreasing`{.variable})_
 
-:   `R_orderVector()` corresponds to R's
-    `order(..., na.last, decreasing)`. More specifically,
-    `indx <- order(x, y, na.last, decreasing)` corresponds to
-    `R_orderVector(indx, n, Rf_lang2(x, y), nalast, decreasing)` and for
-    three vectors, `Rf_lang3(x,y,z)` is used as `arglist`.
+: `R_orderVector()` corresponds to R's
+`order(..., na.last, decreasing)`. More specifically,
+`indx <- order(x, y, na.last, decreasing)` corresponds to
+`R_orderVector(indx, n, Rf_lang2(x, y), nalast, decreasing)` and for
+three vectors, `Rf_lang3(x,y,z)` is used as `arglist`{.variable}.
 
     Both `R_orderVector` and `R_orderVector1` assume the vector `indx`
-    to be allocated to length \>= n. On return, `indx` contains a
+    to be allocated to length \>= n. On return, `indx[]` contains a
     permutation of `0:(n-1)`, i.e., 0-based C indices (and not 1-based R
     indices, as R's `order()`).
 
@@ -15017,109 +13210,85 @@ All other sort routines are declared in header file
 `R_ext/Utils.h` (included by `R.h`) and include the
 following.
 
-Function: *void* **R\_isort** *(int\* `x`, int `n`)*\
-Function: *void* **R\_rsort** *(double\* `x`, int `n`)*\
-Function: *void* **R\_csort** *(Rcomplex\* `x`, int `n`)*\
-Function: *void* **rsort\_with\_index** *(double\* `x`, int\* `index`, int `n`)*
+Function: _void_ **R_isort** _(int\* `x`{.variable}, int `n`{.variable})_\
+Function: _void_ **R_rsort** _(double\* `x`{.variable}, int `n`{.variable})_\
+Function: _void_ **R_csort** _(Rcomplex\* `x`{.variable}, int `n`{.variable})_\
+Function: _void_ **rsort_with_index** _(double\* `x`{.variable}, int\* `index`{.variable}, int `n`{.variable})_
 
-:   The first three sort integer, real (double) and complex data
-    respectively. (Complex numbers are sorted by the real part first
-    then the imaginary part.) `NA`s are sorted last.
+: The first three sort integer, real (double) and complex data
+respectively. (Complex numbers are sorted by the real part first
+then the imaginary part.) `NA`s are sorted last.
 
-    `rsort_with_index` sorts on `x`, and applies the same
-    permutation to `index`. `NA`s are sorted last.
+    `rsort_with_index` sorts on `x`{.variable}, and applies the same
+    permutation to `index`{.variable}. `NA`s are sorted last.
 
-```
-<!-- -->
-```
+Function: _void_ **revsort** _(double\* `x`{.variable}, int\* `index`{.variable}, int `n`{.variable})_
 
-Function: *void* **revsort** *(double\* `x`, int\* `index`, int `n`)*
+: Is similar to `rsort_with_index` but sorts into decreasing order,
+and `NA`s are not handled.
 
-:   Is similar to `rsort_with_index` but sorts into decreasing order,
-    and `NA`s are not handled.
+Function: _void_ **iPsort** _(int\* `x`{.variable}, int `n`{.variable}, int `k`{.variable})_\
+Function: _void_ **rPsort** _(double\* `x`{.variable}, int `n`{.variable}, int `k`{.variable})_\
+Function: _void_ **cPsort** _(Rcomplex\* `x`{.variable}, int `n`{.variable}, int `k`{.variable})_
 
-```
-<!-- -->
-```
+: These all provide (very) partial sorting: they permute
+`x`{.variable} so that `x[k]` is in the correct place with smaller
+values to the left, larger ones to the right.
 
-Function: *void* **iPsort** *(int\* `x`, int `n`, int `k`)*\
-Function: *void* **rPsort** *(double\* `x`, int `n`, int `k`)*\
-Function: *void* **cPsort** *(Rcomplex\* `x`, int `n`, int `k`)*
+Function: _void_ **R_qsort** _(double \*`v`{.variable}, size_t `i`{.variable}, size_t `j`{.variable})_\
+Function: _void_ **R_qsort_I** _(double \*`v`{.variable}, int \*`I`{.variable}, int `i`{.variable}, int `j`{.variable})_\
+Function: _void_ **R_qsort_int** _(int \*`iv`{.variable}, size_t `i`{.variable}, size_t `j`{.variable})_\
+Function: _void_ **R_qsort_int_I** _(int \*`iv`{.variable}, int \*`I`{.variable}, int `i`{.variable}, int `j`{.variable})_
 
-:   These all provide (very) partial sorting: they permute
-    `x` so that `x[k]` is in the correct place with smaller
-    values to the left, larger ones to the right.
-
-```
-<!-- -->
-```
-
-Function: *void* **R\_qsort** *(double \*`v`, size\_t `i`, size\_t `j`)*\
-Function: *void* **R\_qsort\_I** *(double \*`v`, int \*`I`, int `i`, int `j`)*\
-Function: *void* **R\_qsort\_int** *(int \*`iv`, size\_t `i`, size\_t `j`)*\
-Function: *void* **R\_qsort\_int\_I** *(int \*`iv`, int \*`I`, int `i`, int `j`)*
-
-:   These routines sort `v[i:j]` or `iv[i:j]` (using 1-indexing, i.e.,
-    `v[1]` is the first element) calling the quicksort algorithm as used
-    by R's `sort(v, method = "quick")` and documented on the help page
-    for the R function `sort`. The `..._I()` versions also return the
-    `sort.index()` vector in `I`. Note that the ordering is *not*
-    stable, so tied values may be permuted.
+: These routines sort `v[i:j]` or `iv[i:j]` (using 1-indexing, i.e.,
+`v[1]` is the first element) calling the quicksort algorithm as used
+by R's `sort(v, method = "quick")` and documented on the help page
+for the R function `sort`. The `..._I()` versions also return the
+`sort.index()` vector in `I`. Note that the ordering is _not_
+stable, so tied values may be permuted.
 
     Note that `NA`s are not handled (explicitly) and you should use
     different sorting functions if `NA`s can be present.
 
-```
-<!-- -->
-```
+Function: _subroutine_ **qsort4** _(double precision `v`{.variable}, integer `indx`{.variable}, integer `ii`{.variable}, integer `jj`{.variable})_\
+Function: _subroutine_ **qsort3** _(double precision `v`{.variable}, integer `ii`{.variable}, integer `jj`{.variable})_
 
-Function: *subroutine* **qsort4** *(double precision `v`, integer `indx`, integer `ii`, integer `jj`)*\
-Function: *subroutine* **qsort3** *(double precision `v`, integer `ii`, integer `jj`)*
+: The Fortran interface routines for sorting double precision vectors
+are `qsort3` and `qsort4`, equivalent to `R_qsort` and `R_qsort_I`,
+respectively.
 
-:   The Fortran interface routines for sorting double precision vectors
-    are `qsort3` and `qsort4`, equivalent to `R_qsort` and `R_qsort_I`,
-    respectively.
+Function: _void_ **R_max_col** _(double\* `matrix`{.variable}, int\* `nr`{.variable}, int\* `nc`{.variable}, int\* `maxes`{.variable}, int\* `ties_meth`{.variable})_
 
-```
-<!-- -->
-```
+: Given the `nr`{.variable} by `nc`{.variable} matrix `matrix` in
+column-major ("Fortran") order, `R_max_col()` returns in
+`maxes[i-1]` the column number of the maximal element in the
+`i`{.variable}-th row (the same as R's `max.col()` function). In the
+case of ties (multiple maxima), `*ties_meth` is an integer code in
+`1:3` determining the method: 1 = "random", 2 = "first" and 3 =
+"last". See R's help page `?max.col`.
 
-Function: *void* **R\_max\_col** *(double\* `matrix`, int\* `nr`, int\* `nc`, int\* `maxes`, int\* `ties_meth`)*
+Function: _int_ **findInterval** _(double\* `xt`{.variable}, int `n`{.variable}, double `x`{.variable}, Rboolean `rightmost_closed`{.variable}, Rboolean `all_inside`{.variable}, int `ilo`{.variable}, int\* `mflag`{.variable})_\
+Function: _int_ **findInterval2(double\*** _`xt`{.variable}, int `n`{.variable}, double `x`{.variable}, Rboolean `rightmost_closed`{.variable}, Rboolean `all_inside`{.variable}, Rboolean `left_open`{.variable}, int `ilo`{.variable}, int\* `mflag`{.variable})_
 
-:   Given the `nr` by `nc` matrix `matrix` in
-    column-major ("Fortran") order, `R_max_col()` returns in
-    `maxes[i-1]` the column number of the maximal element in the
-    `i`-th row (the same as R's `max.col()` function). In the
-    case of ties (multiple maxima), `*ties_meth` is an integer code in
-    `1:3` determining the method: 1 = "random", 2 = "first" and 3 =
-    "last". See R's help page `?max.col`.
+: Given the ordered vector `xt`{.variable} of length `n`{.variable},
+return the interval or index of `x`{.variable} in `xt[]`, typically
+max(_i_; 1 \<= i \<= `n`{.variable} & _`xt`{.variable}\[i\]_ \<=
+`x`{.variable}) where we use 1-indexing as in R and Fortran (but not
+C). If `rightmost_closed`{.variable} is true, also returns
+_`n`{.variable}-1_ if `x`{.variable} equals
+_`xt`{.variable}\[`n`{.variable}\]_. If `all_inside`{.variable} is
+not 0, the result is coerced to lie in `1:(n-1)` even when
+`x`{.variable} is outside the `xt`{.variable}\[\] range. On return,
+`*mflag` equals _-1_ if `x`{.variable} \< `xt`{.variable}\[1\], _+1_
+if `x`{.variable} \>= `xt`{.variable}\[`n`{.variable}\], and 0
+otherwise.
 
-```
-<!-- -->
-```
-
-Function: *int* **findInterval** *(double\* `xt`, int `n`, double `x`, Rboolean `rightmost_closed`, Rboolean `all_inside`, int `ilo`, int\* `mflag`)*\
-Function: *int* **findInterval2(double\*** *`xt`, int `n`, double `x`, Rboolean `rightmost_closed`, Rboolean `all_inside`, Rboolean `left_open`, int `ilo`, int\* `mflag`)*
-
-:   Given the ordered vector `xt` of length `n`,
-    return the interval or index of `x` in `xt`, typically
-    max(*i*; 1 \<= i \<= `n` & *`xt`\[i\]* \<=
-    `x`) where we use 1-indexing as in R and Fortran (but not
-    C). If `rightmost_closed` is true, also returns
-    *`n`-1* if `x` equals
-    *`xt`\[`n`\]*. If `all_inside` is
-    not 0, the result is coerced to lie in `1:(n-1)` even when
-    `x` is outside the `xt`\[\] range. On return,
-    `*mflag` equals *-1* if `x` \< `xt`\[1\], *+1*
-    if `x` \>= `xt`\[`n`\], and 0
-    otherwise.
-
-    The algorithm is particularly fast when `ilo` is set to
-    the last result of `findInterval()` and `x` is a value of
+    The algorithm is particularly fast when `ilo`{.variable} is set to
+    the last result of `findInterval()` and `x`{.variable} is a value of
     a sequence which is increasing or decreasing for subsequent calls.
 
     `findInterval2()` is a generalization of `findInterval()`, with an
-    extra `Rboolean` argument `left_open`. Setting
+    extra `Rboolean` argument `left_open`{.variable}. Setting
     `left_open = TRUE` basically replaces all left-closed right-open
     intervals t) by left-open ones t\], see the help page of R function
     `findInterval` for details.
@@ -15130,26 +13299,26 @@ Function: *int* **findInterval2(double\*** *`xt`, int `n`, double `x`, Rboolean 
 A system-independent interface to produce the name of a temporary file
 is provided as
 
-Function: *char \** **R\_tmpnam** *(const char \*`prefix`, const char \*`tmpdir`)*\
-Function: *char \** **R\_tmpnam2** *(const char \*`prefix`, const char \*`tmpdir`, const char \*`fileext`)*
+Function: \*char \*_ **R_tmpnam** _(const char \*`prefix`{.variable}, const char \*`tmpdir`{.variable})*\
+Function: *char \*_ **R_tmpnam2** _(const char \*`prefix`{.variable}, const char \*`tmpdir`{.variable}, const char \*`fileext`{.variable})\*
 
-:   Return a pathname for a temporary file with name beginning with
-    `prefix` and ending with `fileext` in
-    directory `tmpdir`. A `NULL` prefix or extension is
-    replaced by `""`. Note that the return value is dynamically
-    allocated and should be freed using `R_free_tmpnam` when no longer
-    needed (unlike the system call `tmpnam`). Freeing the result using
-    `free` is no longer recommended.
+: Return a pathname for a temporary file with name beginning with
+`prefix`{.variable} and ending with `fileext`{.variable} in
+directory `tmpdir`{.variable}. A `NULL` prefix or extension is
+replaced by `""`. Note that the return value is dynamically
+allocated and should be freed using `R_free_tmpnam` when no longer
+needed (unlike the system call `tmpnam`). Freeing the result using
+`free` is no longer recommended.
 
 There is also the internal function used to expand file names in several
 R functions, and called directly by `path.expand`.
 
-Function: *const char \** **R\_ExpandFileName** *(const char \*`fn`)*
+Function: \*const char \*_ **R_ExpandFileName** _(const char \*`fn`{.variable})\*
 
-:   Expand a path name `fn` by replacing a leading tilde by
-    the user's home directory (if defined). The precise meaning is
-    platform-specific; it will usually be taken from the environment
-    variable `HOME` if this is defined.
+: Expand a path name `fn`{.variable} by replacing a leading tilde by
+the user's home directory (if defined). The precise meaning is
+platform-specific; it will usually be taken from the environment
+variable `HOME` if this is defined.
 
 For historical reasons there are Fortran interfaces to functions
 `D1MACH` and `I1MACH`. These can be called from C code as e.g.
@@ -15158,15 +13327,9 @@ functions by Fox, Hall and Schryer on NetLib at
 <http://www.netlib.org/slatec/src/> for IEC 60559 arithmetic (required
 by R).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Condition handling and cleanup
-code](#Condition-handling-and-cleanup-code), Previous: [Utility
-functions](#Utility-functions), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.11 Re-encoding 
+### 6.11 Re-encoding
 
 R has its own C-level interface to the encoding conversion capabilities
 provided by `iconv` because there are incompatibilities between the
@@ -15174,47 +13337,26 @@ declarations in different implementations of `iconv`.
 
 These are declared in header file `R_ext/Riconv.h`.
 
-Function: *void \** **Riconv\_open** *(const char \*`to`,
-const char \*`from`)*
+Function: \*void \*_ **Riconv_open** _(const char \*`to`{.variable},
+const char \*`from`{.variable})\*
 
 Set up a pointer to an encoding object to be used to convert between two
 encodings: `""` indicates the current locale.
 
-Function: *size\_t* **Riconv** *(void \*`cd`, const char
-\*\*`inbuf`, size\_t \*`inbytesleft`, char
-\*\*`outbuf`, size\_t \*`outbytesleft`)*
+Function: _size_t_ **Riconv** _(void \*`cd`{.variable}, const char
+\*\*`inbuf`{.variable}, size_t \*`inbytesleft`{.variable}, char
+\*\*`outbuf`{.variable}, size_t \*`outbytesleft`{.variable})_
 
 Convert as much as possible of `inbuf` to `outbuf`. Initially the `int`
 variables indicate the number of bytes available in the buffers, and
 they are updated (and the `char` pointers are updated to point to the
-next free byte in the buffer). The return value is the number of
-characters converted, or `(size_t)-1` (beware: `size_t` is usually an
-unsigned type). It should be safe to assume that an error condition sets
-`errno` to one of `E2BIG` (the output buffer is full), `EILSEQ` (the
-input cannot be converted, and might be invalid in the encoding
-specified) or `EINVAL` (the input does not end with a complete
-multi-byte character).
 
-Function: *int* **Riconv\_close** *(void \* `cd`)*
-
-Free the resources of an encoding object.
-
-------------------------------------------------------------------------
-
- 
-Next: [Allowing interrupts](#Allowing-interrupts), Previous:
-[Re-encoding](#Re_002dencoding), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.12 Condition handling and cleanup code 
-
- 
+### 6.12 Condition handling and cleanup code
 
 Two functions are available for establishing condition handlers from
 within C code:
 
- 
-``` 
+```r
 #include <Rinternals.h>
 
 SEXP R_tryCatchError(SEXP (*fun)(void *data), void *data,
@@ -15241,8 +13383,7 @@ The function `R_UnwindProtect` can be used to ensure that a cleanup
 action takes place on ordinary return as well as on a non-local transfer
 of control, which R implements as a `longjmp`.
 
- 
-``` 
+```r
 SEXP R_UnwindProtect(SEXP (*fun)(void *data), void *data,
                      void (*clean)(void *data, Rboolean jump), void *cdata,
                      SEXP cont);
@@ -15259,13 +13400,12 @@ transfer of control is resumed.
 The second use pattern, suitable to support C++ stack unwinding, uses
 two additional functions:
 
- 
-``` 
+```r
 SEXP R_MakeUnwindCont();
 void NORET R_ContinueUnwind(SEXP cont);
 ```
 
-`R_MakeUnwindCont` allocates a *continuation token* `cont` to pass to
+`R_MakeUnwindCont` allocates a _continuation token_ `cont` to pass to
 `R_UnwindProtect`. This token should be protected with `PROTECT` before
 calling `R_UnwindProtect`. When the `clean` function is called with
 `jump == TRUE`, indicating that R is executing a non-local transfer of
@@ -15274,23 +13414,15 @@ code to be unwound, and then use the continuation token in the a call
 `R_ContinueUnwind(cont)` to resume the non-local transfer of control
 within R.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Platform and version
-information](#Platform-and-version-information), Previous: [Condition
-handling and cleanup code](#Condition-handling-and-cleanup-code), Up:
-[The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.13 Allowing interrupts 
+### 6.13 Allowing interrupts
 
 No part of R can be interrupted whilst running long computations in
 compiled code, so programmers should make provision for the code to be
 interrupted at suitable points by calling from C
 
- 
-``` 
+```r
 #include <R_ext/Utils.h>
 
 void R_CheckUserInterrupt(void);
@@ -15298,8 +13430,7 @@ void R_CheckUserInterrupt(void);
 
 and from Fortran
 
- 
-``` 
+```r
 subroutine rchkusr()
 ```
 
@@ -15310,16 +13441,9 @@ Note that it is possible that the code behind one of the entry points
 defined here if called from your C or Fortran code could be
 interruptible or generate an error and so not return to your code.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Inlining C functions](#Inlining-C-functions), Previous: [Allowing
-interrupts](#Allowing-interrupts), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.14 Platform and version information 
-
- 
+### 6.14 Platform and version information
 
 The header files define `USING_R`, which can be used to test if the code
 is indeed being used with R.
@@ -15340,8 +13464,7 @@ to test if the version of R is late enough, or to include
 back-compatibility features. For protection against very old versions of
 R which did not have this macro, use a construction such as
 
- 
-``` 
+```r
 #if defined(R_VERSION) && R_VERSION >= R_Version(3, 1, 0)
   ...
 #endif
@@ -15355,8 +13478,7 @@ includes the patchlevel (as in '`2.2`').
 Packages which use `alloca` need to ensure it is defined: as it is part
 of neither C nor POSIX there is no standard way to do so. One can use
 
- 
-``` 
+```r
 #include <Rconfig.h> // for HAVE_ALLOCA_H
 #ifdef __GNUC__
 // this covers gcc, clang, icc
@@ -15373,15 +13495,9 @@ of neither C nor POSIX there is no standard way to do so. One can use
 `malloc.h` which may have a conflicting definition), which
 suffices for known R platforms.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Controlling visibility](#Controlling-visibility), Previous:
-[Platform and version information](#Platform-and-version-information),
-Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.15 Inlining C functions 
+### 6.15 Inlining C functions
 
 The C99 keyword `inline` should be recognized by all compilers nowadays
 used to build R. Portable code which might be used with earlier versions
@@ -15389,8 +13505,7 @@ of R can be written using the macro `R_INLINE` (defined in file
 `Rconfig.h` included by `R.h`), as for example from
 package [**cluster**](https://CRAN.R-project.org/package=cluster)
 
- 
-``` 
+```r
 #include <R.h>
 
 static R_INLINE int ind_2(int l, int j)
@@ -15407,14 +13522,9 @@ checked is that `R_INLINE` can be used in a single C file with the
 compiler used to build R. We recommend that packages making extensive
 use of inlining include their own configure code.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Standalone Mathlib](#Standalone-Mathlib), Previous: [Inlining C
-functions](#Inlining-C-functions), Up: [The R API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.16 Controlling visibility 
+### 6.16 Controlling visibility
 
 Header `R_ext/Visibility.h` has some definitions for
 controlling the visibility of entry points. These are only effective
@@ -15431,7 +13541,7 @@ C/C++ entry points prefixed by `attribute_hidden` will not be visible in
 the shared object. There is no comparable mechanism for Fortran entry
 points, but there is a more comprehensive scheme used by, for example
 package **stats**. Most compilers which allow control of visibility will
-allow control of visibility for all symbols *via* a flag, and where
+allow control of visibility for all symbols _via_ a flag, and where
 known the flag is encapsulated in the macros '`C_VISIBILITY`',
 '`CXX_VISIBILITY`'[^154^](#FOOT154) and
 '`F_VISIBILITY`' for C, C++ and Fortran
@@ -15439,8 +13549,7 @@ compilers.[^155^](#FOOT155) These are defined in
 `etc/Makeconf` and so available for normal compilation of
 package code. For example, `src/Makevars` could include some of
 
- 
-``` 
+```r
 PKG_CFLAGS=$(C_VISIBILITY)
 PKG_CXXFLAGS=$(CXX_VISIBILITY)
 PKG_FFLAGS=$(F_VISIBILITY)
@@ -15452,8 +13561,7 @@ the `attribute_visible` prefix. A shared object which registers its
 entry points needs only for have one visible entry point, its
 initializer, so for example package **stats** has
 
- 
-``` 
+```r
 void attribute_visible R_init_stats(DllInfo *dll)
 {
     R_registerRoutines(dll, CEntries, CallEntries, FortEntries, NULL);
@@ -15480,36 +13588,27 @@ supplying a definitions file `pkgnme/src/pkgname-win.def`: only
 entry points listed in that file will be visible. Again using **stats**
 as an example, it has
 
- 
-``` 
+```r
 LIBRARY stats.dll
 EXPORTS
  R_init_stats
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Organization of header files](#Organization-of-header-files),
-Previous: [Controlling visibility](#Controlling-visibility), Up: [The R
-API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.17 Using these functions in your own C code 
+### 6.17 Using these functions in your own C code
 
 It is possible to build `Mathlib`, the R set of mathematical functions
 documented in `Rmath.h`, as a standalone library
 `libRmath` under both Unix-alikes and Windows. (This includes
-the functions documented in [Numerical analysis
-subroutines](#Numerical-analysis-subroutines) as from that header file.)
+the functions documented in [Numerical analysis subroutines](#Numerical-analysis-subroutines) as from that header file.)
 
 The library is not built automatically when R is installed, but can be
 built in the directory `src/nmath/standalone` in the R sources:
 see the file `README` there. To use the code in your own C
 program include
 
- 
-``` 
+```r
 #define MATHLIB_STANDALONE
 #include <Rmath.h>
 ```
@@ -15520,8 +13619,7 @@ There is an example file `test.c`.
 A little care is needed to use the random-number routines. You will need
 to supply the uniform random number generator
 
- 
-``` 
+```r
 double unif_rand(void)
 ```
 
@@ -15529,73 +13627,65 @@ or use the one supplied (and with a dynamic library or DLL you will have
 to use the one supplied, which is the Marsaglia-multicarry with an entry
 points
 
- 
-``` 
+```r
 set_seed(unsigned int, unsigned int)
 ```
 
 to set its seeds and
 
- 
-``` 
+```r
 get_seed(unsigned int *, unsigned int *)
 ```
 
 to read the seeds).
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Standalone Mathlib](#Standalone-Mathlib), Up: [The R
-API](#The-R-API)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.18 Organization of header files 
+### 6.18 Organization of header files
 
 The header files which R installs are in directory
 `R_INCLUDE_DIR` (default `R_HOME/include`). This
 currently includes
 
->   -------------------------------- ----------------------------------------------------------------------------------------------
->   `R.h`                   includes many other files
->   `S.h`                   different version for code ported from S
->   `Rinternals.h`          definitions for using R's internal structures
->   `Rdefines.h`            macros for an S-like interface to the above (no longer maintained)
->   `Rmath.h`               standalone math library
->   `Rversion.h`            R version information
->   `Rinterface.h`          for add-on front-ends (Unix-alikes only)
->   `Rembedded.h`           for add-on front-ends
->   `R_ext/Applic.h`        optimization and integration
->   `R_ext/BLAS.h`          C definitions for BLAS routines
->   `R_ext/Callbacks.h`     C (and R function) top-level task handlers
->   `R_ext/GetX11Image.h`   X11Image interface used by package **trkplot**
->   `R_ext/Lapack.h`        C definitions for some LAPACK routines
->   `R_ext/Linpack.h`       C definitions for some LINPACK routines, not all of which are included in R
->   `R_ext/Parse.h`         a small part of R's parse interface: not part of the stable API.
->   `R_ext/RStartup.h`      for add-on front-ends
->   `R_ext/Rdynload.h`      needed to register compiled code in packages
->   `R_ext/R-ftp-http.h`    interface to internal method of `download.file`
->   `R_ext/Riconv.h`        interface to `iconv`
->   `R_ext/Visibility.h`    definitions controlling visibility
->   `R_ext/eventloop.h`     for add-on front-ends and for packages that need to share in the R event loops (not Windows)
->   -------------------------------- ----------------------------------------------------------------------------------------------
+> ---
+>
+> `R.h` includes many other files
+> `S.h` different version for code ported from S
+> `Rinternals.h` definitions for using R's internal structures
+> `Rdefines.h` macros for an S-like interface to the above (no longer maintained)
+> `Rmath.h` standalone math library
+> `Rversion.h` R version information
+> `Rinterface.h` for add-on front-ends (Unix-alikes only)
+> `Rembedded.h` for add-on front-ends
+> `R_ext/Applic.h` optimization and integration
+> `R_ext/BLAS.h` C definitions for BLAS routines
+> `R_ext/Callbacks.h` C (and R function) top-level task handlers
+> `R_ext/GetX11Image.h` X11Image interface used by package **trkplot** > `R_ext/Lapack.h` C definitions for some LAPACK routines
+> `R_ext/Linpack.h` C definitions for some LINPACK routines, not all of which are included in R
+> `R_ext/Parse.h` a small part of R's parse interface: not part of the stable API.
+> `R_ext/RStartup.h` for add-on front-ends
+> `R_ext/Rdynload.h` needed to register compiled code in packages
+> `R_ext/R-ftp-http.h` interface to internal method of `download.file` > `R_ext/Riconv.h` interface to `iconv` > `R_ext/Visibility.h` definitions controlling visibility
+> `R_ext/eventloop.h` for add-on front-ends and for packages that need to share in the R event loops (not Windows)
+>
+> ---
 
 The following headers are included by `R.h`:
 
->   ------------------------------ ------------------------------------------------------------------------------------
->   `Rconfig.h`           configuration info that is made available
->   `R_ext/Arith.h`       handling for `NA`s, `NaN`s, `Inf`/`-Inf`
->   `R_ext/Boolean.h`     `TRUE`/`FALSE` type
->   `R_ext/Complex.h`     C typedefs for R's `complex`
->   `R_ext/Constants.h`   constants
->   `R_ext/Error.h`       error signaling
->   `R_ext/Memory.h`      memory allocation
->   `R_ext/Print.h`       `Rprintf` and variations.
->   `R_ext/RS.h`          definitions common to `R.h` and `S.h`, including `F77_CALL` etc.
->   `R_ext/Random.h`      random number generation
->   `R_ext/Utils.h`       sorting and other utilities
->   `R_ext/libextern.h`   definitions for exports from `R.dll` on Windows.
->   ------------------------------ ------------------------------------------------------------------------------------
+> ---
+>
+> `Rconfig.h` configuration info that is made available
+> `R_ext/Arith.h` handling for `NA`s, `NaN`s, `Inf`/`-Inf` > `R_ext/Boolean.h` `TRUE`/`FALSE` type
+> `R_ext/Complex.h` C typedefs for R's `complex` > `R_ext/Constants.h` constants
+> `R_ext/Error.h` error signaling
+> `R_ext/Memory.h` memory allocation
+> `R_ext/Print.h` `Rprintf` and variations.
+> `R_ext/RS.h` definitions common to `R.h` and `S.h`, including `F77_CALL` etc.
+> `R_ext/Random.h` random number generation
+> `R_ext/Utils.h` sorting and other utilities
+> `R_ext/libextern.h` definitions for exports from `R.dll` on Windows.
+>
+> ---
 
 The graphics systems are exposed in headers
 `R_ext/GraphicsEngine.h`, `R_ext/GraphicsDevice.h`
@@ -15610,18 +13700,9 @@ header files, especially `Rinternals.h` (included by
 which may be used in system headers (fewer if '`R_NO_REMAP`' is
 defined, or '`R_NO_REMAP_RMATH`' for `Rmath.h`).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Linking GUIs and other front-ends to
-R](#Linking-GUIs-and-other-front_002dends-to-R), Previous: [The R
-API](#The-R-API), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-7 Generic functions and methods 
--------------------------------
-
- 
+## 7 Generic functions and methods
 
 R programmers will often want to add methods for existing generic
 functions, and may want to add new generic functions or make existing
@@ -15631,7 +13712,7 @@ examples of the problems caused by not adhering to them.
 This chapter only covers the 'informal' class system copied from S3, and
 not with the S4 (formal) methods of package **methods**.
 
-First, a *caveat*: a function named `gen.cl` will be invoked by the
+First, a _caveat_: a function named `gen.cl` will be invoked by the
 generic `gen` for class `cl`, so do not name functions in this style
 unless they are intended to be methods.
 
@@ -15640,8 +13721,7 @@ method. It is quite typical for a method function to make a few changes
 to its arguments, dispatch to the next method, receive the results and
 modify them a little. An example is
 
- 
-``` 
+```r
 t.data.frame <- function(x)
 {
     x <- as.matrix(x)
@@ -15649,19 +13729,19 @@ t.data.frame <- function(x)
 }
 ```
 
-Note that the example above works because there is a *next* method, the
+Note that the example above works because there is a _next_ method, the
 default method, not that a new method is selected when the class is
 changed.
 
-*Any* method a programmer writes may be invoked from another method by
-`NextMethod`, *with the arguments appropriate to the previous method*.
+_Any_ method a programmer writes may be invoked from another method by
+`NextMethod`, _with the arguments appropriate to the previous method_.
 Further, the programmer cannot predict which method `NextMethod` will
 pick (it might be one not yet dreamt of), and the end user calling the
 generic needs to be able to pass arguments to the next method. For this
 to work
 
-> *A method must have all the arguments of the generic, including `…` if
-> the generic does.*
+> _A method must have all the arguments of the generic, including `…` if
+> the generic does._
 
 It is a grave misunderstanding to think that a method needs only to
 accept the arguments it needs. The original S version of `predict.lm`
@@ -15676,29 +13756,26 @@ Further, the user is entitled to use positional matching when calling
 the generic, and the arguments to a method called by `UseMethod` are
 those of the call to the generic. Thus
 
-> *A method must have arguments in exactly the same order as the
-> generic.*
+> _A method must have arguments in exactly the same order as the
+> generic._
 
 To see the scale of this problem, consider the generic function `scale`,
 defined as
 
- 
-``` 
+```r
 scale <- function (x, center = TRUE, scale = TRUE)
     UseMethod("scale")
 ```
 
 Suppose an unthinking package writer created methods such as
 
- 
-``` 
-scale.foo <- function(x, scale = FALSE, ...) 
+```r
+scale.foo <- function(x, scale = FALSE, ...) { }
 ```
 
 Then for `x` of class `"foo"` the calls
 
- 
-``` 
+```r
 scale(x, , TRUE)
 scale(x, scale = TRUE)
 ```
@@ -15709,8 +13786,7 @@ consternation of the end user.
 To add a further twist, which default is used when a user calls
 `scale(x)` in our example? What if
 
- 
-``` 
+```r
 scale.bar <- function(x, center, scale = TRUE) NextMethod("scale")
 ```
 
@@ -15718,39 +13794,34 @@ and `x` has class `c("bar", "foo")`? It is the default specified in the
 method that is used, but the default specified in the generic may be the
 one the user sees. This leads to the recommendation:
 
-> *If the generic specifies defaults, all methods should use the same
-> defaults.*
+> _If the generic specifies defaults, all methods should use the same
+> defaults._
 
 An easy way to follow these recommendations is to always keep generics
 simple, e.g.
 
- 
-``` 
+```r
 scale <- function(x, ...) UseMethod("scale")
 ```
 
 Only add parameters and defaults to the generic if they make sense in
 all possible methods implementing it.
 
-  ----------------------------------------------- ---- --
-  • [Adding new generics](#Adding-new-generics)        
-  ----------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Adding new generics](#Adding-new-generics)
 
- 
-Previous: [Generic functions and
-methods](#Generic-functions-and-methods), Up: [Generic functions and
-methods](#Generic-functions-and-methods)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 7.1 Adding new generics 
+---
+
+### 7.1 Adding new generics
 
 When creating a new generic function, bear in mind that its argument
 list will be the maximal set of arguments for methods, including those
 written elsewhere years later. So choosing a good set of arguments may
 well be an important design issue, and there need to be good arguments
-*not* to include a `…` argument.
+_not_ to include a `…` argument.
 
 If a `…` argument is supplied, some thought should be given to its
 position in the argument sequence. Arguments which follow `…` must be
@@ -15767,8 +13838,7 @@ have a small performance cost. It is never necessary, as a package can
 take over a function in the base package and make it generic by
 something like
 
- 
-``` 
+```r
 foo <- function(object, ...) UseMethod("foo")
 foo.default <- function(object, ...) base::foo(object)
 ```
@@ -15781,16 +13851,9 @@ R is patched or updated.
 The same idea can be applied for functions in other packages with
 namespaces.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Function and variable index](#Function-and-variable-index),
-Previous: [Generic functions and
-methods](#Generic-functions-and-methods), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-8 Linking GUIs and other front-ends to R 
-----------------------------------------
+## 8 Linking GUIs and other front-ends to R
 
 There are a number of ways to build front-ends to R: we take this to
 mean a GUI or other application that has the ability to submit commands
@@ -15810,21 +13873,16 @@ package (although packages may contain alternative front-ends).
 Conversely some of the functions from the API (such as `R_alloc`) should
 not be used in front-ends.
 
-  ----------------------------------------------------------------------- ---- --
-  • [Embedding R under Unix-alikes](#Embedding-R-under-Unix_002dalikes)        
-  • [Embedding R under Windows](#Embedding-R-under-Windows)                    
-  ----------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Embedding R under Unix-alikes](#Embedding-R-under-Unix_002dalikes)     
+ • [Embedding R under Windows](#Embedding-R-under-Windows)
 
- 
-Next: [Embedding R under Windows](#Embedding-R-under-Windows), Previous:
-[Linking GUIs and other front-ends to
-R](#Linking-GUIs-and-other-front_002dends-to-R), Up: [Linking GUIs and
-other front-ends to R](#Linking-GUIs-and-other-front_002dends-to-R)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 8.1 Embedding R under Unix-alikes 
+---
+
+### 8.1 Embedding R under Unix-alikes
 
 R can be built as a shared library[^156^](#FOOT156) if
 configured with `--enable-R-shlib`. This shared library can be
@@ -15841,8 +13899,7 @@ example, and the former GNOME (see package **gnomeGUI** on CRAN's
 `R_HOME/bin/exec/R` is in file `src/main/Rmain.c` and
 is very simple
 
- 
-``` 
+```r
 int Rf_initialize_R(int ac, char **av); /* in ../unix/system.c */
 void Rf_mainloop();                     /* in main.c */
 
@@ -15861,21 +13918,20 @@ indeed, misleadingly simple. Remember that `R_HOME/bin/exec/R`
 is run from a shell script `R_HOME/bin/R` which sets up the
 environment for the executable, and this is used for
 
--   Setting `R_HOME` and checking it is valid, as well as the path
-    `R_SHARE_DIR` and `R_DOC_DIR` to the installed `share` and
-    `doc` directory trees. Also setting `R_ARCH` if needed.
--   Setting `LD_LIBRARY_PATH` to include the directories used in
-    linking R. This is recorded as the default setting of
-    `R_LD_LIBRARY_PATH` in the shell script
-    `R_HOME/etcR_ARCH/ldpaths`.
--   Processing some of the arguments, for example to run R under a
-    debugger and to launch alternative front-ends to provide GUIs.
+- Setting `R_HOME` and checking it is valid, as well as the path
+  `R_SHARE_DIR` and `R_DOC_DIR` to the installed `share` and
+  `doc` directory trees. Also setting `R_ARCH` if needed.
+- Setting `LD_LIBRARY_PATH` to include the directories used in
+  linking R. This is recorded as the default setting of
+  `R_LD_LIBRARY_PATH` in the shell script
+  `R_HOME/etcR_ARCH/ldpaths`.
+- Processing some of the arguments, for example to run R under a
+  debugger and to launch alternative front-ends to provide GUIs.
 
 The first two of these can be achieved for your front-end by running it
-*via* `R CMD`. So, for example
+_via_ `R CMD`. So, for example
 
- 
-``` 
+```r
 R CMD /usr/local/lib/R/bin/exec/R
 R CMD exec/R
 ```
@@ -15896,8 +13952,7 @@ the `tests/Embedding` directory. These make use of
 `Rf_initEmbeddedR` in `src/main/Rembedded.c`, and essentially
 use
 
- 
-``` 
+```r
 #include <Rembedded.h>
 
 int main(int ac, char **av)
@@ -15926,9 +13981,8 @@ int main(int ac, char **av)
 If you do not want to pass R arguments, you can fake an `argv` array,
 for example by
 
- 
-``` 
-    char *argv= ;
+```r
+    char *argv[]= {"REmbeddedPostgres", "--silent"};
     Rf_initEmbeddedR(sizeof(argv)/sizeof(argv[0]), argv);
 ```
 
@@ -15941,7 +13995,7 @@ One issue to watch is that on some platforms `Rf_initEmbeddedR` and
 to be trapped and to make use of extended precision registers).
 
 The standard code sets up a session temporary directory in the usual
-way, *unless* `R_TempDir` is set to a non-NULL value before
+way, _unless_ `R_TempDir` is set to a non-NULL value before
 `Rf_initEmbeddedR` is called. In that case the value is assumed to
 contain an existing writable directory (no check is done), and it is not
 cleaned up when R is shut down.
@@ -15958,29 +14012,24 @@ It is the user's responsibility to attempt to initialize only once. To
 protect the R interpreter, `Rf_initialize_R` will exit the process if
 re-initialization is attempted.
 
-  ----------------------------------------------------------------------- ---- --
-  • [Compiling against the R library](#Compiling-against-the-R-library)        
-  • [Setting R callbacks](#Setting-R-callbacks)                                
-  • [Registering symbols](#Registering-symbols)                                
-  • [Meshing event loops](#Meshing-event-loops)                                
-  • [Threading issues](#Threading-issues)                                      
-  ----------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Compiling against the R library](#Compiling-against-the-R-library)     
+ • [Setting R callbacks](#Setting-R-callbacks)     
+ • [Registering symbols](#Registering-symbols)     
+ • [Meshing event loops](#Meshing-event-loops)     
+ • [Threading issues](#Threading-issues)
 
- 
-Next: [Setting R callbacks](#Setting-R-callbacks), Previous: [Embedding
-R under Unix-alikes](#Embedding-R-under-Unix_002dalikes), Up: [Embedding
-R under Unix-alikes](#Embedding-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 8.1.1 Compiling against the R library 
+---
+
+#### 8.1.1 Compiling against the R library
 
 Suitable flags to compile and link against the R (shared or static)
 library can be found by
 
- 
-``` 
+```r
 R CMD config --cppflags
 R CMD config --ldflags
 ```
@@ -15991,16 +14040,14 @@ If R is installed, `pkg-config` is available and neither
 sub-architectures nor a macOS framework have been used, alternatives for
 a shared R library are
 
- 
-``` 
+```r
 pkg-config --cflags libR
 pkg-config --libs libR
 ```
 
 and for a static R library
 
- 
-``` 
+```r
 pkg-config --cflags libR
 pkg-config --libs --static libR
 ```
@@ -16013,10 +14060,9 @@ However, a more comprehensive way is to set up a `Makefile` to
 compile the front-end. Suppose file `myfe.c` is to be compiled
 to `myfe`. A suitable `Makefile` might be
 
- 
-``` 
-## WARNING: does not work when $ contains spaces
-include $/etc$/Makeconf
+```r
+## WARNING: does not work when ${R_HOME} contains spaces
+include ${R_HOME}/etc${R_ARCH}/Makeconf
 all: myfe
 
 ## The following is not needed, but avoids PIC flags.
@@ -16030,22 +14076,20 @@ myfe: myfe.o
 
 invoked as
 
- 
-``` 
+```r
 R CMD make
 R CMD myfe
 ```
 
-Even though not recommended, `$` may contain spaces. In that
+Even though not recommended, `${R_HOME}` may contain spaces. In that
 case, it cannot be passed as an argument to `include` in the makefile.
 Instead, one can instruct `make` using the `-f` option to include
-`Makeconf`, for example *via* recursive invocation of `make`,
+`Makeconf`, for example _via_ recursive invocation of `make`,
 see [Writing portable packages](#Writing-portable-packages).
 
- 
-``` 
+```r
 all:
-      $(MAKE) -f "$/etc$/Makeconf" -f Makefile.inner
+      $(MAKE) -f "${R_HOME}/etc${R_ARCH}/Makeconf" -f Makefile.inner
 ```
 
 Additional flags which `$(MAIN_LINK)` includes are, amongst others,
@@ -16055,22 +14099,15 @@ using a shared R library as `libR` is linked against those
 libraries, but some platforms need the executable also linked against
 them.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Registering symbols](#Registering-symbols), Previous: [Compiling
-against the R library](#Compiling-against-the-R-library), Up: [Embedding
-R under Unix-alikes](#Embedding-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 8.1.2 Setting R callbacks 
+#### 8.1.2 Setting R callbacks
 
 For Unix-alikes there is a public header file `Rinterface.h`
 that makes it possible to change the standard callbacks used by R in a
 documented way. This defines pointers (if `R_INTERFACE_PTRS` is defined)
 
- 
-``` 
+```r
 extern void (*ptr_R_Suicide)(const char *);
 extern void (*ptr_R_ShowMessage)(const char *);
 extern int  (*ptr_R_ReadConsole)(const char *, unsigned char *, int, int);
@@ -16100,44 +14137,36 @@ which allow standard R callbacks to be redirected to your GUI. What
 these do is generally documented in the file
 `src/unix/system.txt`.
 
-Function: *void* **R\_ShowMessage** *(char \*`message`)*
+Function: _void_ **R_ShowMessage** _(char \*`message`{.variable})_
 
-:   This should display the message, which may have multiple lines: it
-    should be brought to the user's attention immediately.
+: This should display the message, which may have multiple lines: it
+should be brought to the user's attention immediately.
 
-```
-<!-- -->
-```
+Function: _void_ **R_Busy** _(int `which`{.variable})_
 
-Function: *void* **R\_Busy** *(int `which`)*
+: This function invokes actions (such as change of cursor) when R
+embarks on an extended computation (`which=1`) and when such a state
+terminates (`which=0`).
 
-:   This function invokes actions (such as change of cursor) when R
-    embarks on an extended computation (`which=1`) and when such a state
-    terminates (`which=0`).
+Function: _int_ **R_ReadConsole** _(const char \*`prompt`{.variable}, unsigned char \*`buf`{.variable}, int `buflen`{.variable}, int `hist`{.variable})_\
+Function: _void_ **R_WriteConsole** _(const char \*`buf`{.variable}, int `buflen`{.variable})_\
+Function: _void_ **R_WriteConsoleEx** _(const char \*`buf`{.variable}, int `buflen`{.variable}, int `otype`{.variable})_\
+Function: _void_ **R_ResetConsole** _()_\
+Function: _void_ **R_FlushConsole** _()_\
+Function: _void_ **R_ClearErrConsole** _()_
 
-```
-<!-- -->
-```
-
-Function: *int* **R\_ReadConsole** *(const char \*`prompt`, unsigned char \*`buf`, int `buflen`, int `hist`)*\
-Function: *void* **R\_WriteConsole** *(const char \*`buf`, int `buflen`)*\
-Function: *void* **R\_WriteConsoleEx** *(const char \*`buf`, int `buflen`, int `otype`)*\
-Function: *void* **R\_ResetConsole** *()*\
-Function: *void* **R\_FlushConsole** *()*\
-Function: *void* **R\_ClearErrConsole** *()*
-
-:   These functions interact with a console.
+: These functions interact with a console.
 
     `R_ReadConsole` prints the given prompt at the console and then does
-    a `fgets(3)`--like operation, transferring up to `buflen`
-    characters into the buffer `buf`. The last two bytes
+    a `fgets(3)`--like operation, transferring up to `buflen`{.variable}
+    characters into the buffer `buf`{.variable}. The last two bytes
     should be set to '`"\n\0"`' to preserve sanity. If
-    `hist` is non-zero, then the line should be added to any
+    `hist`{.variable} is non-zero, then the line should be added to any
     command history which is being maintained. The return value is 0 is
     no input is available and \>0 otherwise.
 
     `R_WriteConsoleEx` writes the given buffer to the console,
-    `otype` specifies the output type (regular output or
+    `otype`{.variable} specifies the output type (regular output or
     warning/error). Call to `R_WriteConsole(buf, buflen)` is equivalent
     to `R_WriteConsoleEx(buf, buflen, 0)`. To ensure backward
     compatibility of the callbacks, `ptr_R_WriteConsoleEx` is used only
@@ -16145,67 +14174,46 @@ Function: *void* **R\_ClearErrConsole** *()*
     and `stderr()` connections point to the console, set the
     corresponding files to `NULL` *via*
 
-     
-    ``` 
+
+    ``` r
           R_Outputfile = NULL;
           R_Consolefile = NULL;
     ```
-    
 
     `R_ResetConsole` is called when the system is reset after an error.
     `R_FlushConsole` is called to flush any pending output to the system
     console. `R_ClearerrConsole` clears any errors associated with
     reading from the console.
 
-```
-<!-- -->
-```
+Function: _int_ **R_ShowFiles** _(int `nfile`{.variable}, const char \*\*`file`{.variable}, const char \*\*`headers`{.variable}, const char \*`wtitle`{.variable}, Rboolean `del`{.variable}, const char \*`pager`{.variable})_
 
-Function: *int* **R\_ShowFiles** *(int `nfile`, const char \*\*`file`, const char \*\*`headers`, const char \*`wtitle`, Rboolean `del`, const char \*`pager`)*
+: This function is used to display the contents of files.
 
-:   This function is used to display the contents of files.
+Function: _int_ **R_ChooseFile** _(int `new`{.variable}, char \*`buf`{.variable}, int `len`{.variable})_
 
-```
-<!-- -->
-```
+: Choose a file and return its name in `buf`{.variable} of length
+`len`{.variable}. Return value is 0 for success, \> 0 otherwise.
 
-Function: *int* **R\_ChooseFile** *(int `new`, char \*`buf`, int `len`)*
+Function: _int_ **R_EditFile** _(const char \*`buf`{.variable})_
 
-:   Choose a file and return its name in `buf` of length
-    `len`. Return value is 0 for success, \> 0 otherwise.
+: Send a file to an editor window.
 
-```
-<!-- -->
-```
+Function: _int_ **R_EditFiles** _(int `nfile`{.variable}, const char \*\*`file`{.variable}, const char \*\*`title`{.variable}, const char \*`editor`{.variable})_
 
-Function: *int* **R\_EditFile** *(const char \*`buf`)*
+: Send `nfile`{.variable} files to an editor, with titles possibly to
+be used for the editor window(s).
 
-:   Send a file to an editor window.
+Function: _SEXP_ **R_loadhistory** _(SEXP, SEXP, SEXP, SEXP);_\
+Function: _SEXP_ **R_savehistory** _(SEXP, SEXP, SEXP, SEXP);_\
+Function: _SEXP_ **R_addhistory** _(SEXP, SEXP, SEXP, SEXP);_
 
-```
-<!-- -->
-```
-
-Function: *int* **R\_EditFiles** *(int `nfile`, const char \*\*`file`, const char \*\*`title`, const char \*`editor`)*
-
-:   Send `nfile` files to an editor, with titles possibly to
-    be used for the editor window(s).
-
-```
-<!-- -->
-```
-
-Function: *SEXP* **R\_loadhistory** *(SEXP, SEXP, SEXP, SEXP);*\
-Function: *SEXP* **R\_savehistory** *(SEXP, SEXP, SEXP, SEXP);*\
-Function: *SEXP* **R\_addhistory** *(SEXP, SEXP, SEXP, SEXP);*
-
-:   `.Internal` functions for `loadhistory`, `savehistory` and
-    `timestamp`.
+: `.Internal` functions for `loadhistory`, `savehistory` and
+`timestamp`.
 
     If the console has no history mechanism these can be as simple as
 
-     
-    ``` 
+
+    ``` r
     SEXP R_loadhistory (SEXP call, SEXP op, SEXP args, SEXP env)
     {
         errorcall(call, "loadhistory is not implemented");
@@ -16221,23 +14229,17 @@ Function: *SEXP* **R\_addhistory** *(SEXP, SEXP, SEXP, SEXP);*
         return R_NilValue;
     }
     ```
-    
 
     The `R_addhistory` function should return silently if no history
     mechanism is present, as a user may be calling `timestamp` purely to
     write the time stamp to the console.
 
-```
-<!-- -->
-```
+Function: _void_ **R_Suicide** _(const char \*`message`{.variable})_
 
-Function: *void* **R\_Suicide** *(const char \*`message`)*
+: This should abort R as rapidly as possible, displaying the message.
+A possible implementation is
 
-:   This should abort R as rapidly as possible, displaying the message.
-    A possible implementation is
-
-     
-    ``` 
+    ``` r
     void R_Suicide (const char *message)
     {
         char  pp[1024];
@@ -16246,19 +14248,13 @@ Function: *void* **R\_Suicide** *(const char \*`message`)*
         R_CleanUp(SA_SUICIDE, 2, 0);
     }
     ```
-    
 
-```
-<!-- -->
-```
+Function: _void_ **R_CleanUp** _(SA_TYPE `saveact`{.variable}, int `status`{.variable}, int `RunLast`{.variable})_
 
-Function: *void* **R\_CleanUp** *(SA\_TYPE `saveact`, int `status`, int `RunLast`)*
+: This function invokes any actions which occur at system termination.
+It needs to be quite complex:
 
-:   This function invokes any actions which occur at system termination.
-    It needs to be quite complex:
-
-     
-    ``` 
+    ``` r
     #include <Rinterface.h>
     #include <Rembedded.h>    /* for Rf_KillAllDevices */
 
@@ -16294,28 +14290,21 @@ Function: *void* **R\_CleanUp** *(SA\_TYPE `saveact`, int `status`, int `RunLast
         exit(status);
     }
     ```
-    
 
 These callbacks should never be changed in a running R session (and
 hence cannot be called from an extension package).
 
-Function: *SEXP* **R\_dataentry** *(SEXP, SEXP, SEXP, SEXP);*\
-Function: *SEXP* **R\_dataviewer** *(SEXP, SEXP, SEXP, SEXP);*\
-Function: *SEXP* **R\_selectlist** *(SEXP, SEXP, SEXP, SEXP);*
+Function: _SEXP_ **R_dataentry** _(SEXP, SEXP, SEXP, SEXP);_\
+Function: _SEXP_ **R_dataviewer** _(SEXP, SEXP, SEXP, SEXP);_\
+Function: _SEXP_ **R_selectlist** _(SEXP, SEXP, SEXP, SEXP);_
 
-:   `.External` functions for `dataentry` (and `edit` on matrices and
-    data frames), `View` and `select.list`. These can be changed if they
-    are not currently in use.
+: `.External` functions for `dataentry` (and `edit` on matrices and
+data frames), `View` and `select.list`. These can be changed if they
+are not currently in use.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Meshing event loops](#Meshing-event-loops), Previous: [Setting R
-callbacks](#Setting-R-callbacks), Up: [Embedding R under
-Unix-alikes](#Embedding-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 8.1.3 Registering symbols 
+#### 8.1.3 Registering symbols
 
 An application embedding R needs a different way of registering symbols
 because it is not a dynamic library loaded by R as would be the case
@@ -16324,63 +14313,55 @@ embedding application such that it can register symbols to be used with
 `.C`, `.Call` etc. This entry can be obtained by calling
 `getEmbeddingDllInfo`, so a typical use is
 
- 
-``` 
+```r
 DllInfo *info = R_getEmbeddingDllInfo();
 R_registerRoutines(info, cMethods, callMethods, NULL, NULL);
 ```
 
 The native routines defined by `cMethods` and `callMethods` should be
-present in the embedding application. See [Registering native
-routines](#Registering-native-routines) for details on registering
+present in the embedding application. See [Registering native routines](#Registering-native-routines) for details on registering
 symbols in general.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Threading issues](#Threading-issues), Previous: [Registering
-symbols](#Registering-symbols), Up: [Embedding R under
-Unix-alikes](#Embedding-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 8.1.4 Meshing event loops 
+#### 8.1.4 Meshing event loops
 
 One of the most difficult issues in interfacing R to a front-end is the
 handling of event loops, at least if a single thread is used. R uses
 events and timers for
 
--   Running X11 windows such as the graphics device and data editor, and
-    interacting with them (e.g., using `locator()`).
--   Supporting Tcl/Tk events for the **tcltk** package (for at least the
-    X11 version of Tk).
--   Preparing input.
--   Timing operations, for example for profiling R code and
-    `Sys.sleep()`.
--   Interrupts, where permitted.
+- Running X11 windows such as the graphics device and data editor, and
+  interacting with them (e.g., using `locator()`).
+- Supporting Tcl/Tk events for the **tcltk** package (for at least the
+  X11 version of Tk).
+- Preparing input.
+- Timing operations, for example for profiling R code and
+  `Sys.sleep()`.
+- Interrupts, where permitted.
 
 Specifically, the Unix-alike command-line version of R runs separate
 event loops for
 
--   Preparing input at the console command-line, in file
-    `src/unix/sys-unix.c`.
--   Waiting for a response from a socket in the internal functions
-    underlying FTP and HTTP transfers in `download.file()` and for
-    direct socket access, in files
-    `src/modules/internet/nanoftp.c`,
-    `src/modules/internet/nanohttp.c` and
-    `src/modules/internet/Rsock.c`
--   Mouse and window events when displaying the X11-based dataentry
-    window, in file `src/modules/X11/dataentry.c`. This is
-    regarded as *modal*, and no other events are serviced whilst it is
-    active.
+- Preparing input at the console command-line, in file
+  `src/unix/sys-unix.c`.
+- Waiting for a response from a socket in the internal functions
+  underlying FTP and HTTP transfers in `download.file()` and for
+  direct socket access, in files
+  `src/modules/internet/nanoftp.c`,
+  `src/modules/internet/nanohttp.c` and
+  `src/modules/internet/Rsock.c`
+- Mouse and window events when displaying the X11-based dataentry
+  window, in file `src/modules/X11/dataentry.c`. This is
+  regarded as _modal_, and no other events are serviced whilst it is
+  active.
 
 There is a protocol for adding event handlers to the first two types of
 event loops, using types and functions declared in the header
 `R_ext/eventloop.h` and described in comments in file
 `src/unix/sys-std.c`. It is possible to add (or remove) an
 input handler for events on a particular file descriptor, or to set a
-polling interval (*via* `R_wait_usec`) and a function to be called
-periodically *via* `R_PolledEvents`: the polling mechanism is used by
+polling interval (_via_ `R_wait_usec`) and a function to be called
+periodically _via_ `R_PolledEvents`: the polling mechanism is used by
 the **tcltk** package.
 
 It is not intended that these facilities are used by packages, but if
@@ -16397,14 +14378,9 @@ whilst waiting for input, and to ensure that it is not frozen out during
 events of the second type. The ability to add a polled handler as
 `R_timeout_handler` is used by the **tcltk** package.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Meshing event loops](#Meshing-event-loops), Up: [Embedding R
-under Unix-alikes](#Embedding-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 8.1.5 Threading issues 
+#### 8.1.5 Threading issues
 
 Embedded R is designed to be run in the main thread, and all the testing
 is done in that context. There is a potential issue with the
@@ -16412,8 +14388,7 @@ stack-checking mechanism where threads are involved. This uses two
 variables declared in `Rinterface.h` (if `CSTACK_DEFNS` is
 defined) as
 
- 
-``` 
+```r
 extern uintptr_t R_CStackLimit; /* C stack limit */
 extern uintptr_t R_CStackStart; /* Initial stack address */
 ```
@@ -16424,7 +14399,7 @@ appropriately. To do so, test if the type is defined in C header
 `stdint.h` or C++ header `cstdint` and if so include
 the header and define `HAVE_UINTPTR_T` before including
 `Rinterface.h`. (For C code one can simply include
-`Rconfig.h`, possibly *via* `R.h`, and for C++11 code
+`Rconfig.h`, possibly _via_ `R.h`, and for C++11 code
 `Rinterface.h` will include the header `cstdint`.)
 
 These will be set[^159^](#FOOT159) when `Rf_initialize_R` is
@@ -16445,35 +14420,25 @@ Note that these variables must not be changed by an R **package**: a
 package should not call R internals which makes use of the
 stack-checking mechanism on a secondary thread.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Embedding R under
-Unix-alikes](#Embedding-R-under-Unix_002dalikes), Up: [Linking GUIs and
-other front-ends to R](#Linking-GUIs-and-other-front_002dends-to-R)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 8.2 Embedding R under Windows 
+### 8.2 Embedding R under Windows
 
 All Windows interfaces to R call entry points in the DLL
 `R.dll`, directly or indirectly. Simpler applications may find
-it easier to use the indirect route *via* (D)COM.
+it easier to use the indirect route _via_ (D)COM.
 
-  --------------------------------------------------------- ---- --
-  • [Using (D)COM](#Using-_0028D_0029COM)                        
-  • [Calling R.dll directly](#Calling-R_002edll-directly)        
-  • [Finding R\_HOME](#Finding-R_005fHOME)                       
-  --------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Using (D)COM](#Using-_0028D_0029COM)     
+ • [Calling R.dll directly](#Calling-R_002edll-directly)     
+ • [Finding R_HOME](#Finding-R_005fHOME)
 
- 
-Next: [Calling R.dll directly](#Calling-R_002edll-directly), Previous:
-[Embedding R under Windows](#Embedding-R-under-Windows), Up: [Embedding
-R under Windows](#Embedding-R-under-Windows)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 8.2.1 Using (D)COM 
+---
+
+#### 8.2.1 Using (D)COM
 
 (D)COM is a standard Windows mechanism used for communication between
 Windows applications. One application (here R) is run as COM server
@@ -16488,28 +14453,22 @@ The basic R distribution is not a (D)COM server, but two addons are
 currently available that interface directly with R and provide a (D)COM
 server:
 
--   There is a (D)COM server called `StatConnector` written by Thomas
-    Baier available *via* <http://www.autstat.com/>, which works with R
-    packages to support transfer of data to and from R and remote
-    execution of R commands, as well as embedding of an R graphics
-    window.
+- There is a (D)COM server called `StatConnector` written by Thomas
+  Baier available _via_ <http://www.autstat.com/>, which works with R
+  packages to support transfer of data to and from R and remote
+  execution of R commands, as well as embedding of an R graphics
+  window.
 
-    Recent versions have usage restrictions.
+  Recent versions have usage restrictions.
 
--   Another (D)COM server, `RDCOMServer`, may be available from
-    Omegahat, <http://www.omegahat.net/>. Its philosophy is discussed in
-    <http://www.omegahat.net/RDCOMServer/Docs/Paradigm.html> and is very
-    different from the purpose of this section.
+- Another (D)COM server, `RDCOMServer`, may be available from
+  Omegahat, <http://www.omegahat.net/>. Its philosophy is discussed in
+  <http://www.omegahat.net/RDCOMServer/Docs/Paradigm.html> and is very
+  different from the purpose of this section.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Finding R\_HOME](#Finding-R_005fHOME), Previous: [Using
-(D)COM](#Using-_0028D_0029COM), Up: [Embedding R under
-Windows](#Embedding-R-under-Windows)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 8.2.2 Calling R.dll directly 
+#### 8.2.2 Calling R.dll directly
 
 The `R` DLL is mainly written in C and has `_cdecl` entry points.
 Calling it directly will be tricky except from C code (or C++ with a
@@ -16517,8 +14476,7 @@ little care).
 
 There is a version of the Unix-alike interface calling
 
- 
-``` 
+```r
 int Rf_initEmbeddedR(int ac, char **av);
 void Rf_endEmbeddedR(int fatal);
 ```
@@ -16533,8 +14491,7 @@ Examples of calling `R.dll` directly are provided in the
 directory `src/gnuwin32/front-ends`, including a simple
 command-line front end `rtest.c` whose code is
 
- 
-``` 
+```r
 #define Win32
 #include <windows.h>
 #include <stdio.h>
@@ -16576,7 +14533,7 @@ void myBusy(int which)
     /* set a busy cursor ... if which = 1, unset if which = 0 */
 }
 
-static void my_onintr(int sig) 
+static void my_onintr(int sig) { UserBreak = 1; }
 
 int main (int argc, char **argv)
 {
@@ -16635,23 +14592,23 @@ int main (int argc, char **argv)
 
 The ideas are
 
--   Check that the front-end and the linked `R.dll` match --
-    other front-ends may allow a looser match.
--   Find and set the R home directory and the user's home directory. The
-    former may be available from the Windows Registry: it will be in
-    `HKEY_LOCAL_MACHINE\Software\R-core\R\InstallPath` from an
-    administrative install and
-    `HKEY_CURRENT_USER\Software\R-core\R\InstallPath` otherwise, if
-    selected during installation (as it is by default).
--   Define startup conditions and callbacks *via* the `Rstart`
-    structure. `R_DefParams` sets the defaults, and `R_SetParams` sets
-    updated values.
--   Record the command-line arguments used by
-    `R_set_command_line_arguments` for use by the R function
-    `commandArgs()`.
--   Set up the signal handler and the basic user interface.
--   Run the main R loop, possibly with our actions intermeshed.
--   Arrange to clean up.
+- Check that the front-end and the linked `R.dll` match --
+  other front-ends may allow a looser match.
+- Find and set the R home directory and the user's home directory. The
+  former may be available from the Windows Registry: it will be in
+  `HKEY_LOCAL_MACHINE\Software\R-core\R\InstallPath` from an
+  administrative install and
+  `HKEY_CURRENT_USER\Software\R-core\R\InstallPath` otherwise, if
+  selected during installation (as it is by default).
+- Define startup conditions and callbacks _via_ the `Rstart`
+  structure. `R_DefParams` sets the defaults, and `R_SetParams` sets
+  updated values.
+- Record the command-line arguments used by
+  `R_set_command_line_arguments` for use by the R function
+  `commandArgs()`.
+- Set up the signal handler and the basic user interface.
+- Run the main R loop, possibly with our actions intermeshed.
+- Arrange to clean up.
 
 An underlying theme is the need to keep the GUI 'alive', and this has
 not been done in this example. The R callback `R_ProcessEvents` needs to
@@ -16660,23 +14617,23 @@ handled expeditiously. Conversely, R needs to allow the GUI code (which
 is running in the same process) to update itself as needed -- two ways
 are provided to allow this:
 
--   `R_ProcessEvents` calls the callback registered by `Rp->callback`. A
-    version of this is used to run package Tcl/Tk for **tcltk** under
-    Windows, for the code is
-     
-    ``` 
-    void R_ProcessEvents(void)
-    {
-        while (peekevent()) doevent(); /* Windows events for GraphApp */
-        if (UserBreak) 
-        R_CallBackHook();
-        if(R_tcldo) R_tcldo();
-    }
-    ```
-    
--   The mainloop can be split up to allow the calling application to
-    take some action after each line of input has been dealt with: see
-    the alternative code below `#ifdef SIMPLE_CASE`.
+- `R_ProcessEvents` calls the callback registered by `Rp->callback`. A
+  version of this is used to run package Tcl/Tk for **tcltk** under
+  Windows, for the code is
+
+  ```r
+  void R_ProcessEvents(void)
+  {
+      while (peekevent()) doevent(); /* Windows events for GraphApp */
+      if (UserBreak) { UserBreak = FALSE; onintr(); }
+      R_CallBackHook();
+      if(R_tcldo) R_tcldo();
+  }
+  ```
+
+- The mainloop can be split up to allow the calling application to
+  take some action after each line of input has been dealt with: see
+  the alternative code below `#ifdef SIMPLE_CASE`.
 
 It may be that no R GraphApp windows need to be considered, although
 these include pagers, the `windows()` graphics device, the R data and
@@ -16693,14 +14650,9 @@ executables default to 2Mb, and Visual C++ ones to 1Mb. The latter stack
 sizes are too small for a number of R applications, so general-purpose
 front-ends should use a larger stack size.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Calling R.dll directly](#Calling-R_002edll-directly), Up:
-[Embedding R under Windows](#Embedding-R-under-Windows)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 8.2.3 Finding R\_HOME 
+#### 8.2.3 Finding R_HOME
 
 Both applications which embed R and those which use a `system` call to
 invoke R (as `Rscript.exe`, `Rterm.exe` or `R.exe`) need to be able to
@@ -16710,7 +14662,7 @@ naive users may be flummoxed as to how to do so or what value to use.
 
 The R for Windows installers have for a long time allowed the value of
 `R_HOME` to be recorded in the Windows Registry: this is optional but
-selected by default. *Where* it is recorded has changed over the years
+selected by default. _Where_ it is recorded has changed over the years
 to allow for multiple versions of R to be installed at once, and to
 allow 32- and 64-bit versions of R to be installed on the same machine.
 
@@ -16735,2977 +14687,2073 @@ is also a key named something like `3.0.0` or `3.0.0 patched` or
 
 So a comprehensive algorithm to search for `R_HOME` is something like
 
--   Decide which of personal or administrative installs should have
-    precedence. There are arguments both ways: we find that with roaming
-    profiles that `HKEY_CURRENT_USER\Software` often gets reverted to an
-    earlier version. Do the following for one or both of
-    `HKEY_CURRENT_USER` and `HKEY_LOCAL_MACHINE`.
--   If the desired architecture is known, look in `Software\R-core\R32`
-    or `Software\R-core\R64`, and if that does not exist or the
-    architecture is immaterial, in `Software\R-core\R`.
--   If key `InstallPath` exists then this is `R_HOME` (recorded using
-    backslashes). If it does not, look for version-specific keys like
-    `2.11.0 alpha`, pick the latest (which is of itself a complicated
-    algorithm as `2.11.0 patched > 2.11.0 > 2.11.0 alpha > 2.8.1`) and
-    use its value for `InstallPath`.
+- Decide which of personal or administrative installs should have
+  precedence. There are arguments both ways: we find that with roaming
+  profiles that `HKEY_CURRENT_USER\Software` often gets reverted to an
+  earlier version. Do the following for one or both of
+  `HKEY_CURRENT_USER` and `HKEY_LOCAL_MACHINE`.
+- If the desired architecture is known, look in `Software\R-core\R32`
+  or `Software\R-core\R64`, and if that does not exist or the
+  architecture is immaterial, in `Software\R-core\R`.
+- If key `InstallPath` exists then this is `R_HOME` (recorded using
+  backslashes). If it does not, look for version-specific keys like
+  `2.11.0 alpha`, pick the latest (which is of itself a complicated
+  algorithm as `2.11.0 patched > 2.11.0 > 2.11.0 alpha > 2.8.1`) and
+  use its value for `InstallPath`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Concept index](#Concept-index), Previous: [Linking GUIs and other
-front-ends to R](#Linking-GUIs-and-other-front_002dends-to-R), Up:
-[Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## Function and variable index
 
-Function and variable index 
----------------------------
+---
 
-  ----------------------------------- ---------------------------------------------------------------------
-  Jump to:                            [**.**](#Function-and-variable-index_vr_symbol-1)  
-                                      [**\\**](#Function-and-variable-index_vr_symbol-2)
-                                       \
-                                      [**A**](#Function-and-variable-index_vr_letter-A)  
-                                      [**B**](#Function-and-variable-index_vr_letter-B)  
-                                      [**C**](#Function-and-variable-index_vr_letter-C)  
-                                      [**D**](#Function-and-variable-index_vr_letter-D)  
-                                      [**E**](#Function-and-variable-index_vr_letter-E)  
-                                      [**F**](#Function-and-variable-index_vr_letter-F)  
-                                      [**G**](#Function-and-variable-index_vr_letter-G)  
-                                      [**I**](#Function-and-variable-index_vr_letter-I)  
-                                      [**L**](#Function-and-variable-index_vr_letter-L)  
-                                      [**M**](#Function-and-variable-index_vr_letter-M)  
-                                      [**N**](#Function-and-variable-index_vr_letter-N)  
-                                      [**O**](#Function-and-variable-index_vr_letter-O)  
-                                      [**P**](#Function-and-variable-index_vr_letter-P)  
-                                      [**Q**](#Function-and-variable-index_vr_letter-Q)  
-                                      [**R**](#Function-and-variable-index_vr_letter-R)  
-                                      [**S**](#Function-and-variable-index_vr_letter-S)  
-                                      [**T**](#Function-and-variable-index_vr_letter-T)  
-                                      [**U**](#Function-and-variable-index_vr_letter-U)  
-                                      [**V**](#Function-and-variable-index_vr_letter-V)  
+Jump to:   [**.**](#Function-and-variable-index_vr_symbol-1){.summary-letter}  
+[**\\**](#Function-and-variable-index_vr_symbol-2){.summary-letter}
+ \
+ [**A**](#Function-and-variable-index_vr_letter-A){.summary-letter}  
+[**B**](#Function-and-variable-index_vr_letter-B){.summary-letter}  
+[**C**](#Function-and-variable-index_vr_letter-C){.summary-letter}  
+[**D**](#Function-and-variable-index_vr_letter-D){.summary-letter}  
+[**E**](#Function-and-variable-index_vr_letter-E){.summary-letter}  
+[**F**](#Function-and-variable-index_vr_letter-F){.summary-letter}  
+[**G**](#Function-and-variable-index_vr_letter-G){.summary-letter}  
+[**I**](#Function-and-variable-index_vr_letter-I){.summary-letter}  
+[**L**](#Function-and-variable-index_vr_letter-L){.summary-letter}  
+[**M**](#Function-and-variable-index_vr_letter-M){.summary-letter}  
+[**N**](#Function-and-variable-index_vr_letter-N){.summary-letter}  
+[**O**](#Function-and-variable-index_vr_letter-O){.summary-letter}  
+[**P**](#Function-and-variable-index_vr_letter-P){.summary-letter}  
+[**Q**](#Function-and-variable-index_vr_letter-Q){.summary-letter}  
+[**R**](#Function-and-variable-index_vr_letter-R){.summary-letter}  
+[**S**](#Function-and-variable-index_vr_letter-S){.summary-letter}  
+[**T**](#Function-and-variable-index_vr_letter-T){.summary-letter}  
+[**U**](#Function-and-variable-index_vr_letter-U){.summary-letter}  
+[**V**](#Function-and-variable-index_vr_letter-V){.summary-letter}
 
-  ----------------------------------- ---------------------------------------------------------------------
+---
 
 Index Entry
 
- 
-
 Section
 
-------------------------------------------------------------------------
+---
 
 .
 
 [`.C`](#index-_002eC):
-
- 
 
 [Interface functions .C and
 .Fortran](#Interface-functions-_002eC-and-_002eFortran)
 
 [`.Call`](#index-_002eCall):
 
- 
-
 [Handling R objects in C](#Handling-R-objects-in-C)
 
 [`.Call`](#index-_002eCall-1):
-
- 
 
 [Calling .Call](#Calling-_002eCall)
 
 [`.External`](#index-_002eExternal):
 
- 
-
 [Handling R objects in C](#Handling-R-objects-in-C)
 
 [`.External`](#index-_002eExternal-1):
 
- 
-
 [Calling .External](#Calling-_002eExternal)
 
 [`.Fortran`](#index-_002eFortran):
-
- 
 
 [Interface functions .C and
 .Fortran](#Interface-functions-_002eC-and-_002eFortran)
 
 [`.Last.lib`](#index-_002eLast_002elib):
 
- 
-
 [Load hooks](#Load-hooks)
 
 [`.onAttach`](#index-_002eonAttach):
-
- 
 
 [Load hooks](#Load-hooks)
 
 [`.onDetach`](#index-_002eonDetach):
 
- 
-
 [Load hooks](#Load-hooks)
 
 [`.onLoad`](#index-_002eonLoad):
-
- 
 
 [Load hooks](#Load-hooks)
 
 [`.onUnload`](#index-_002eonUnload):
 
- 
-
 [Load hooks](#Load-hooks)
 
 [`.Random.seed`](#index-_002eRandom_002eseed):
 
- 
-
 [Random numbers](#Random-numbers)
 
-------------------------------------------------------------------------
+---
 
 \\
 
 [`\acronym`](#index-_005cacronym):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\alias`](#index-_005calias):
-
- 
 
 [Documenting functions](#Documenting-functions)
 
 [`\arguments`](#index-_005carguments):
 
- 
-
 [Documenting functions](#Documenting-functions)
 
 [`\author`](#index-_005cauthor):
-
- 
 
 [Documenting functions](#Documenting-functions)
 
 [`\bold`](#index-_005cbold):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\cite`](#index-_005ccite):
-
- 
 
 [Marking text](#Marking-text)
 
 [`\code`](#index-_005ccode):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\command`](#index-_005ccommand):
-
- 
 
 [Marking text](#Marking-text)
 
 [`\concept`](#index-_005cconcept):
 
- 
-
 [Indices](#Indices)
 
 [`\cr`](#index-_005ccr):
 
- 
-
 [Sectioning](#Sectioning)
 
-[`\CRANpkg`](#index-_005cCRANpkg_007bpkg_007d):
-
- 
+[`\CRANpkg{pkg}`](#index-_005cCRANpkg_007bpkg_007d):
 
 [User-defined macros](#User_002ddefined-macros)
 
 [`\deqn`](#index-_005cdeqn):
 
- 
-
 [Mathematics](#Mathematics)
 
 [`\describe`](#index-_005cdescribe):
-
- 
 
 [Lists and tables](#Lists-and-tables)
 
 [`\description`](#index-_005cdescription):
 
- 
-
 [Documenting functions](#Documenting-functions)
 
 [`\details`](#index-_005cdetails):
-
- 
 
 [Documenting functions](#Documenting-functions)
 
 [`\dfn`](#index-_005cdfn):
 
- 
-
 [Marking text](#Marking-text)
 
-[`\doi`](#index-_005cdoi_007bnumbers_007d):
-
- 
+[`\doi{numbers}`](#index-_005cdoi_007bnumbers_007d):
 
 [User-defined macros](#User_002ddefined-macros)
 
 [`\dontrun`](#index-_005cdontrun):
 
- 
-
 [Documenting functions](#Documenting-functions)
 
 [`\dontshow`](#index-_005cdontshow):
-
- 
 
 [Documenting functions](#Documenting-functions)
 
 [`\dots`](#index-_005cdots):
 
- 
-
 [Insertions](#Insertions)
 
 [`\dQuote`](#index-_005cdQuote):
-
- 
 
 [Marking text](#Marking-text)
 
 [`\email`](#index-_005cemail):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\emph`](#index-_005cemph):
-
- 
 
 [Marking text](#Marking-text)
 
 [`\enc`](#index-_005cenc):
 
- 
-
 [Insertions](#Insertions)
 
 [`\enumerate`](#index-_005cenumerate):
-
- 
 
 [Lists and tables](#Lists-and-tables)
 
 [`\env`](#index-_005cenv):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\eqn`](#index-_005ceqn):
-
- 
 
 [Mathematics](#Mathematics)
 
 [`\examples`](#index-_005cexamples):
 
- 
-
 [Documenting functions](#Documenting-functions)
 
 [`\figure`](#index-_005cfigure):
-
- 
 
 [Figures](#Figures)
 
 [`\file`](#index-_005cfile):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\format`](#index-_005cformat):
-
- 
 
 [Documenting data sets](#Documenting-data-sets)
 
 [`\href`](#index-_005chref):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\if`](#index-_005cif):
-
- 
 
 [Conditional text](#Conditional-text)
 
 [`\ifelse`](#index-_005cifelse):
 
- 
-
 [Conditional text](#Conditional-text)
 
 [`\itemize`](#index-_005citemize):
-
- 
 
 [Lists and tables](#Lists-and-tables)
 
 [`\kbd`](#index-_005ckbd):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\keyword`](#index-_005ckeyword):
-
- 
 
 [Documenting functions](#Documenting-functions)
 
 [`\ldots`](#index-_005cldots):
 
- 
-
 [Insertions](#Insertions)
 
 [`\link`](#index-_005clink):
-
- 
 
 [Cross-references](#Cross_002dreferences)
 
 [`\method`](#index-_005cmethod):
 
- 
-
 [Documenting functions](#Documenting-functions)
 
 [`\name`](#index-_005cname):
-
- 
 
 [Documenting functions](#Documenting-functions)
 
 [`\newcommand`](#index-_005cnewcommand):
 
- 
-
 [User-defined macros](#User_002ddefined-macros)
 
 [`\note`](#index-_005cnote):
-
- 
 
 [Documenting functions](#Documenting-functions)
 
 [`\option`](#index-_005coption):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\out`](#index-_005cout):
-
- 
 
 [Conditional text](#Conditional-text)
 
 [`\packageAuthor`](#index-_005cpackageAuthor):
 
- 
-
 [User-defined macros](#User_002ddefined-macros)
 
 [`\packageDescription`](#index-_005cpackageDescription):
-
- 
 
 [User-defined macros](#User_002ddefined-macros)
 
 [`\packageDESCRIPTION`](#index-_005cpackageDESCRIPTION):
 
- 
-
 [User-defined macros](#User_002ddefined-macros)
 
 [`\packageIndices`](#index-_005cpackageIndices):
-
- 
 
 [User-defined macros](#User_002ddefined-macros)
 
 [`\packageMaintainer`](#index-_005cpackageMaintainer):
 
- 
-
 [User-defined macros](#User_002ddefined-macros)
 
 [`\packageTitle`](#index-_005cpackageTitle):
-
- 
 
 [User-defined macros](#User_002ddefined-macros)
 
 [`\pkg`](#index-_005cpkg):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\preformatted`](#index-_005cpreformatted):
-
- 
 
 [Marking text](#Marking-text)
 
 [`\R`](#index-_005cR):
 
- 
-
 [Insertions](#Insertions)
 
 [`\RdOpts`](#index-_005cRdOpts):
-
- 
 
 [Dynamic pages](#Dynamic-pages)
 
 [`\references`](#index-_005creferences):
 
- 
-
 [Documenting functions](#Documenting-functions)
 
 [`\renewcommand`](#index-_005crenewcommand):
-
- 
 
 [User-defined macros](#User_002ddefined-macros)
 
 [`\S3method`](#index-_005cS3method):
 
- 
-
 [Documenting functions](#Documenting-functions)
 
 [`\samp`](#index-_005csamp):
-
- 
 
 [Marking text](#Marking-text)
 
 [`\section`](#index-_005csection):
 
- 
-
 [Sectioning](#Sectioning)
 
 [`\seealso`](#index-_005cseealso):
-
- 
 
 [Documenting functions](#Documenting-functions)
 
 [`\Sexpr`](#index-_005cSexpr):
 
- 
-
 [Dynamic pages](#Dynamic-pages)
 
 [`\source`](#index-_005csource):
-
- 
 
 [Documenting data sets](#Documenting-data-sets)
 
 [`\sQuote`](#index-_005csQuote):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\sspace`](#index-_005csspace):
-
- 
 
 [User-defined macros](#User_002ddefined-macros)
 
 [`\strong`](#index-_005cstrong):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\tabular`](#index-_005ctabular):
-
- 
 
 [Lists and tables](#Lists-and-tables)
 
 [`\title`](#index-_005ctitle):
 
- 
-
 [Documenting functions](#Documenting-functions)
 
 [`\url`](#index-_005curl):
-
- 
 
 [Marking text](#Marking-text)
 
 [`\usage`](#index-_005cusage):
 
- 
-
 [Documenting functions](#Documenting-functions)
 
 [`\value`](#index-_005cvalue):
-
- 
 
 [Documenting functions](#Documenting-functions)
 
 [`\var`](#index-_005cvar):
 
- 
-
 [Marking text](#Marking-text)
 
 [`\verb`](#index-_005cverb):
 
- 
-
 [Marking text](#Marking-text)
 
-------------------------------------------------------------------------
+---
 
 A
 
 [`allocVector`](#index-allocVector):
 
- 
-
 [Allocating storage](#Allocating-storage)
 
 [`AUTHORS`](#index-AUTHORS):
 
- 
-
 [Package subdirectories](#Package-subdirectories)
 
-------------------------------------------------------------------------
+---
 
 B
 
 [`bessel_i`](#index-bessel_005fi):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`bessel_i`](#index-bessel_005fi-1):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`bessel_j`](#index-bessel_005fj):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`bessel_j`](#index-bessel_005fj-1):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`bessel_k`](#index-bessel_005fk):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`bessel_k`](#index-bessel_005fk-1):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`bessel_y`](#index-bessel_005fy):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`bessel_y`](#index-bessel_005fy-1):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`beta`](#index-beta):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`beta`](#index-beta-1):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`BLAS_LIBS`](#index-BLAS_005fLIBS):
 
- 
-
 [Using Makevars](#Using-Makevars)
 
 [`browser`](#index-browser):
 
- 
-
 [Browsing](#Browsing)
 
-------------------------------------------------------------------------
+---
 
 C
 
 [`Calloc`](#index-Calloc):
 
- 
-
 [User-controlled memory](#User_002dcontrolled-memory)
 
 [`CAR`](#index-CAR):
-
- 
 
 [Calling .External](#Calling-_002eExternal)
 
 [`CDR`](#index-CDR):
 
- 
-
 [Calling .External](#Calling-_002eExternal)
 
 [`cgmin`](#index-cgmin):
-
- 
 
 [Optimization](#Optimization)
 
 [`choose`](#index-choose):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`choose`](#index-choose-1):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`CITATION`](#index-CITATION):
 
- 
-
 [Package subdirectories](#Package-subdirectories)
 
 [`CITATION`](#index-CITATION-1):
-
- 
 
 [Preparing translations](#Preparing-translations)
 
 [`COPYRIGHTS`](#index-COPYRIGHTS):
 
- 
-
 [The DESCRIPTION file](#The-DESCRIPTION-file)
 
 [`COPYRIGHTS`](#index-COPYRIGHTS-1):
-
- 
 
 [Package subdirectories](#Package-subdirectories)
 
 [`cospi`](#index-cospi):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
 [`cPsort`](#index-cPsort):
 
- 
-
 [Utility functions](#Utility-functions)
 
-------------------------------------------------------------------------
+---
 
 D
 
 [`debug`](#index-debug):
 
- 
-
 [Debugging R code](#Debugging-R-code)
 
 [`debugger`](#index-debugger):
-
- 
 
 [Debugging R code](#Debugging-R-code)
 
 [`defineVar`](#index-defineVar):
 
- 
-
 [Finding and setting variables](#Finding-and-setting-variables)
 
 [`digamma`](#index-digamma):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`digamma`](#index-digamma-1):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`dump.frames`](#index-dump_002eframes):
-
- 
 
 [Debugging R code](#Debugging-R-code)
 
 [`duplicate`](#index-duplicate):
 
- 
-
 [Named objects and copying](#Named-objects-and-copying)
 
 [`dyn.load`](#index-dyn_002eload):
-
- 
 
 [dyn.load and dyn.unload](#dyn_002eload-and-dyn_002eunload)
 
 [`dyn.unload`](#index-dyn_002eunload):
 
- 
-
 [dyn.load and dyn.unload](#dyn_002eload-and-dyn_002eunload)
 
-------------------------------------------------------------------------
+---
 
 E
 
 [`expm1`](#index-expm1):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
 [`export`](#index-export):
-
- 
 
 [Specifying imports and exports](#Specifying-imports-and-exports)
 
 [`exportClasses`](#index-exportClasses):
 
- 
-
-[Namespaces with S4 classes and
-methods](#Namespaces-with-S4-classes-and-methods)
+[Namespaces with S4 classes and methods](#Namespaces-with-S4-classes-and-methods)
 
 [`exportClassPattern`](#index-exportClassPattern):
 
- 
-
-[Namespaces with S4 classes and
-methods](#Namespaces-with-S4-classes-and-methods)
+[Namespaces with S4 classes and methods](#Namespaces-with-S4-classes-and-methods)
 
 [`exportMethods`](#index-exportMethods):
 
- 
-
-[Namespaces with S4 classes and
-methods](#Namespaces-with-S4-classes-and-methods)
+[Namespaces with S4 classes and methods](#Namespaces-with-S4-classes-and-methods)
 
 [`exportPattern`](#index-exportPattern):
-
- 
 
 [Specifying imports and exports](#Specifying-imports-and-exports)
 
 [`exportPattern`](#index-exportPattern-1):
 
- 
-
-[Namespaces with S4 classes and
-methods](#Namespaces-with-S4-classes-and-methods)
+[Namespaces with S4 classes and methods](#Namespaces-with-S4-classes-and-methods)
 
 [`exp_rand`](#index-exp_005frand):
 
- 
-
 [Random numbers](#Random-numbers)
 
-------------------------------------------------------------------------
+---
 
 F
 
 [`FALSE`](#index-FALSE):
 
- 
-
 [Mathematical constants](#Mathematical-constants)
 
 [`findInterval`](#index-findInterval):
-
- 
 
 [Utility functions](#Utility-functions)
 
 [`findInterval2(double*`](#index-findInterval2_0028double_002a):
 
- 
-
 [Utility functions](#Utility-functions)
 
 [`findVar`](#index-findVar):
-
- 
 
 [Finding and setting variables](#Finding-and-setting-variables)
 
 [`FLIBS`](#index-FLIBS):
 
- 
-
 [Using Makevars](#Using-Makevars)
 
 [`fmax2`](#index-fmax2):
-
- 
 
 [Numerical Utilities](#Numerical-Utilities)
 
 [`fmin2`](#index-fmin2):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
 [`fprec`](#index-fprec):
-
- 
 
 [Numerical Utilities](#Numerical-Utilities)
 
 [`Free`](#index-Free):
 
- 
-
 [User-controlled memory](#User_002dcontrolled-memory)
 
 [`fround`](#index-fround):
-
- 
 
 [Numerical Utilities](#Numerical-Utilities)
 
 [`fsign`](#index-fsign):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
 [`ftrunc`](#index-ftrunc):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
-------------------------------------------------------------------------
+---
 
 G
 
 [`gammafn`](#index-gammafn):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`gammafn`](#index-gammafn-1):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`gctorture`](#index-gctorture):
 
- 
-
 [Using gctorture](#Using-gctorture)
 
 [`getAttrib`](#index-getAttrib):
-
- 
 
 [Attributes](#Attributes)
 
 [`getCharCE`](#index-getCharCE):
 
- 
-
 [Character encoding issues](#Character-encoding-issues)
 
 [`GetRNGstate`](#index-GetRNGstate):
 
- 
-
 [Random numbers](#Random-numbers)
 
-------------------------------------------------------------------------
+---
 
 I
 
 [`imax2`](#index-imax2):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
 [`imin2`](#index-imin2):
-
- 
 
 [Numerical Utilities](#Numerical-Utilities)
 
 [`import`](#index-import):
 
- 
-
 [Specifying imports and exports](#Specifying-imports-and-exports)
 
 [`importClassesFrom`](#index-importClassesFrom):
 
- 
-
-[Namespaces with S4 classes and
-methods](#Namespaces-with-S4-classes-and-methods)
+[Namespaces with S4 classes and methods](#Namespaces-with-S4-classes-and-methods)
 
 [`importFrom`](#index-importFrom):
-
- 
 
 [Specifying imports and exports](#Specifying-imports-and-exports)
 
 [`importMethodsFrom`](#index-importMethodsFrom):
 
- 
-
-[Namespaces with S4 classes and
-methods](#Namespaces-with-S4-classes-and-methods)
+[Namespaces with S4 classes and methods](#Namespaces-with-S4-classes-and-methods)
 
 [`install`](#index-install):
-
- 
 
 [Attributes](#Attributes)
 
 [`iPsort`](#index-iPsort):
 
- 
-
 [Utility functions](#Utility-functions)
 
 [`ISNA`](#index-ISNA):
-
- 
 
 [Missing and special values](#Missing-and-special-values)
 
 [`ISNA`](#index-ISNA-1):
 
- 
-
 [Missing and IEEE values](#Missing-and-IEEE-values)
 
 [`ISNAN`](#index-ISNAN):
-
- 
 
 [Missing and special values](#Missing-and-special-values)
 
 [`ISNAN`](#index-ISNAN-1):
 
- 
-
 [Missing and IEEE values](#Missing-and-IEEE-values)
 
-------------------------------------------------------------------------
+---
 
 L
 
 [`LAPACK_LIBS`](#index-LAPACK_005fLIBS):
 
- 
-
 [Using Makevars](#Using-Makevars)
 
 [`lbeta`](#index-lbeta):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`lbeta`](#index-lbeta-1):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`lbfgsb`](#index-lbfgsb):
-
- 
 
 [Optimization](#Optimization)
 
 [`lchoose`](#index-lchoose):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`lchoose`](#index-lchoose-1):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`lgamma1p`](#index-lgamma1p):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
 [`lgammafn`](#index-lgammafn):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`lgammafn`](#index-lgammafn-1):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`library.dynam`](#index-library_002edynam):
-
- 
 
 [Package subdirectories](#Package-subdirectories)
 
 [`library.dynam`](#index-library_002edynam-1):
 
- 
-
 [dyn.load and dyn.unload](#dyn_002eload-and-dyn_002eunload)
 
 [`log1p`](#index-log1p):
-
- 
 
 [Numerical Utilities](#Numerical-Utilities)
 
 [`log1pexp`](#index-log1pexp):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
 [`log1pmx`](#index-log1pmx):
-
- 
 
 [Numerical Utilities](#Numerical-Utilities)
 
 [`logspace_add`](#index-logspace_005fadd):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
 [`logspace_sub`](#index-logspace_005fsub):
-
- 
 
 [Numerical Utilities](#Numerical-Utilities)
 
 [`logspace_sum`](#index-logspace_005fsum):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
-------------------------------------------------------------------------
+---
 
 M
 
 [`mkChar`](#index-mkChar):
 
- 
-
 [Handling character data](#Handling-character-data)
 
 [`mkCharCE`](#index-mkCharCE):
-
- 
 
 [Character encoding issues](#Character-encoding-issues)
 
 [`mkCharLen`](#index-mkCharLen):
 
- 
-
 [Handling character data](#Handling-character-data)
 
 [`mkCharLenCE`](#index-mkCharLenCE):
-
- 
 
 [Character encoding issues](#Character-encoding-issues)
 
 [`M_E`](#index-M_005fE):
 
- 
-
 [Mathematical constants](#Mathematical-constants)
 
 [`M_PI`](#index-M_005fPI):
 
- 
-
 [Mathematical constants](#Mathematical-constants)
 
-------------------------------------------------------------------------
+---
 
 N
 
 [`NA_REAL`](#index-NA_005fREAL):
 
- 
-
 [Missing and IEEE values](#Missing-and-IEEE-values)
 
 [`NEWS.Rd`](#index-NEWS_002eRd):
-
- 
 
 [Package subdirectories](#Package-subdirectories)
 
 [`nmmin`](#index-nmmin):
 
- 
-
 [Optimization](#Optimization)
 
 [`norm_rand`](#index-norm_005frand):
 
- 
-
 [Random numbers](#Random-numbers)
 
-------------------------------------------------------------------------
+---
 
 O
 
 [`OBJECTS`](#index-OBJECTS):
 
- 
-
 [Using Makevars](#Using-Makevars)
 
 [`OBJECTS`](#index-OBJECTS-1):
 
- 
-
 [Creating shared objects](#Creating-shared-objects)
 
-------------------------------------------------------------------------
+---
 
 P
 
 [`pentagamma`](#index-pentagamma):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`pentagamma`](#index-pentagamma-1):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`PKG_CFLAGS`](#index-PKG_005fCFLAGS):
 
- 
-
 [Creating shared objects](#Creating-shared-objects)
 
 [`PKG_CPPFLAGS`](#index-PKG_005fCPPFLAGS):
-
- 
 
 [Creating shared objects](#Creating-shared-objects)
 
 [`PKG_CXXFLAGS`](#index-PKG_005fCXXFLAGS):
 
- 
-
 [Creating shared objects](#Creating-shared-objects)
 
 [`PKG_FCFLAGS`](#index-PKG_005fFCFLAGS):
-
- 
 
 [Using F9x code](#Using-F9x-code)
 
 [`PKG_FFLAGS`](#index-PKG_005fFFLAGS):
 
- 
-
 [Creating shared objects](#Creating-shared-objects)
 
 [`PKG_LIBS`](#index-PKG_005fLIBS):
-
- 
 
 [Creating shared objects](#Creating-shared-objects)
 
 [`PKG_OBJCFLAGS`](#index-PKG_005fOBJCFLAGS):
 
- 
-
 [Creating shared objects](#Creating-shared-objects)
 
 [`PKG_OBJCXXFLAGS`](#index-PKG_005fOBJCXXFLAGS):
-
- 
 
 [Creating shared objects](#Creating-shared-objects)
 
 [`prompt`](#index-prompt):
 
- 
-
 [Rd format](#Rd-format)
 
 [`PROTECT`](#index-PROTECT):
-
- 
 
 [Garbage Collection](#Garbage-Collection)
 
 [`PROTECT_WITH_INDEX`](#index-PROTECT_005fWITH_005fINDEX):
 
- 
-
 [Garbage Collection](#Garbage-Collection)
 
 [`psigamma`](#index-psigamma):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`psigamma`](#index-psigamma-1):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`PutRNGstate`](#index-PutRNGstate):
 
- 
-
 [Random numbers](#Random-numbers)
 
-------------------------------------------------------------------------
+---
 
 Q
 
 [`qsort3`](#index-qsort3):
 
- 
-
 [Utility functions](#Utility-functions)
 
 [`qsort4`](#index-qsort4):
 
- 
-
 [Utility functions](#Utility-functions)
 
-------------------------------------------------------------------------
+---
 
 R
 
 [`R CMD build`](#index-R-CMD-build):
 
- 
-
 [Building package tarballs](#Building-package-tarballs)
 
 [`R CMD check`](#index-R-CMD-check):
-
- 
 
 [Checking packages](#Checking-packages)
 
 [`R CMD config`](#index-R-CMD-config):
 
- 
-
 [Configure and cleanup](#Configure-and-cleanup)
 
 [`R CMD Rd2pdf`](#index-R-CMD-Rd2pdf):
-
- 
 
 [Processing documentation files](#Processing-documentation-files)
 
 [`R CMD Rdconv`](#index-R-CMD-Rdconv):
 
- 
-
 [Processing documentation files](#Processing-documentation-files)
 
 [`R CMD SHLIB`](#index-R-CMD-SHLIB):
-
- 
 
 [Creating shared objects](#Creating-shared-objects)
 
 [`R CMD Stangle`](#index-R-CMD-Stangle):
 
- 
-
 [Processing documentation files](#Processing-documentation-files)
 
 [`R CMD Sweave`](#index-R-CMD-Sweave):
-
- 
 
 [Processing documentation files](#Processing-documentation-files)
 
 [`Rdqagi`](#index-Rdqagi):
 
- 
-
 [Integration](#Integration)
 
 [`Rdqags`](#index-Rdqags):
-
- 
 
 [Integration](#Integration)
 
 [`Realloc`](#index-Realloc):
 
- 
-
 [User-controlled memory](#User_002dcontrolled-memory)
 
 [`recover`](#index-recover):
-
- 
 
 [Debugging R code](#Debugging-R-code)
 
 [`reEnc`](#index-reEnc):
 
- 
-
 [Character encoding issues](#Character-encoding-issues)
 
 [`REprintf`](#index-REprintf):
-
- 
 
 [Printing](#Printing)
 
 [`REPROTECT`](#index-REPROTECT):
 
- 
-
 [Garbage Collection](#Garbage-Collection)
 
 [`REvprintf`](#index-REvprintf):
-
- 
 
 [Printing](#Printing)
 
 [`revsort`](#index-revsort):
 
- 
-
 [Utility functions](#Utility-functions)
 
 [`Riconv`](#index-Riconv):
-
- 
 
 [Re-encoding](#Re_002dencoding)
 
 [`Riconv_close`](#index-Riconv_005fclose):
 
- 
-
 [Re-encoding](#Re_002dencoding)
 
 [`Riconv_open`](#index-Riconv_005fopen):
-
- 
 
 [Re-encoding](#Re_002dencoding)
 
 [`Rprintf`](#index-Rprintf):
 
- 
-
 [Printing](#Printing)
 
 [`Rprof`](#index-Rprof):
-
- 
 
 [Profiling R code for speed](#Profiling-R-code-for-speed)
 
 [`Rprof`](#index-Rprof-1):
 
- 
-
 [Memory statistics from Rprof](#Memory-statistics-from-Rprof)
 
 [`Rprofmem`](#index-Rprofmem):
-
- 
 
 [Tracking memory allocations](#Tracking-memory-allocations)
 
 [`rPsort`](#index-rPsort):
 
- 
-
 [Utility functions](#Utility-functions)
 
 [`rsort_with_index`](#index-rsort_005fwith_005findex):
-
- 
 
 [Utility functions](#Utility-functions)
 
 [`Rvprintf`](#index-Rvprintf):
 
- 
-
 [Printing](#Printing)
 
 [`R_addhistory`](#index-R_005faddhistory):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_alloc`](#index-R_005falloc):
 
- 
-
 [Transient storage allocation](#Transient-storage-allocation)
 
 [`R_allocLD`](#index-R_005fallocLD):
-
- 
 
 [Transient storage allocation](#Transient-storage-allocation)
 
 [`R_Busy`](#index-R_005fBusy):
 
- 
-
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_ChooseFile`](#index-R_005fChooseFile):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_CleanUp`](#index-R_005fCleanUp):
 
- 
-
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_ClearErrConsole`](#index-R_005fClearErrConsole):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_csort`](#index-R_005fcsort):
 
- 
-
 [Utility functions](#Utility-functions)
 
 [`R_dataentry`](#index-R_005fdataentry):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_dataviewer`](#index-R_005fdataviewer):
 
- 
-
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_EditFile`](#index-R_005fEditFile):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_EditFiles`](#index-R_005fEditFiles):
 
- 
-
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_ExpandFileName`](#index-R_005fExpandFileName):
-
- 
 
 [Utility functions](#Utility-functions)
 
 [`R_FINITE`](#index-R_005fFINITE):
 
- 
-
 [Missing and IEEE values](#Missing-and-IEEE-values)
 
 [`R_FlushConsole`](#index-R_005fFlushConsole):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_forceSymbols`](#index-R_005fforceSymbols):
 
- 
-
 [Registering native routines](#Registering-native-routines)
 
 [`R_GetCCallable`](#index-R_005fGetCCallable):
 
- 
-
-[Linking to native routines in other
-packages](#Linking-to-native-routines-in-other-packages)
+[Linking to native routines in other packages](#Linking-to-native-routines-in-other-packages)
 
 [`R_GetCurrentSrcref`](#index-R_005fGetCurrentSrcref):
-
- 
 
 [Accessing source references](#Accessing-source-references)
 
 [`R_GetSrcFilename`](#index-R_005fGetSrcFilename):
 
- 
-
 [Accessing source references](#Accessing-source-references)
 
 [`R_INLINE`](#index-R_005fINLINE):
-
- 
 
 [Inlining C functions](#Inlining-C-functions)
 
 [`R_IsNaN`](#index-R_005fIsNaN):
 
- 
-
 [Missing and IEEE values](#Missing-and-IEEE-values)
 
 [`R_isort`](#index-R_005fisort):
-
- 
 
 [Utility functions](#Utility-functions)
 
 [`R_LIBRARY_DIR`](#index-R_005fLIBRARY_005fDIR):
 
- 
-
 [Configure and cleanup](#Configure-and-cleanup)
 
 [`R_loadhistory`](#index-R_005floadhistory):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_max_col`](#index-R_005fmax_005fcol):
 
- 
-
 [Utility functions](#Utility-functions)
 
 [`R_NegInf`](#index-R_005fNegInf):
-
- 
 
 [Missing and IEEE values](#Missing-and-IEEE-values)
 
 [`R_NewPreciousMSet`](#index-R_005fNewPreciousMSet):
 
- 
-
 [Garbage Collection](#Garbage-Collection)
 
 [`R_orderVector`](#index-R_005forderVector):
-
- 
 
 [Utility functions](#Utility-functions)
 
 [`R_orderVector1`](#index-R_005forderVector1):
 
- 
-
 [Utility functions](#Utility-functions)
 
 [`R_PACKAGE_DIR`](#index-R_005fPACKAGE_005fDIR):
-
- 
 
 [Configure and cleanup](#Configure-and-cleanup)
 
 [`R_PACKAGE_NAME`](#index-R_005fPACKAGE_005fNAME):
 
- 
-
 [Configure and cleanup](#Configure-and-cleanup)
 
 [`R_ParseVector`](#index-R_005fParseVector):
-
- 
 
 [Parsing R code from C](#Parsing-R-code-from-C)
 
 [`R_PosInf`](#index-R_005fPosInf):
 
- 
-
 [Missing and IEEE values](#Missing-and-IEEE-values)
 
 [`R_pow`](#index-R_005fpow):
-
- 
 
 [Numerical Utilities](#Numerical-Utilities)
 
 [`R_pow_di`](#index-R_005fpow_005fdi):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
 [`R_PreserveInMSet`](#index-R_005fPreserveInMSet):
-
- 
 
 [Garbage Collection](#Garbage-Collection)
 
 [`R_PreserveObject`](#index-R_005fPreserveObject):
 
- 
-
 [Garbage Collection](#Garbage-Collection)
 
 [`R_qsort`](#index-R_005fqsort):
-
- 
 
 [Utility functions](#Utility-functions)
 
 [`R_qsort_I`](#index-R_005fqsort_005fI):
 
- 
-
 [Utility functions](#Utility-functions)
 
 [`R_qsort_int`](#index-R_005fqsort_005fint):
-
- 
 
 [Utility functions](#Utility-functions)
 
 [`R_qsort_int_I`](#index-R_005fqsort_005fint_005fI):
 
- 
-
 [Utility functions](#Utility-functions)
 
 [`R_ReadConsole`](#index-R_005fReadConsole):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_RegisterCCallable`](#index-R_005fRegisterCCallable):
 
- 
-
-[Linking to native routines in other
-packages](#Linking-to-native-routines-in-other-packages)
+[Linking to native routines in other packages](#Linking-to-native-routines-in-other-packages)
 
 [`R_registerRoutines`](#index-R_005fregisterRoutines):
-
- 
 
 [Registering native routines](#Registering-native-routines)
 
 [`R_ReleaseFromMSet`](#index-R_005fReleaseFromMSet):
 
- 
-
 [Garbage Collection](#Garbage-Collection)
 
 [`R_ReleaseObject`](#index-R_005fReleaseObject):
-
- 
 
 [Garbage Collection](#Garbage-Collection)
 
 [`R_ResetConsole`](#index-R_005fResetConsole):
 
- 
-
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_rsort`](#index-R_005frsort):
-
- 
 
 [Utility functions](#Utility-functions)
 
 [`R_savehistory`](#index-R_005fsavehistory):
 
- 
-
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_selectlist`](#index-R_005fselectlist):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_ShowFiles`](#index-R_005fShowFiles):
 
- 
-
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_ShowMessage`](#index-R_005fShowMessage):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_Srcref`](#index-R_005fSrcref):
 
- 
-
 [Accessing source references](#Accessing-source-references)
 
 [`R_Suicide`](#index-R_005fSuicide):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_tmpnam`](#index-R_005ftmpnam):
 
- 
-
 [Utility functions](#Utility-functions)
 
 [`R_tmpnam2`](#index-R_005ftmpnam2):
-
- 
 
 [Utility functions](#Utility-functions)
 
 [`R_unif_index`](#index-R_005funif_005findex):
 
- 
-
 [Random numbers](#Random-numbers)
 
 [`R_useDynamicSymbols`](#index-R_005fuseDynamicSymbols):
-
- 
 
 [Registering native routines](#Registering-native-routines)
 
 [`R_Version`](#index-R_005fVersion):
 
- 
-
 [Platform and version information](#Platform-and-version-information)
 
 [`R_WriteConsole`](#index-R_005fWriteConsole):
-
- 
 
 [Setting R callbacks](#Setting-R-callbacks)
 
 [`R_WriteConsoleEx`](#index-R_005fWriteConsoleEx):
 
- 
-
 [Setting R callbacks](#Setting-R-callbacks)
 
-------------------------------------------------------------------------
+---
 
 S
 
 [`S3method`](#index-S3method):
 
- 
-
 [Registering S3 methods](#Registering-S3-methods)
 
 [`SAFE_FFLAGS`](#index-SAFE_005fFFLAGS):
-
- 
 
 [Using Makevars](#Using-Makevars)
 
 [`samin`](#index-samin):
 
- 
-
 [Optimization](#Optimization)
 
 [`seed_in`](#index-seed_005fin):
-
- 
 
 [Random numbers](#Random-numbers)
 
 [`seed_out`](#index-seed_005fout):
 
- 
-
 [Random numbers](#Random-numbers)
 
 [`setAttrib`](#index-setAttrib):
-
- 
 
 [Attributes](#Attributes)
 
 [`setVar`](#index-setVar):
 
- 
-
 [Finding and setting variables](#Finding-and-setting-variables)
 
 [`sign`](#index-sign):
-
- 
 
 [Numerical Utilities](#Numerical-Utilities)
 
 [`sinpi`](#index-sinpi):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
 [`summaryRprof`](#index-summaryRprof):
-
- 
 
 [Memory statistics from Rprof](#Memory-statistics-from-Rprof)
 
 [`system`](#index-system):
 
- 
-
 [Operating system access](#Operating-system-access)
 
 [`system.time`](#index-system_002etime):
-
- 
 
 [Operating system access](#Operating-system-access)
 
 [`system2`](#index-system2):
 
- 
-
 [Operating system access](#Operating-system-access)
 
 [`S_alloc`](#index-S_005falloc):
-
- 
 
 [Transient storage allocation](#Transient-storage-allocation)
 
 [`S_realloc`](#index-S_005frealloc):
 
- 
-
 [Transient storage allocation](#Transient-storage-allocation)
 
-------------------------------------------------------------------------
+---
 
 T
 
 [`tanpi`](#index-tanpi):
 
- 
-
 [Numerical Utilities](#Numerical-Utilities)
 
 [`tetragamma`](#index-tetragamma):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`tetragamma`](#index-tetragamma-1):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`trace`](#index-trace):
-
- 
 
 [Debugging R code](#Debugging-R-code)
 
 [`traceback`](#index-traceback):
 
- 
-
 [Debugging R code](#Debugging-R-code)
 
 [`tracemem`](#index-tracemem):
-
- 
 
 [Tracing copies of an object](#Tracing-copies-of-an-object)
 
 [`translateChar`](#index-translateChar):
 
- 
-
 [Character encoding issues](#Character-encoding-issues)
 
 [`translateCharUTF8`](#index-translateCharUTF8):
-
- 
 
 [Character encoding issues](#Character-encoding-issues)
 
 [`trigamma`](#index-trigamma):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [`trigamma`](#index-trigamma-1):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [`TRUE`](#index-TRUE):
 
- 
-
 [Mathematical constants](#Mathematical-constants)
 
-------------------------------------------------------------------------
+---
 
 U
 
 [`undebug`](#index-undebug):
 
- 
-
 [Debugging R code](#Debugging-R-code)
 
 [`unif_rand`](#index-unif_005frand):
-
- 
 
 [Random numbers](#Random-numbers)
 
 [`UNPROTECT`](#index-UNPROTECT):
 
- 
-
 [Garbage Collection](#Garbage-Collection)
 
 [`UNPROTECT_PTR`](#index-UNPROTECT_005fPTR):
-
- 
 
 [Garbage Collection](#Garbage-Collection)
 
 [`untracemem`](#index-untracemem):
 
- 
-
 [Tracing copies of an object](#Tracing-copies-of-an-object)
 
 [`useDynLib`](#index-useDynLib):
 
- 
-
 [useDynLib](#useDynLib)
 
-------------------------------------------------------------------------
+---
 
 V
 
 [`vmaxget`](#index-vmaxget):
 
- 
-
 [Transient storage allocation](#Transient-storage-allocation)
 
 [`vmaxset`](#index-vmaxset):
-
- 
 
 [Transient storage allocation](#Transient-storage-allocation)
 
 [`vmmin`](#index-vmmin):
 
- 
-
 [Optimization](#Optimization)
 
-------------------------------------------------------------------------
+---
 
-  ----------------------------------- ---------------------------------------------------------------------
-  Jump to:                            [**.**](#Function-and-variable-index_vr_symbol-1)  
-                                      [**\\**](#Function-and-variable-index_vr_symbol-2)
-                                       \
-                                      [**A**](#Function-and-variable-index_vr_letter-A)  
-                                      [**B**](#Function-and-variable-index_vr_letter-B)  
-                                      [**C**](#Function-and-variable-index_vr_letter-C)  
-                                      [**D**](#Function-and-variable-index_vr_letter-D)  
-                                      [**E**](#Function-and-variable-index_vr_letter-E)  
-                                      [**F**](#Function-and-variable-index_vr_letter-F)  
-                                      [**G**](#Function-and-variable-index_vr_letter-G)  
-                                      [**I**](#Function-and-variable-index_vr_letter-I)  
-                                      [**L**](#Function-and-variable-index_vr_letter-L)  
-                                      [**M**](#Function-and-variable-index_vr_letter-M)  
-                                      [**N**](#Function-and-variable-index_vr_letter-N)  
-                                      [**O**](#Function-and-variable-index_vr_letter-O)  
-                                      [**P**](#Function-and-variable-index_vr_letter-P)  
-                                      [**Q**](#Function-and-variable-index_vr_letter-Q)  
-                                      [**R**](#Function-and-variable-index_vr_letter-R)  
-                                      [**S**](#Function-and-variable-index_vr_letter-S)  
-                                      [**T**](#Function-and-variable-index_vr_letter-T)  
-                                      [**U**](#Function-and-variable-index_vr_letter-U)  
-                                      [**V**](#Function-and-variable-index_vr_letter-V)  
+---
 
-  ----------------------------------- ---------------------------------------------------------------------
+Jump to:   [**.**](#Function-and-variable-index_vr_symbol-1){.summary-letter}  
+[**\\**](#Function-and-variable-index_vr_symbol-2){.summary-letter}
+ \
+ [**A**](#Function-and-variable-index_vr_letter-A){.summary-letter}  
+[**B**](#Function-and-variable-index_vr_letter-B){.summary-letter}  
+[**C**](#Function-and-variable-index_vr_letter-C){.summary-letter}  
+[**D**](#Function-and-variable-index_vr_letter-D){.summary-letter}  
+[**E**](#Function-and-variable-index_vr_letter-E){.summary-letter}  
+[**F**](#Function-and-variable-index_vr_letter-F){.summary-letter}  
+[**G**](#Function-and-variable-index_vr_letter-G){.summary-letter}  
+[**I**](#Function-and-variable-index_vr_letter-I){.summary-letter}  
+[**L**](#Function-and-variable-index_vr_letter-L){.summary-letter}  
+[**M**](#Function-and-variable-index_vr_letter-M){.summary-letter}  
+[**N**](#Function-and-variable-index_vr_letter-N){.summary-letter}  
+[**O**](#Function-and-variable-index_vr_letter-O){.summary-letter}  
+[**P**](#Function-and-variable-index_vr_letter-P){.summary-letter}  
+[**Q**](#Function-and-variable-index_vr_letter-Q){.summary-letter}  
+[**R**](#Function-and-variable-index_vr_letter-R){.summary-letter}  
+[**S**](#Function-and-variable-index_vr_letter-S){.summary-letter}  
+[**T**](#Function-and-variable-index_vr_letter-T){.summary-letter}  
+[**U**](#Function-and-variable-index_vr_letter-U){.summary-letter}  
+[**V**](#Function-and-variable-index_vr_letter-V){.summary-letter}
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Function and variable index](#Function-and-variable-index),
-Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-Concept index 
--------------
+## Concept index
 
-  ----------------------------------- -------------------------------------------------------
-  Jump to:                            [**.**](#Concept-index_cp_symbol-1)  
-                                      [**\\**](#Concept-index_cp_symbol-2)
-                                       \
-                                      [**A**](#Concept-index_cp_letter-A)  
-                                      [**B**](#Concept-index_cp_letter-B)  
-                                      [**C**](#Concept-index_cp_letter-C)  
-                                      [**D**](#Concept-index_cp_letter-D)  
-                                      [**E**](#Concept-index_cp_letter-E)  
-                                      [**F**](#Concept-index_cp_letter-F)  
-                                      [**G**](#Concept-index_cp_letter-G)  
-                                      [**H**](#Concept-index_cp_letter-H)  
-                                      [**I**](#Concept-index_cp_letter-I)  
-                                      [**L**](#Concept-index_cp_letter-L)  
-                                      [**M**](#Concept-index_cp_letter-M)  
-                                      [**N**](#Concept-index_cp_letter-N)  
-                                      [**O**](#Concept-index_cp_letter-O)  
-                                      [**P**](#Concept-index_cp_letter-P)  
-                                      [**R**](#Concept-index_cp_letter-R)  
-                                      [**S**](#Concept-index_cp_letter-S)  
-                                      [**T**](#Concept-index_cp_letter-T)  
-                                      [**U**](#Concept-index_cp_letter-U)  
-                                      [**V**](#Concept-index_cp_letter-V)  
-                                      [**W**](#Concept-index_cp_letter-W)  
-                                      [**Z**](#Concept-index_cp_letter-Z)  
+---
 
-  ----------------------------------- -------------------------------------------------------
+Jump to:   [**.**](#Concept-index_cp_symbol-1){.summary-letter}  
+[**\\**](#Concept-index_cp_symbol-2){.summary-letter}
+ \
+ [**A**](#Concept-index_cp_letter-A){.summary-letter}  
+[**B**](#Concept-index_cp_letter-B){.summary-letter}  
+[**C**](#Concept-index_cp_letter-C){.summary-letter}  
+[**D**](#Concept-index_cp_letter-D){.summary-letter}  
+[**E**](#Concept-index_cp_letter-E){.summary-letter}  
+[**F**](#Concept-index_cp_letter-F){.summary-letter}  
+[**G**](#Concept-index_cp_letter-G){.summary-letter}  
+[**H**](#Concept-index_cp_letter-H){.summary-letter}  
+[**I**](#Concept-index_cp_letter-I){.summary-letter}  
+[**L**](#Concept-index_cp_letter-L){.summary-letter}  
+[**M**](#Concept-index_cp_letter-M){.summary-letter}  
+[**N**](#Concept-index_cp_letter-N){.summary-letter}  
+[**O**](#Concept-index_cp_letter-O){.summary-letter}  
+[**P**](#Concept-index_cp_letter-P){.summary-letter}  
+[**R**](#Concept-index_cp_letter-R){.summary-letter}  
+[**S**](#Concept-index_cp_letter-S){.summary-letter}  
+[**T**](#Concept-index_cp_letter-T){.summary-letter}  
+[**U**](#Concept-index_cp_letter-U){.summary-letter}  
+[**V**](#Concept-index_cp_letter-V){.summary-letter}  
+[**W**](#Concept-index_cp_letter-W){.summary-letter}  
+[**Z**](#Concept-index_cp_letter-Z){.summary-letter}
+
+---
 
 Index Entry
 
- 
-
 Section
 
-------------------------------------------------------------------------
+---
 
 .
 
-[.install\_extras file](#index-_002einstall_005fextras-file):
-
- 
+[.install_extras file](#index-_002einstall_005fextras-file):
 
 [Writing package vignettes](#Writing-package-vignettes)
 
 [.Rbuildignore file](#index-_002eRbuildignore-file):
 
- 
-
 [Building package tarballs](#Building-package-tarballs)
 
 [.Rinstignore file](#index-_002eRinstignore-file):
 
- 
-
 [Package subdirectories](#Package-subdirectories)
 
-------------------------------------------------------------------------
+---
 
 \\
 
 [\\linkS4class](#index-_005clinkS4class):
 
- 
-
 [Cross-references](#Cross_002dreferences)
 
-------------------------------------------------------------------------
+---
 
 A
 
 [Allocating storage](#index-Allocating-storage):
 
- 
-
 [Allocating storage](#Allocating-storage)
 
 [Attributes](#index-Attributes):
 
- 
-
 [Attributes](#Attributes)
 
-------------------------------------------------------------------------
+---
 
 B
 
 [Bessel functions](#index-Bessel-functions):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [Beta function](#index-Beta-function):
-
- 
 
 [Mathematical functions](#Mathematical-functions)
 
 [Building binary packages](#index-Building-binary-packages):
 
- 
-
 [Building binary packages](#Building-binary-packages)
 
 [Building source packages](#index-Building-source-packages):
 
- 
-
 [Building package tarballs](#Building-package-tarballs)
 
-------------------------------------------------------------------------
+---
 
 C
 
 [C++ code, interfacing](#index-C_002b_002b-code_002c-interfacing):
 
- 
-
 [Interfacing C++ code](#Interfacing-C_002b_002b-code)
 
-[Calling C from Fortran and vice
-versa](#index-Calling-C-from-Fortran-and-vice-versa):
+[Calling C from Fortran and vice versa](#index-Calling-C-from-Fortran-and-vice-versa):
 
- 
-
-[Calling C from Fortran and vice
-versa](#Calling-C-from-Fortran-and-vice-versa)
+[Calling C from Fortran and vice versa](#Calling-C-from-Fortran-and-vice-versa)
 
 [Checking packages](#index-Checking-packages):
-
- 
 
 [Checking packages](#Checking-packages)
 
 [citation](#index-citation):
 
- 
-
 [Package subdirectories](#Package-subdirectories)
 
 [citation](#index-citation-1):
-
- 
 
 [Preparing translations](#Preparing-translations)
 
 [Classes](#index-Classes):
 
- 
-
 [Classes](#Classes)
 
 [Cleanup code](#index-Cleanup-code):
 
- 
-
-[Condition handling and cleanup
-code](#Condition-handling-and-cleanup-code)
+[Condition handling and cleanup code](#Condition-handling-and-cleanup-code)
 
 [cleanup file](#index-cleanup-file):
-
- 
 
 [Package structure](#Package-structure)
 
 [Condition handling](#index-Condition-handling):
 
- 
-
-[Condition handling and cleanup
-code](#Condition-handling-and-cleanup-code)
+[Condition handling and cleanup code](#Condition-handling-and-cleanup-code)
 
 [conditionals](#index-conditionals):
-
- 
 
 [Conditional text](#Conditional-text)
 
 [configure file](#index-configure-file):
 
- 
-
 [Package structure](#Package-structure)
 
 [Copying objects](#index-Copying-objects):
-
- 
 
 [Named objects and copying](#Named-objects-and-copying)
 
 [CRAN](#index-CRAN):
 
- 
-
 [Creating R packages](#Creating-R-packages)
 
 [Creating packages](#index-Creating-packages):
-
- 
 
 [Creating R packages](#Creating-R-packages)
 
 [Creating shared objects](#index-Creating-shared-objects):
 
- 
-
 [Creating shared objects](#Creating-shared-objects)
 
-[Cross-references in
-documentation](#index-Cross_002dreferences-in-documentation):
-
- 
+[Cross-references in documentation](#index-Cross_002dreferences-in-documentation):
 
 [Cross-references](#Cross_002dreferences)
 
 [cumulative hazard](#index-cumulative-hazard):
 
- 
-
 [Distribution functions](#Distribution-functions)
 
-------------------------------------------------------------------------
+---
 
 D
 
 [Debugging](#index-Debugging):
 
- 
-
 [Debugging compiled code](#Debugging-compiled-code)
 
 [DESCRIPTION file](#index-DESCRIPTION-file):
-
- 
 
 [The DESCRIPTION file](#The-DESCRIPTION-file)
 
 [Details of R types](#index-Details-of-R-types):
 
- 
-
 [Details of R types](#Details-of-R-types)
 
 [Distribution functions from C](#index-Distribution-functions-from-C):
-
- 
 
 [Distribution functions](#Distribution-functions)
 
 [Documentation, writing](#index-Documentation_002c-writing):
 
- 
-
 [Writing R documentation files](#Writing-R-documentation-files)
 
 [Dynamic loading](#index-Dynamic-loading):
-
- 
 
 [dyn.load and dyn.unload](#dyn_002eload-and-dyn_002eunload)
 
 [dynamic pages](#index-dynamic-pages):
 
- 
-
 [Dynamic pages](#Dynamic-pages)
 
-------------------------------------------------------------------------
+---
 
 E
 
 [Editing Rd files](#index-Editing-Rd-files):
 
- 
-
 [Editing Rd files](#Editing-Rd-files)
 
 [encoding](#index-encoding):
-
- 
 
 [Encoding](#Encoding)
 
 [Error handling](#index-Error-handling):
 
- 
-
-[Condition handling and cleanup
-code](#Condition-handling-and-cleanup-code)
+[Condition handling and cleanup code](#Condition-handling-and-cleanup-code)
 
 [Error signaling from C](#index-Error-signaling-from-C):
-
- 
 
 [Error signaling](#Error-signaling)
 
 [Error signaling from Fortran](#index-Error-signaling-from-Fortran):
 
- 
-
 [Error signaling from Fortran](#Error-signaling-from-Fortran)
 
-[Evaluating R expressions from
-C](#index-Evaluating-R-expressions-from-C):
-
- 
+[Evaluating R expressions from C](#index-Evaluating-R-expressions-from-C):
 
 [Evaluating R expressions from C](#Evaluating-R-expressions-from-C)
 
 [external pointer](#index-external-pointer):
 
- 
+[External pointers and weak references](#External-pointers-and-weak-references)
 
-[External pointers and weak
-references](#External-pointers-and-weak-references)
-
-------------------------------------------------------------------------
+---
 
 F
 
 [Figures in documentation](#index-Figures-in-documentation):
 
- 
-
 [Figures](#Figures)
 
 [finalizer](#index-finalizer):
 
- 
-
-[External pointers and weak
-references](#External-pointers-and-weak-references)
+[External pointers and weak references](#External-pointers-and-weak-references)
 
 [Finding variables](#index-Finding-variables):
 
- 
-
 [Finding and setting variables](#Finding-and-setting-variables)
 
-------------------------------------------------------------------------
+---
 
 G
 
 [Gamma function](#index-Gamma-function):
 
- 
-
 [Mathematical functions](#Mathematical-functions)
 
 [Garbage collection](#index-Garbage-collection):
-
- 
 
 [Garbage Collection](#Garbage-Collection)
 
 [Generic functions](#index-Generic-functions):
 
- 
-
 [Generic functions and methods](#Generic-functions-and-methods)
 
-------------------------------------------------------------------------
+---
 
 H
 
 [handling character data](#index-handling-character-data):
 
- 
-
 [Handling character data](#Handling-character-data)
 
 [Handling lists](#index-Handling-lists):
-
- 
 
 [Handling lists](#Handling-lists)
 
 [Handling R objects in C](#index-Handling-R-objects-in-C):
 
- 
-
 [Handling R objects in C](#Handling-R-objects-in-C)
 
-------------------------------------------------------------------------
+---
 
 I
 
 [IEEE special values](#index-IEEE-special-values):
 
- 
-
 [Missing and special values](#Missing-and-special-values)
 
 [IEEE special values](#index-IEEE-special-values-1):
-
- 
 
 [Missing and IEEE values](#Missing-and-IEEE-values)
 
 [INDEX file](#index-INDEX-file):
 
- 
-
 [The INDEX file](#The-INDEX-file)
 
 [Indices](#index-Indices):
 
- 
-
 [Indices](#Indices)
 
-[Inspecting R objects when
-debugging](#index-Inspecting-R-objects-when-debugging):
-
- 
+[Inspecting R objects when debugging](#index-Inspecting-R-objects-when-debugging):
 
 [Inspecting R objects](#Inspecting-R-objects)
 
 [integration](#index-integration):
 
- 
-
 [Integration](#Integration)
 
 [Interfaces to compiled code](#index-Interfaces-to-compiled-code):
-
- 
 
 [Interface functions .C and
 .Fortran](#Interface-functions-_002eC-and-_002eFortran)
 
 [Interfaces to compiled code](#index-Interfaces-to-compiled-code-1):
 
- 
-
 [Interface functions .Call and
 .External](#Interface-functions-_002eCall-and-_002eExternal)
 
 [Interfacing C++ code](#index-Interfacing-C_002b_002b-code):
 
- 
-
 [Interfacing C++ code](#Interfacing-C_002b_002b-code)
 
 [Interrupts](#index-Interrupts):
 
- 
-
 [Allowing interrupts](#Allowing-interrupts)
 
-------------------------------------------------------------------------
+---
 
 L
 
 [LICENCE file](#index-LICENCE-file):
 
- 
-
 [Licensing](#Licensing)
 
 [LICENSE file](#index-LICENSE-file):
 
- 
-
 [Licensing](#Licensing)
 
-[Lists and tables in
-documentation](#index-Lists-and-tables-in-documentation):
-
- 
+[Lists and tables in documentation](#index-Lists-and-tables-in-documentation):
 
 [Lists and tables](#Lists-and-tables)
 
-------------------------------------------------------------------------
+---
 
 M
 
 [Marking text in documentation](#index-Marking-text-in-documentation):
 
- 
-
 [Marking text](#Marking-text)
 
 [Mathematics in documentation](#index-Mathematics-in-documentation):
-
- 
 
 [Mathematics](#Mathematics)
 
 [Memory allocation from C](#index-Memory-allocation-from-C):
 
- 
-
 [Memory allocation](#Memory-allocation)
 
 [Memory use](#index-Memory-use):
-
- 
 
 [Profiling R code for memory use](#Profiling-R-code-for-memory-use)
 
 [Method functions](#index-Method-functions):
 
- 
-
 [Generic functions and methods](#Generic-functions-and-methods)
 
 [Missing values](#index-Missing-values):
-
- 
 
 [Missing and special values](#Missing-and-special-values)
 
 [Missing values](#index-Missing-values-1):
 
- 
-
 [Missing and IEEE values](#Missing-and-IEEE-values)
 
-------------------------------------------------------------------------
+---
 
 N
 
 [namespaces](#index-namespaces):
 
- 
-
 [Package namespaces](#Package-namespaces)
 
 [news](#index-news):
 
- 
-
 [Package subdirectories](#Package-subdirectories)
 
-[Numerical analysis subroutines from
-C](#index-Numerical-analysis-subroutines-from-C):
-
- 
+[Numerical analysis subroutines from C](#index-Numerical-analysis-subroutines-from-C):
 
 [Numerical analysis subroutines](#Numerical-analysis-subroutines)
 
 [Numerical derivatives](#index-Numerical-derivatives):
 
- 
-
 [Calculating numerical derivatives](#Calculating-numerical-derivatives)
 
-------------------------------------------------------------------------
+---
 
 O
 
 [OpenMP](#index-OpenMP):
 
- 
-
 [OpenMP support](#OpenMP-support)
 
 [OpenMP](#index-OpenMP-1):
-
- 
 
 [Platform and version information](#Platform-and-version-information)
 
 [Operating system access](#index-Operating-system-access):
 
- 
-
 [Operating system access](#Operating-system-access)
 
 [optimization](#index-optimization):
 
- 
-
 [Optimization](#Optimization)
 
-------------------------------------------------------------------------
+---
 
 P
 
 [Package builder](#index-Package-builder):
 
- 
-
 [Building package tarballs](#Building-package-tarballs)
 
 [Package structure](#index-Package-structure):
-
- 
 
 [Package structure](#Package-structure)
 
 [Package subdirectories](#index-Package-subdirectories):
 
- 
-
 [Package subdirectories](#Package-subdirectories)
 
 [Packages](#index-Packages):
-
- 
 
 [Creating R packages](#Creating-R-packages)
 
 [Parsing R code from C](#index-Parsing-R-code-from-C):
 
- 
-
 [Parsing R code from C](#Parsing-R-code-from-C)
 
-[Platform-specific
-documentation](#index-Platform_002dspecific-documentation):
-
- 
+[Platform-specific documentation](#index-Platform_002dspecific-documentation):
 
 [Platform-specific sections](#Platform_002dspecific-sections)
 
 [Printing from C](#index-Printing-from-C):
 
- 
-
 [Printing](#Printing)
 
 [Printing from Fortran](#index-Printing-from-Fortran):
-
- 
 
 [Printing from Fortran](#Printing-from-Fortran)
 
 [Processing Rd format](#index-Processing-Rd-format):
 
- 
-
 [Processing documentation files](#Processing-documentation-files)
 
 [Profiling](#index-Profiling):
-
- 
 
 [Profiling R code for speed](#Profiling-R-code-for-speed)
 
 [Profiling](#index-Profiling-1):
 
- 
-
 [Profiling R code for memory use](#Profiling-R-code-for-memory-use)
 
 [Profiling](#index-Profiling-2):
 
- 
-
 [Profiling compiled code](#Profiling-compiled-code)
 
-------------------------------------------------------------------------
+---
 
 R
 
 [Random numbers in C](#index-Random-numbers-in-C):
 
- 
-
 [Random numbers](#Random-numbers)
 
 [Random numbers in C](#index-Random-numbers-in-C-1):
-
- 
 
 [Distribution functions](#Distribution-functions)
 
 [Random numbers in Fortran](#index-Random-numbers-in-Fortran):
 
- 
-
-[Calling C from Fortran and vice
-versa](#Calling-C-from-Fortran-and-vice-versa)
+[Calling C from Fortran and vice versa](#Calling-C-from-Fortran-and-vice-versa)
 
 [Registering native routines](#index-Registering-native-routines):
 
- 
-
 [Registering native routines](#Registering-native-routines)
 
-------------------------------------------------------------------------
+---
 
 S
 
 [Setting variables](#index-Setting-variables):
 
- 
-
 [Finding and setting variables](#Finding-and-setting-variables)
 
 [Sort functions from C](#index-Sort-functions-from-C):
-
- 
 
 [Utility functions](#Utility-functions)
 
 [Sweave](#index-Sweave):
 
- 
-
 [Writing package vignettes](#Writing-package-vignettes)
 
-------------------------------------------------------------------------
+---
 
 T
 
 [tarballs](#index-tarballs):
 
- 
-
 [Building package tarballs](#Building-package-tarballs)
 
 [Tidying R code](#index-Tidying-R-code):
 
- 
-
 [Tidying R code](#Tidying-R-code)
 
-------------------------------------------------------------------------
+---
 
 U
 
 [user-defined macros](#index-user_002ddefined-macros):
 
- 
-
 [User-defined macros](#User_002ddefined-macros)
 
-------------------------------------------------------------------------
+---
 
 V
 
 [Version information from C](#index-Version-information-from-C):
 
- 
-
 [Platform and version information](#Platform-and-version-information)
 
 [vignettes](#index-vignettes):
-
- 
 
 [Writing package vignettes](#Writing-package-vignettes)
 
 [Visibility](#index-Visibility):
 
- 
-
 [Controlling visibility](#Controlling-visibility)
 
-------------------------------------------------------------------------
+---
 
 W
 
 [weak reference](#index-weak-reference):
 
- 
+[External pointers and weak references](#External-pointers-and-weak-references)
 
-[External pointers and weak
-references](#External-pointers-and-weak-references)
-
-------------------------------------------------------------------------
+---
 
 Z
 
 [Zero-finding](#index-Zero_002dfinding):
 
- 
-
 [Zero-finding](#Zero_002dfinding)
 
-------------------------------------------------------------------------
+---
 
-  ----------------------------------- -------------------------------------------------------
-  Jump to:                            [**.**](#Concept-index_cp_symbol-1)  
-                                      [**\\**](#Concept-index_cp_symbol-2)
-                                       \
-                                      [**A**](#Concept-index_cp_letter-A)  
-                                      [**B**](#Concept-index_cp_letter-B)  
-                                      [**C**](#Concept-index_cp_letter-C)  
-                                      [**D**](#Concept-index_cp_letter-D)  
-                                      [**E**](#Concept-index_cp_letter-E)  
-                                      [**F**](#Concept-index_cp_letter-F)  
-                                      [**G**](#Concept-index_cp_letter-G)  
-                                      [**H**](#Concept-index_cp_letter-H)  
-                                      [**I**](#Concept-index_cp_letter-I)  
-                                      [**L**](#Concept-index_cp_letter-L)  
-                                      [**M**](#Concept-index_cp_letter-M)  
-                                      [**N**](#Concept-index_cp_letter-N)  
-                                      [**O**](#Concept-index_cp_letter-O)  
-                                      [**P**](#Concept-index_cp_letter-P)  
-                                      [**R**](#Concept-index_cp_letter-R)  
-                                      [**S**](#Concept-index_cp_letter-S)  
-                                      [**T**](#Concept-index_cp_letter-T)  
-                                      [**U**](#Concept-index_cp_letter-U)  
-                                      [**V**](#Concept-index_cp_letter-V)  
-                                      [**W**](#Concept-index_cp_letter-W)  
-                                      [**Z**](#Concept-index_cp_letter-Z)  
+---
 
-  ----------------------------------- -------------------------------------------------------
+Jump to:   [**.**](#Concept-index_cp_symbol-1){.summary-letter}  
+[**\\**](#Concept-index_cp_symbol-2){.summary-letter}
+ \
+ [**A**](#Concept-index_cp_letter-A){.summary-letter}  
+[**B**](#Concept-index_cp_letter-B){.summary-letter}  
+[**C**](#Concept-index_cp_letter-C){.summary-letter}  
+[**D**](#Concept-index_cp_letter-D){.summary-letter}  
+[**E**](#Concept-index_cp_letter-E){.summary-letter}  
+[**F**](#Concept-index_cp_letter-F){.summary-letter}  
+[**G**](#Concept-index_cp_letter-G){.summary-letter}  
+[**H**](#Concept-index_cp_letter-H){.summary-letter}  
+[**I**](#Concept-index_cp_letter-I){.summary-letter}  
+[**L**](#Concept-index_cp_letter-L){.summary-letter}  
+[**M**](#Concept-index_cp_letter-M){.summary-letter}  
+[**N**](#Concept-index_cp_letter-N){.summary-letter}  
+[**O**](#Concept-index_cp_letter-O){.summary-letter}  
+[**P**](#Concept-index_cp_letter-P){.summary-letter}  
+[**R**](#Concept-index_cp_letter-R){.summary-letter}  
+[**S**](#Concept-index_cp_letter-S){.summary-letter}  
+[**T**](#Concept-index_cp_letter-T){.summary-letter}  
+[**U**](#Concept-index_cp_letter-U){.summary-letter}  
+[**V**](#Concept-index_cp_letter-V){.summary-letter}  
+[**W**](#Concept-index_cp_letter-W){.summary-letter}  
+[**Z**](#Concept-index_cp_letter-Z){.summary-letter}
 
- 
+---
 
-------------------------------------------------------------------------
+---
 
-#### Footnotes 
+#### Footnotes
 
 [(1)](#DOCF1)
 
 although this is a persistent mis-usage. It seems to stem from S, whose
-analogues of R's packages were officially known as *library sections*
-and later as *chapters*, but almost always referred to as *libraries*.
+analogues of R's packages were officially known as _library sections_
+and later as _chapters_, but almost always referred to as _libraries_.
 
 [(2)](#DOCF2)
 
@@ -19739,8 +16787,7 @@ But it is checked for Open Source packages by `R CMD check --as-cran`.
 
 [(8)](#DOCF8)
 
-Duplicate definitions may trigger a warning: see [User-defined
-macros](#User_002ddefined-macros).
+Duplicate definitions may trigger a warning: see [User-defined macros](#User_002ddefined-macros).
 
 [(9)](#DOCF9)
 
@@ -19758,7 +16805,7 @@ even one wrapped in `\donttest`.
 [(12)](#DOCF12)
 
 This includes all packages directly called by `library` and `require`
-calls, as well as data obtained *via*
+calls, as well as data obtained _via_
 `data(theirdata, package = "somepkg")` calls: `R CMD check` will warn
 about all of these. But there are subtler uses which it may not detect:
 e.g. if package A uses package B and makes use of functionality in
@@ -19789,7 +16836,7 @@ Windows' idea of the '`C`' locale uses the WinAnsi charset.
 [(16)](#DOCF16)
 
 More precisely, they can contain the English alphanumeric characters and
-the symbols '`$ - _ . + ! ' ( ) , ;  = &`'.
+the symbols '`$ - _ . + ! ' ( ) , ; = &`'.
 
 [(17)](#DOCF17)
 
@@ -20037,8 +17084,8 @@ running version of R.
 
 [(60)](#DOCF60)
 
-Note that lazy-loaded datasets are *not* in the package's namespace so
-need to be accessed *via* `::`, e.g. `survival::survexp.us`.
+Note that lazy-loaded datasets are _not_ in the package's namespace so
+need to be accessed _via_ `::`, e.g. `survival::survexp.us`.
 
 [(61)](#DOCF61)
 
@@ -20077,7 +17124,7 @@ about and some other `make`s ignore incomplete final lines.
 [(68)](#DOCF68)
 
 This was apparently introduced in SunOS 4, and is available elsewhere
-*provided* it is surrounded by spaces.
+_provided_ it is surrounded by spaces.
 
 [(69)](#DOCF69)
 
@@ -20146,7 +17193,7 @@ some versions of macOS did not.
 
 [(82)](#DOCF82)
 
-If a Java interpreter is required directly (not *via*
+If a Java interpreter is required directly (not _via_
 [**rJava**](https://CRAN.R-project.org/package=rJava)) this must be
 declared and its presence tested like any other external command.
 
@@ -20277,7 +17324,7 @@ environments.
 
 [(107)](#DOCF107)
 
-a common example in CRAN packages is `\link[mgcv]`.
+a common example in CRAN packages is `\link[mgcv]{gam}`.
 
 [(108)](#DOCF108)
 
@@ -20311,7 +17358,7 @@ elapsed time.
 [(113)](#DOCF113)
 
 With the exceptions of the commands listed below: an object of such a
-name can be printed *via* an explicit call to `print`.
+name can be printed _via_ an explicit call to `print`.
 
 [(114)](#DOCF114)
 
@@ -20459,7 +17506,7 @@ object through unchanged.
 
 [(143)](#DOCF143)
 
-You can assign a *copy* of the object in the environment frame `rho`
+You can assign a _copy_ of the object in the environment frame `rho`
 using `defineVar(symbol, duplicate(value), rho)`).
 
 [(144)](#DOCF144)
@@ -20488,7 +17535,7 @@ in S.
 
 [(149)](#DOCF149)
 
-These started to be implemented in compilers *ca* 2007, e.g. in
+These started to be implemented in compilers _ca_ 2007, e.g. in
 `gfortran` 4.3.
 
 [(150)](#DOCF150)
@@ -20497,8 +17544,7 @@ It is an optional C11 extension.
 
 [(151)](#DOCF151)
 
-but see the second paragraph of see [Portable C and C++
-code](#Portable-C-and-C_002b_002b-code).
+but see the second paragraph of see [Portable C and C++ code](#Portable-C-and-C_002b_002b-code).
 
 [(152)](#DOCF152)
 
@@ -20524,7 +17570,7 @@ the flag but do not actually hide their symbols.
 
 [(156)](#DOCF156)
 
-In the parlance of macOS this is a *dynamic* library, and is the normal
+In the parlance of macOS this is a _dynamic_ library, and is the normal
 way to build R on that platform.
 
 [(157)](#DOCF157)
@@ -20550,4 +17596,4 @@ An attempt to use only threads in the late 1990s failed to work
 correctly under Windows 95, the predominant version of Windows at that
 time.
 
-------------------------------------------------------------------------
+---

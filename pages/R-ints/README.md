@@ -7,139 +7,131 @@ resource-type: document
 title: R Internals
 ---
 
-R Internals 
-===========
+# R Internals
 
-Table of Contents 
------------------
+## Table of Contents
 
- 
--   [1 R Internal
-    Structures](#R-Internal-Structures)
-    -   [1.1 SEXPs](#SEXPs)
-        -   [1.1.1 SEXPTYPEs](#SEXPTYPEs)
-        -   [1.1.2 Rest of
-            header](#Rest-of-header)
-        -   [1.1.3 The
-            'data'](#The-_0027data_0027)
-        -   [1.1.4 Allocation
-            classes](#Allocation-classes)
-    -   [1.2 Environments and variable
-        lookup](#Environments-and-variable-lookup)
-        -   [1.2.1 Search paths](#Search-paths)
-        -   [1.2.2 Namespaces](#Namespaces)
-        -   [1.2.3 Hash table](#Hash-table)
-    -   [1.3 Attributes](#Attributes)
-    -   [1.4 Contexts](#Contexts)
-    -   [1.5 Argument
-        evaluation](#Argument-evaluation)
-        -   [1.5.1 Missingness](#Missingness)
-        -   [1.5.2 Dot-dot-dot
-            arguments](#Dot_002ddot_002ddot-arguments)
-    -   [1.6 Autoprinting](#Autoprinting)
-    -   [1.7 The write barrier and the garbage
-        collector](#The-write-barrier)
-    -   [1.8 Serialization
-        Formats](#Serialization-Formats)
-    -   [1.9 Encodings for
-        CHARSXPs](#Encodings-for-CHARSXPs)
-    -   [1.10 The CHARSXP
-        cache](#The-CHARSXP-cache)
-    -   [1.11 Warnings and
-        errors](#Warnings-and-errors)
-    -   [1.12 S4 objects](#S4-objects)
-        -   [1.12.1 Representation of S4
-            objects](#Representation-of-S4-objects)
-        -   [1.12.2 S4 classes](#S4-classes)
-        -   [1.12.3 S4 methods](#S4-methods)
-        -   [1.12.4 Mechanics of S4
-            dispatch](#Mechanics-of-S4-dispatch)
-    -   [1.13 Memory
-        allocators](#Memory-allocators)
-        -   [1.13.1 Internals of
-            R\_alloc](#Internals-of-R_005falloc)
-    -   [1.14 Internal use of global and base
-        environments](#Internal-use-of-global-and-base-environments)
-        -   [1.14.1 Base
-            environment](#Base-environment)
-        -   [1.14.2 Global
-            environment](#Global-environment)
-    -   [1.15 Modules](#Modules)
-    -   [1.16 Visibility](#Visibility)
-        -   [1.16.1 Hiding C entry
-            points](#Hiding-C-entry-points)
-        -   [1.16.2 Variables in Windows
-            DLLs](#Variables-in-Windows-DLLs)
-    -   [1.17 Lazy loading](#Lazy-loading)
--   [2 `.Internal` vs
-    `.Primitive`](#g_t_002eInternal-vs-_002ePrimitive)
-    -   [2.1 Special
-        primitives](#Special-primitives)
-    -   [2.2 Special
-        internals](#Special-internals)
-    -   [2.3 Prototypes for
-        primitives](#Prototypes-for-primitives)
-    -   [2.4 Adding a
-        primitive](#Adding-a-primitive)
--   [3 Internationalization in the R
-    sources](#Internationalization-in-the-R-sources)
-    -   [3.1 R code](#R-code)
-    -   [3.2 Main C code](#Main-C-code)
-    -   [3.3 Windows-GUI-specific
-        code](#Windows_002dGUI_002dspecific-code)
-    -   [3.4 macOS GUI](#macOS-GUI)
-    -   [3.5 Updating](#Updating)
--   [4 Structure of an Installed
-    Package](#Package-Structure)
-    -   [4.1 Metadata](#Metadata)
-    -   [4.2 Help](#Help)
--   [5 Files](#Files)
--   [6 Graphics](#Graphics-Devices)
-    -   [6.1 Graphics
-        Devices](#Graphics-devices)
-        -   [6.1.1 Device
-            structures](#Device-structures)
-        -   [6.1.2 Device
-            capabilities](#Device-capabilities)
-        -   [6.1.3 Handling text](#Handling-text)
-        -   [6.1.4 Conventions](#Conventions)
-        -   [6.1.5 'Mode'](#g_t_0027Mode_0027)
-        -   [6.1.6 Graphics
-            events](#Graphics-events)
-        -   [6.1.7 Specific
-            devices](#Specific-devices)
-            -   [6.1.7.1 X11()](#X11_0028_0029)
-            -   [6.1.7.2
-                windows()](#windows_0028_0029)
-    -   [6.2 Colours](#Colours)
-    -   [6.3 Base graphics](#Base-graphics)
-        -   [6.3.1 Arguments and
-            parameters](#Arguments-and-parameters)
-    -   [6.4 Grid graphics](#Grid-graphics)
--   [7 GUI consoles](#GUI-consoles)
-    -   [7.1 R.app](#R_002eapp)
--   [8 Tools](#Tools)
--   [9 R coding
-    standards](#R-coding-standards)
--   [10 Testing R code](#Testing-R-code)
--   [11 Use of TeX
-    dialects](#Use-of-TeX-dialects)
--   [12 Current and future
-    directions](#Current-and-future-directions)
-    -   [12.1 Long vectors](#Long-vectors)
-    -   [12.2 64-bit
-        types](#g_t64_002dbit-types)
-    -   [12.3 Large matrices](#Large-matrices)
--   [Function and variable
-    index](#Function-and-variable-index)
--   [Concept index](#Concept-index)
+- [1 R Internal
+  Structures](#R-Internal-Structures)
+  - [1.1 SEXPs](#SEXPs)
+    - [1.1.1 SEXPTYPEs](#SEXPTYPEs)
+    - [1.1.2 Rest of
+      header](#Rest-of-header)
+    - [1.1.3 The
+      'data'](#The-_0027data_0027)
+    - [1.1.4 Allocation
+      classes](#Allocation-classes)
+  - [1.2 Environments and variable
+    lookup](#Environments-and-variable-lookup)
+    - [1.2.1 Search paths](#Search-paths)
+    - [1.2.2 Namespaces](#Namespaces)
+    - [1.2.3 Hash table](#Hash-table)
+  - [1.3 Attributes](#Attributes)
+  - [1.4 Contexts](#Contexts)
+  - [1.5 Argument
+    evaluation](#Argument-evaluation)
+    - [1.5.1 Missingness](#Missingness)
+    - [1.5.2 Dot-dot-dot
+      arguments](#Dot_002ddot_002ddot-arguments)
+  - [1.6 Autoprinting](#Autoprinting)
+  - [1.7 The write barrier and the garbage
+    collector](#The-write-barrier)
+  - [1.8 Serialization
+    Formats](#Serialization-Formats)
+  - [1.9 Encodings for
+    CHARSXPs](#Encodings-for-CHARSXPs)
+  - [1.10 The CHARSXP
+    cache](#The-CHARSXP-cache)
+  - [1.11 Warnings and
+    errors](#Warnings-and-errors)
+  - [1.12 S4 objects](#S4-objects)
+    - [1.12.1 Representation of S4
+      objects](#Representation-of-S4-objects)
+    - [1.12.2 S4 classes](#S4-classes)
+    - [1.12.3 S4 methods](#S4-methods)
+    - [1.12.4 Mechanics of S4
+      dispatch](#Mechanics-of-S4-dispatch)
+  - [1.13 Memory
+    allocators](#Memory-allocators)
+    - [1.13.1 Internals of
+      R_alloc](#Internals-of-R_005falloc)
+  - [1.14 Internal use of global and base
+    environments](#Internal-use-of-global-and-base-environments)
+    - [1.14.1 Base
+      environment](#Base-environment)
+    - [1.14.2 Global
+      environment](#Global-environment)
+  - [1.15 Modules](#Modules)
+  - [1.16 Visibility](#Visibility)
+    - [1.16.1 Hiding C entry
+      points](#Hiding-C-entry-points)
+    - [1.16.2 Variables in Windows
+      DLLs](#Variables-in-Windows-DLLs)
+  - [1.17 Lazy loading](#Lazy-loading)
+- [2 `.Internal` vs
+  `.Primitive`](#g_t_002eInternal-vs-_002ePrimitive)
+  - [2.1 Special
+    primitives](#Special-primitives)
+  - [2.2 Special
+    internals](#Special-internals)
+  - [2.3 Prototypes for
+    primitives](#Prototypes-for-primitives)
+  - [2.4 Adding a
+    primitive](#Adding-a-primitive)
+- [3 Internationalization in the R
+  sources](#Internationalization-in-the-R-sources)
+  - [3.1 R code](#R-code)
+  - [3.2 Main C code](#Main-C-code)
+  - [3.3 Windows-GUI-specific
+    code](#Windows_002dGUI_002dspecific-code)
+  - [3.4 macOS GUI](#macOS-GUI)
+  - [3.5 Updating](#Updating)
+- [4 Structure of an Installed
+  Package](#Package-Structure)
+  - [4.1 Metadata](#Metadata)
+  - [4.2 Help](#Help)
+- [5 Files](#Files)
+- [6 Graphics](#Graphics-Devices)
+  - [6.1 Graphics
+    Devices](#Graphics-devices)
+    - [6.1.1 Device
+      structures](#Device-structures)
+    - [6.1.2 Device
+      capabilities](#Device-capabilities)
+    - [6.1.3 Handling text](#Handling-text)
+    - [6.1.4 Conventions](#Conventions)
+    - [6.1.5 'Mode'](#g_t_0027Mode_0027)
+    - [6.1.6 Graphics
+      events](#Graphics-events)
+    - [6.1.7 Specific
+      devices](#Specific-devices)
+      - [6.1.7.1 X11()](#X11_0028_0029)
+      - [6.1.7.2
+        windows()](#windows_0028_0029)
+  - [6.2 Colours](#Colours)
+  - [6.3 Base graphics](#Base-graphics)
+    - [6.3.1 Arguments and
+      parameters](#Arguments-and-parameters)
+  - [6.4 Grid graphics](#Grid-graphics)
+- [7 GUI consoles](#GUI-consoles)
+  - [7.1 R.app](#R_002eapp)
+- [8 Tools](#Tools)
+- [9 R coding
+  standards](#R-coding-standards)
+- [10 Testing R code](#Testing-R-code)
+- [11 Use of TeX
+  dialects](#Use-of-TeX-dialects)
+- [12 Current and future
+  directions](#Current-and-future-directions)
+  - [12.1 Long vectors](#Long-vectors)
+  - [12.2 64-bit
+    types](#g_t64_002dbit-types)
+  - [12.3 Large matrices](#Large-matrices)
+- [Function and variable
+  index](#Function-and-variable-index)
+- [Concept index](#Concept-index)
 
- 
-Next: [R Internal Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-R Internals 
-===========
+# R Internals
 
 This is a guide to the internal structures of R and coding standards for
 the core team working on R itself.
@@ -162,32 +154,28 @@ Copyright © 1999--2018 R Core Team
 > versions, except that this permission notice may be stated in a
 > translation approved by the R Core Team.
 
-  ----------------------------------------------------------------------------------- ---- --
-  • [R Internal Structures](#R-Internal-Structures)                                        
-  • [.Internal vs .Primitive](#g_t_002eInternal-vs-_002ePrimitive)                         
-  • [Internationalization in the R sources](#Internationalization-in-the-R-sources)        
-  • [Package Structure](#Package-Structure)                                                
-  • [Files](#Files)                                                                        
-  • [Graphics Devices](#Graphics-Devices)                                                  
-  • [GUI consoles](#GUI-consoles)                                                          
-  • [Tools](#Tools)                                                                        
-  • [R coding standards](#R-coding-standards)                                              
-  • [Testing R code](#Testing-R-code)                                                      
-  • [Use of TeX dialects](#Use-of-TeX-dialects)                                            
-  • [Current and future directions](#Current-and-future-directions)                        
-  • [Function and variable index](#Function-and-variable-index)                            
-  • [Concept index](#Concept-index)                                                        
-  ----------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [R Internal Structures](#R-Internal-Structures)     
+ • [.Internal vs .Primitive](#g_t_002eInternal-vs-_002ePrimitive)     
+ • [Internationalization in the R sources](#Internationalization-in-the-R-sources)     
+ • [Package Structure](#Package-Structure)     
+ • [Files](#Files)     
+ • [Graphics Devices](#Graphics-Devices)     
+ • [GUI consoles](#GUI-consoles)     
+ • [Tools](#Tools)     
+ • [R coding standards](#R-coding-standards)     
+ • [Testing R code](#Testing-R-code)     
+ • [Use of TeX dialects](#Use-of-TeX-dialects)     
+ • [Current and future directions](#Current-and-future-directions)     
+ • [Function and variable index](#Function-and-variable-index)     
+ • [Concept index](#Concept-index)
 
- 
-Next: [.Internal vs .Primitive](#g_t_002eInternal-vs-_002ePrimitive),
-Previous: [Top](#Top), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-1 R Internal Structures 
------------------------
+---
+
+## 1 R Internal Structures
 
 This chapter is the beginnings of documentation about R internal
 structures. It is written for the core team and others studying the code
@@ -198,45 +186,38 @@ version of the source code. Versions for R 2.x.y contain historical
 comments about when features were introduced: this version is for the
 3.x.y series.
 
-  ------------------------------------------------------------------------------------------------- ---- --
-  • [SEXPs](#SEXPs)                                                                                      
-  • [Environments and variable lookup](#Environments-and-variable-lookup)                                
-  • [Attributes](#Attributes)                                                                            
-  • [Contexts](#Contexts)                                                                                
-  • [Argument evaluation](#Argument-evaluation)                                                          
-  • [Autoprinting](#Autoprinting)                                                                        
-  • [The write barrier](#The-write-barrier)                                                              
-  • [Serialization Formats](#Serialization-Formats)                                                      
-  • [Encodings for CHARSXPs](#Encodings-for-CHARSXPs)                                                    
-  • [The CHARSXP cache](#The-CHARSXP-cache)                                                              
-  • [Warnings and errors](#Warnings-and-errors)                                                          
-  • [S4 objects](#S4-objects)                                                                            
-  • [Memory allocators](#Memory-allocators)                                                              
-  • [Internal use of global and base environments](#Internal-use-of-global-and-base-environments)        
-  • [Modules](#Modules)                                                                                  
-  • [Visibility](#Visibility)                                                                            
-  • [Lazy loading](#Lazy-loading)                                                                        
-  ------------------------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [SEXPs](#SEXPs)     
+ • [Environments and variable lookup](#Environments-and-variable-lookup)     
+ • [Attributes](#Attributes)     
+ • [Contexts](#Contexts)     
+ • [Argument evaluation](#Argument-evaluation)     
+ • [Autoprinting](#Autoprinting)     
+ • [The write barrier](#The-write-barrier)     
+ • [Serialization Formats](#Serialization-Formats)     
+ • [Encodings for CHARSXPs](#Encodings-for-CHARSXPs)     
+ • [The CHARSXP cache](#The-CHARSXP-cache)     
+ • [Warnings and errors](#Warnings-and-errors)     
+ • [S4 objects](#S4-objects)     
+ • [Memory allocators](#Memory-allocators)     
+ • [Internal use of global and base environments](#Internal-use-of-global-and-base-environments)     
+ • [Modules](#Modules)     
+ • [Visibility](#Visibility)     
+ • [Lazy loading](#Lazy-loading)
 
- 
-Next: [Environments and variable
-lookup](#Environments-and-variable-lookup), Previous: [R Internal
-Structures](#R-Internal-Structures), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 1.1 SEXPs 
+---
 
- 
+### 1.1 SEXPs
 
-What R users think of as *variables* or *objects* are symbols which are
+What R users think of as _variables_ or _objects_ are symbols which are
 bound to a value. The value can be thought of as either a `SEXP` (a
 pointer), or the structure it points to, a `SEXPREC` (and there are
 alternative forms used for vectors, namely `VECSXP` pointing to
 `VECTOR_SEXPREC` structures). So the basic building blocks of R objects
-are often called *nodes*, meaning `SEXPREC`s or `VECTOR_SEXPREC`s.
+are often called _nodes_, meaning `SEXPREC`s or `VECTOR_SEXPREC`s.
 
 Note that the internal structure of the `SEXPREC` is not made available
 to R Extensions: rather `SEXP` is an opaque pointer, and the internals
@@ -244,29 +225,8 @@ can only be accessed by the functions provided.
 
 Both types of node structure have as their first three fields a 64-bit
 `sxpinfo` header and then three pointers (to the attributes and the
-previous and next node in a doubly-linked list), and then some further
-fields. On a 32-bit platform a node[^1^](#FOOT1) occupies 32
-bytes: on a 64-bit platform typically 56 bytes (depending on alignment
-constraints).
 
-The first five bits of the `sxpinfo` header specify one of up to 32
-`SEXPTYPE`s.
-
-  --------------------------------------------- ---- --
-  • [SEXPTYPEs](#SEXPTYPEs)                          
-  • [Rest of header](#Rest-of-header)                
-  • [The \'data\'](#The-_0027data_0027)              
-  • [Allocation classes](#Allocation-classes)        
-  --------------------------------------------- ---- --
-
-------------------------------------------------------------------------
-
- 
-Next: [Rest of header](#Rest-of-header), Previous: [SEXPs](#SEXPs), Up:
-[SEXPs](#SEXPs)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.1 SEXPTYPEs 
+#### 1.1.1 SEXPTYPEs
 
 Currently `SEXPTYPE`s 0:10 and 13:25 are in use. Values 11 and 12 were
 used for internal factors and ordered factors and have since been
@@ -274,32 +234,33 @@ withdrawn. Note that the `SEXPTYPE` numbers are stored in `save`d
 objects and that the ordering of the types is used, so the gap cannot
 easily be reused.
 
->   no     SEXPTYPE       Description
->   ------ -------------- -------------------------------
->   `0`    `NILSXP`       `NULL`
->   `1`    `SYMSXP`       symbols
->   `2`    `LISTSXP`      pairlists
->   `3`    `CLOSXP`       closures
->   `4`    `ENVSXP`       environments
->   `5`    `PROMSXP`      promises
->   `6`    `LANGSXP`      language objects
->   `7`    `SPECIALSXP`   special functions
->   `8`    `BUILTINSXP`   builtin functions
->   `9`    `CHARSXP`      internal character strings
->   `10`   `LGLSXP`       logical vectors
->   `13`   `INTSXP`       integer vectors
->   `14`   `REALSXP`      numeric vectors
->   `15`   `CPLXSXP`      complex vectors
->   `16`   `STRSXP`       character vectors
->   `17`   `DOTSXP`       dot-dot-dot object
->   `18`   `ANYSXP`       make "any" args work
->   `19`   `VECSXP`       list (generic vector)
->   `20`   `EXPRSXP`      expression vector
->   `21`   `BCODESXP`     byte code
->   `22`   `EXTPTRSXP`    external pointer
->   `23`   `WEAKREFSXP`   weak reference
->   `24`   `RAWSXP`       raw vector
->   `25`   `S4SXP`        S4 classes not of simple type
+> no SEXPTYPE Description
+>
+> ---
+>
+> `0` `NILSXP` `NULL` > `1` `SYMSXP` symbols
+> `2` `LISTSXP` pairlists
+> `3` `CLOSXP` closures
+> `4` `ENVSXP` environments
+> `5` `PROMSXP` promises
+> `6` `LANGSXP` language objects
+> `7` `SPECIALSXP` special functions
+> `8` `BUILTINSXP` builtin functions
+> `9` `CHARSXP` internal character strings
+> `10` `LGLSXP` logical vectors
+> `13` `INTSXP` integer vectors
+> `14` `REALSXP` numeric vectors
+> `15` `CPLXSXP` complex vectors
+> `16` `STRSXP` character vectors
+> `17` `DOTSXP` dot-dot-dot object
+> `18` `ANYSXP` make "any" args work
+> `19` `VECSXP` list (generic vector)
+> `20` `EXPRSXP` expression vector
+> `21` `BCODESXP` byte code
+> `22` `EXTPTRSXP` external pointer
+> `23` `WEAKREFSXP` weak reference
+> `24` `RAWSXP` raw vector
+> `25` `S4SXP` S4 classes not of simple type
 
 Many of these will be familiar from R level: the atomic vector types are
 `LGLSXP`, `INTSXP`, `REALSXP`, `CPLXSP`, `STRSXP` and `RAWSXP`. Lists
@@ -308,8 +269,6 @@ are `VECSXP` and names (also known as symbols) are `SYMSXP`. Pairlists
 language) are rarely seen at R level, but are for example used for
 argument lists. Character vectors are effectively lists all of whose
 elements are `CHARSXP`, a type that is rarely visible at R level.
-
- 
 
 Language objects (`LANGSXP`) are calls (including formulae and so on).
 Internally they are pairlists with first element a
@@ -330,22 +289,16 @@ into a pseudo-type `FUNSXP` with code 99. Functions defined via
 The `SEXPTYPE` `S4SXP` is for S4 objects which do not consist solely of
 a simple type such as an atomic vector or function.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [The \'data\'](#The-_0027data_0027), Previous:
-[SEXPTYPEs](#SEXPTYPEs), Up: [SEXPs](#SEXPs)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.2 Rest of header 
+#### 1.1.2 Rest of header
 
 Note that the size and structure of the header changed in R 3.5.0: see
 earlier editions of this manual for the previous layout.
 
 The `sxpinfo` header is defined as a 64-bit C structure by
 
- 
-``` 
+```r
 #define NAMED_BITS 16
 struct sxpinfo_struct {
     SEXPTYPE type      :  5;  /* discussed above */
@@ -375,15 +328,12 @@ objects when tracing duplications (see `tracemem`).
 The `spare` bit is used for closures to mark them for one-time
 debugging.
 
-  
-
 The `named` field is set and accessed by the `SET_NAMED` and `NAMED`
 macros, and take values `0`, `1` and `2`, or possibly higher if
 `NAMEDMAX` is set to a higher value. R has a 'call by value' illusion,
 so an assignment like
 
- 
-``` 
+```r
 b <- a
 ```
 
@@ -399,16 +349,14 @@ necessary or not.) A value of `0` means that it is known that no other
 `SEXP` shares data with this object, and so it may safely be altered. A
 value of `1` is used for situations like
 
- 
-``` 
+```r
 dim(a) <- c(7, 2)
 ```
 
 where in principle two copies of `a` exist for the duration of the
 computation as (in principle)
 
- 
-``` 
+```r
 a <- `dim<-`(a, c(7, 2))
 ```
 
@@ -418,8 +366,6 @@ avoid a copy in this case.
 The `gp` bits are by definition 'general purpose'. We label these from 0
 to 15. Bits 0--5 and bits 14--15 have been used as described below
 (mainly from detective work on the sources).
-
-  
 
 The bits can be accessed and set by the `LEVELS` and `SETLEVELS` macros,
 which names appear to date back to the internal factor and ordered types
@@ -433,12 +379,8 @@ active binding. (For the definition of an 'active binding' see the
 header comments in file `src/main/envir.c`.) Bit 15 is used for
 an environment to indicate if it participates in the global cache.
 
- 
-
 The macros `ARGUSED` and `SET_ARGUSED` are used when matching actual and
 formal function arguments, and take the values 0, 1 and 2.
-
- 
 
 The macros `MISSING` and `SET_MISSING` are used for pairlists of
 arguments. Four bits are reserved, but only two are used (and exactly
@@ -447,14 +389,10 @@ to mark missingness on the returned argument list, and bit 1 is used to
 mark the use of a default value for an argument copied to the evaluation
 frame of a closure.
 
- 
-
 Bit 0 is used by macros `DDVAL` and `SET_DDVAL`. This indicates that a
 `SYMSXP` is one of the symbols `..n` which are implicitly created when
 `...` is processed, and so indicates that it may need to be looked up in
 a `DOTSXP`.
-
- 
 
 Bit 0 is used for `PRSEEN`, a flag to indicate if a promise has already
 been seen during the evaluation of the promise (and so to avoid
@@ -483,21 +421,15 @@ is `NA_STRING` or is in the `CHARSXP` cache (this is not serialized).
 Only exceptionally is a `CHARSXP` not hashed, and this should never
 happen in end-user code.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Allocation classes](#Allocation-classes), Previous: [Rest of
-header](#Rest-of-header), Up: [SEXPs](#SEXPs)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.3 The 'data' 
+#### 1.1.3 The 'data'
 
 A `SEXPREC` is a C structure containing the 32-bit header as described
 above, three pointers (to the attributes, previous and next node) and
 the node data, a union
 
- 
-``` 
+```r
 union {
     struct primsxp_struct primsxp;
     struct symsxp_struct symsxp;
@@ -528,126 +460,122 @@ this is interpretation, i.e. the types are not checked.
 
 `NILSXP`
 
-:   There is only one object of type `NILSXP`, `R_NilValue`, with no
-    data.
+: There is only one object of type `NILSXP`, `R_NilValue`, with no
+data.
 
 `SYMSXP`
 
-:   Pointers to three nodes, the name, value and internal, accessed by
-    `PRINTNAME` (a `CHARSXP`), `SYMVALUE` and `INTERNAL`. (If the
-    symbol's value is a `.Internal` function, the last is a pointer to
-    the appropriate `SEXPREC`.) Many symbols have `SYMVALUE`
-    `R_UnboundValue`.
+: Pointers to three nodes, the name, value and internal, accessed by
+`PRINTNAME` (a `CHARSXP`), `SYMVALUE` and `INTERNAL`. (If the
+symbol's value is a `.Internal` function, the last is a pointer to
+the appropriate `SEXPREC`.) Many symbols have `SYMVALUE`
+`R_UnboundValue`.
 
 `LISTSXP`
 
-:   Pointers to the CAR, CDR (usually a `LISTSXP` or `NULL`) and TAG (a
-    `SYMSXP` or `NULL`).
+: Pointers to the CAR, CDR (usually a `LISTSXP` or `NULL`) and TAG (a
+`SYMSXP` or `NULL`).
 
 `CLOSXP`
 
-:   Pointers to the formals (a pairlist), the body and the environment.
+: Pointers to the formals (a pairlist), the body and the environment.
 
 `ENVSXP`
 
-:   Pointers to the frame, enclosing environment and hash table (`NULL`
-    or a `VECSXP`). A frame is a tagged pairlist with tag the symbol and
-    CAR the bound value.
+: Pointers to the frame, enclosing environment and hash table (`NULL`
+or a `VECSXP`). A frame is a tagged pairlist with tag the symbol and
+CAR the bound value.
 
 `PROMSXP`
 
-:   Pointers to the value, expression and environment (in which to
-    evaluate the expression). Once an promise has been evaluated, the
-    environment is set to `NULL`.
+: Pointers to the value, expression and environment (in which to
+evaluate the expression). Once an promise has been evaluated, the
+environment is set to `NULL`.
 
 `LANGSXP`
 
-:   A special type of `LISTSXP` used for function calls. (The CAR
-    references the function (perhaps via a symbol or language object),
-    and the CDR the argument list with tags for named arguments.)
-    R-level documentation references to 'expressions' / 'language
-    objects' are mainly `LANGSXP`s, but can be symbols (`SYMSXP`s) or
-    expression vectors (`EXPRSXP`s).
+: A special type of `LISTSXP` used for function calls. (The CAR
+references the function (perhaps via a symbol or language object),
+and the CDR the argument list with tags for named arguments.)
+R-level documentation references to 'expressions' / 'language
+objects' are mainly `LANGSXP`s, but can be symbols (`SYMSXP`s) or
+expression vectors (`EXPRSXP`s).
 
 `SPECIALSXP`\
 `BUILTINSXP`
 
-:   An integer giving the offset into the table of
-    primitives/`.Internal`s.
+: An integer giving the offset into the table of
+primitives/`.Internal`s.
 
 `CHARSXP`
 
-:   `length`, `truelength` followed by a block of bytes (allowing for
-    the `nul` terminator).
+: `length`, `truelength` followed by a block of bytes (allowing for
+the `nul` terminator).
 
 `LGLSXP`\
 `INTSXP`
 
-:   `length`, `truelength` followed by a block of C `int`s (which are 32
-    bits on all R platforms).
+: `length`, `truelength` followed by a block of C `int`s (which are 32
+bits on all R platforms).
 
 `REALSXP`
 
-:   `length`, `truelength` followed by a block of C `double`s.
+: `length`, `truelength` followed by a block of C `double`s.
 
 `CPLXSXP`
 
-:   `length`, `truelength` followed by a block of C99 `double complex`s.
+: `length`, `truelength` followed by a block of C99 `double complex`s.
 
 `STRSXP`
 
-:   `length`, `truelength` followed by a block of pointers (`SEXP`s
-    pointing to `CHARSXP`s).
+: `length`, `truelength` followed by a block of pointers (`SEXP`s
+pointing to `CHARSXP`s).
 
 `DOTSXP`
 
-:   A special type of `LISTSXP` for the value bound to a `...` symbol: a
-    pairlist of promises.
+: A special type of `LISTSXP` for the value bound to a `...` symbol: a
+pairlist of promises.
 
 `ANYSXP`
 
-:   This is used as a place holder for any type: there are no actual
-    objects of this type.
+: This is used as a place holder for any type: there are no actual
+objects of this type.
 
 `VECSXP`\
 `EXPRSXP`
 
-:   `length`, `truelength` followed by a block of pointers. These are
-    internally identical (and identical to `STRSXP`) but differ in the
-    interpretations placed on the elements.
+: `length`, `truelength` followed by a block of pointers. These are
+internally identical (and identical to `STRSXP`) but differ in the
+interpretations placed on the elements.
 
 `BCODESXP`
 
-:   For the 'byte-code' objects generated by the compiler.
+: For the 'byte-code' objects generated by the compiler.
 
 `EXTPTRSXP`
 
-:   Has three pointers, to the pointer, the protection value (an R
-    object which if alive protects this object) and a tag (a `SYMSXP`?).
+: Has three pointers, to the pointer, the protection value (an R
+object which if alive protects this object) and a tag (a `SYMSXP`?).
 
 `WEAKREFSXP`
 
-:   A `WEAKREFSXP` is a special `VECSXP` of length 4, with elements
-    '`key`', '`value`', '`finalizer`' and
-    '`next`'. The '`key`' is `NULL`, an environment or
-    an external pointer, and the '`finalizer`' is a function or
-    `NULL`.
+: A `WEAKREFSXP` is a special `VECSXP` of length 4, with elements
+'`key`', '`value`', '`finalizer`' and
+'`next`'. The '`key`' is `NULL`, an environment or
+an external pointer, and the '`finalizer`' is a function or
+`NULL`.
 
 `RAWSXP`
 
-:   `length`, `truelength` followed by a block of bytes.
+: `length`, `truelength` followed by a block of bytes.
 
 `S4SXP`
 
-:   two unused pointers and a tag.
+: two unused pointers and a tag.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [The \'data\'](#The-_0027data_0027), Up: [SEXPs](#SEXPs)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.1.4 Allocation classes 
+#### 1.1.4 Allocation classes
 
 As we have seen, the field `gccls` in the header is three bits to label
 up to 8 classes of nodes. Non-vector nodes are of class 0, and 'small'
@@ -661,28 +589,19 @@ in the gc memory usage statistics since their memory semantics is not
 under R's control and may be non-standard (e.g., memory could be
 partially shared across nodes).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Attributes](#Attributes), Previous: [SEXPs](#SEXPs), Up: [R
-Internal Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.2 Environments and variable lookup 
-
- 
+### 1.2 Environments and variable lookup
 
 What users think of as 'variables' are symbols which are bound to
 objects in 'environments'. The word 'environment' is used ambiguously in
-R to mean *either* the frame of an `ENVSXP` (a pairlist of symbol-value
-pairs) *or* an `ENVSXP`, a frame plus an enclosure.
+R to mean _either_ the frame of an `ENVSXP` (a pairlist of symbol-value
+pairs) _or_ an `ENVSXP`, a frame plus an enclosure.
 
 There are additional places that 'variables' can be looked up, called
 'user databases' in comments in the code. These seem undocumented in the
 R sources, but apparently refer to the **RObjectTable** package at
 <http://www.omegahat.net/RObjectTables/>.
-
- 
 
 The base environment is special. There is an `ENVSXP` environment with
 enclosure the empty environment `R_EmptyEnv`, but the frame of that
@@ -708,21 +627,17 @@ symbols are flushed from the cache. The cache is used whenever searching
 for variables from the global environment (possibly as part of a
 recursive search).
 
-  --------------------------------- ---- --
-  • [Search paths](#Search-paths)        
-  • [Namespaces](#Namespaces)            
-  • [Hash table](#Hash-table)            
-  --------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Search paths](#Search-paths)     
+ • [Namespaces](#Namespaces)     
+ • [Hash table](#Hash-table)
 
- 
-Next: [Namespaces](#Namespaces), Previous: [Environments and variable
-lookup](#Environments-and-variable-lookup), Up: [Environments and
-variable lookup](#Environments-and-variable-lookup)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.2.1 Search paths 
+---
+
+#### 1.2.1 Search paths
 
 S has the notion of a 'search path': the lookup for a 'variable' leads
 (possibly through a series of frames) to the 'session frame' the
@@ -748,15 +663,9 @@ empty environment, but with an optimization to stop at the base
 environment.) So the 'search path' describes the chain of environments
 which is traversed once the search reaches the global environment.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Hash table](#Hash-table), Previous: [Search
-paths](#Search-paths), Up: [Environments and variable
-lookup](#Environments-and-variable-lookup)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.2.2 Namespaces 
+#### 1.2.2 Namespaces
 
 Namespaces are environments associated with packages (and once again the
 base package is special and will be considered separately). A package
@@ -768,28 +677,21 @@ bindings in the `namespace:pkg` environment. The `package:pkg`
 environment is populated by selected symbols from the `namespace:pkg`
 environment (the exports). The enclosure of this environment is an
 environment populated with the explicit imports from other namespaces,
-and the enclosure of *that* environment is the base namespace. (So the
+and the enclosure of _that_ environment is the base namespace. (So the
 illusion of the imports being in the namespace environment is created
 via the environment tree.) The enclosure of the base namespace is the
 global environment, so the search from a package namespace goes via the
 (explicit and implicit) imports to the standard 'search path'.
 
- 
-
 The base namespace environment `R_BaseNamespace` is another `ENVSXP`
 that is special-cased. It is effectively the same thing as the base
-environment `R_BaseEnv` *except* that its enclosure is the global
+environment `R_BaseEnv` _except_ that its enclosure is the global
 environment rather than the empty environment: the internal code diverts
 lookups in its frame to the global symbol table.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Namespaces](#Namespaces), Up: [Environments and variable
-lookup](#Environments-and-variable-lookup)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.2.3 Hash table 
+#### 1.2.3 Hash table
 
 Environments in R usually have a hash table, and nowadays that is the
 default in `new.env()`. It is stored as a `VECSXP` where `length` is
@@ -812,17 +714,9 @@ designed for fast searching of environments, which are from time to time
 added to but rarely deleted from, so items are not actually deleted but
 have their value set to `R_UnboundValue`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Contexts](#Contexts), Previous: [Environments and variable
-lookup](#Environments-and-variable-lookup), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.3 Attributes 
-
-  
+### 1.3 Attributes
 
 As we have seen, every `SEXPREC` has a pointer to the attributes of the
 node (default `R_NilValue`). The attributes can be accessed/set by the
@@ -873,15 +767,13 @@ object: it is for example reasonable to have a name for an environment,
 and also a `"path"` attribute for those environments populated from R
 code in a package.
 
- 
-
 When should attributes be preserved under operations on an object?
 Becker, Chambers & Wilks (1988, pp. 144--6) give some guidance. Scalar
 functions (those which operate element-by-element on a vector and whose
 output is similar to the input) should preserve attributes (except
 perhaps class, and if they do preserve class they need to preserve the
 `OBJECT` and S4 bits). Binary operations normally call
- `copyMostAttrib` to copy most attributes from
+`copyMostAttrib` to copy most attributes from
 the longer argument (and if they are of the same length from both,
 preferring the values on the first). Here 'most' means all except the
 `names`, `dim` and `dimnames` which are set appropriately by the code
@@ -892,10 +784,9 @@ except `names`, `dim` and `dimnames` which are reset as appropriate. On
 the other hand, subassignment generally preserves such attributes even
 if the length is changed. Coercion drops all attributes. For example:
 
- 
-``` 
+```r
 > x <- structure(1:8, names=letters[1:8], comm="a comment")
-> x
+> x[]
 a b c d e f g h
 1 2 3 4 5 6 7 8
 attr(,"comm")
@@ -917,25 +808,18 @@ attr(,"comm")
 [1] "a comment"
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Argument evaluation](#Argument-evaluation), Previous:
-[Attributes](#Attributes), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 1.4 Contexts
 
-### 1.4 Contexts 
-
-*Contexts* are the internal mechanism used to keep track of where a
+_Contexts_ are the internal mechanism used to keep track of where a
 computation has got to (and from where), so that control-flow constructs
 can work and reasonable information can be produced on error conditions
-(such as *via* traceback), and otherwise (the `sys.xxx` functions).
+(such as _via_ traceback), and otherwise (the `sys.xxx` functions).
 
 Execution contexts are a stack of C `structs`:
 
- 
-``` 
+```r
 typedef struct RCNTXT {
     struct RCNTXT *nextcontext; /* The next context up the chain */
     int callflag;               /* The context ‘type’ */
@@ -960,8 +844,7 @@ typedef struct RCNTXT {
 
 plus additional fields for the byte-code compiler. The 'types' are from
 
- 
-``` 
+```r
 enum {
     CTXT_TOPLEVEL = 0,  /* toplevel context */
     CTXT_NEXT     = 1,  /* target for next */
@@ -989,8 +872,6 @@ the command prompt), and `R_GlobalContext` is the top of the stack.
 Note that whilst calls to closures and builtins set a context, those to
 special internal functions never do.
 
- 
-
 Dispatching from a S3 generic (via `UseMethod` or its internal
 equivalent) or calling `NextMethod` sets the context type to
 `CTXT_GENERIC`. This is used to set the `sysparent` of the method call
@@ -1011,14 +892,9 @@ serialization (to recover from errors, e.g. free buffers) and within the
 error handling code (to raise the C stack limit and reset some
 variables).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Autoprinting](#Autoprinting), Previous: [Contexts](#Contexts),
-Up: [R Internal Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.5 Argument evaluation 
+### 1.5 Argument evaluation
 
 As we have seen, functions in R come in three types, closures
 (`SEXPTYPE` `CLOSXP`), specials (`SPECIALSXP`) and builtins
@@ -1035,7 +911,7 @@ matched values are promises, the defaults as promises to be evaluated in
 the environment just created. That environment is then used for the
 evaluation of the body of the function, and promises will be forced (and
 hence actual or default arguments evaluated) when they are encountered.
- (Evaluating a promise sets `NAMED = NAMEDMAX` on its
+(Evaluating a promise sets `NAMED = NAMEDMAX` on its
 value, so if the argument was a symbol its binding is regarded as having
 multiple references during the evaluation of the closure call.)
 
@@ -1048,15 +924,12 @@ is created for it containing the matched arguments of the method plus
 any new variables defined so far during the evaluation of the body of
 the generic. (Note that this means changes to the values of the formal
 arguments in the body of the generic are discarded when calling the
-method, but *actual* argument promises which have been forced retain the
+method, but _actual_ argument promises which have been forced retain the
 values found when they were forced. On the other hand, missing arguments
 have values which are promises to use the default supplied by the method
 and not by the generic.) If the method found is a primitive it is called
 with the matched argument list of promises (possibly already forced)
 used for the generic.
-
- 
- 
 
 The essential difference[^5^](#FOOT5) between special and
 builtin functions is that the arguments of specials are not evaluated
@@ -1064,8 +937,6 @@ before the C code is called, and those of builtins are. Note that being
 a special/builtin is separate from being primitive or `.Internal`:
 `quote` is a special primitive, `+` is a builtin primitive, `cbind` is a
 special `.Internal` and `grep` is a builtin `.Internal`.
-
- 
 
 Many of the internal functions are internal generics, which for specials
 means that they do not evaluate their arguments on call, but the C code
@@ -1076,8 +947,6 @@ method, it dispatches to that method with a call based on promises to
 evaluate the remaining arguments. If no method is found, the remaining
 arguments are evaluated before return to the internal generic.
 
- 
-
 The other way that internal functions can be generic is to be group
 generic. Most such functions are builtins (so immediately evaluate all
 their arguments), and all contain a call to the C function
@@ -1086,20 +955,16 @@ arguments for the `"Math"` group generic, with some members allowing
 only one argument, some having two (with a default for the second) and
 `trunc` allows one or more but the default method only accepts one.
 
-  ----------------------------------------------------------- ---- --
-  • [Missingness](#Missingness)                                    
-  • [Dot-dot-dot arguments](#Dot_002ddot_002ddot-arguments)        
-  ----------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Missingness](#Missingness)     
+ • [Dot-dot-dot arguments](#Dot_002ddot_002ddot-arguments)
 
- 
-Next: [Dot-dot-dot arguments](#Dot_002ddot_002ddot-arguments), Previous:
-[Argument evaluation](#Argument-evaluation), Up: [Argument
-evaluation](#Argument-evaluation)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.5.1 Missingness 
+---
+
+#### 1.5.1 Missingness
 
 Actual arguments to (non-internal) R functions can be fewer than are
 required to match the formal arguments of the function. Having unmatched
@@ -1108,12 +973,9 @@ evaluation), but when the argument is evaluated, either its default
 value is evaluated (within the evaluation environment of the function)
 or an error is thrown with a message along the lines of
 
- 
-``` 
+```r
 argument "foobar" is missing, with no default
 ```
-
- 
 
 Internally missingness is handled by two mechanisms. The object
 `R_MissingArg` is used to indicate that a formal argument has no
@@ -1142,14 +1004,9 @@ Special primitives also need to handle missing arguments, and in some
 case (e.g. `log`) that is why they are special and not builtin. This is
 usually done by testing if an argument's value is `R_MissingArg`.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Missingness](#Missingness), Up: [Argument
-evaluation](#Argument-evaluation)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.5.2 Dot-dot-dot arguments 
+#### 1.5.2 Dot-dot-dot arguments
 
 Dot-dot-dot arguments are convenient when writing functions, but
 complicate the internal code for argument evaluation.
@@ -1174,17 +1031,9 @@ Values of arguments matched to a `...` argument can be missing.
 Special primitives may need to handle `...` arguments: see for example
 the internal code of `switch` in file `src/main/builtin.c`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [The write barrier](#The-write-barrier), Previous: [Argument
-evaluation](#Argument-evaluation), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.6 Autoprinting 
-
- 
+### 1.6 Autoprinting
 
 Whether the returned value of a top-level R expression is printed is
 controlled by the global boolean variable `R_Visible`. This is set (to
@@ -1205,7 +1054,7 @@ which may change the visibility flag: examples[^6^](#FOOT6) are
 `Recall`, `recordGraphics`, `standardGeneric`, `switch` and `UseMethod`.
 
 'Special' primitive and internal functions evaluate their arguments
-internally *after* `R_Visible` has been set, and evaluation of the
+internally _after_ `R_Visible` has been set, and evaluation of the
 arguments (e.g. an assignment as in PR\#9263) can change the value of
 the flag.
 
@@ -1226,17 +1075,9 @@ Otherwise, if the object bit is set (so the object has a `"class"`
 attribute), `print` is called to dispatch methods: for objects without a
 class the internal code of `print.default` is called.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Serialization Formats](#Serialization-Formats), Previous:
-[Autoprinting](#Autoprinting), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.7 The write barrier and the garbage collector 
-
- 
+### 1.7 The write barrier and the garbage collector
 
 R has long had a generational garbage collector, and bit `gcgen` in the
 `sxpinfo` header is used in the implementation of this. This is used in
@@ -1246,18 +1087,18 @@ There are three levels of collections. Level 0 collects only the
 youngest generation, level 1 collects the two youngest generations and
 level 2 collects all generations. After 20 level-0 collections the next
 collection is at level 1, and after 5 level-1 collections at level 2.
-Further, if a level-`n` collection fails to provide 20% free
+Further, if a level-`n`{.variable} collection fails to provide 20% free
 space (for each of nodes and the vector heap), the next collection will
-be at level `n+1`. (The R-level function `gc()` performs a
+be at level `n+1`{.variable}. (The R-level function `gc()` performs a
 level-2 collection.)
 
 A generational collector needs to efficiently 'age' the objects,
 especially list-like objects (including `STRSXP`s). This is done by
 ensuring that the elements of a list are regarded as at least as old as
-the list *when they are assigned*. This is handled by the functions
+the list _when they are assigned_. This is handled by the functions
 `SET_VECTOR_ELT` and `SET_STRING_ELT`, which is why they are functions
 and not macros. Ensuring the integrity of such operations is termed the
-*write barrier* and is done by making the `SEXP` opaque and only
+_write barrier_ and is done by making the `SEXP` opaque and only
 providing access via functions (which cannot be used as lvalues in
 assignments in C).
 
@@ -1277,15 +1118,9 @@ For background papers see
 <http://homepage.stat.uiowa.edu/~luke/R/barrier.html> and
 <http://homepage.stat.uiowa.edu/~luke/R/gengcnotes.html>.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Encodings for CHARSXPs](#Encodings-for-CHARSXPs), Previous: [The
-write barrier](#The-write-barrier), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.8 Serialization Formats 
+### 1.8 Serialization Formats
 
 Serialized versions of R objects are used by `load`/`save` and also at a
 slightly lower level by `saveRDS`/`readRDS` (and their earlier
@@ -1388,22 +1223,16 @@ serialization of `ALTREP` framework objects. It also stores the current
 native encoding at serialization time, so that unflagged strings can be
 converted if unserialized in R running under different native encoding.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [The CHARSXP cache](#The-CHARSXP-cache), Previous: [Serialization
-Formats](#Serialization-Formats), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.9 Encodings for CHARSXPs 
+### 1.9 Encodings for CHARSXPs
 
 Character data in R are stored in the sexptype `CHARSXP`.
 
 There is support for encodings other than that of the current locale, in
 particular UTF-8 and the multi-byte encodings used on Windows for CJK
 languages. A limited means to indicate the encoding of a `CHARSXP` is
-*via* two of the 'general purpose' bits which are used to declare the
+_via_ two of the 'general purpose' bits which are used to declare the
 encoding to be either Latin-1 or UTF-8. (Note that it is possible for a
 character vector to contain elements in different encodings.) Both
 printing and plotting notice the declaration and convert the string to
@@ -1468,15 +1297,9 @@ convention is used (see header file `rgui_UTF8.h`) by `cat`,
 the encoding is declared explicitly on an unopened connection passed to
 those functions.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Warnings and errors](#Warnings-and-errors), Previous: [Encodings
-for CHARSXPs](#Encodings-for-CHARSXPs), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.10 The CHARSXP cache 
+### 1.10 The CHARSXP cache
 
 There is a global cache for `CHARSXP`s created by `mkChar` --- the cache
 ensures that most `CHARSXP`s with the same contents share storage
@@ -1486,21 +1309,13 @@ reloaded from the `save` formats of R prior to 0.99.0 are not cached
 (since the code used is frozen and very few examples still exist).
 
 The cache records the encoding of the string as well as the bytes: all
-requests to create a `CHARSXP` should be *via* a call to `mkCharLenCE`.
+requests to create a `CHARSXP` should be _via_ a call to `mkCharLenCE`.
 Any encoding given in `mkCharLenCE` call will be ignored if the string's
 bytes are all ASCII characters.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [S4 objects](#S4-objects), Previous: [The CHARSXP
-cache](#The-CHARSXP-cache), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.11 Warnings and errors 
-
-  
+### 1.11 Warnings and errors
 
 Each of `warning` and `stop` have two C-level equivalents, `warning`,
 `warningcall`, `error` and `errorcall`. The relationship between the
@@ -1530,8 +1345,7 @@ either a primitive or a `.Internal`, in which case probably
 `warningcall` is more appropriate. The other involves replacement
 functions, where the call was once of the form
 
- 
-``` 
+```r
 > length(x) <- y ~ x
 Error in "length<-"(`*tmp*`, value = y ~ x) : invalid value
 ```
@@ -1541,35 +1355,26 @@ will be a suitable context at the top of the stack, so `warning` should
 be used. (The results for `.Internal` replacement functions such as
 `substr<-` are not ideal.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Memory allocators](#Memory-allocators), Previous: [Warnings and
-errors](#Warnings-and-errors), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.12 S4 objects 
+### 1.12 S4 objects
 
 \[This section is currently a preliminary draft and should not be taken
 as definitive. The description assumes that `R_NO_METHODS_TABLES` has
 not been set.\]
 
-  ----------------------------------------------------------------- ---- --
-  • [Representation of S4 objects](#Representation-of-S4-objects)        
-  • [S4 classes](#S4-classes)                                            
-  • [S4 methods](#S4-methods)                                            
-  • [Mechanics of S4 dispatch](#Mechanics-of-S4-dispatch)                
-  ----------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Representation of S4 objects](#Representation-of-S4-objects)     
+ • [S4 classes](#S4-classes)     
+ • [S4 methods](#S4-methods)     
+ • [Mechanics of S4 dispatch](#Mechanics-of-S4-dispatch)
 
- 
-Next: [S4 classes](#S4-classes), Previous: [S4 objects](#S4-objects),
-Up: [S4 objects](#S4-objects)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.12.1 Representation of S4 objects 
+---
+
+#### 1.12.1 Representation of S4 objects
 
 S4 objects can be of any `SEXPTYPE`. They are either an object of a
 simple type (such as an atomic vector or function) with S4 class
@@ -1588,14 +1393,9 @@ attribute, the `OBJECT` bit is set.
 It is currently unclear what should happen if the class attribute is
 removed from an S4 object, or if this should be allowed.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [S4 methods](#S4-methods), Previous: [Representation of S4
-objects](#Representation-of-S4-objects), Up: [S4 objects](#S4-objects)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.12.2 S4 classes 
+#### 1.12.2 S4 classes
 
 S4 classes are stored as R objects in the environment in which they are
 created, with names `.__C__classname`: as such they are not listed by
@@ -1611,14 +1411,9 @@ merely convenient ways to refer to class objects without needing to know
 their internal 'metaname' (although `exportClasses` does a little sanity
 checking via `isClass`).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Mechanics of S4 dispatch](#Mechanics-of-S4-dispatch), Previous:
-[S4 classes](#S4-classes), Up: [S4 objects](#S4-objects)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.12.3 S4 methods 
+#### 1.12.3 S4 methods
 
 Details of the methods are stored in environments (typically hidden in
 the respective namespace) with a non-syntactic name of the form
@@ -1629,8 +1424,7 @@ sometimes referred to as a 'methods table'.
 
 For example,
 
- 
-``` 
+```r
  length(nM <- asNamespace("Matrix") )                    # 941 for Matrix 1.2-6
  length(meth <- grep("^[.]__T__", names(nM), value=TRUE))# 107 generics with methods
  length(meth.Ops <- nM$`.__T__Ops:base‘) # 71 methods for the ’Ops' (group)generic
@@ -1665,16 +1459,12 @@ generic will be imported if it is in the namespace, so
 in other packages. Since methods for a generic could be imported from
 several different packages, the methods tables are merged.
 
-When a package is attached `methodscacheMetaData` is called to update
+When a package is attached `methods:::cacheMetaData` is called to update
 the internal tables: only the visible methods will be cached.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [S4 methods](#S4-methods), Up: [S4 objects](#S4-objects)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.12.4 Mechanics of S4 dispatch 
+#### 1.12.4 Mechanics of S4 dispatch
 
 This subsection does not discuss how S4 methods are chosen: see
 <https://developer.r-project.org/howMethodsWork.pdf>.
@@ -1683,7 +1473,7 @@ For all but primitive functions, setting a method on an existing
 function that is not itself S4 generic creates a new object in the
 current environment which is a call to `standardGeneric` with the old
 definition as the default method. Such S4 generics can also be created
-*via* a call to `setGeneric`[^13^](#FOOT13) and are standard
+_via_ a call to `setGeneric`[^13^](#FOOT13) and are standard
 closures in the R language, with environment the environment within
 which they are created. With the advent of namespaces this is somewhat
 problematic: if `myfn` was previously in a package with a name space
@@ -1738,16 +1528,9 @@ and a short exceptions list in file `BasicFunsList.R`: this
 currently contains the subsetting and subassignment operators and an
 override for `c`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Internal use of global and base
-environments](#Internal-use-of-global-and-base-environments), Previous:
-[S4 objects](#S4-objects), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.13 Memory allocators 
+### 1.13 Memory allocators
 
 R's memory allocation is almost all done via routines in file
 `src/main/memory.c`. It is important to keep track of where
@@ -1756,7 +1539,7 @@ memory allocator that differs from `malloc` etc as provided by MinGW.
 Specifically, there are entry points `Rm_malloc`, `Rm_free`, `Rm_calloc`
 and `Rm_free` provided by file `src/gnuwin32/malloc.c`. This
 was done for two reasons. The primary motivation was performance: the
-allocator provided by MSVCRT *via* MinGW was far too slow at handling
+allocator provided by MSVCRT _via_ MinGW was far too slow at handling
 the many small allocations that the allocation system for `SEXPREC`s
 uses. As a side benefit, we can set a limit on the amount of allocated
 memory: this is useful as whereas Windows does provide virtual memory it
@@ -1769,15 +1552,14 @@ packages.
 
 The rest of R should where possible make use of the allocators made
 available by file `src/main/memory.c`, which are also the
-methods recommended in [Memory
-allocation](./R-exts.html#Memory-allocation) in Writing R Extensions
-  
- for use in R packages, namely the use of `R_alloc`,
+methods recommended in [Memory allocation](./R-exts.html#Memory-allocation) in Writing R Extensions
+
+for use in R packages, namely the use of `R_alloc`,
 `Calloc`, `Realloc` and `Free`. Memory allocated by `R_alloc` is freed
 by the garbage collector once the 'watermark' has been reset by calling
- `vmaxset`. This is done automatically by the wrapper
+`vmaxset`. This is done automatically by the wrapper
 code calling primitives and `.Internal` functions (and also by the
-wrapper code to `.Call` and `.External`), but 
+wrapper code to `.Call` and `.External`), but
 `vmaxget` and `vmaxset` can be used to reset the watermark from within
 internal code if the memory is only required for a short time.
 
@@ -1792,8 +1574,7 @@ the allocation block returned. Second, it increases the danger of
 overflowing the C stack. It is suggested that it is only used for
 smallish allocations (up to tens of thousands of bytes), and that
 
- 
-``` 
+```r
     R_CheckStack();
 ```
 
@@ -1802,14 +1583,13 @@ mechanism will warn far enough from the stack limit to allow for modest
 use of alloca). (`do_makeunique` in file `src/main/unique.c`
 provides an example of both points.)
 
-There is an alternative check, 
+There is an alternative check,
 
- 
-``` 
+```r
     R_CheckStack2(size_t extra);
 ```
 
-to be called immediately *before* trying an allocation of `extra` bytes.
+to be called immediately _before_ trying an allocation of `extra` bytes.
 
 An alternative strategy has been used for various functions which
 require intermediate blocks of storage of varying but usually small
@@ -1817,23 +1597,21 @@ size, and this has been consolidated into the routines in the header
 file `src/main/RBufferUtils.h`. This uses a structure which
 contains a buffer, the current size and the default size. A call to
 
- 
-``` 
+```r
     R_AllocStringBuffer(size_t blen, R_StringBuffer *buf);
 ```
 
 sets `buf->data` to a memory area of at least `blen+1` bytes. At least
 the default size is used, which means that for small allocations the
-same buffer can be reused. A call to 
- `R_FreeStringBufferL` releases memory
+same buffer can be reused. A call to
+`R_FreeStringBufferL` releases memory
 if more than the default has been allocated whereas a call to
 `R_FreeStringBuffer` frees any memory allocated.
 
 The `R_StringBuffer` structure needs to be initialized, for example by
 
- 
-``` 
-static R_StringBuffer ex_buff = ;
+```r
+static R_StringBuffer ex_buff = {NULL, 0, MAXELTSIZE};
 ```
 
 which uses a default size of `MAXELTSIZE = 8192` bytes. Most current
@@ -1842,9 +1620,8 @@ uses have a static `R_StringBuffer` structure, which allows the
 even between functions: this will need to be changed if R ever allows
 concurrent evaluation threads. So the idiom is
 
- 
-``` 
-static R_StringBuffer ex_buff = ;
+```r
+static R_StringBuffer ex_buff = {NULL, 0, MAXELTSIZE};
 ...
     char *buf;
     for(i = 0; i < n; i++) {
@@ -1857,18 +1634,15 @@ static R_StringBuffer ex_buff = ;
    R_FreeStringBufferL(&ex_buff);
 ```
 
-  ------------------------------------------------------ ---- --
-  • [Internals of R\_alloc](#Internals-of-R_005falloc)        
-  ------------------------------------------------------ ---- --
+---
 
-------------------------------------------------------------------------
+• [Internals of R_alloc](#Internals-of-R_005falloc)
 
- 
-Previous: [Memory allocators](#Memory-allocators), Up: [Memory
-allocators](#Memory-allocators)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.13.1 Internals of R\_alloc 
+---
+
+#### 1.13.1 Internals of R_alloc
 
 The memory used by `R_alloc` is allocated as R vectors, of type
 `RAWSXP`. Thus the allocation is in units of 8 bytes, and is rounded up.
@@ -1884,41 +1658,26 @@ the current `R_VStack`, and `R_VStack` is set to the latest allocation.
 Thus `R_VStack` is a single-linked chain of the vectors currently
 allocated via `R_alloc`. Function `vmaxset` resets the location
 `R_VStack`, and should be to a value that has previously be obtained
-*via* `vmaxget`: allocations after the value was obtained will no longer
+_via_ `vmaxget`: allocations after the value was obtained will no longer
 be protected and hence available for garbage collection.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Modules](#Modules), Previous: [Memory
-allocators](#Memory-allocators), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.14 Internal use of global and base environments 
+### 1.14 Internal use of global and base environments
 
 This section notes known use by the system of these environments: the
 intention is to minimize or eliminate such uses.
 
-  --------------------------------------------- ---- --
-  • [Base environment](#Base-environment)            
-  • [Global environment](#Global-environment)        
-  --------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Base environment](#Base-environment)     
+ • [Global environment](#Global-environment)
 
- 
-Next: [Global environment](#Global-environment), Previous: [Internal use
-of global and base
-environments](#Internal-use-of-global-and-base-environments), Up:
-[Internal use of global and base
-environments](#Internal-use-of-global-and-base-environments)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.14.1 Base environment 
+---
 
- 
- 
+#### 1.14.1 Base environment
 
 The graphics devices system maintains two variables `.Device` and
 `.Devices` in the base environment: both are always set. The variable
@@ -1933,22 +1692,12 @@ assigned, and so shows up as a base variable.
 Similarly, the evaluator creates a symbol `.Last.value` which appears as
 a variable in the base environment.
 
- 
-
 Errors can give rise to objects `.Traceback` and `last.warning` in the
 base environment.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Base environment](#Base-environment), Up: [Internal use of
-global and base
-environments](#Internal-use-of-global-and-base-environments)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.14.2 Global environment 
-
- 
+#### 1.14.2 Global environment
 
 The seed for the random number generator is stored in object
 `.Random.seed` in the global environment.
@@ -1960,15 +1709,9 @@ The `windows()` device makes use of a variable `.SavedPlots` to store
 display lists of saved plots for later display. This is regarded as a
 variable created by the user.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Visibility](#Visibility), Previous: [Internal use of global and
-base environments](#Internal-use-of-global-and-base-environments), Up:
-[R Internal Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.15 Modules 
+### 1.15 Modules
 
 R makes use of a number of shared objects/DLLs stored in the
 `modules` directory. These are parts of the code which have
@@ -1976,55 +1719,46 @@ been chosen to be loaded 'on demand' rather than linked as dynamic
 libraries or incorporated into the main executable/dynamic library.
 
 For the remaining modules the motivation has been the amount of (often
-optional) code they will bring in *via* libraries to which they are
+optional) code they will bring in _via_ libraries to which they are
 linked.
 
 `internet`
 
-:   The internal HTTP and FTP clients and socket support, which link to
-    system-specific support libraries. This may load `libcurl` and on
-    Windows will load `wininet.dll` and `ws2_32.dll`.
+: The internal HTTP and FTP clients and socket support, which link to
+system-specific support libraries. This may load `libcurl` and on
+Windows will load `wininet.dll` and `ws2_32.dll`.
 
 `lapack`
 
-:   The code which makes use of the LAPACK library, and is linked to
-    `libRlapack` or an external LAPACK library.
+: The code which makes use of the LAPACK library, and is linked to
+`libRlapack` or an external LAPACK library.
 
 `X11`
 
-:   (Unix-alikes only.) The `X11()`, `jpeg()`, `png()` and `tiff()`
-    devices. These are optional, and links to some or all of the `X11`,
-    `pango`, `cairo`, `jpeg`, `libpng` and `libtiff` libraries.
+: (Unix-alikes only.) The `X11()`, `jpeg()`, `png()` and `tiff()`
+devices. These are optional, and links to some or all of the `X11`,
+`pango`, `cairo`, `jpeg`, `libpng` and `libtiff` libraries.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Lazy loading](#Lazy-loading), Previous: [Modules](#Modules), Up:
-[R Internal Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 1.16 Visibility
 
-### 1.16 Visibility 
+---
 
-  ----------------------------------------------------------- ---- --
-  • [Hiding C entry points](#Hiding-C-entry-points)                
-  • [Variables in Windows DLLs](#Variables-in-Windows-DLLs)        
-  ----------------------------------------------------------- ---- --
+• [Hiding C entry points](#Hiding-C-entry-points)     
+ • [Variables in Windows DLLs](#Variables-in-Windows-DLLs)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Variables in Windows DLLs](#Variables-in-Windows-DLLs), Previous:
-[Visibility](#Visibility), Up: [Visibility](#Visibility)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.16.1 Hiding C entry points 
+#### 1.16.1 Hiding C entry points
 
-We make use of the visibility mechanisms discussed in [Controlling
-visibility](./R-exts.html#Controlling-visibility) in Writing R
+We make use of the visibility mechanisms discussed in [Controlling visibility](./R-exts.html#Controlling-visibility) in Writing R
 Extensions, C entry points not needed outside the main R
 executable/dynamic library (and in particular in no package nor module)
 should be prefixed by `attribute_hidden`.
- Minimizing the visibility of symbols in
+Minimizing the visibility of symbols in
 the R dynamic library will speed up linking to it (which packages will
 do) and reduce the possibility of linking to the wrong entry points of
 the same name. In addition, on some platforms reducing the number of
@@ -2037,7 +1771,7 @@ The visibility mechanism used is only available with some compilers and
 platforms, and in particular not on Windows, where an alternative
 mechanism is used. Entry points will not be made available in
 `R.dll` if they are listed in the file
-`src/gnuwin32/Rdll.hide`.  Entries in
+`src/gnuwin32/Rdll.hide`. Entries in
 that file start with a space and must be strictly in alphabetic order in
 the C locale (use `sort` on the file to ensure this if you change it).
 It is possible to hide Fortran as well as C entry points via this file:
@@ -2056,19 +1790,13 @@ header file `Rinternals.h`. A list of the visible entry points
 on shared-R-library build on a reasonably standard Unix-alike can be
 made by something like
 
- 
-``` 
+```r
 nm -g libR.so | grep ‘ [BCDT] ’ | cut -b20-
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Hiding C entry points](#Hiding-C-entry-points), Up:
-[Visibility](#Visibility)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 1.16.2 Variables in Windows DLLs 
+#### 1.16.2 Variables in Windows DLLs
 
 Windows is unique in that it conventionally treats importing variables
 differently from functions: variables that are imported from a DLL need
@@ -2094,14 +1822,9 @@ compiler suites.
 It is only possible to check if this has been handled correctly by
 compiling the R sources on Windows.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Visibility](#Visibility), Up: [R Internal
-Structures](#R-Internal-Structures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.17 Lazy loading 
+### 1.17 Lazy loading
 
 Lazy loading is always used for code in packages but is optional
 (selected by the package maintainer) for datasets in packages. When a
@@ -2149,7 +1872,7 @@ this was found necessary when using file systems with high latency
 
 Lazy-load databases are loaded into the exports for a package, but not
 into the namespace environment itself. Thus they are visible when the
-package is *attached*, and also *via* the `::` operator. This was a
+package is _attached_, and also _via_ the `::` operator. This was a
 deliberate design decision, as packages mostly make datasets available
 for use by the end user (or other packages), and they should not be
 found preferentially from functions in the package, surprising users who
@@ -2159,23 +1882,14 @@ intended primarily to be used within the package.)
 
 The same database mechanism is used to store parsed `Rd` files.
 One or all of the parsed objects is fetched by a call to
-`toolsfetchRdDB`.
+`tools:::fetchRdDB`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Internationalization in the R
-sources](#Internationalization-in-the-R-sources), Previous: [R Internal
-Structures](#R-Internal-Structures), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-2 `.Internal` vs `.Primitive` 
------------------------------
-
- 
+## 2 `.Internal` vs `.Primitive`
 
 C code compiled into R at build time can be called directly in what are
-termed *primitives* or via the `.Internal` interface, which is very
+termed _primitives_ or via the `.Internal` interface, which is very
 similar to the `.External` interface except in syntax. More precisely, R
 maintains a table of R function names and corresponding C functions to
 call, which by convention all start with '`do_`' and return a
@@ -2190,8 +1904,7 @@ Functions using `.Internal()` wrapped in a closure are in general
 preferred as this ensures standard handling of named and default
 arguments. For example, `grep` is defined as
 
- 
-``` 
+```r
 grep <-
 function (pattern, x, ignore.case = FALSE, perl = FALSE, value = FALSE,
          fixed = FALSE, useBytes = FALSE, invert = FALSE)
@@ -2220,21 +1933,21 @@ matching of the first argument.
 The list of primitive functions is subject to change; currently, it
 includes the following.
 
-1.  "Special functions" which really are *language* elements, but
+1.  "Special functions" which really are _language_ elements, but
     implemented as primitive functions:
-     
-    ``` 
+
+
+    ```r
     {       (         if     for      while  repeat  break  next
     return  function  quote  switch
     ```
-    
 
 2.  Language elements and basic *operator*s (i.e., functions usually
-    *not* called as `foo(a, b, ...)`) for subsetting, assignment,
+    _not_ called as `foo(a, b, ...)`) for subsetting, assignment,
     arithmetic, comparison and logic:
 
-     
-    ``` 
+
+    ```r
                    [    [[    $    @
     <-   <<-  =    [<-  [[<-  $<-  @<-
 
@@ -2242,7 +1955,7 @@ includes the following.
     <    <=   ==   !=    >=   >
     |    ||   &    &&    !
     ```
-    
+
 
     When the arithmetic, comparison and logical operators are called as
     functions, any argument names are discarded so positional matching
@@ -2250,18 +1963,17 @@ includes the following.
 
 3.  "Low level" 0-- and 1--argument functions which belong to one of the
     following groups of functions:
-    a.  Basic mathematical functions with a single argument, i.e.,
+    a. Basic mathematical functions with a single argument, i.e.,
 
-         
-        ``` 
+        ``` r
         abs     sign    sqrt
         floor   ceiling
         ```
 
-        ``` 
+        ``` r
         ```
 
-        ``` 
+        ``` r
         exp     expm1
         log2    log10   log1p
         cos     sin     tan
@@ -2271,27 +1983,26 @@ includes the following.
         cospi   sinpi   tanpi
         ```
 
-        ``` 
+        ``` r
         ```
 
-        ``` 
+        ``` r
         gamma   lgamma  digamma trigamma
         ```
 
-        ``` 
+        ``` r
         ```
 
-        ``` 
+        ``` r
         cumsum  cumprod cummax  cummin
         ```
 
-        ``` 
+        ``` r
         ```
 
-        ``` 
+        ``` r
         Im  Re  Arg  Conj  Mod
         ```
-        
 
         `log` is a primitive function of one or two arguments with named
         argument matching.
@@ -2300,36 +2011,19 @@ includes the following.
         or more arguments: the default method handled in the primitive
         has only one.
 
-    b.  Functions rarely used outside of "programming" (i.e., mostly
-        used inside other functions), such as
-         
-        ``` 
-        nargs          missing        on.exit        interactive
-        as.call        as.character   as.complex     as.double
-        as.environment as.integer     as.logical     as.raw
-        is.array       is.atomic      is.call        is.character
-        is.complex     is.double      is.environment is.expression
-        is.finite      is.function    is.infinite    is.integer
-        is.language    is.list        is.logical     is.matrix
-        is.na          is.name        is.nan         is.null
-        is.numeric     is.object      is.pairlist    is.raw
-        is.real        is.recursive   is.single      is.symbol
-        baseenv        emptyenv       globalenv      pos.to.env
-        unclass        invisible      seq_along      seq_len
-        ```
-        
+    b. Functions rarely used outside of "programming" (i.e., mostly
+    used inside other functions), such as
 
-    c.  The programming and session management utilities
-         
-        ``` 
-        browser  proc.time  gc.time tracemem retracemem untracemem
-        ```
-        
+    `r nargs missing on.exit interactive as.call as.character as.complex as.double as.environment as.integer as.logical as.raw is.array is.atomic is.call is.character is.complex is.double is.environment is.expression is.finite is.function is.infinite is.integer is.language is.list is.logical is.matrix is.na is.name is.nan is.null is.numeric is.object is.pairlist is.raw is.real is.recursive is.single is.symbol baseenv emptyenv globalenv pos.to.env unclass invisible seq_along seq_len`
+
+    c. The programming and session management utilities
+
+    `r browser proc.time gc.time tracemem retracemem untracemem`
 
 4.  The following basic replacement and extractor functions
 
-     
-    ``` 
+
+    ```r
     length      length<-
     class       class<-
     oldClass    oldClass<-
@@ -2342,9 +2036,9 @@ includes the following.
                 levels<-
                 storage.mode<-
     ```
-    
 
-    
+
+
 
     Note that optimizing `NAMED = 1` is only effective within a
     primitive (as the closure wrapper of a `.Internal` will set
@@ -2354,32 +2048,31 @@ includes the following.
 
 5.  The following functions are primitive for efficiency reasons:
 
-     
-    ``` 
+
+    ```r
     :           ~           c           list
     call        expression  substitute
     UseMethod   standardGeneric
     .C          .Fortran   .Call        .External
     round       signif      rep         seq.int
     ```
-    
+
 
     as well as the following internal-use-only functions
 
-     
-    ``` 
+
+
+    ```r
     .Primitive      .Internal
     .Call.graphics  .External.graphics
     .subset         .subset2
     .primTrace      .primUntrace
     lazyLoadDBfetch
     ```
-    
 
 The multi-argument primitives
 
- 
-``` 
+```r
 call       switch
 .C         .Fortran   .Call       .External
 ```
@@ -2389,8 +2082,7 @@ partial matching to their first argument. They do check that the first
 argument is unnamed or for the first two, partially matches the formal
 argument name. On the other hand,
 
- 
-``` 
+```r
 attr       attr<-     browser     rememtrace substitute  UseMethod
 log        round      signif      rep        seq.int
 ```
@@ -2403,28 +2095,24 @@ documentation: this is also done for replacement functions with one
 argument plus `value`.
 
 The net effect is that argument matching for primitives intended for
-end-user use *as functions* is done in the same way as for interpreted
+end-user use _as functions_ is done in the same way as for interpreted
 functions except for the six exceptions where positional matching is
 required.
 
-  ----------------------------------------------------------- ---- --
-  • [Special primitives](#Special-primitives)                      
-  • [Special internals](#Special-internals)                        
-  • [Prototypes for primitives](#Prototypes-for-primitives)        
-  • [Adding a primitive](#Adding-a-primitive)                      
-  ----------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Special primitives](#Special-primitives)     
+ • [Special internals](#Special-internals)     
+ • [Prototypes for primitives](#Prototypes-for-primitives)     
+ • [Adding a primitive](#Adding-a-primitive)
 
- 
-Next: [Special internals](#Special-internals), Previous: [.Internal vs
-.Primitive](#g_t_002eInternal-vs-_002ePrimitive), Up: [.Internal vs
-.Primitive](#g_t_002eInternal-vs-_002ePrimitive)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 2.1 Special primitives 
+---
 
-A small number of primitives are *specials* rather than *builtins*, that
+### 2.1 Special primitives
+
+A small number of primitives are _specials_ rather than _builtins_, that
 is they are entered with unevaluated arguments. This is clearly
 necessary for the language constructs and the assignment operators, as
 well as for `&&` and `||` which conditionally evaluate their second
@@ -2445,29 +2133,17 @@ argument, and `[` and `[[` allow missing arguments.)
 `UseMethod` is special to avoid the additional contexts added to calls
 to builtins.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Prototypes for primitives](#Prototypes-for-primitives), Previous:
-[Special primitives](#Special-primitives), Up: [.Internal vs
-.Primitive](#g_t_002eInternal-vs-_002ePrimitive)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.2 Special internals 
+### 2.2 Special internals
 
 There are also special `.Internal` functions: `NextMethod`, `Recall`,
 `withVisible`, `cbind`, `rbind` (to allow for the `deparse.level`
 argument), `eapply`, `lapply` and `vapply`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Adding a primitive](#Adding-a-primitive), Previous: [Special
-internals](#Special-internals), Up: [.Internal vs
-.Primitive](#g_t_002eInternal-vs-_002ePrimitive)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.3 Prototypes for primitives 
+### 2.3 Prototypes for primitives
 
 Prototypes are available for the primitive functions and operators, and
 these are used for printing, `args` and package checking (e.g. by
@@ -2488,8 +2164,7 @@ these environments are currently primitive, and that the primitives not
 included are better thought of as language elements (at the time of
 writing
 
- 
-``` 
+```r
 $  $<-  &&  (  :  @  @<-  [  [[  [[<-  [<-  {  ||  ~  <-  <<-  =
 break  for function  if  next  repeat  return  while
 ```
@@ -2510,32 +2185,27 @@ closure, there would be an argument name mismatch. So the definitions in
 environment `.GenericArgsEnv` have to use argument names `e1` and `e2`
 even though the traditional documentation is in terms of `x` and `y`:
 `codoc` makes the appropriate adjustment via
-`tools.make_S3_primitive_generic_env`. The second discrepancy is with
+`tools:::.make_S3_primitive_generic_env`. The second discrepancy is with
 the `Math` group generics, where the group generic is defined with
 argument list `(x, ...)`, but most of the members only allow one
 argument when used as the default method (and `round` and `signif` allow
 two as default methods): again fix-ups are used.
 
 Those primitives which are in `.GenericArgsEnv` are checked (via
-`tests/primitives.R`) to be generic *via* defining methods for
+`tests/primitives.R`) to be generic _via_ defining methods for
 them, and a check is made that the remaining primitives are probably not
 generic, by setting a method and checking it is not dispatched to (but
 this can fail for other reasons). However, there is no certain way to
 know that if other `.Internal` or primitive functions are not internally
 generic except by reading the source code.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Prototypes for primitives](#Prototypes-for-primitives), Up:
-[.Internal vs .Primitive](#g_t_002eInternal-vs-_002ePrimitive)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.4 Adding a primitive 
+### 2.4 Adding a primitive
 
 \[For R-core use: reverse this procedure to remove a primitive. Most
-commonly this is done by changing a `.Internal` to a primitive or *vice
-versa*.\]
+commonly this is done by changing a `.Internal` to a primitive or _vice
+versa_.\]
 
 Primitives are listed in the table `R_FunTab` in
 `src/main/names.c`: primitives have '`Y = 0`' in the
@@ -2562,15 +2232,9 @@ argument, add argument-name checking.
 Do ensure that `make check-devel` has been run: that tests most of these
 requirements.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Package Structure](#Package-Structure), Previous: [.Internal vs
-.Primitive](#g_t_002eInternal-vs-_002ePrimitive), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-3 Internationalization in the R sources 
----------------------------------------
+## 3 Internationalization in the R sources
 
 The process of marking messages (errors, warnings etc) for translation
 in an R package is described in
@@ -2579,30 +2243,25 @@ Extensions, and the standard packages included with R have (with an
 exception in **grDevices** for the menus of the `windows()` device) been
 internationalized in the same way as other packages.
 
-  ------------------------------------------------------------------- ---- --
-  • [R code](#R-code)                                                      
-  • [Main C code](#Main-C-code)                                            
-  • [Windows-GUI-specific code](#Windows_002dGUI_002dspecific-code)        
-  • [macOS GUI](#macOS-GUI)                                                
-  • [Updating](#Updating)                                                  
-  ------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [R code](#R-code)     
+ • [Main C code](#Main-C-code)     
+ • [Windows-GUI-specific code](#Windows_002dGUI_002dspecific-code)     
+ • [macOS GUI](#macOS-GUI)     
+ • [Updating](#Updating)
 
- 
-Next: [Main C code](#Main-C-code), Previous: [Internationalization in
-the R sources](#Internationalization-in-the-R-sources), Up:
-[Internationalization in the R
-sources](#Internationalization-in-the-R-sources)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 3.1 R code 
+---
+
+### 3.1 R code
 
 Internationalization for R code is done in exactly the same way as for
 extension packages. As all standard packages which have R code also have
 a namespace, it is never necessary to specify `domain`, but for
 efficiency calls to `message`, `warning` and `stop` should include
-`domain = NA` when the message is constructed *via* `gettextf`,
+`domain = NA` when the message is constructed _via_ `gettextf`,
 `gettext` or `ngettext`.
 
 For each package, the extracted messages and translation sources are
@@ -2611,15 +2270,9 @@ compiled translations under `inst/po` for installation to
 package directory `po` in the installed package. This also
 applies to C code in packages.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Windows-GUI-specific code](#Windows_002dGUI_002dspecific-code),
-Previous: [R code](#R-code), Up: [Internationalization in the R
-sources](#Internationalization-in-the-R-sources)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 3.2 Main C code 
+### 3.2 Main C code
 
 The main C code (e.g. that in files `src/*/*.c` and in the
 modules) is where R is closest to the sort of application for which
@@ -2636,17 +2289,15 @@ translation without wanting them translated at the time, for example
 when declaring string constants. This is the purpose of the `N_` macro,
 for example
 
- 
-``` 
-,
+```r
+{ ERROR_ARGTYPE,           N_("invalid argument type")},
 ```
 
 from file `src/main/errors.c`.
 
 The `P_` macro
 
- 
-``` 
+```r
 #ifdef ENABLE_NLS
 #define P_(StringS, StringP, N) ngettext (StringS, StringP, N)
 #else
@@ -2662,26 +2313,20 @@ The macro `_("msg")` can safely be used in directory
 `src/appl`; the header for standalone '`nmath`' skips
 possible translation. (This does not apply to `N_` or `P_`).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [macOS GUI](#macOS-GUI), Previous: [Main C code](#Main-C-code),
-Up: [Internationalization in the R
-sources](#Internationalization-in-the-R-sources)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 3.3 Windows-GUI-specific code 
+### 3.3 Windows-GUI-specific code
 
 Messages for the Windows GUI are in a separate domain '`RGui`'.
 This was done for two reasons:
 
--   The translators for the Windows version of R might be separate from
-    those for the rest of R (familiarity with the GUI helps), and
--   Messages for Windows are most naturally handled in the native
-    charset for the language, and in the case of CJK languages the
-    charset is Windows-specific. (It transpires that as the `iconv` we
-    ported works well under Windows, this is less important than
-    anticipated.)
+- The translators for the Windows version of R might be separate from
+  those for the rest of R (familiarity with the GUI helps), and
+- Messages for Windows are most naturally handled in the native
+  charset for the language, and in the case of CJK languages the
+  charset is Windows-specific. (It transpires that as the `iconv` we
+  ported works well under Windows, this is less important than
+  anticipated.)
 
 Messages for the '`RGui`' domain are marked by `G_("msg")`, a
 macro that is defined in header file `src/gnuwin32/win-nls.h`.
@@ -2694,49 +2339,33 @@ device are considered to be part of the GUI. (There is also
 The template and message catalogs for the '`RGui`' domain are
 in the top-level `po` directory.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Updating](#Updating), Previous: [Windows-GUI-specific
-code](#Windows_002dGUI_002dspecific-code), Up: [Internationalization in
-the R sources](#Internationalization-in-the-R-sources)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 3.4 macOS GUI 
+### 3.4 macOS GUI
 
 This is handled separately: see
 <https://developer.r-project.org/Translations30.html>.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [macOS GUI](#macOS-GUI), Up: [Internationalization in the R
-sources](#Internationalization-in-the-R-sources)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 3.5 Updating 
+### 3.5 Updating
 
 See file `po/README` for how to update the message templates
 and catalogs.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Files](#Files), Previous: [Internationalization in the R
-sources](#Internationalization-in-the-R-sources), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 4 Structure of an Installed Package
 
-4 Structure of an Installed Package 
------------------------------------
+---
 
-  ------------------------- ---- --
-  • [Metadata](#Metadata)        
-  • [Help](#Help)                
-  ------------------------- ---- --
+• [Metadata](#Metadata)     
+ • [Help](#Help)
 
-The structure of a *source* packages is described in [Creating R
-packages](./R-exts.html#Creating-R-packages) in Writing R Extensions:
-this chapter is concerned with the structure of *installed* packages.
+---
+
+The structure of a _source_ packages is described in [Creating R packages](./R-exts.html#Creating-R-packages) in Writing R Extensions:
+this chapter is concerned with the structure of _installed_ packages.
 
 An installed package has a top-level file `DESCRIPTION`, a copy
 of the file of that name in the package sources with a
@@ -2781,14 +2410,9 @@ from the sources.
 Subdirectory `po` contains (in subdirectories) compiled message
 catalogs.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Help](#Help), Previous: [Package Structure](#Package-Structure),
-Up: [Package Structure](#Package-Structure)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 4.1 Metadata 
+### 4.1 Metadata
 
 Directory `Meta` contains several files in `.rds` format, that
 is serialized R objects written by `saveRDS`. All packages have files
@@ -2848,8 +2472,7 @@ presenting the results as '`pkgname::topic`') and
 File `links.rds` records a named character vector, the names
 being aliases and the values character strings of the form
 
- 
-``` 
+```r
 "../../pkgname/html/filename.html"
 ```
 
@@ -2865,14 +2488,9 @@ installed PDF version, if present), '`Depends`',
 '`Keywords`' and '`R`' (the pathless file name of the
 installed R code, if present).
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Metadata](#Metadata), Up: [Package
-Structure](#Package-Structure)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 4.2 Help 
+### 4.2 Help
 
 All installed packages, whether they had any `.Rd` files or
 not, have `help` and `html` directories. The latter
@@ -2882,30 +2500,24 @@ package index which has hyperlinks to the help topics (if any).
 Directory `help` contains files `AnIndex`,
 `paths.rds` and `pkgname.rd[bx]`. The latter two files
 are a lazy-load database of parsed `.Rd` files, accessed by
-`toolsfetchRdDB`. File `paths.rds` is a saved character
+`tools:::fetchRdDB`. File `paths.rds` is a saved character
 vector of the original path names of the `.Rd` files, used when
 updating the database.
 
 File `AnIndex` is a two-column tab-delimited file: the first
 column contains the aliases defined in the help files and the second the
 basename (without the `.Rd` or `.rd` extension) of the
-file containing that alias. It is read by `utilsindex.search` to
+file containing that alias. It is read by `utils:::index.search` to
 search for files matching a topic (alias), and read by `scan` in
-`utilsmatchAvailableTopics`, part of the completion system.
+`utils:::matchAvailableTopics`, part of the completion system.
 
 File `aliases.rds` is the same information as
 `AnIndex` as a named character vector (names the topics, values
 the file basename), for faster access.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Graphics Devices](#Graphics-Devices), Previous: [Package
-Structure](#Package-Structure), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-5 Files 
--------
+## 5 Files
 
 R provides many functions to work with files and directories: many of
 these have been added relatively recently to facilitate scripting in R
@@ -2950,8 +2562,8 @@ Windows has another couple of peculiarities. Whereas a POSIX file system
 has a single root directory (and other physical file systems are mounted
 onto logical directories under that root), Windows has separate roots
 for each physical or logical file system ('volume'), organized under
-*drives* (with file paths starting `D:` for an ASCII letter,
-case-insensitively) and *network shares* (with paths like
+_drives_ (with file paths starting `D:` for an ASCII letter,
+case-insensitively) and _network shares_ (with paths like
 `\netname\topdir\myfiles\a file`). There is a current drive, and path
 names without a drive part are relative to the current drive. Further,
 each drive has a current directory, and relative paths are relative to
@@ -2959,15 +2571,9 @@ that current directory, on a particular drive if one is specified. So
 `D:dir\file` and `D:` are valid path specifications
 (the last being the current directory on drive `D:`).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [GUI consoles](#GUI-consoles), Previous: [Files](#Files), Up:
-[Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-6 Graphics 
-----------
+## 6 Graphics
 
 R's graphics internals were re-designed to enable multiple graphics
 systems to be installed on top on the graphics 'engine' -- currently
@@ -2983,37 +2589,37 @@ At the lowest level is a graphics device, which manages a plotting
 surface (a screen window or a representation to be written to a file).
 This implements a set of graphics primitives, to 'draw'
 
--   a circle, optionally filled
--   a rectangle, optionally filled
--   a line
--   a set of connected lines
--   a polygon, optionally filled
--   a paths, optionally filled using a winding rule
--   text
--   a raster image (optional)
--   and to set a clipping rectangle
+- a circle, optionally filled
+- a rectangle, optionally filled
+- a line
+- a set of connected lines
+- a polygon, optionally filled
+- a paths, optionally filled using a winding rule
+- text
+- a raster image (optional)
+- and to set a clipping rectangle
 
 as well as requests for information such as
 
--   the width of a string if plotted
--   the metrics (width, ascent, descent) of a single character
--   the current size of the plotting surface
+- the width of a string if plotted
+- the metrics (width, ascent, descent) of a single character
+- the current size of the plotting surface
 
 and requests/opportunities to take action such as
 
--   start a new 'page', possibly after responding to a request to ask
-    the user for confirmation.
--   return the position of the device pointer (if any).
--   when a device become the current device or stops being the current
-    device (this is usually used to change the window title on a screen
-    device).
--   when drawing starts or finishes (e.g. used to flush graphics to the
-    screen when drawing stops).
--   wait for an event, for example a mouse click or keypress.
--   an 'onexit' action, to clean up if plotting is interrupted (by an
-    error or by the user).
--   capture the current contents of the device as a raster image.
--   close the device.
+- start a new 'page', possibly after responding to a request to ask
+  the user for confirmation.
+- return the position of the device pointer (if any).
+- when a device become the current device or stops being the current
+  device (this is usually used to change the window title on a screen
+  device).
+- when drawing starts or finishes (e.g. used to flush graphics to the
+  screen when drawing stops).
+- wait for an event, for example a mouse click or keypress.
+- an 'onexit' action, to clean up if plotting is interrupted (by an
+  error or by the user).
+- capture the current contents of the device as a raster image.
+- close the device.
 
 The device also sets a number of variables, mainly Boolean flags
 indicating its capabilities. Devices work entirely in 'device units'
@@ -3064,45 +2670,39 @@ with **grid**, and hence has been transferred from package **graphics**
 to **grDevices**. This is principally concerned with the handling of
 colours and recording and replaying plots.
 
-  ----------------------------------------- ---- --
-  • [Graphics devices](#Graphics-devices)        
-  • [Colours](#Colours)                          
-  • [Base graphics](#Base-graphics)              
-  • [Grid graphics](#Grid-graphics)              
-  ----------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Graphics devices](#Graphics-devices)     
+ • [Colours](#Colours)     
+ • [Base graphics](#Base-graphics)     
+ • [Grid graphics](#Grid-graphics)
 
- 
-Next: [Colours](#Colours), Previous: [Graphics
-Devices](#Graphics-Devices), Up: [Graphics Devices](#Graphics-Devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 6.1 Graphics Devices 
+---
+
+### 6.1 Graphics Devices
 
 R ships with several graphics devices, and there is support for
 third-party packages to provide additional devices---several packages
 now do. This section describes the device internals from the viewpoint
 of a would-be writer of a graphics device.
 
-  ----------------------------------------------- ---- --
-  • [Device structures](#Device-structures)            
-  • [Device capabilities](#Device-capabilities)        
-  • [Handling text](#Handling-text)                    
-  • [Conventions](#Conventions)                        
-  • [\'Mode\'](#g_t_0027Mode_0027)                     
-  • [Graphics events](#Graphics-events)                
-  • [Specific devices](#Specific-devices)              
-  ----------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Device structures](#Device-structures)     
+ • [Device capabilities](#Device-capabilities)     
+ • [Handling text](#Handling-text)     
+ • [Conventions](#Conventions)     
+ • [\'Mode\'](#g_t_0027Mode_0027)     
+ • [Graphics events](#Graphics-events)     
+ • [Specific devices](#Specific-devices)
 
- 
-Next: [Device capabilities](#Device-capabilities), Previous: [Graphics
-devices](#Graphics-devices), Up: [Graphics devices](#Graphics-devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 6.1.1 Device structures 
+---
+
+#### 6.1.1 Device structures
 
 There are two types used internally which are pointers to structures
 related to graphics devices.
@@ -3129,8 +2729,7 @@ length 2.
 The `GEDevDesc` type is a structure defined in
 `R_ext/GraphicsEngine.h` (with comments in the file) as
 
- 
-``` 
+```r
 typedef struct _GEDevDesc GEDevDesc;
 struct _GEDevDesc {
     pDevDesc dev;
@@ -3163,8 +2762,7 @@ killed.
 Each instance of a graphics device needs to set up a `GEDevDesc`
 structure by code very similar to
 
- 
-``` 
+```r
     pGEDevDesc gdd;
 
     R_GE_checkVersionOrDie(R_GE_version);
@@ -3195,8 +2793,7 @@ Rather more protection is provided by the version number of the
 engine/device API, `R_GE_version` defined in
 `R_ext/GraphicsEngine.h` together with access functions
 
- 
-``` 
+```r
 int R_GE_getVersion(void);
 void R_GE_checkVersionOrDie(int version);
 ```
@@ -3205,57 +2802,45 @@ If a graphics device calls `R_GE_checkVersionOrDie(R_GE_version)` it can
 ensure it will only be used in versions of R which provide the API it
 was designed for and compiled against.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Handling text](#Handling-text), Previous: [Device
-structures](#Device-structures), Up: [Graphics
-devices](#Graphics-devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.1.2 Device capabilities 
+#### 6.1.2 Device capabilities
 
 The following 'capabilities' can be defined for the device's `DevDesc`
 structure.
 
--   `canChangeGamma` -- `Rboolean`: can the display gamma be adjusted?
-    This is now ignored, as gamma support has been removed.
--   `canHadj` -- `integer`: can the device do horizontal adjustment of
-    text *via* the `text` callback, and if so, how precisely? 0 = no
-    adjustment, 1 =  (left, centre, right justification) or 2
-    = continuously variable (in \[0,1\]) between left and right
-    justification.
--   `canGenMouseDown` -- `Rboolean`: can the device handle mouse down
-    events? This flag and the next three are not currently used by R,
-    but are maintained for back compatibility.
--   `canGenMouseMove` -- `Rboolean`: ditto for mouse move events.
--   `canGenMouseUp` -- `Rboolean`: ditto for mouse up events.
--   `canGenKeybd` -- `Rboolean`: ditto for keyboard events.
--   `hasTextUTF8` -- `Rboolean`: should non-symbol text be sent (in
-    UTF-8) to the `textUTF8` and `strWidthUTF8` callbacks, and sent as
-    Unicode points (negative values) to the `metricInfo` callback?
--   `wantSymbolUTF8` -- `Rboolean`: should symbol text be handled in
-    UTF-8 in the same way as other text? Requires `textUTF8 = TRUE`.
--   `haveTransparency`: does the device support semi-transparent
-    colours?
--   `haveTransparentBg`: can the background be fully or
-    semi-transparent?
--   `haveRaster`: is there support for rendering raster images?
--   `haveCapture`: is there support for `grid::grid.cap`?
--   `haveLocator`: is there an interactive locator?
+- `canChangeGamma` -- `Rboolean`: can the display gamma be adjusted?
+  This is now ignored, as gamma support has been removed.
+- `canHadj` -- `integer`: can the device do horizontal adjustment of
+  text _via_ the `text` callback, and if so, how precisely? 0 = no
+  adjustment, 1 = {0, 0.5, 1} (left, centre, right justification) or 2
+  = continuously variable (in \[0,1\]) between left and right
+  justification.
+- `canGenMouseDown` -- `Rboolean`: can the device handle mouse down
+  events? This flag and the next three are not currently used by R,
+  but are maintained for back compatibility.
+- `canGenMouseMove` -- `Rboolean`: ditto for mouse move events.
+- `canGenMouseUp` -- `Rboolean`: ditto for mouse up events.
+- `canGenKeybd` -- `Rboolean`: ditto for keyboard events.
+- `hasTextUTF8` -- `Rboolean`: should non-symbol text be sent (in
+  UTF-8) to the `textUTF8` and `strWidthUTF8` callbacks, and sent as
+  Unicode points (negative values) to the `metricInfo` callback?
+- `wantSymbolUTF8` -- `Rboolean`: should symbol text be handled in
+  UTF-8 in the same way as other text? Requires `textUTF8 = TRUE`.
+- `haveTransparency`: does the device support semi-transparent
+  colours?
+- `haveTransparentBg`: can the background be fully or
+  semi-transparent?
+- `haveRaster`: is there support for rendering raster images?
+- `haveCapture`: is there support for `grid::grid.cap`?
+- `haveLocator`: is there an interactive locator?
 
 The last three can often be deduced to be false from the presence of
 `NULL` entries instead of the corresponding functions.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Conventions](#Conventions), Previous: [Device
-capabilities](#Device-capabilities), Up: [Graphics
-devices](#Graphics-devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.1.3 Handling text 
+#### 6.1.3 Handling text
 
 Handling text is probably the hardest task for a graphics device, and
 the design allows for the device to optionally indicate that it has
@@ -3265,8 +2850,7 @@ be handled in the graphics engine.)
 The three callbacks for handling text that must be in all graphics
 devices are `text`, `strWidth` and `metricInfo` with declarations
 
- 
-``` 
+```r
 void text(double x, double y, const char *str, double rot, double hadj,
           pGgcontext gc, pDevDesc dd);
 
@@ -3301,23 +2885,6 @@ cursor should be advanced when the character is placed. For `ascent` and
 by the glyph and not the box which might be used when assembling a line
 of conventional text (it needs to be for e.g. `hat(beta)` to work
 correctly). However, the `width` is used in plotmath to advance to the
-next character, and so needs to include left and right bearings.
-
-The *interpretation* of '`c`' depends on the locale. In a
-single-byte locale values `32...255` indicate the corresponding
-character in the locale (if present). For the symbol font (as used by
-'`graphics::par(font=5)`', '`grid::gpar(fontface=5`')
-and by 'plotmath'), values `32...126, 161...239, 241...254` indicate
-glyphs in the Adobe Symbol encoding. In a multibyte locale, `c`
-represents a Unicode point (except in the symbol font). So the function
-needs to include code like
-
- 
-``` 
-    Rboolean Unicode = mbcslocale && (gc->fontface != 5);
-    if (c < 0) 
-    if(Unicode) UniCharMetric(c, ...); else CharMetric(c, ...);
-```
 
 In addition, if device capability `hasTextUTF8` (see below) is true,
 Unicode points will be passed as negative values: the code snippet above
@@ -3354,8 +2921,7 @@ bitmaps often cannot. Those which can should set
 Several other elements relate to the precise placement of text by the
 graphics engine:
 
- 
-``` 
+```r
 double xCharOffset;
 double yCharOffset;
 double yLineBias;
@@ -3372,8 +2938,7 @@ is use to set the line spacing, that is the relationship between
 `par("mai")` and `par("mai")` and so on. It is suggested that a good
 choice is
 
- 
-``` 
+```r
 dd->cra[0] = 0.9 * fnsize;
 dd->cra[1] = 1.2 * fnsize;
 ```
@@ -3386,8 +2951,7 @@ in device units.
 The remaining elements are yet more mysterious. The `postscript()`
 device says
 
- 
-``` 
+```r
     /* Character Addressing Offsets */
     /* These offsets should center a single */
     /* plotting character over the plotting point. */
@@ -3409,14 +2973,9 @@ information is not available or for multi-line strings.
 `yLineBias` is used in the base graphics system in `axis()` and
 `mtext()` to provide a default for their '`padj`' argument.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [\'Mode\'](#g_t_0027Mode_0027), Previous: [Handling
-text](#Handling-text), Up: [Graphics devices](#Graphics-devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.1.4 Conventions 
+#### 6.1.4 Conventions
 
 The aim is to make the (default) output from graphics devices as similar
 as possible. Generally people follow the model of the `postscript` and
@@ -3424,25 +2983,25 @@ as possible. Generally people follow the model of the `postscript` and
 
 The following conventions have become established:
 
--   The default size of a device should be 7 inches square.
--   There should be a '`pointsize`' argument which defaults to
-    12, and it should give the pointsize in big points (1/72 inch). How
-    exactly this is interpreted is font-specific, but it should use a
-    font which works with lines packed 1/6 inch apart, and looks good
-    with lines 1/5 inch apart (that is with 2pt leading).
--   The default font family should be a sans serif font, e.g Helvetica
-    or similar (e.g. Arial on Windows).
--   `lwd = 1` should correspond to a line width of 1/96 inch. This will
-    be a problem with pixel-based devices, and generally there is a
-    minimum line width of 1 pixel (although this may not be appropriate
-    where anti-aliasing of lines is used, and `cairo` prefers a minimum
-    of 2 pixels).
--   Even very small circles should be visible, e.g. by using a minimum
-    radius of 1 pixel or replacing very small circles by a single filled
-    pixel.
--   How RGB colour values will be interpreted should be documented, and
-    preferably be sRGB.
--   The help page should describe its policy on these conventions.
+- The default size of a device should be 7 inches square.
+- There should be a '`pointsize`' argument which defaults to
+  12, and it should give the pointsize in big points (1/72 inch). How
+  exactly this is interpreted is font-specific, but it should use a
+  font which works with lines packed 1/6 inch apart, and looks good
+  with lines 1/5 inch apart (that is with 2pt leading).
+- The default font family should be a sans serif font, e.g Helvetica
+  or similar (e.g. Arial on Windows).
+- `lwd = 1` should correspond to a line width of 1/96 inch. This will
+  be a problem with pixel-based devices, and generally there is a
+  minimum line width of 1 pixel (although this may not be appropriate
+  where anti-aliasing of lines is used, and `cairo` prefers a minimum
+  of 2 pixels).
+- Even very small circles should be visible, e.g. by using a minimum
+  radius of 1 pixel or replacing very small circles by a single filled
+  pixel.
+- How RGB colour values will be interpreted should be documented, and
+  preferably be sRGB.
+- The help page should describe its policy on these conventions.
 
 These conventions are less clear-cut for bitmap devices, especially
 where the bitmap format does not have a design resolution.
@@ -3452,20 +3011,14 @@ header `GraphicsEngine.h` and in the help for `par`: note that
 the 'scale' of the pattern should be proportional to the line width (at
 least for widths above the default).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Graphics events](#Graphics-events), Previous:
-[Conventions](#Conventions), Up: [Graphics devices](#Graphics-devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.1.5 'Mode' 
+#### 6.1.5 'Mode'
 
 One of the device callbacks is a function `mode`, documented in the
 header as
 
- 
-``` 
+```r
      * device_Mode is called whenever the graphics engine
      * starts drawing (mode=1) or stops drawing (mode=0)
      * GMode (in graphics.c) also says that
@@ -3485,19 +3038,13 @@ ensure that drawing is flushed to the screen when called with
 note that 'drawing' is interpreted at quite a low level and a typical
 single figure will stop and start drawing many times. The buffering
 introduced in the `X11()` device makes use of `mode = 0` to indicate
-activity: it updates the screen after *ca* 100ms of inactivity.
+activity: it updates the screen after _ca_ 100ms of inactivity.
 
 This callback need not be supplied if it does nothing.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Specific devices](#Specific-devices), Previous:
-[\'Mode\'](#g_t_0027Mode_0027), Up: [Graphics
-devices](#Graphics-devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.1.6 Graphics events 
+#### 6.1.6 Graphics events
 
 Graphics devices may be designed to handle user interaction: not all
 are.
@@ -3517,33 +3064,25 @@ save the first such value found to be returned. C functions
 with `init=false` to inform the devices that the loop is done, and the
 result is returned to the user.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Graphics events](#Graphics-events), Up: [Graphics
-devices](#Graphics-devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.1.7 Specific devices 
+#### 6.1.7 Specific devices
 
 Specific devices are mostly documented by comments in their sources,
 although for devices of many years' standing those comments can be in
 need of updating. This subsection is a repository of notes on design
 decisions.
 
-  ----------------------------------- ---- --
-  • [X11()](#X11_0028_0029)                
-  • [windows()](#windows_0028_0029)        
-  ----------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [X11()](#X11_0028_0029)     
+ • [windows()](#windows_0028_0029)
 
- 
-Next: [windows()](#windows_0028_0029), Previous: [Specific
-devices](#Specific-devices), Up: [Specific devices](#Specific-devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 6.1.7.1 X11() 
+---
+
+#### 6.1.7.1 X11()
 
 The `X11(type="Xlib")` device dates back to the mid 1990's and was
 written then in `Xlib`, the most basic X11 toolkit. It has since
@@ -3553,8 +3092,9 @@ clipboard selections.
 
 Using basic `Xlib` code makes drawing fast, but is limiting. There is no
 support of translucent colours (that came in the `Xrender` toolkit of
-2000) nor for rotated text (which R implements by rendering text to a
-bitmap and rotating the latter).
+
+2000. nor for rotated text (which R implements by rendering text to a
+      bitmap and rotating the latter).
 
 The hinting for the X11 window asks for backing store to be used, and
 some windows managers may use it to handle repaints, but it seems that
@@ -3581,20 +3121,15 @@ plotted is often quite unsatisfactory.
 The current approach is to make use of more modern toolkits, namely
 `cairo` for rendering and `Pango` for font management---because these
 are associated with `Gtk+2` they are widely available. Cairo supports
-translucent colours and alpha-blending (*via* `Xrender`), and
+translucent colours and alpha-blending (_via_ `Xrender`), and
 anti-aliasing for the display of lines and text. Pango's font management
 is based on `fontconfig` and somewhat mysterious, but it seems mainly to
 use Type 1 and TrueType fonts on the machine running R and send
 grayscale bitmaps to cairo.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [X11()](#X11_0028_0029), Up: [Specific
-devices](#Specific-devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.1.7.2 windows() 
+#### 6.1.7.2 windows()
 
 The `windows()` device is a family of devices: it supports plotting to
 Windows (enhanced) metafiles, `BMP`, `JPEG`, `PNG` and `TIFF` files as
@@ -3664,18 +3199,13 @@ opaque. If 32-bit colour were available then we could add a full alpha
 channel, but this is dependent on the graphics hardware and undocumented
 properties of GDI.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Base graphics](#Base-graphics), Previous: [Graphics
-devices](#Graphics-devices), Up: [Graphics Devices](#Graphics-Devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.2 Colours 
+### 6.2 Colours
 
 Devices receive colours as a `typedef` `rcolor` (an `unsigned int`)
 defined in the header `R_ext/GraphicsEngine.h`). The 4 bytes
-are *R* ,*G*, *B* and *alpha* from least to most significant. So each of
+are _R_ ,_G_, _B_ and _alpha_ from least to most significant. So each of
 RGB has 256 levels of luminosity from 0 to 255. The alpha byte
 represents opacity, so value 255 is fully opaque and 0 fully
 transparent: many but not all devices handle semi-transparent colours.
@@ -3733,8 +3263,8 @@ border (or otherwise only half the border will be visible). Where both
 the fill and the border are semi-transparent there is some room for
 interpretation of the intention. Most devices first paint the fill and
 then the border, alpha-blending at each step. However, PDF does some
-automatic grouping of objects, and *when the fill and the border have
-the same alpha*, they are painted onto the same layer and then
+automatic grouping of objects, and _when the fill and the border have
+the same alpha_, they are painted onto the same layer and then
 alpha-blended in one step. (See p. 569 of the PDF Reference Sixth
 Edition, version 1.7. Unfortunately, although this is what the PDF
 standard says should happen, it is not correctly implemented by some
@@ -3759,14 +3289,9 @@ takes a colour name (a C string) and returns a value of type `rcolor`.
 This handles `"NA"`, `"transparent"` and the 657 colours known to the R
 function `colors()`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Grid graphics](#Grid-graphics), Previous: [Colours](#Colours),
-Up: [Graphics Devices](#Graphics-Devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.3 Base graphics 
+### 6.3 Base graphics
 
 The base graphics system was migrated to package **graphics** in R
 3.0.0: it was previously implemented in files in `src/main`.
@@ -3811,18 +3336,15 @@ high-level graphics calls (handled by `ProcessInlinePars`).
 Snapshots of the base subsystem record the 'saved device copy' of the
 `GPar` structure.
 
-  --------------------------------------------------------- ---- --
-  • [Arguments and parameters](#Arguments-and-parameters)        
-  --------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Arguments and parameters](#Arguments-and-parameters)
 
- 
-Previous: [Base graphics](#Base-graphics), Up: [Base
-graphics](#Base-graphics)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 6.3.1 Arguments and parameters 
+---
+
+#### 6.3.1 Arguments and parameters
 
 There is an unfortunate confusion between some of the graphical
 parameters (as set by `par`) and arguments to base graphic functions of
@@ -3858,26 +3380,15 @@ the graphics engine (but for example the handling of `lwd = 0` remains
 device-specific, with some interpreting it as a 'thinnest possible'
 line).
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Base graphics](#Base-graphics), Up: [Graphics
-Devices](#Graphics-Devices)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.4 Grid graphics 
+### 6.4 Grid graphics
 
 \[At least pointers to documentation.\]
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Tools](#Tools), Previous: [Graphics Devices](#Graphics-Devices),
-Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-7 GUI consoles 
---------------
+## 7 GUI consoles
 
 The standard R front-ends are programs which run in a terminal, but
 there are several ways to provide a GUI console.
@@ -3899,18 +3410,15 @@ program which runs embedded R: this is done by `Rgui.exe` on Windows and
 `R.app` on macOS. The first is an integral part of R and the code for
 the console is currently in `R.dll`.
 
-  ----------------------- ---- --
-  • [R.app](#R_002eapp)        
-  ----------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [R.app](#R_002eapp)
 
- 
-Previous: [GUI consoles](#GUI-consoles), Up: [GUI
-consoles](#GUI-consoles)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 7.1 R.app 
+---
+
+### 7.1 R.app
 
 `R.app` is a macOS application which provides a console. Its sources are
 a separate project[^21^](#FOOT21), and its binaries link to an
@@ -3954,62 +3462,56 @@ install R as the framework needed for use with `R.app`. (The option
 `HAVE_AQUA` in `config.h` and the make variable
 `BUILD_AQUA_TRUE`. These have several consequences:
 
--   The `quartz()` device is built (other than as a stub) in package
-    **grDevices**: this needs an Objective-C compiler. Then `quartz()`
-    can be used with terminal R provided the latter has access to the
-    macOS screen.
--   File `src/unix/aqua.c` is compiled. This now only contains
-    an interface pointer for the `quartz()` device(s).
--   `capabilities("aqua")` is set to `TRUE`.
--   The default path for a personal library directory is set as
-    `~/Library/R/x.y/library`.
--   There is support for setting a 'busy' indicator whilst waiting for
-    `system()` to return.
--   `R_ProcessEvents` is inhibited in a forked child from package
-    **parallel**. The associated callback in `R.app` does things which
-    should not be done in a child, and forking forks the whole process
-    including the console.
--   There is support for starting the embedded R with the option
-    `--gui=aqua`: when this is done the global C variable
-    `useaqua` is set to a true value. This has consequences:
-    -   The R session is asserted to be interactive *via*
-        `R_Interactive`.
-    -   `.Platform$GUI` is set to `"AQUA"`. That has consequences:
-        -   The environment variable `DISPLAY` is set to '`:0`'
-            if not already set.
-        -   `/usr/local/bin` is appended to `PATH` since that
-            is where `gfortran` is installed.
-        -   The default HTML browser is switched to the one in `R.app`.
-        -   Various widgets are switched to the versions provided in
-            `R.app`: these include graphical menus, the data editor (but
-            not the data viewer used by `View()`) and the workspace
-            browser invoked by `browseEnv()`.
-        -   The **grDevices** package when loaded knows that it is being
-            run under `R.app` and so informs any `quartz` devices that a
-            Quartz event loop is already running.
-    -   The use of the OS's `system` function (including by `system()`
-        and `system2()`, and to launch editors and pagers) is replaced
-        by a version in `R.app` (which by default just calls the OS's
-        `system` with various signal handlers reset).
--   If either R was started by `--gui=aqua` or R is running in
-    a terminal which is not of type '`dumb`', the standard
-    output to files `stdout` and `stderr` is directed
-    through the C function `Rstd_WriteConsoleEx`. This uses ANSI
-    terminal escapes to render lines sent to `stderr` as bold on
-    `stdout`.
--   For historical reasons the startup option `-psn` is allowed but
-    ignored. (It seems that in 2003, '`r27492`', this was added
-    by Finder.)
+- The `quartz()` device is built (other than as a stub) in package
+  **grDevices**: this needs an Objective-C compiler. Then `quartz()`
+  can be used with terminal R provided the latter has access to the
+  macOS screen.
+- File `src/unix/aqua.c` is compiled. This now only contains
+  an interface pointer for the `quartz()` device(s).
+- `capabilities("aqua")` is set to `TRUE`.
+- The default path for a personal library directory is set as
+  `~/Library/R/x.y/library`.
+- There is support for setting a 'busy' indicator whilst waiting for
+  `system()` to return.
+- `R_ProcessEvents` is inhibited in a forked child from package
+  **parallel**. The associated callback in `R.app` does things which
+  should not be done in a child, and forking forks the whole process
+  including the console.
+- There is support for starting the embedded R with the option
+  `--gui=aqua`: when this is done the global C variable
+  `useaqua` is set to a true value. This has consequences:
+  - The R session is asserted to be interactive _via_
+    `R_Interactive`.
+  - `.Platform$GUI` is set to `"AQUA"`. That has consequences:
+    - The environment variable `DISPLAY` is set to '`:0`'
+      if not already set.
+    - `/usr/local/bin` is appended to `PATH` since that
+      is where `gfortran` is installed.
+    - The default HTML browser is switched to the one in `R.app`.
+    - Various widgets are switched to the versions provided in
+      `R.app`: these include graphical menus, the data editor (but
+      not the data viewer used by `View()`) and the workspace
+      browser invoked by `browseEnv()`.
+    - The **grDevices** package when loaded knows that it is being
+      run under `R.app` and so informs any `quartz` devices that a
+      Quartz event loop is already running.
+  - The use of the OS's `system` function (including by `system()`
+    and `system2()`, and to launch editors and pagers) is replaced
+    by a version in `R.app` (which by default just calls the OS's
+    `system` with various signal handlers reset).
+- If either R was started by `--gui=aqua` or R is running in
+  a terminal which is not of type '`dumb`', the standard
+  output to files `stdout` and `stderr` is directed
+  through the C function `Rstd_WriteConsoleEx`. This uses ANSI
+  terminal escapes to render lines sent to `stderr` as bold on
+  `stdout`.
+- For historical reasons the startup option `-psn` is allowed but
+  ignored. (It seems that in 2003, '`r27492`', this was added
+  by Finder.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [R coding standards](#R-coding-standards), Previous: [GUI
-consoles](#GUI-consoles), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-8 Tools 
--------
+## 8 Tools
 
 The behavior of `R CMD check` can be controlled through a variety of
 command line arguments and environment variables.
@@ -4019,647 +3521,646 @@ not shown by `R CMD check --help`, with possible values
 
 `check:file`
 
-:   Assume that installation was already performed with stdout/stderr to
-    `file`, the contents of which need to be checked (without
-    repeating the installation). This is useful for checks applied by
-    repository maintainers: it reduces the check time by the
-    installation time given that the package has already been installed.
-    In this case, one also needs to specify *where* the package was
-    installed to using command line option `--library`.
+: Assume that installation was already performed with stdout/stderr to
+`file`{.variable}, the contents of which need to be checked (without
+repeating the installation). This is useful for checks applied by
+repository maintainers: it reduces the check time by the
+installation time given that the package has already been installed.
+In this case, one also needs to specify _where_ the package was
+installed to using command line option `--library`.
 
 `fake`
 
-:   Fake installation, and turn off the run-time tests.
+: Fake installation, and turn off the run-time tests.
 
 `skip`
 
-:   Skip installation, e.g., when testing recommended packages bundled
-    with R.
+: Skip installation, e.g., when testing recommended packages bundled
+with R.
 
 `no`
 
-:   The same as `--no-install` : turns off installation and the
-    tests which require the package to be installed.
+: The same as `--no-install` : turns off installation and the
+tests which require the package to be installed.
 
 The following environment variables can be used to customize the
 operation of `check`: a convenient place to set these is the check
 environment file (default, `~/.R/check.Renviron`).
 
-`_R_CHECK_ALL_NON_ISO_C_` 
+`_R_CHECK_ALL_NON_ISO_C_`
 
-:   If true, do not ignore compiler (typically GCC) warnings about non
-    ISO C code in *system* headers. Note that this may also show
-    additional ISO C++ warnings. Default: false.
+: If true, do not ignore compiler (typically GCC) warnings about non
+ISO C code in _system_ headers. Note that this may also show
+additional ISO C++ warnings. Default: false.
 
-`_R_CHECK_FORCE_SUGGESTS_` 
+`_R_CHECK_FORCE_SUGGESTS_`
 
-:   If true, give an error if suggested packages are not available.
-    Default: true (but false for CRAN submission checks).
+: If true, give an error if suggested packages are not available.
+Default: true (but false for CRAN submission checks).
 
-`_R_CHECK_RD_CONTENTS_` 
+`_R_CHECK_RD_CONTENTS_`
 
-:   If true, check `Rd` files for auto-generated content which
-    needs editing, and missing argument documentation. Default: true.
+: If true, check `Rd` files for auto-generated content which
+needs editing, and missing argument documentation. Default: true.
 
-`_R_CHECK_RD_LINE_WIDTHS_` 
+`_R_CHECK_RD_LINE_WIDTHS_`
 
-:   If true, check `Rd` line widths in usage and examples
-    sections. Default: false (but true for CRAN submission checks).
+: If true, check `Rd` line widths in usage and examples
+sections. Default: false (but true for CRAN submission checks).
 
-`_R_CHECK_RD_STYLE_` 
+`_R_CHECK_RD_STYLE_`
 
-:   If true, check whether `Rd` usage entries for S3 methods
-    use the full function name rather than the appropriate `\method`
-    markup. Default: true.
+: If true, check whether `Rd` usage entries for S3 methods
+use the full function name rather than the appropriate `\method`
+markup. Default: true.
 
-`_R_CHECK_RD_XREFS_` 
+`_R_CHECK_RD_XREFS_`
 
-:   If true, check the cross-references in `.Rd` files.
-    Default: true.
+: If true, check the cross-references in `.Rd` files.
+Default: true.
 
-`_R_CHECK_SUBDIRS_NOCASE_` 
+`_R_CHECK_SUBDIRS_NOCASE_`
 
-:   If true, check the case of directories such as `R` and
-    `man`. Default: true.
+: If true, check the case of directories such as `R` and
+`man`. Default: true.
 
-`_R_CHECK_SUBDIRS_STRICT_` 
+`_R_CHECK_SUBDIRS_STRICT_`
 
-:   Initial setting for `--check-subdirs`. Default:
-    '`default`' (which checks only tarballs, and checks in the
-    `src` only if there is no `configure` file).
+: Initial setting for `--check-subdirs`. Default:
+'`default`' (which checks only tarballs, and checks in the
+`src` only if there is no `configure` file).
 
-`_R_CHECK_USE_CODETOOLS_` 
+`_R_CHECK_USE_CODETOOLS_`
 
-:   If true, make use of the
-    [**codetools**](https://CRAN.R-project.org/package=codetools)
-    package, which provides a detailed analysis of visibility of objects
-    (but may give false positives). Default: true (if recommended
-    packages are installed).
+: If true, make use of the
+[**codetools**](https://CRAN.R-project.org/package=codetools)
+package, which provides a detailed analysis of visibility of objects
+(but may give false positives). Default: true (if recommended
+packages are installed).
 
-`_R_CHECK_USE_INSTALL_LOG_` 
+`_R_CHECK_USE_INSTALL_LOG_`
 
-:   If true, record the output from installing a package as part of its
-    check to a log file (`00install.out` by default), even when
-    running interactively. Default: true.
+: If true, record the output from installing a package as part of its
+check to a log file (`00install.out` by default), even when
+running interactively. Default: true.
 
-`_R_CHECK_VIGNETTES_NLINES_` 
+`_R_CHECK_VIGNETTES_NLINES_`
 
-:   Maximum number of lines to show from the bottom of the output when
-    reporting errors in running or re-building vignettes. ( Value `0`
-    means all lines will be shown.) Default: 10 for running, 25 for
-    re-building.
+: Maximum number of lines to show from the bottom of the output when
+reporting errors in running or re-building vignettes. ( Value `0`
+means all lines will be shown.) Default: 10 for running, 25 for
+re-building.
 
-`_R_CHECK_CODOC_S4_METHODS_` 
+`_R_CHECK_CODOC_S4_METHODS_`
 
-:   Control whether `codoc()` testing is also performed on S4 methods.
-    Default: true.
+: Control whether `codoc()` testing is also performed on S4 methods.
+Default: true.
 
-`_R_CHECK_DOT_INTERNAL_` 
+`_R_CHECK_DOT_INTERNAL_`
 
-:   Control whether the package code is scanned for `.Internal` calls,
-    which should only be used by base (and occasionally by recommended)
-    packages. Default: true.
+: Control whether the package code is scanned for `.Internal` calls,
+which should only be used by base (and occasionally by recommended)
+packages. Default: true.
 
-`_R_CHECK_EXECUTABLES_` 
+`_R_CHECK_EXECUTABLES_`
 
-:   Control checking for executable (binary) files. Default: true.
+: Control checking for executable (binary) files. Default: true.
 
-`_R_CHECK_EXECUTABLES_EXCLUSIONS_` 
+`_R_CHECK_EXECUTABLES_EXCLUSIONS_`
 
-:   Control whether checking for executable (binary) files ignores files
-    listed in the package's `BinaryFiles` file. Default: true
-    (but false for CRAN submission checks). However, most likely this
-    package-level override mechanism will be removed eventually.
+: Control whether checking for executable (binary) files ignores files
+listed in the package's `BinaryFiles` file. Default: true
+(but false for CRAN submission checks). However, most likely this
+package-level override mechanism will be removed eventually.
 
-`_R_CHECK_PERMISSIONS_` 
+`_R_CHECK_PERMISSIONS_`
 
-:   Control whether permissions of files should be checked. Default:
-    true iff `.Platform$OS.type == "unix"`.
+: Control whether permissions of files should be checked. Default:
+true iff `.Platform$OS.type == "unix"`.
 
-`_R_CHECK_FF_CALLS_` 
+`_R_CHECK_FF_CALLS_`
 
-:   Allows turning off `checkFF()` testing. If set to
-    '`registration`', checks the registration information
-    (number of arguments, correct choice of
-    `.C/.Fortran/.Call/.External`) for such calls provided the package
-    is installed. Default: true.
+: Allows turning off `checkFF()` testing. If set to
+'`registration`', checks the registration information
+(number of arguments, correct choice of
+`.C/.Fortran/.Call/.External`) for such calls provided the package
+is installed. Default: true.
 
-`_R_CHECK_FF_DUP_` 
+`_R_CHECK_FF_DUP_`
 
-:   Controls `checkFF(check_DUP)` Default: true (and forced to be true
-    for CRAN submission checks).
+: Controls `checkFF(check_DUP)` Default: true (and forced to be true
+for CRAN submission checks).
 
-`_R_CHECK_LICENSE_` 
+`_R_CHECK_LICENSE_`
 
-:   Control whether/how license checks are performed. A possible value
-    is '`maybe`' (warn in case of problems, but not about
-    standardizable non-standard license specs). Default: true.
+: Control whether/how license checks are performed. A possible value
+is '`maybe`' (warn in case of problems, but not about
+standardizable non-standard license specs). Default: true.
 
-`_R_CHECK_RD_EXAMPLES_T_AND_F_` 
+`_R_CHECK_RD_EXAMPLES_T_AND_F_`
 
-:   Control whether `check_T_and_F()` also looks for "bad" (global)
-    '`T`'/'`F`' uses in examples. Off by default
-    because this can result in false positives.
+: Control whether `check_T_and_F()` also looks for "bad" (global)
+'`T`'/'`F`' uses in examples. Off by default
+because this can result in false positives.
 
-`_R_CHECK_RD_CHECKRD_MINLEVEL_` 
+`_R_CHECK_RD_CHECKRD_MINLEVEL_`
 
-:   Controls the minimum level for reporting warnings from `checkRd`.
-    Default: -1.
+: Controls the minimum level for reporting warnings from `checkRd`.
+Default: -1.
 
-`_R_CHECK_XREFS_REPOSITORIES_` 
+`_R_CHECK_XREFS_REPOSITORIES_`
 
-:   If set to a non-empty value, a space-separated list of repositories
-    to use to determine known packages. Default: empty, when the CRAN
-    and Bioconductor repositories known to R is used.
+: If set to a non-empty value, a space-separated list of repositories
+to use to determine known packages. Default: empty, when the CRAN
+and Bioconductor repositories known to R is used.
 
-`_R_CHECK_SRC_MINUS_W_IMPLICIT_` 
+`_R_CHECK_SRC_MINUS_W_IMPLICIT_`
 
-:   Control whether installation output is checked for compilation
-    warnings about implicit function declarations (as spotted by GCC
-    with command line option `-Wimplicit-function-declaration`,
-    which is implied by `-Wall`). Default: false.
+: Control whether installation output is checked for compilation
+warnings about implicit function declarations (as spotted by GCC
+with command line option `-Wimplicit-function-declaration`,
+which is implied by `-Wall`). Default: false.
 
-`_R_CHECK_SRC_MINUS_W_UNUSED_` 
+`_R_CHECK_SRC_MINUS_W_UNUSED_`
 
-:   Control whether installation output is checked for compilation
-    warnings about unused code constituents (as spotted by GCC with
-    command line option `-Wunused`, which is implied by
-    `-Wall`). Default: true.
+: Control whether installation output is checked for compilation
+warnings about unused code constituents (as spotted by GCC with
+command line option `-Wunused`, which is implied by
+`-Wall`). Default: true.
 
-`_R_CHECK_WALL_FORTRAN_` 
+`_R_CHECK_WALL_FORTRAN_`
 
-:   Control whether gfortran 4.0 or later `-Wall` warnings are
-    used in the analysis of installation output. Default: false, even
-    though the warnings are justifiable.
+: Control whether gfortran 4.0 or later `-Wall` warnings are
+used in the analysis of installation output. Default: false, even
+though the warnings are justifiable.
 
-`_R_CHECK_ASCII_CODE_` 
+`_R_CHECK_ASCII_CODE_`
 
-:   If true, check R code for non-ascii characters. Default: true.
+: If true, check R code for non-ascii characters. Default: true.
 
-`_R_CHECK_ASCII_DATA_` 
+`_R_CHECK_ASCII_DATA_`
 
-:   If true, check data for non-ascii characters. *En route*, checks
-    that all the datasets can be loaded and that their components can be
-    accessed. Default: true.
+: If true, check data for non-ascii characters. _En route_, checks
+that all the datasets can be loaded and that their components can be
+accessed. Default: true.
 
-`_R_CHECK_COMPACT_DATA_` 
+`_R_CHECK_COMPACT_DATA_`
 
-:   If true, check data for ascii and uncompressed saves, and also check
-    if using `bzip2` or `xz` compression would be significantly better.
-    Default: true.
+: If true, check data for ascii and uncompressed saves, and also check
+if using `bzip2` or `xz` compression would be significantly better.
+Default: true.
 
-`_R_CHECK_SKIP_ARCH_` 
+`_R_CHECK_SKIP_ARCH_`
 
-:   Comma-separated list of architectures that will be omitted from
-    checking in a multi-arch setup. Default: none.
+: Comma-separated list of architectures that will be omitted from
+checking in a multi-arch setup. Default: none.
 
-`_R_CHECK_SKIP_TESTS_ARCH_` 
+`_R_CHECK_SKIP_TESTS_ARCH_`
 
-:   Comma-separated list of architectures that will be omitted from
-    running tests in a multi-arch setup. Default: none.
+: Comma-separated list of architectures that will be omitted from
+running tests in a multi-arch setup. Default: none.
 
-`_R_CHECK_SKIP_EXAMPLES_ARCH_` 
+`_R_CHECK_SKIP_EXAMPLES_ARCH_`
 
-:   Comma-separated list of architectures that will be omitted from
-    running examples in a multi-arch setup. Default: none.
+: Comma-separated list of architectures that will be omitted from
+running examples in a multi-arch setup. Default: none.
 
-`_R_CHECK_VC_DIRS_` 
+`_R_CHECK_VC_DIRS_`
 
-:   Should the unpacked package directory be checked for version-control
-    directories (`CVS`, `.svn` ...)? Default: true for
-    tarballs.
+: Should the unpacked package directory be checked for version-control
+directories (`CVS`, `.svn` ...)? Default: true for
+tarballs.
 
-`_R_CHECK_PKG_SIZES_` 
+`_R_CHECK_PKG_SIZES_`
 
-:   Should `du` be used to find the installed sizes of packages?
-    `R CMD check` does check for the availability of `du`. but this
-    option allows the check to be overruled if an unsuitable command is
-    found (including one that does not respect the `-k` flag to
-    report in units of 1Kb, or reports in a different format -- the GNU,
-    macOS and Solaris `du` commands have been tested). Default: true if
-    `du` is found.
+: Should `du` be used to find the installed sizes of packages?
+`R CMD check` does check for the availability of `du`. but this
+option allows the check to be overruled if an unsuitable command is
+found (including one that does not respect the `-k` flag to
+report in units of 1Kb, or reports in a different format -- the GNU,
+macOS and Solaris `du` commands have been tested). Default: true if
+`du` is found.
 
-`_R_CHECK_PKG_SIZES_THRESHOLD_` 
+`_R_CHECK_PKG_SIZES_THRESHOLD_`
 
-:   Threshold used for `_R_CHECK_PKG_SIZES_` (in Mb). Default: 5
+: Threshold used for `_R_CHECK_PKG_SIZES_` (in Mb). Default: 5
 
-`_R_CHECK_DOC_SIZES_` 
+`_R_CHECK_DOC_SIZES_`
 
-:   Should `qpdf` be used to check the installed sizes of PDFs? Default:
-    true if `qpdf` is found.
+: Should `qpdf` be used to check the installed sizes of PDFs? Default:
+true if `qpdf` is found.
 
-`_R_CHECK_DOC_SIZES2_` 
+`_R_CHECK_DOC_SIZES2_`
 
-:   Should `gs` be used to check the installed sizes of PDFs? This is
-    slower than (and in addition to) the previous check, but does detect
-    figures with excessive detail (often hidden by over-plotting) or
-    bitmap figures with too high a resolution. Requires that `R_GSCMD`
-    is set to a valid program, or `gs` (or on Windows, `gswin32.exe` or
-    `gswin64c.exe`) is on the path. Default: false (but true for CRAN
-    submission checks).
+: Should `gs` be used to check the installed sizes of PDFs? This is
+slower than (and in addition to) the previous check, but does detect
+figures with excessive detail (often hidden by over-plotting) or
+bitmap figures with too high a resolution. Requires that `R_GSCMD`
+is set to a valid program, or `gs` (or on Windows, `gswin32.exe` or
+`gswin64c.exe`) is on the path. Default: false (but true for CRAN
+submission checks).
 
-`_R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_` 
+`_R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_`
 
-:   By default the output from running the R code in the vignettes is
-    kept only if there is an error. This also applies to the
-    `build_vignettes.log` log from the re-building of
-    vignettes. Default: false.
+: By default the output from running the R code in the vignettes is
+kept only if there is an error. This also applies to the
+`build_vignettes.log` log from the re-building of
+vignettes. Default: false.
 
-`_R_CHECK_CLEAN_VIGN_TEST_` 
+`_R_CHECK_CLEAN_VIGN_TEST_`
 
-:   Should the `vign_test` directory be removed if the test is
-    successful? Default: true.
+: Should the `vign_test` directory be removed if the test is
+successful? Default: true.
 
-`_R_CHECK_REPLACING_IMPORTS_` 
+`_R_CHECK_REPLACING_IMPORTS_`
 
-:   Should warnings about replacing imports be reported? These sometimes
-    come from auto-generated `NAMESPACE` files in other
-    packages, but most often from importing the whole of a namespace
-    rather than using `importFrom`. Default: true.
+: Should warnings about replacing imports be reported? These sometimes
+come from auto-generated `NAMESPACE` files in other
+packages, but most often from importing the whole of a namespace
+rather than using `importFrom`. Default: true.
 
-`_R_CHECK_UNSAFE_CALLS_` 
+`_R_CHECK_UNSAFE_CALLS_`
 
-:   Check for calls that appear to tamper with (or allow tampering with)
-    already loaded code not from the current package: such calls may
-    well contravene CRAN policies. Default: true.
+: Check for calls that appear to tamper with (or allow tampering with)
+already loaded code not from the current package: such calls may
+well contravene CRAN policies. Default: true.
 
-`_R_CHECK_TIMINGS_` 
+`_R_CHECK_TIMINGS_`
 
-:   Optionally report timings for installation, examples, tests and
-    running/re-building vignettes as part of the check log. The format
-    is '`[as/bs]`' for the total CPU time (including child
-    processes) '`a`' and elapsed time '`b`', except on
-    Windows, when it is '`[bs]`'. In most cases timings are
-    only given for '`OK`' checks. Times with an elapsed
-    component over 10 mins are reported in minutes (with abbreviation
-    '`m`'). The value is the smallest numerical value in
-    elapsed seconds that should be reported: non-numerical values
-    indicate that no report is required, a value of '`0`' that
-    a report is always required. Default: `""`. (`10` for CRAN checks.)
+: Optionally report timings for installation, examples, tests and
+running/re-building vignettes as part of the check log. The format
+is '`[as/bs]`' for the total CPU time (including child
+processes) '`a`' and elapsed time '`b`', except on
+Windows, when it is '`[bs]`'. In most cases timings are
+only given for '`OK`' checks. Times with an elapsed
+component over 10 mins are reported in minutes (with abbreviation
+'`m`'). The value is the smallest numerical value in
+elapsed seconds that should be reported: non-numerical values
+indicate that no report is required, a value of '`0`' that
+a report is always required. Default: `""`. (`10` for CRAN checks.)
 
-`_R_CHECK_EXAMPLE_TIMING_THRESHOLD_` 
+`_R_CHECK_EXAMPLE_TIMING_THRESHOLD_`
 
-:   If timings are being recorded, set the threshold in seconds for
-    reporting long-running examples (either user+system CPU time or
-    elapsed time). Default: `"5"`.
+: If timings are being recorded, set the threshold in seconds for
+reporting long-running examples (either user+system CPU time or
+elapsed time). Default: `"5"`.
 
-`_R_CHECK_EXAMPLE_TIMING_CPU_TO_ELAPSED_THRESHOLD_` 
+`_R_CHECK_EXAMPLE_TIMING_CPU_TO_ELAPSED_THRESHOLD_`
 
-:   For checks with timings enabled, report examples where the ratio of
-    CPU time to elapsed time exceeds this threshold (and the CPU time is
-    at least one second). This can help detect the simultaneous use of
-    multiple CPU cores. Default: `NA`.
+: For checks with timings enabled, report examples where the ratio of
+CPU time to elapsed time exceeds this threshold (and the CPU time is
+at least one second). This can help detect the simultaneous use of
+multiple CPU cores. Default: `NA`.
 
-`_R_CHECK_TEST_TIMING_CPU_TO_ELAPSED_THRESHOLD_` 
+`_R_CHECK_TEST_TIMING_CPU_TO_ELAPSED_THRESHOLD_`
 
-:   Report for running an individual test if the ratio of CPU time to
-    elapsed time exceeds this threshold (and the CPU time is at least
-    one second). Not supported on Windows. Default: `NA`.
+: Report for running an individual test if the ratio of CPU time to
+elapsed time exceeds this threshold (and the CPU time is at least
+one second). Not supported on Windows. Default: `NA`.
 
-`_R_CHECK_VIGNETTE_TIMING_CPU_TO_ELAPSED_THRESHOLD_` 
+`_R_CHECK_VIGNETTE_TIMING_CPU_TO_ELAPSED_THRESHOLD_`
 
-:   Report if when running/re-building vignettes (individually or in
-    aggregate) the ratio of CPU time to elapsed time exceeds this
-    threshold (and the CPU time is at least one second). Not supported
-    on Windows. Default: `NA`.
+: Report if when running/re-building vignettes (individually or in
+aggregate) the ratio of CPU time to elapsed time exceeds this
+threshold (and the CPU time is at least one second). Not supported
+on Windows. Default: `NA`.
 
-`_R_CHECK_INSTALL_DEPENDS_` 
+`_R_CHECK_INSTALL_DEPENDS_`
 
-:   If set to a true value and a test installation is to be done, this
-    is done with `.libPaths()` containing just a temporary library
-    directory and `.Library`. The temporary library is populated by
-    symbolic links[^22^](#FOOT22) to the installed copies of
-    all the Depends/Imports/LinkingTo packages which are not in
-    `.Library`. Default: false (but true for CRAN submission checks).
+: If set to a true value and a test installation is to be done, this
+is done with `.libPaths()` containing just a temporary library
+directory and `.Library`. The temporary library is populated by
+symbolic links[^22^](#FOOT22) to the installed copies of
+all the Depends/Imports/LinkingTo packages which are not in
+`.Library`. Default: false (but true for CRAN submission checks).
 
     Note that this is actually implemented in `R CMD INSTALL`, so it is
     available to those who first install recording to a log, then call
     `R CMD check`.
 
 `_R_CHECK_DEPENDS_ONLY_` \
-`_R_CHECK_SUGGESTS_ONLY_` 
+`\_R_CHECK_SUGGESTS_ONLY_`
 
-:   If set to a true value, running examples, tests and vignettes is
-    done with `.libPaths()` containing just a temporary library
-    directory and `.Library`. The temporary library is populated by
-    symbolic links[^23^](#FOOT23) to the installed copies of
-    all the Depends/Imports and (for the second only) Suggests packages
-    which are not in `.Library`. (As exceptions, packages in a
-    '`VignetteBuilder`' field and test-suite managers in
-    '`Suggests`' are always made available.) Default: false
-    (but `_R_CHECK_SUGGESTS_ONLY_` is true for CRAN submission checks:
-    some of the regular checks use true and some use false).
+: If set to a true value, running examples, tests and vignettes is
+done with `.libPaths()` containing just a temporary library
+directory and `.Library`. The temporary library is populated by
+symbolic links[^23^](#FOOT23) to the installed copies of
+all the Depends/Imports and (for the second only) Suggests packages
+which are not in `.Library`. (As exceptions, packages in a
+'`VignetteBuilder`' field and test-suite managers in
+'`Suggests`' are always made available.) Default: false
+(but `_R_CHECK_SUGGESTS_ONLY_` is true for CRAN submission checks:
+some of the regular checks use true and some use false).
 
-`_R_CHECK_NO_RECOMMENDED_` 
+`_R_CHECK_NO_RECOMMENDED_`
 
-:   If set to a true value, augment the previous checks to make
-    recommended packages unavailable unless declared. Default: false
-    (but true for CRAN submission checks).
+: If set to a true value, augment the previous checks to make
+recommended packages unavailable unless declared. Default: false
+(but true for CRAN submission checks).
 
     This may give false positives on code which uses
-    `grDevices::densCols` and `statsasSparse` as these invoke
+    `grDevices::densCols` and `stats:::asSparse` as these invoke
     [**KernSmooth**](https://CRAN.R-project.org/package=KernSmooth) and
     [**Matrix**](https://CRAN.R-project.org/package=Matrix)
     respectively.
 
-`_R_CHECK_CODETOOLS_PROFILE_` 
+`_R_CHECK_CODETOOLS_PROFILE_`
 
-:   A string with comma-separated `name=value` pairs (with
-    `value` a logical constant) giving additional arguments
-    for the
-    [**codetools**](https://CRAN.R-project.org/package=codetools)
-    functions used for analyzing package code. E.g., use
-    `_R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE"` to turn
-    off suppressing warnings about unused local variables. Default: no
-    additional arguments, corresponding to using `skipWith = TRUE`,
-    `suppressPartialMatchArgs = FALSE` and `suppressLocalUnused = TRUE`.
+: A string with comma-separated `name=value` pairs (with
+`value`{.variable} a logical constant) giving additional arguments
+for the
+[**codetools**](https://CRAN.R-project.org/package=codetools)
+functions used for analyzing package code. E.g., use
+`_R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE"` to turn
+off suppressing warnings about unused local variables. Default: no
+additional arguments, corresponding to using `skipWith = TRUE`,
+`suppressPartialMatchArgs = FALSE` and `suppressLocalUnused = TRUE`.
 
-`_R_CHECK_CRAN_INCOMING_` 
+`_R_CHECK_CRAN_INCOMING_`
 
-:   Check whether package is suitable for publication on CRAN. Default:
-    false, except for CRAN submission checks.
+: Check whether package is suitable for publication on CRAN. Default:
+false, except for CRAN submission checks.
 
-`_R_CHECK_CRAN_INCOMING_REMOTE_` 
+`_R_CHECK_CRAN_INCOMING_REMOTE_`
 
-:   Include checks that require remote access among the above. Default:
-    same as `_R_CHECK_CRAN_INCOMING_`
+: Include checks that require remote access among the above. Default:
+same as `_R_CHECK_CRAN_INCOMING_`
 
-`_R_CHECK_XREFS_USE_ALIASES_FROM_CRAN_` 
+`_R_CHECK_XREFS_USE_ALIASES_FROM_CRAN_`
 
-:   When checking anchored Rd xrefs, use Rd aliases from the CRAN
-    package web areas in addition to those in the packages installed
-    locally. Default: false.
+: When checking anchored Rd xrefs, use Rd aliases from the CRAN
+package web areas in addition to those in the packages installed
+locally. Default: false.
 
-`_R_SHLIB_BUILD_OBJECTS_SYMBOL_TABLES_` 
+`_R_SHLIB_BUILD_OBJECTS_SYMBOL_TABLES_`
 
-:   Make the checks of compiled code more accurate by recording the
-    symbol tables for objects (`.o` files) at installation in a
-    file `symbols.rds`. (Only currently supported on Linux,
-    Solaris, macOS, Windows and FreeBSD.) Default: true.
+: Make the checks of compiled code more accurate by recording the
+symbol tables for objects (`.o` files) at installation in a
+file `symbols.rds`. (Only currently supported on Linux,
+Solaris, macOS, Windows and FreeBSD.) Default: true.
 
-`_R_CHECK_CODE_ASSIGN_TO_GLOBALENV_` 
+`_R_CHECK_CODE_ASSIGN_TO_GLOBALENV_`
 
-:   Should the package code be checked for assignments to the global
-    environment? Default: false (but true for CRAN submission checks).
+: Should the package code be checked for assignments to the global
+environment? Default: false (but true for CRAN submission checks).
 
-`_R_CHECK_CODE_ATTACH_` 
+`_R_CHECK_CODE_ATTACH_`
 
-:   Should the package code be checked for calls to `attach()`? Default:
-    false (but true for CRAN submission checks).
+: Should the package code be checked for calls to `attach()`? Default:
+false (but true for CRAN submission checks).
 
-`_R_CHECK_CODE_DATA_INTO_GLOBALENV_` 
+`_R_CHECK_CODE_DATA_INTO_GLOBALENV_`
 
-:   Should the package code be checked for calls to `data()` which load
-    into the global environment? Default: false (but true for CRAN
-    submission checks).
+: Should the package code be checked for calls to `data()` which load
+into the global environment? Default: false (but true for CRAN
+submission checks).
 
-`_R_CHECK_DOT_FIRSTLIB_` 
+`_R_CHECK_DOT_FIRSTLIB_`
 
-:   Should the package code be checked for the presence of the obsolete
-    function `.First.lib()`? Default: false (but true for CRAN
-    submission checks).
+: Should the package code be checked for the presence of the obsolete
+function `.First.lib()`? Default: false (but true for CRAN
+submission checks).
 
-`_R_CHECK_DEPRECATED_DEFUNCT_` 
+`_R_CHECK_DEPRECATED_DEFUNCT_`
 
-:   Should the package code be checked for the presence of recently
-    deprecated or defunct functions (including completely removed
-    functions). Also for platform-specific graphics devices. Default:
-    false (but true for CRAN submission checks).
+: Should the package code be checked for the presence of recently
+deprecated or defunct functions (including completely removed
+functions). Also for platform-specific graphics devices. Default:
+false (but true for CRAN submission checks).
 
-`_R_CHECK_SCREEN_DEVICE_` 
+`_R_CHECK_SCREEN_DEVICE_`
 
-:   If set to '`warn`', give a warning if examples etc open a
-    screen device. If set to '`stop`', give an error. Default:
-    empty (but '`stop`' for CRAN submission checks).
+: If set to '`warn`', give a warning if examples etc open a
+screen device. If set to '`stop`', give an error. Default:
+empty (but '`stop`' for CRAN submission checks).
 
-`_R_CHECK_WINDOWS_DEVICE_` 
+`_R_CHECK_WINDOWS_DEVICE_`
 
-:   If set to '`stop`', give an error if a Windows-only device
-    is used in example etc. This is only useful on Windows: the devices
-    do not exist elsewhere. Default: empty (but '`stop`' for
-    CRAN submission checks on Windows).
+: If set to '`stop`', give an error if a Windows-only device
+is used in example etc. This is only useful on Windows: the devices
+do not exist elsewhere. Default: empty (but '`stop`' for
+CRAN submission checks on Windows).
 
-`_R_CHECK_TOPLEVEL_FILES_` 
+`_R_CHECK_TOPLEVEL_FILES_`
 
-:   Report on top-level files in the package sources that are not
-    described in 'Writing R Extensions' nor are commonly understood
-    (like `ChangeLog`). Variations on standard names (e.g.
-    `COPYRIGHT`) are also reported. Default: false (but true
-    for CRAN submission checks).
+: Report on top-level files in the package sources that are not
+described in 'Writing R Extensions' nor are commonly understood
+(like `ChangeLog`). Variations on standard names (e.g.
+`COPYRIGHT`) are also reported. Default: false (but true
+for CRAN submission checks).
 
-`_R_CHECK_GCT_N_` 
+`_R_CHECK_GCT_N_`
 
-:   Should the `--use-gct` use `gctorture2(n)` rather than
-    `gctorture(TRUE)`? Use a positive integer to enable this. Default:
-    `0`.
+: Should the `--use-gct` use `gctorture2(n)` rather than
+`gctorture(TRUE)`? Use a positive integer to enable this. Default:
+`0`.
 
-`_R_CHECK_LIMIT_CORES_` 
+`_R_CHECK_LIMIT_CORES_`
 
-:   If set, check the usage of too many cores in package **parallel**.
-    If set to '`warn`' gives a warning, to '`false`'
-    or '`FALSE`' the check is skipped, and any other non-empty
-    value gives an error when more than 2 children are spawned. Default:
-    unset (but '`TRUE`' for CRAN submission checks).
+: If set, check the usage of too many cores in package **parallel**.
+If set to '`warn`' gives a warning, to '`false`'
+or '`FALSE`' the check is skipped, and any other non-empty
+value gives an error when more than 2 children are spawned. Default:
+unset (but '`TRUE`' for CRAN submission checks).
 
-`_R_CHECK_CODE_USAGE_VIA_NAMESPACES_` 
+`_R_CHECK_CODE_USAGE_VIA_NAMESPACES_`
 
-:   If set, check code usage (via
-    [**codetools**](https://CRAN.R-project.org/package=codetools))
-    directly on the package namespace without loading and attaching the
-    package and its suggests and enhances. Default: true (and true for
-    CRAN submission checks).
+: If set, check code usage (via
+[**codetools**](https://CRAN.R-project.org/package=codetools))
+directly on the package namespace without loading and attaching the
+package and its suggests and enhances. Default: true (and true for
+CRAN submission checks).
 
-`_R_CHECK_CODE_USAGE_WITH_ONLY_BASE_ATTACHED_` 
+`_R_CHECK_CODE_USAGE_WITH_ONLY_BASE_ATTACHED_`
 
-:   If set, check code usage (via
-    [**codetools**](https://CRAN.R-project.org/package=codetools)) with
-    only the base package attached. Default: true.
+: If set, check code usage (via
+[**codetools**](https://CRAN.R-project.org/package=codetools)) with
+only the base package attached. Default: true.
 
-`_R_CHECK_EXIT_ON_FIRST_ERROR_` 
+`_R_CHECK_EXIT_ON_FIRST_ERROR_`
 
-:   If set to a true value, the check will exit on the first error.
-    Default: false.
+: If set to a true value, the check will exit on the first error.
+Default: false.
 
-`_R_CHECK_S3_METHODS_NOT_REGISTERED_` 
+`_R_CHECK_S3_METHODS_NOT_REGISTERED_`
 
-:   If set to a true value, report (apparent) S3 methods exported but
-    not registered. Default: true.
+: If set to a true value, report (apparent) S3 methods exported but
+not registered. Default: true.
 
-`_R_CHECK_OVERWRITE_REGISTERED_S3_METHODS_` 
+`_R_CHECK_OVERWRITE_REGISTERED_S3_METHODS_`
 
-:   If set to a true value, report already registered S3 methods in
-    base/recommended packages which are overwritten when this package's
-    namespace is loaded. Default: false (but true for CRAN submission
-    checks).
+: If set to a true value, report already registered S3 methods in
+base/recommended packages which are overwritten when this package's
+namespace is loaded. Default: false (but true for CRAN submission
+checks).
 
-`_R_CHECK_TESTS_NLINES_` 
+`_R_CHECK_TESTS_NLINES_`
 
-:   Number of trailing lines of test output to reproduce in the log. If
-    `0` all lines except the R preamble are reproduced. Default: 13.
+: Number of trailing lines of test output to reproduce in the log. If
+`0` all lines except the R preamble are reproduced. Default: 13.
 
-`_R_CHECK_NATIVE_ROUTINE_REGISTRATION_` 
+`_R_CHECK_NATIVE_ROUTINE_REGISTRATION_`
 
-:   If set to a true value, report if the entry points to register
-    native routines and to suppress dynamic search are not found in a
-    package's DLL. (**NB:** this requires system command `nm` to be on
-    the `PATH`. On Windows, `objdump.exe` is first searched for in
-    compiler toolchain specified via `Makeconf` (can be customized by
-    environment variable `BINPREF`). If not found there, it must be on
-    the `PATH`. On Unix this would be normal when using a package with
-    compiled code (which are the only ones this checks), but Windows'
-    users should check.) Default: false (but true for CRAN submission
-    checks).
+: If set to a true value, report if the entry points to register
+native routines and to suppress dynamic search are not found in a
+package's DLL. (**NB:** this requires system command `nm` to be on
+the `PATH`. On Windows, `objdump.exe` is first searched for in
+compiler toolchain specified via `Makeconf` (can be customized by
+environment variable `BINPREF`). If not found there, it must be on
+the `PATH`. On Unix this would be normal when using a package with
+compiled code (which are the only ones this checks), but Windows'
+users should check.) Default: false (but true for CRAN submission
+checks).
 
-`_R_CHECK_NO_STOP_ON_TEST_ERROR_` 
-
-:   If set to a true value, do not stop running tests after first error
-    (as if command line option `--no-stop-on-test-error` had
-    been given). Default: false (but true for CRAN submission checks).
-
-`_R_CHECK_PRAGMAS_` 
+`_R_CHECK_NO_STOP_ON_TEST_ERROR_`
+
+: If set to a true value, do not stop running tests after first error
+(as if command line option `--no-stop-on-test-error` had
+been given). Default: false (but true for CRAN submission checks).
+
+`_R_CHECK_PRAGMAS_`
 
-:   Run additional checks on the pragmas in C/C++ source code and
-    headers. Default: false (but true for CRAN submission checks).
-
-`_R_CHECK_COMPILATION_FLAGS_` 
-
-:   If the package is installed and has C/C++/Fortran code, check the
-    install log for non-portable flags (for example those added to
-    `src/Makevars` during configuration). Currently
-    `-W` flags are reported, except `-Wall`,
-    `-Wextra` and `-Weverything`, and flags which
-    appear to be attempts to suppress warnings are highlighted. See
-    [Writing portable packages](./R-exts.html#Writing-portable-packages)
-    in Writing R Extensions for the rationale of this check (and why
-    even `-Werror` is unsafe). Environment variable
-    `_R_CHECK_COMPILATION_FLAGS_KNOWN_` can be set to a space-separated
-    set of flags which come from the R build used for testing (flags
-    such as `-Wall` and `-Wextra` are already known).
-    Default: false (but true for CRAN submission checks).
-
-`_R_CHECK_R_DEPENDS_` 
-
-:   Check that any dependence on R is not on a recent patch-level
-    version such as `R (>= 3.3.3)` since blocking installation of a
-    package will also block its reverse dependencies. Possible values
-    '`"note"`', '`"warn"`' and logical values (where
-    currently true values are equivalent to '`"note"`').
-    Default: false (but '`"warn"`' for `--as-cran`).
-
-`_R_CHECK_SERIALIZATION_` 
-
-:   Check that serialized R objects in the package sources were
-    serialized with version 2 and there is no dependence on
-    '`R >= 3.5.0`'. (Version 3 is in use as from R 3.5.0 but
-    should only be used when necessary.) Default: false (but true for
-    CRAN submission checks).
-
-`_R_CHECK_R_ON_PATH_` 
-
-:   This checks if the package attempts to use `R` or `Rscript` from the
-    path rather than that under test. It does so by putting scripts at
-    the head of the path which print a message and fail. Default: false
-    (but true for CRAN submission checks).
-
-`_R_CHECK_PACKAGES_USED_IN_TESTS_USE_SUBDIRS_` 
-
-:   If set to a true value, also check the R code in common unit test
-    subdirectories of `tests` for undeclared package
-    dependencies. Default: false (but true for CRAN submission checks).
-
-`_R_CHECK_SHLIB_OPENMP_FLAGS_` 
-
-:   Check correct and portable use of `SHLIB_OPENMP_*FLAGS` in
-    `src/Makevars` (and similar). Default: false (but true for
-    CRAN submission checks).
-
-`_R_CHECK_CONNECTIONS_LEFT_OPEN_` 
-
-:   When checking examples, check for each example if connections are
-    left open: if any are found, this is reported with a fatal error.
-    NB: 'connections' includes most use of files and any parallel
-    clusters which have not be stopped by `stopCluster()`. Default:
-    false (but true for CRAN submission checks).
-
-`_R_CHECK_FUTURE_FILE_TIMESTAMPS_` 
-
-:   Check if any of the input files has a timestamp in the future (and
-    to do so, checks that the system clock is correct to within 5
-    minutes). Default: false (but true for CRAN submission checks).
-
-`_R_CHECK_LENGTH_1_CONDITION_` 
-
-:   Optionally check if the condition in `if` and `while` statements has
-    length greater than one. For a true value ('`T`',
-    '`True`', '`TRUE`' or '`true`'), give an
-    error. For a false value ('`F`', '`False`',
-    '`FALSE`' or '`false`') or when unset, print a
-    warning. Any other non-true non-empty value needs to be a list of
-    commands separated by comma: '`abort`' causes R to
-    terminate unconditionally instead of signalling an error,
-    '`verbose`' prints very detailed diagnostic message,
-    '`package:pkg`' restricts the check to if/while statements
-    executing in the namespace of package '`pkg`',
-    '`package:_R_CHECK_PACKAGE_NAME_`' restricts the check to
-    if/while statements executing in the package that is currently being
-    checked by `R CMD check`, '`warn`' causes R to report a
-    warning instead of signalling an error. Default: unset (warning is
-    reported)
-
-`_R_CHECK_LENGTH_1_LOGIC2_` 
-
-:   Optionally check if either argument of the binary operators `&&` and
-    `||` has length greater than one. The format is the same as for
-    \_R\_CHECK\_LENGTH\_1\_CONDITION\_. Default: unset (nothing is
-    reported, but
-    '`package:_R_CHECK_PACKAGE_NAME_,abort,verbose`' for the
-    CRAN submission checks).
-
-`_R_CHECK_BUILD_VIGNETTES_SEPARATELY_` 
-
-:   Prior to R 3.6.0, re-building the vignette outputs was done in a
-    single R session which allowed accidental reliance of one vignette
-    on another (for example, in the loading of packages). The current
-    default is to use a separate session for each vignette; this option
-    allows testing the older behaviour, Default: true
-
-`_R_CHECK_SYSTEM_CLOCK_` 
-
-:   As part of the 'checking for future file timestamps' enabled by
-    `--as-cran`, check the system clock against an external
-    clock to catch errors such as the wrong day or even year. Not
-    necessary on systems doing repeated checks. Default: true (but false
-    for CRAN checking)
-
-`_R_CHECK_AUTOCONF_` 
-
-:   For packages with a `configure` file generated by GNU
-    `autoconf` and either `configure.ac` or
-    `configure,.in`, check that `autoreconf` can, if available,
-    be run in a copy of the sources (this will detect missing source
-    files and report `autoconf` warnings). Default: false (but true for
-    CRAN submission checks).
-
-`_R_CHECK_THINGS_IN_TEMP_DIR_` 
-
-:   Check and report at the end of the check run if files would have
-    been left in the temporary directory (usually `/tmp` on a
-    Unix-alike). It does this by setting the environment variable
-    `TEMPDIR` to a subdirectory of the R session directory for the
-    `check` process: if any files or directories are left there they are
-    removed. Since some of these might be out of the user's control,
-    environment variable `_R_CHECK_THINGS_IN_TEMP_DIR_EXCLUDE_` can
-    specify an (extended regex) pattern of file names not to be reported
-    -- CRAN uses '`^ompi.`' for directories left behind by
-    OpenMPI. There are rare instances where `TEMPDIR` is not respected
-    and so files are left in `/tmp` (and not reported): one
-    example is `/tmp/boost_interprocess` on some OSes. Default:
-    false (but true for CRAN submission checks).
+: Run additional checks on the pragmas in C/C++ source code and
+headers. Default: false (but true for CRAN submission checks).
+
+`_R_CHECK_COMPILATION_FLAGS_`
+
+: If the package is installed and has C/C++/Fortran code, check the
+install log for non-portable flags (for example those added to
+`src/Makevars` during configuration). Currently
+`-W` flags are reported, except `-Wall`,
+`-Wextra` and `-Weverything`, and flags which
+appear to be attempts to suppress warnings are highlighted. See
+[Writing portable packages](./R-exts.html#Writing-portable-packages)
+in Writing R Extensions for the rationale of this check (and why
+even `-Werror` is unsafe). Environment variable
+`_R_CHECK_COMPILATION_FLAGS_KNOWN_` can be set to a space-separated
+set of flags which come from the R build used for testing (flags
+such as `-Wall` and `-Wextra` are already known).
+Default: false (but true for CRAN submission checks).
+
+`_R_CHECK_R_DEPENDS_`
+
+: Check that any dependence on R is not on a recent patch-level
+version such as `R (>= 3.3.3)` since blocking installation of a
+package will also block its reverse dependencies. Possible values
+'`"note"`', '`"warn"`' and logical values (where
+currently true values are equivalent to '`"note"`').
+Default: false (but '`"warn"`' for `--as-cran`).
+
+`_R_CHECK_SERIALIZATION_`
+
+: Check that serialized R objects in the package sources were
+serialized with version 2 and there is no dependence on
+'`R >= 3.5.0`'. (Version 3 is in use as from R 3.5.0 but
+should only be used when necessary.) Default: false (but true for
+CRAN submission checks).
+
+`_R_CHECK_R_ON_PATH_`
+
+: This checks if the package attempts to use `R` or `Rscript` from the
+path rather than that under test. It does so by putting scripts at
+the head of the path which print a message and fail. Default: false
+(but true for CRAN submission checks).
+
+`_R_CHECK_PACKAGES_USED_IN_TESTS_USE_SUBDIRS_`
+
+: If set to a true value, also check the R code in common unit test
+subdirectories of `tests` for undeclared package
+dependencies. Default: false (but true for CRAN submission checks).
+
+`_R_CHECK_SHLIB_OPENMP_FLAGS_`
+
+: Check correct and portable use of `SHLIB_OPENMP_*FLAGS` in
+`src/Makevars` (and similar). Default: false (but true for
+CRAN submission checks).
+
+`_R_CHECK_CONNECTIONS_LEFT_OPEN_`
+
+: When checking examples, check for each example if connections are
+left open: if any are found, this is reported with a fatal error.
+NB: 'connections' includes most use of files and any parallel
+clusters which have not be stopped by `stopCluster()`. Default:
+false (but true for CRAN submission checks).
+
+`_R_CHECK_FUTURE_FILE_TIMESTAMPS_`
+
+: Check if any of the input files has a timestamp in the future (and
+to do so, checks that the system clock is correct to within 5
+minutes). Default: false (but true for CRAN submission checks).
+
+`_R_CHECK_LENGTH_1_CONDITION_`
+
+: Optionally check if the condition in `if` and `while` statements has
+length greater than one. For a true value ('`T`',
+'`True`', '`TRUE`' or '`true`'), give an
+error. For a false value ('`F`', '`False`',
+'`FALSE`' or '`false`') or when unset, print a
+warning. Any other non-true non-empty value needs to be a list of
+commands separated by comma: '`abort`' causes R to
+terminate unconditionally instead of signalling an error,
+'`verbose`' prints very detailed diagnostic message,
+'`package:pkg`' restricts the check to if/while statements
+executing in the namespace of package '`pkg`',
+'`package:_R_CHECK_PACKAGE_NAME_`' restricts the check to
+if/while statements executing in the package that is currently being
+checked by `R CMD check`, '`warn`' causes R to report a
+warning instead of signalling an error. Default: unset (warning is
+reported)
+
+`_R_CHECK_LENGTH_1_LOGIC2_`
+
+: Optionally check if either argument of the binary operators `&&` and
+`||` has length greater than one. The format is the same as for
+\_R*CHECK_LENGTH_1_CONDITION\_. Default: unset (nothing is
+reported, but
+'`package:\_R_CHECK_PACKAGE_NAME*,abort,verbose`' for the
+CRAN submission checks).
+
+`_R_CHECK_BUILD_VIGNETTES_SEPARATELY_`
+
+: Prior to R 3.6.0, re-building the vignette outputs was done in a
+single R session which allowed accidental reliance of one vignette
+on another (for example, in the loading of packages). The current
+default is to use a separate session for each vignette; this option
+allows testing the older behaviour, Default: true
+
+`_R_CHECK_SYSTEM_CLOCK_`
+
+: As part of the 'checking for future file timestamps' enabled by
+`--as-cran`, check the system clock against an external
+clock to catch errors such as the wrong day or even year. Not
+necessary on systems doing repeated checks. Default: true (but false
+for CRAN checking)
+
+`_R_CHECK_AUTOCONF_`
+
+: For packages with a `configure` file generated by GNU
+`autoconf` and either `configure.ac` or
+`configure,.in`, check that `autoreconf` can, if available,
+be run in a copy of the sources (this will detect missing source
+files and report `autoconf` warnings). Default: false (but true for
+CRAN submission checks).
+
+`_R_CHECK_THINGS_IN_TEMP_DIR_`
+
+: Check and report at the end of the check run if files would have
+been left in the temporary directory (usually `/tmp` on a
+Unix-alike). It does this by setting the environment variable
+`TEMPDIR` to a subdirectory of the R session directory for the
+`check` process: if any files or directories are left there they are
+removed. Since some of these might be out of the user's control,
+environment variable `_R_CHECK_THINGS_IN_TEMP_DIR_EXCLUDE_` can
+specify an (extended regex) pattern of file names not to be reported
+-- CRAN uses '`^ompi.`' for directories left behind by
+OpenMPI. There are rare instances where `TEMPDIR` is not respected
+and so files are left in `/tmp` (and not reported): one
+example is `/tmp/boost_interprocess` on some OSes. Default:
+false (but true for CRAN submission checks).
 
 CRAN's submission checks use something like
 
- 
-``` 
+```r
 _R_CHECK_CRAN_INCOMING_=TRUE
 _R_CHECK_CRAN_INCOMING_REMOTE_=TRUE
 _R_CHECK_VC_DIRS_=TRUE
@@ -4697,8 +4198,7 @@ _R_CHECK_THINGS_IN_TEMP_DIR_=true
 These are turned on by `R CMD check --as-cran`: the incoming checks also
 use
 
- 
-``` 
+```r
 _R_CHECK_FORCE_SUGGESTS_=FALSE
 ```
 
@@ -4713,43 +4213,43 @@ indicate a number of seconds, minutes or hours respectively: other
 values are interpreted as a whole number of seconds (with invalid inputs
 being treated as no limit).
 
-`_R_CHECK_ELAPSED_TIMEOUT_` 
+`_R_CHECK_ELAPSED_TIMEOUT_`
 
-:   The default timeout for sub-processes not otherwise mentioned, and
-    the default value for all except
-    `_R_CHECK_ONE_TEST_ELAPSED_TIMEOUT_`. (This is also used by
-    `tools::check_packages_in_dir`.)
+: The default timeout for sub-processes not otherwise mentioned, and
+the default value for all except
+`_R_CHECK_ONE_TEST_ELAPSED_TIMEOUT_`. (This is also used by
+`tools::check_packages_in_dir`.)
 
-`_R_CHECK_INSTALL_ELAPSED_TIMEOUT_` 
+`_R_CHECK_INSTALL_ELAPSED_TIMEOUT_`
 
-:   Limit for when `R CMD INSTALL` is run by `check`.
+: Limit for when `R CMD INSTALL` is run by `check`.
 
-`_R_CHECK_EXAMPLES_ELAPSED_TIMEOUT_` 
+`_R_CHECK_EXAMPLES_ELAPSED_TIMEOUT_`
 
-:   Limit for running all the examples for one sub-architecture.
+: Limit for running all the examples for one sub-architecture.
 
-`_R_CHECK_ONE_TEST_ELAPSED_TIMEOUT_` 
+`_R_CHECK_ONE_TEST_ELAPSED_TIMEOUT_`
 
-:   Limit for running one test for one sub-architecture. Default
-    `_R_CHECK_TESTS_ELAPSED_TIMEOUT_`.
+: Limit for running one test for one sub-architecture. Default
+`_R_CHECK_TESTS_ELAPSED_TIMEOUT_`.
 
-`_R_CHECK_TESTS_ELAPSED_TIMEOUT_` 
+`_R_CHECK_TESTS_ELAPSED_TIMEOUT_`
 
-:   Limit for running all the tests for one sub-architecture (and the
-    default limit for running one test).
+: Limit for running all the tests for one sub-architecture (and the
+default limit for running one test).
 
-`_R_CHECK_ONE_VIGNETTE_ELAPSED_TIMEOUT_` 
+`_R_CHECK_ONE_VIGNETTE_ELAPSED_TIMEOUT_`
 
-:   Limit for running the R code in one vignette, including for
-    re-building each vignette separately.
+: Limit for running the R code in one vignette, including for
+re-building each vignette separately.
 
-`_R_CHECK_BUILD_VIGNETTES_ELAPSED_TIMEOUT_` 
+`_R_CHECK_BUILD_VIGNETTES_ELAPSED_TIMEOUT_`
 
-:   Limit for re-building all vignettes.
+: Limit for re-building all vignettes.
 
-`_R_CHECK_PKGMAN_ELAPSED_TIMEOUT_` 
+`_R_CHECK_PKGMAN_ELAPSED_TIMEOUT_`
 
-:   Limit for each attempt at building the PDF package manual.
+: Limit for each attempt at building the PDF package manual.
 
 Another variable which enables stricter checks is to set
 `R_CHECK_CONSTANTS` to `5`. This checks that
@@ -4761,15 +4261,9 @@ on second use). Unfortunately these checks slow down checking of
 examples, tests and vignettes, typically two-fold but in the worst cases
 at least a hundred-fold.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Testing R code](#Testing-R-code), Previous: [Tools](#Tools), Up:
-[Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-9 R coding standards 
---------------------
+## 9 R coding standards
 
 R is meant to run on a wide variety of platforms, including Linux and
 most variants of Unix as well as Windows and macOS. Therefore, when
@@ -4784,40 +4278,40 @@ Standards should be followed if possible.
 
 The following tools can "safely be assumed" for R extensions.
 
--   An ISO C99 C compiler. Note that extensions such as POSIX 1003.1
-    must be tested for, typically using Autoconf unless you are sure
-    they are supported on all mainstream R platforms (including Windows
-    and macOS).
+- An ISO C99 C compiler. Note that extensions such as POSIX 1003.1
+  must be tested for, typically using Autoconf unless you are sure
+  they are supported on all mainstream R platforms (including Windows
+  and macOS).
 
--   A fixed-form Fortran compiler.
+- A fixed-form Fortran compiler.
 
--   A simple `make`, considering the features of `make` in 4.2 BSD
-    systems as a baseline. 
+- A simple `make`, considering the features of `make` in 4.2 BSD
+  systems as a baseline.
 
-    GNU or other extensions, including pattern rules using
-    '`%`', the automatic variable '`$^`', the
-    '`+=`' syntax to append to the value of a variable, the
-    ("safe") inclusion of makefiles with no error, conditional
-    execution, and many more, must not be used (see Chapter "Features"
-    in the GNU Make Manual for more information). On the other hand,
-    building R in a separate directory (not containing the sources)
-    should work provided that `make` supports the `VPATH` mechanism.
+  GNU or other extensions, including pattern rules using
+  '`%`', the automatic variable '`$^`', the
+  '`+=`' syntax to append to the value of a variable, the
+  ("safe") inclusion of makefiles with no error, conditional
+  execution, and many more, must not be used (see Chapter "Features"
+  in the GNU Make Manual for more information). On the other hand,
+  building R in a separate directory (not containing the sources)
+  should work provided that `make` supports the `VPATH` mechanism.
 
-    Windows-specific makefiles can assume GNU `make` 3.79 or later, as
-    no other `make` is viable on that platform.
+  Windows-specific makefiles can assume GNU `make` 3.79 or later, as
+  no other `make` is viable on that platform.
 
--   A Bourne shell and the "traditional" Unix programming tools,
-    including `grep`, `sed`, and `awk`.
+- A Bourne shell and the "traditional" Unix programming tools,
+  including `grep`, `sed`, and `awk`.
 
-    There are POSIX standards for these tools, but these may not be
-    fully supported. Baseline features could be determined from a book
-    such as The UNIX Programming Environment by Brian W. Kernighan & Rob
-    Pike. Note in particular that '`|`' in a regexp is an
-    extended regexp, and is not supported by all versions of `grep` or
-    `sed`. The Open Group Base Specifications, Issue 7, which are
-    technically identical to IEEE Std 1003.1 (POSIX), 2008, are
-    available at
-    <http://pubs.opengroup.org/onlinepubs/9699919799/mindex.html>.
+  There are POSIX standards for these tools, but these may not be
+  fully supported. Baseline features could be determined from a book
+  such as The UNIX Programming Environment by Brian W. Kernighan & Rob
+  Pike. Note in particular that '`|`' in a regexp is an
+  extended regexp, and is not supported by all versions of `grep` or
+  `sed`. The Open Group Base Specifications, Issue 7, which are
+  technically identical to IEEE Std 1003.1 (POSIX), 2008, are
+  available at
+  <http://pubs.opengroup.org/onlinepubs/9699919799/mindex.html>.
 
 Under Windows, most users will not have these tools installed, and you
 should not require their presence for the operation of your package.
@@ -4829,10 +4323,10 @@ as this does not use a standard shell (let alone a Bourne shell).
 
 In addition, the following tools are needed for certain tasks.
 
--   Perl version 5 is only needed for the maintainer-only script
-    `tools/help2man.pl`. 
--   Makeinfo version 4.7 or later is needed to build the Info files for
-    the R manuals written in the GNU Texinfo system. 
+- Perl version 5 is only needed for the maintainer-only script
+  `tools/help2man.pl`.
+- Makeinfo version 4.7 or later is needed to build the Info files for
+  the R manuals written in the GNU Texinfo system.
 
 It is also important that code is written in a way that allows others to
 understand it. This is particularly helpful for fixing problems, and
@@ -4842,10 +4336,9 @@ indentation of 4 for R and C (and most likely also Perl) code, and 2 for
 documentation in Rd format. Emacs (21 or later) users can implement this
 indentation style by putting the following in one of their startup
 files, and using customization to set the `c-default-style` to `"bsd"`
-and `c-basic-offset` to `4`.) 
+and `c-basic-offset` to `4`.)
 
- 
-``` 
+```r
 ;;; ESS
 (add-hook 'ess-mode-hook
           (lambda ()
@@ -4867,7 +4360,7 @@ and `c-basic-offset` to `4`.)
 ;; (setq ess-nuke-trailing-whitespace-p t)
 ```
 
-``` 
+```r
 ;;; Perl
 (add-hook 'perl-mode-hook
           (lambda () (setq perl-indent-level 4)))
@@ -4877,20 +4370,14 @@ and `c-basic-offset` to `4`.)
 which has been determined not to display the structure clearly enough
 when using narrow fonts.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Use of TeX dialects](#Use-of-TeX-dialects), Previous: [R coding
-standards](#R-coding-standards), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-10 Testing R code 
------------------
+## 10 Testing R code
 
 When you (as R developer) add new functions to the R base (all the
 packages distributed with R), be careful to check if [make
-test-Specific] or particularly, [cd tests; make
-no-segfault.Rout] still works (without interactive user
+test-Specific]{.kbd} or particularly, [cd tests; make
+no-segfault.Rout]{.kbd} still works (without interactive user
 intervention, and on a standalone computer). If the new function, for
 example, accesses the Internet, or requires GUI interaction, please add
 its name to the "stop list" in `tests/no-segfault.Rin`.
@@ -4898,15 +4385,9 @@ its name to the "stop list" in `tests/no-segfault.Rin`.
 \[To be revised: use `make check-devel`, check the write barrier if you
 change internal structures.\]
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Current and future directions](#Current-and-future-directions),
-Previous: [Testing R code](#Testing-R-code), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-11 Use of TeX dialects 
-----------------------
+## 11 Use of TeX dialects
 
 Various dialects of TeX are used for different purposes in R. The policy
 is that manuals be written in '`texinfo`', and for convenience
@@ -4944,38 +4425,27 @@ friends and if found records the absolute paths in the system
 `Renviron` file. This used to record '`false`' if no
 command was found, but it nowadays records the name for looking up on
 the path at run time. The latter can be important for binary
-distributions: one does not want to be tied to, for example, TeX Live
-2007.
+distributions: one does not want to be tied to, for example, TeX Live 2007.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Function and variable index](#Function-and-variable-index),
-Previous: [Use of TeX dialects](#Use-of-TeX-dialects), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-12 Current and future directions 
---------------------------------
+## 12 Current and future directions
 
 This chapter is for notes about possible in-progress and future changes
 to R: there is no commitment to release such changes, let alone to a
 timescale.
 
-  ---------------------------------------- ---- --
-  • [Long vectors](#Long-vectors)               
-  • [64-bit types](#g_t64_002dbit-types)        
-  • [Large matrices](#Large-matrices)           
-  ---------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Long vectors](#Long-vectors)     
+ • [64-bit types](#g_t64_002dbit-types)     
+ • [Large matrices](#Large-matrices)
 
- 
-Next: [64-bit types](#g_t64_002dbit-types), Previous: [Current and
-future directions](#Current-and-future-directions), Up: [Current and
-future directions](#Current-and-future-directions)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 12.1 Long vectors 
+---
+
+### 12.1 Long vectors
 
 Vectors in R 2.x.y were limited to a length of 2\^31 - 1 elements (about
 2 billion), as the length is stored in the `SEXPREC` as a C `int`, and
@@ -4995,43 +4465,37 @@ logical, integer, numeric and character vectors, and lists and
 expression vectors. (Elements of character vectors (`CHARSXP`s) remain
 limited to 2\^31 - 1 bytes.) Some considerations:
 
--   This has been implemented by recording the length (and true length)
-    as `-1` and recording the actual length as a 64-bit field at the
-    beginning of the header. Because a fair amount of code in R uses a
-    signed type for the length, the 'long length' is recorded using the
-    signed C99 type `ptrdiff_t`, which is typedef-ed to `R_xlen_t`.
--   These can in theory have 63-bit lengths, but note that current
-    64-bit OSes do not even theoretically offer 64-bit address spaces
-    and there is currently a 52-bit limit (which exceeds the theoretical
-    limit of current OSes and ensures that such lengths can be stored
-    exactly in doubles).
--   The serialization format has been changed to accommodate longer
-    lengths, but vectors of lengths up to 2\^31-1 are stored in the same
-    way as before. Longer vectors have their length field set to `-1`
-    and followed by two 32-bit fields giving the upper and lower 32-bits
-    of the actual length. There is currently a sanity check which limits
-    lengths to 2\^48 on unserialization.
--   The type `R_xlen_t` is made available to packages in C header
-    `Rinternals.h`: this should be fine in C code since C99 is
-    required. People do try to use R internals in C++, but C++98
-    compilers are not required to support these types.
--   Indexing can be done via the use of doubles. The internal indexing
-    code used to work with positive integer indices (and negative,
-    logical and matrix indices were all converted to positive integers):
-    it now works with either `INTSXP` or `REALSXP` indices.
--   The R function `length` returns a double value if the length exceeds
-    2\^31-1. Code calling `as.integer(length(x))` before passing to
-    `.C`/`.Fortran` should checks for an `NA` result.
+- This has been implemented by recording the length (and true length)
+  as `-1` and recording the actual length as a 64-bit field at the
+  beginning of the header. Because a fair amount of code in R uses a
+  signed type for the length, the 'long length' is recorded using the
+  signed C99 type `ptrdiff_t`, which is typedef-ed to `R_xlen_t`.
+- These can in theory have 63-bit lengths, but note that current
+  64-bit OSes do not even theoretically offer 64-bit address spaces
+  and there is currently a 52-bit limit (which exceeds the theoretical
+  limit of current OSes and ensures that such lengths can be stored
+  exactly in doubles).
+- The serialization format has been changed to accommodate longer
+  lengths, but vectors of lengths up to 2\^31-1 are stored in the same
+  way as before. Longer vectors have their length field set to `-1`
+  and followed by two 32-bit fields giving the upper and lower 32-bits
+  of the actual length. There is currently a sanity check which limits
+  lengths to 2\^48 on unserialization.
+- The type `R_xlen_t` is made available to packages in C header
+  `Rinternals.h`: this should be fine in C code since C99 is
+  required. People do try to use R internals in C++, but C++98
+  compilers are not required to support these types.
+- Indexing can be done via the use of doubles. The internal indexing
+  code used to work with positive integer indices (and negative,
+  logical and matrix indices were all converted to positive integers):
+  it now works with either `INTSXP` or `REALSXP` indices.
+- The R function `length` returns a double value if the length exceeds
+  2\^31-1. Code calling `as.integer(length(x))` before passing to
+  `.C`/`.Fortran` should checks for an `NA` result.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Large matrices](#Large-matrices), Previous: [Long
-vectors](#Long-vectors), Up: [Current and future
-directions](#Current-and-future-directions)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 12.2 64-bit types 
+### 12.2 64-bit types
 
 There is also some desire to be able to store larger integers in R,
 although the possibility of storing these as `double` is often
@@ -5040,15 +4504,15 @@ stored as `double`).
 
 Different routes have been proposed:
 
--   Add a new type to R and use that for lengths and indices---most
-    likely this would be a 64-bit signed type, say `longint`. R's usual
-    implicit coercion rules would ensure that supplying an `integer`
-    vector for indexing or `length<-` would work.
--   A more radical alternative is to change the existing `integer` type
-    to be 64-bit on 64-bit platforms (which was the approach taken by
-    S-PLUS for DEC/Compaq Alpha systems). Or even on all platforms.
--   Allow either `integer` or `double` values for lengths and indices,
-    and return `double` only when necessary.
+- Add a new type to R and use that for lengths and indices---most
+  likely this would be a 64-bit signed type, say `longint`. R's usual
+  implicit coercion rules would ensure that supplying an `integer`
+  vector for indexing or `length<-` would work.
+- A more radical alternative is to change the existing `integer` type
+  to be 64-bit on 64-bit platforms (which was the approach taken by
+  S-PLUS for DEC/Compaq Alpha systems). Or even on all platforms.
+- Allow either `integer` or `double` values for lengths and indices,
+  and return `double` only when necessary.
 
 The third has the advantages of minimal disruption to existing code and
 not increasing memory requirements. In the first and third scenarios
@@ -5070,14 +4534,9 @@ introduce 'long' versions `xlength` and `XLENGTH` which return
 
 See also <http://homepage.cs.uiowa.edu/~luke/talks/useR10.pdf>.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [64-bit types](#g_t64_002dbit-types), Up: [Current and future
-directions](#Current-and-future-directions)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 12.3 Large matrices 
+### 12.3 Large matrices
 
 Matrices are stored as vectors and so were also limited to 2\^31-1
 elements. Now longer vectors are allowed on 64-bit platforms, matrices
@@ -5101,1543 +4560,1105 @@ been encountered. For matrix algebra on large matrices one almost
 certainly wants a machine with a lot of RAM (100s of gigabytes), many
 cores and a multi-threaded BLAS.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Concept index](#Concept-index), Previous: [Current and future
-directions](#Current-and-future-directions), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## Function and variable index
 
-Function and variable index 
----------------------------
+---
 
-  ----------------------------------- ---------------------------------------------------------------------
-  Jump to:                            [**.**](#Function-and-variable-index_vr_symbol-1)  
-                                      [**\_**](#Function-and-variable-index_vr_symbol-2)
-                                       \
-                                      [**A**](#Function-and-variable-index_vr_letter-A)  
-                                      [**C**](#Function-and-variable-index_vr_letter-C)  
-                                      [**D**](#Function-and-variable-index_vr_letter-D)  
-                                      [**E**](#Function-and-variable-index_vr_letter-E)  
-                                      [**F**](#Function-and-variable-index_vr_letter-F)  
-                                      [**G**](#Function-and-variable-index_vr_letter-G)  
-                                      [**I**](#Function-and-variable-index_vr_letter-I)  
-                                      [**L**](#Function-and-variable-index_vr_letter-L)  
-                                      [**M**](#Function-and-variable-index_vr_letter-M)  
-                                      [**N**](#Function-and-variable-index_vr_letter-N)  
-                                      [**P**](#Function-and-variable-index_vr_letter-P)  
-                                      [**R**](#Function-and-variable-index_vr_letter-R)  
-                                      [**S**](#Function-and-variable-index_vr_letter-S)  
-                                      [**T**](#Function-and-variable-index_vr_letter-T)  
-                                      [**U**](#Function-and-variable-index_vr_letter-U)  
-                                      [**V**](#Function-and-variable-index_vr_letter-V)  
-                                      [**W**](#Function-and-variable-index_vr_letter-W)  
+Jump to:   [**.**](#Function-and-variable-index_vr_symbol-1){.summary-letter}  
+[**\_**](#Function-and-variable-index_vr_symbol-2){.summary-letter}
+ \
+ [**A**](#Function-and-variable-index_vr_letter-A){.summary-letter}  
+[**C**](#Function-and-variable-index_vr_letter-C){.summary-letter}  
+[**D**](#Function-and-variable-index_vr_letter-D){.summary-letter}  
+[**E**](#Function-and-variable-index_vr_letter-E){.summary-letter}  
+[**F**](#Function-and-variable-index_vr_letter-F){.summary-letter}  
+[**G**](#Function-and-variable-index_vr_letter-G){.summary-letter}  
+[**I**](#Function-and-variable-index_vr_letter-I){.summary-letter}  
+[**L**](#Function-and-variable-index_vr_letter-L){.summary-letter}  
+[**M**](#Function-and-variable-index_vr_letter-M){.summary-letter}  
+[**N**](#Function-and-variable-index_vr_letter-N){.summary-letter}  
+[**P**](#Function-and-variable-index_vr_letter-P){.summary-letter}  
+[**R**](#Function-and-variable-index_vr_letter-R){.summary-letter}  
+[**S**](#Function-and-variable-index_vr_letter-S){.summary-letter}  
+[**T**](#Function-and-variable-index_vr_letter-T){.summary-letter}  
+[**U**](#Function-and-variable-index_vr_letter-U){.summary-letter}  
+[**V**](#Function-and-variable-index_vr_letter-V){.summary-letter}  
+[**W**](#Function-and-variable-index_vr_letter-W){.summary-letter}
 
-  ----------------------------------- ---------------------------------------------------------------------
+---
 
 Index Entry
 
- 
-
 Section
 
-------------------------------------------------------------------------
+---
 
 .
 
 [`.Device`](#index-_002eDevice):
 
- 
-
 [Base environment](#Base-environment)
 
 [`.Devices`](#index-_002eDevices):
-
- 
 
 [Base environment](#Base-environment)
 
 [`.Internal`](#index-_002eInternal):
 
- 
-
 [.Internal vs .Primitive](#g_t_002eInternal-vs-_002ePrimitive)
 
 [`.Last.value`](#index-_002eLast_002evalue):
-
- 
 
 [Base environment](#Base-environment)
 
 [`.Options`](#index-_002eOptions):
 
- 
-
 [Base environment](#Base-environment)
 
 [`.Primitive`](#index-_002ePrimitive):
-
- 
 
 [.Internal vs .Primitive](#g_t_002eInternal-vs-_002ePrimitive)
 
 [`.Random.seed`](#index-_002eRandom_002eseed):
 
- 
-
 [Global environment](#Global-environment)
 
 [`.SavedPlots`](#index-_002eSavedPlots):
-
- 
 
 [Global environment](#Global-environment)
 
 [`.Traceback`](#index-_002eTraceback):
 
- 
-
 [Base environment](#Base-environment)
 
-------------------------------------------------------------------------
+---
 
 \_
 
 [`_R_CHECK_ALL_NON_ISO_C_`](#index-_005fR_005fCHECK_005fALL_005fNON_005fISO_005fC_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_`](#index-_005fR_005fCHECK_005fALWAYS_005fLOG_005fVIGNETTE_005fOUTPUT_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_ASCII_CODE_`](#index-_005fR_005fCHECK_005fASCII_005fCODE_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_ASCII_DATA_`](#index-_005fR_005fCHECK_005fASCII_005fDATA_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_AUTOCONF_`](#index-_005fR_005fCHECK_005fAUTOCONF_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_BUILD_VIGNETTES_ELAPSED_TIMEOUT_`](#index-_005fR_005fCHECK_005fBUILD_005fVIGNETTES_005fELAPSED_005fTIMEOUT_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_BUILD_VIGNETTES_SEPARATELY_`](#index-_005fR_005fCHECK_005fBUILD_005fVIGNETTES_005fSEPARATELY_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_CLEAN_VIGN_TEST_`](#index-_005fR_005fCHECK_005fCLEAN_005fVIGN_005fTEST_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_CODETOOLS_PROFILE_`](#index-_005fR_005fCHECK_005fCODETOOLS_005fPROFILE_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_CODE_ASSIGN_TO_GLOBALENV_`](#index-_005fR_005fCHECK_005fCODE_005fASSIGN_005fTO_005fGLOBALENV_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_CODE_ATTACH_`](#index-_005fR_005fCHECK_005fCODE_005fATTACH_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_CODE_DATA_INTO_GLOBALENV_`](#index-_005fR_005fCHECK_005fCODE_005fDATA_005fINTO_005fGLOBALENV_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_CODE_USAGE_VIA_NAMESPACES_`](#index-_005fR_005fCHECK_005fCODE_005fUSAGE_005fVIA_005fNAMESPACES_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_CODE_USAGE_WITH_ONLY_BASE_ATTACHED_`](#index-_005fR_005fCHECK_005fCODE_005fUSAGE_005fWITH_005fONLY_005fBASE_005fATTACHED_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_CODOC_S4_METHODS_`](#index-_005fR_005fCHECK_005fCODOC_005fS4_005fMETHODS_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_COMPACT_DATA_`](#index-_005fR_005fCHECK_005fCOMPACT_005fDATA_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_COMPILATION_FLAGS_`](#index-_005fR_005fCHECK_005fCOMPILATION_005fFLAGS_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_CONNECTIONS_LEFT_OPEN_`](#index-_005fR_005fCHECK_005fCONNECTIONS_005fLEFT_005fOPEN_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_CRAN_INCOMING_`](#index-_005fR_005fCHECK_005fCRAN_005fINCOMING_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_CRAN_INCOMING_REMOTE_`](#index-_005fR_005fCHECK_005fCRAN_005fINCOMING_005fREMOTE_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_DEPENDS_ONLY_`](#index-_005fR_005fCHECK_005fDEPENDS_005fONLY_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_DEPRECATED_DEFUNCT_`](#index-_005fR_005fCHECK_005fDEPRECATED_005fDEFUNCT_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_DOC_SIZES2_`](#index-_005fR_005fCHECK_005fDOC_005fSIZES2_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_DOC_SIZES_`](#index-_005fR_005fCHECK_005fDOC_005fSIZES_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_DOT_FIRSTLIB_`](#index-_005fR_005fCHECK_005fDOT_005fFIRSTLIB_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_DOT_INTERNAL_`](#index-_005fR_005fCHECK_005fDOT_005fINTERNAL_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_ELAPSED_TIMEOUT_`](#index-_005fR_005fCHECK_005fELAPSED_005fTIMEOUT_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_EXAMPLES_ELAPSED_TIMEOUT_`](#index-_005fR_005fCHECK_005fEXAMPLES_005fELAPSED_005fTIMEOUT_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_EXAMPLE_TIMING_CPU_TO_ELAPSED_THRESHOLD_`](#index-_005fR_005fCHECK_005fEXAMPLE_005fTIMING_005fCPU_005fTO_005fELAPSED_005fTHRESHOLD_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_EXAMPLE_TIMING_THRESHOLD_`](#index-_005fR_005fCHECK_005fEXAMPLE_005fTIMING_005fTHRESHOLD_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_EXECUTABLES_`](#index-_005fR_005fCHECK_005fEXECUTABLES_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_EXECUTABLES_EXCLUSIONS_`](#index-_005fR_005fCHECK_005fEXECUTABLES_005fEXCLUSIONS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_EXIT_ON_FIRST_ERROR_`](#index-_005fR_005fCHECK_005fEXIT_005fON_005fFIRST_005fERROR_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_FF_CALLS_`](#index-_005fR_005fCHECK_005fFF_005fCALLS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_FF_DUP_`](#index-_005fR_005fCHECK_005fFF_005fDUP_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_FORCE_SUGGESTS_`](#index-_005fR_005fCHECK_005fFORCE_005fSUGGESTS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_FUTURE_FILE_TIMESTAMPS_`](#index-_005fR_005fCHECK_005fFUTURE_005fFILE_005fTIMESTAMPS_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_GCT_N_`](#index-_005fR_005fCHECK_005fGCT_005fN_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_INSTALL_DEPENDS_`](#index-_005fR_005fCHECK_005fINSTALL_005fDEPENDS_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_INSTALL_ELAPSED_TIMEOUT_`](#index-_005fR_005fCHECK_005fINSTALL_005fELAPSED_005fTIMEOUT_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_LENGTH_1_CONDITION_`](#index-_005fR_005fCHECK_005fLENGTH_005f1_005fCONDITION_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_LENGTH_1_LOGIC2_`](#index-_005fR_005fCHECK_005fLENGTH_005f1_005fLOGIC2_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_LICENSE_`](#index-_005fR_005fCHECK_005fLICENSE_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_LIMIT_CORES_`](#index-_005fR_005fCHECK_005fLIMIT_005fCORES_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_NATIVE_ROUTINE_REGISTRATION_`](#index-_005fR_005fCHECK_005fNATIVE_005fROUTINE_005fREGISTRATION_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_NO_RECOMMENDED_`](#index-_005fR_005fCHECK_005fNO_005fRECOMMENDED_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_NO_STOP_ON_TEST_ERROR_`](#index-_005fR_005fCHECK_005fNO_005fSTOP_005fON_005fTEST_005fERROR_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_ONE_TEST_ELAPSED_TIMEOUT_`](#index-_005fR_005fCHECK_005fONE_005fTEST_005fELAPSED_005fTIMEOUT_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_ONE_VIGNETTE_ELAPSED_TIMEOUT_`](#index-_005fR_005fCHECK_005fONE_005fVIGNETTE_005fELAPSED_005fTIMEOUT_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_OVERWRITE_REGISTERED_S3_METHODS_`](#index-_005fR_005fCHECK_005fOVERWRITE_005fREGISTERED_005fS3_005fMETHODS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_PACKAGES_USED_IN_TESTS_USE_SUBDIRS_`](#index-_005fR_005fCHECK_005fPACKAGES_005fUSED_005fIN_005fTESTS_005fUSE_005fSUBDIRS_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_PERMISSIONS_`](#index-_005fR_005fCHECK_005fPERMISSIONS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_PKGMAN_ELAPSED_TIMEOUT_`](#index-_005fR_005fCHECK_005fPKGMAN_005fELAPSED_005fTIMEOUT_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_PKG_SIZES_`](#index-_005fR_005fCHECK_005fPKG_005fSIZES_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_PKG_SIZES_THRESHOLD_`](#index-_005fR_005fCHECK_005fPKG_005fSIZES_005fTHRESHOLD_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_PRAGMAS_`](#index-_005fR_005fCHECK_005fPRAGMAS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_RD_CHECKRD_MINLEVEL_`](#index-_005fR_005fCHECK_005fRD_005fCHECKRD_005fMINLEVEL_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_RD_CONTENTS_`](#index-_005fR_005fCHECK_005fRD_005fCONTENTS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_RD_EXAMPLES_T_AND_F_`](#index-_005fR_005fCHECK_005fRD_005fEXAMPLES_005fT_005fAND_005fF_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_RD_LINE_WIDTHS_`](#index-_005fR_005fCHECK_005fRD_005fLINE_005fWIDTHS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_RD_STYLE_`](#index-_005fR_005fCHECK_005fRD_005fSTYLE_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_RD_XREFS_`](#index-_005fR_005fCHECK_005fRD_005fXREFS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_REPLACING_IMPORTS_`](#index-_005fR_005fCHECK_005fREPLACING_005fIMPORTS_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_R_DEPENDS_`](#index-_005fR_005fCHECK_005fR_005fDEPENDS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_R_ON_PATH_`](#index-_005fR_005fCHECK_005fR_005fON_005fPATH_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_S3_METHODS_NOT_REGISTERED_`](#index-_005fR_005fCHECK_005fS3_005fMETHODS_005fNOT_005fREGISTERED_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_SCREEN_DEVICE_`](#index-_005fR_005fCHECK_005fSCREEN_005fDEVICE_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_SERIALIZATION_`](#index-_005fR_005fCHECK_005fSERIALIZATION_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_SHLIB_OPENMP_FLAGS_`](#index-_005fR_005fCHECK_005fSHLIB_005fOPENMP_005fFLAGS_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_SKIP_ARCH_`](#index-_005fR_005fCHECK_005fSKIP_005fARCH_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_SKIP_EXAMPLES_ARCH_`](#index-_005fR_005fCHECK_005fSKIP_005fEXAMPLES_005fARCH_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_SKIP_TESTS_ARCH_`](#index-_005fR_005fCHECK_005fSKIP_005fTESTS_005fARCH_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_SRC_MINUS_W_IMPLICIT_`](#index-_005fR_005fCHECK_005fSRC_005fMINUS_005fW_005fIMPLICIT_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_SRC_MINUS_W_UNUSED_`](#index-_005fR_005fCHECK_005fSRC_005fMINUS_005fW_005fUNUSED_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_SUBDIRS_NOCASE_`](#index-_005fR_005fCHECK_005fSUBDIRS_005fNOCASE_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_SUBDIRS_STRICT_`](#index-_005fR_005fCHECK_005fSUBDIRS_005fSTRICT_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_SUGGESTS_ONLY_`](#index-_005fR_005fCHECK_005fSUGGESTS_005fONLY_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_SYSTEM_CLOCK_`](#index-_005fR_005fCHECK_005fSYSTEM_005fCLOCK_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_TESTS_ELAPSED_TIMEOUT_`](#index-_005fR_005fCHECK_005fTESTS_005fELAPSED_005fTIMEOUT_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_TESTS_NLINES_`](#index-_005fR_005fCHECK_005fTESTS_005fNLINES_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_TEST_TIMING_CPU_TO_ELAPSED_THRESHOLD_`](#index-_005fR_005fCHECK_005fTEST_005fTIMING_005fCPU_005fTO_005fELAPSED_005fTHRESHOLD_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_THINGS_IN_TEMP_DIR_`](#index-_005fR_005fCHECK_005fTHINGS_005fIN_005fTEMP_005fDIR_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_TIMINGS_`](#index-_005fR_005fCHECK_005fTIMINGS_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_TOPLEVEL_FILES_`](#index-_005fR_005fCHECK_005fTOPLEVEL_005fFILES_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_UNSAFE_CALLS_`](#index-_005fR_005fCHECK_005fUNSAFE_005fCALLS_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_USE_CODETOOLS_`](#index-_005fR_005fCHECK_005fUSE_005fCODETOOLS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_USE_INSTALL_LOG_`](#index-_005fR_005fCHECK_005fUSE_005fINSTALL_005fLOG_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_VC_DIRS_`](#index-_005fR_005fCHECK_005fVC_005fDIRS_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_VIGNETTES_NLINES_`](#index-_005fR_005fCHECK_005fVIGNETTES_005fNLINES_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_VIGNETTE_TIMING_CPU_TO_ELAPSED_THRESHOLD_`](#index-_005fR_005fCHECK_005fVIGNETTE_005fTIMING_005fCPU_005fTO_005fELAPSED_005fTHRESHOLD_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_WALL_FORTRAN_`](#index-_005fR_005fCHECK_005fWALL_005fFORTRAN_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_WINDOWS_DEVICE_`](#index-_005fR_005fCHECK_005fWINDOWS_005fDEVICE_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_CHECK_XREFS_REPOSITORIES_`](#index-_005fR_005fCHECK_005fXREFS_005fREPOSITORIES_005f):
 
- 
-
 [Tools](#Tools)
 
 [`_R_CHECK_XREFS_USE_ALIASES_FROM_CRAN_`](#index-_005fR_005fCHECK_005fXREFS_005fUSE_005fALIASES_005fFROM_005fCRAN_005f):
-
- 
 
 [Tools](#Tools)
 
 [`_R_SHLIB_BUILD_OBJECTS_SYMBOL_TABLES_`](#index-_005fR_005fSHLIB_005fBUILD_005fOBJECTS_005fSYMBOL_005fTABLES_005f):
 
- 
-
 [Tools](#Tools)
 
-------------------------------------------------------------------------
+---
 
 A
 
 [`alloca`](#index-alloca):
 
- 
-
 [Memory allocators](#Memory-allocators)
 
 [`ARGSUSED`](#index-ARGSUSED):
-
- 
 
 [Rest of header](#Rest-of-header)
 
 [`ATTRIB`](#index-ATTRIB):
 
- 
-
 [Attributes](#Attributes)
 
 [`attribute_hidden`](#index-attribute_005fhidden):
 
- 
-
 [Hiding C entry points](#Hiding-C-entry-points)
 
-------------------------------------------------------------------------
+---
 
 C
 
 [`Calloc`](#index-Calloc):
 
- 
-
 [Memory allocators](#Memory-allocators)
 
 [`copyMostAttrib`](#index-copyMostAttrib):
 
- 
-
 [Attributes](#Attributes)
 
-------------------------------------------------------------------------
+---
 
 D
 
 [`DDVAL`](#index-DDVAL):
 
- 
-
 [Rest of header](#Rest-of-header)
 
 [`debug bit`](#index-debug-bit):
-
- 
 
 [Rest of header](#Rest-of-header)
 
 [`DispatchGeneric`](#index-DispatchGeneric):
 
- 
-
 [Argument evaluation](#Argument-evaluation)
 
 [`DispatchOrEval`](#index-DispatchOrEval):
-
- 
 
 [Argument evaluation](#Argument-evaluation)
 
 [`dump.frames`](#index-dump_002eframes):
 
- 
-
 [Global environment](#Global-environment)
 
 [`DUPLICATE_ATTRIB`](#index-DUPLICATE_005fATTRIB):
 
- 
-
 [Attributes](#Attributes)
 
-------------------------------------------------------------------------
+---
 
 E
 
 [`emacs`](#index-emacs):
 
- 
-
 [R coding standards](#R-coding-standards)
 
 [`error`](#index-error):
-
- 
 
 [Warnings and errors](#Warnings-and-errors)
 
 [`errorcall`](#index-errorcall):
 
- 
-
 [Warnings and errors](#Warnings-and-errors)
 
-------------------------------------------------------------------------
+---
 
 F
 
 [`Free`](#index-Free):
 
- 
-
 [Memory allocators](#Memory-allocators)
 
-------------------------------------------------------------------------
+---
 
 G
 
 [`gp bits`](#index-gp-bits):
 
- 
-
 [Rest of header](#Rest-of-header)
 
-------------------------------------------------------------------------
+---
 
 I
 
 [`invisible`](#index-invisible):
 
- 
-
 [Autoprinting](#Autoprinting)
 
-------------------------------------------------------------------------
+---
 
 L
 
 [`last.warning`](#index-last_002ewarning):
 
- 
-
 [Base environment](#Base-environment)
 
 [`LEVELS`](#index-LEVELS):
 
- 
-
 [Rest of header](#Rest-of-header)
 
-------------------------------------------------------------------------
+---
 
 M
 
 [`make`](#index-make):
 
- 
-
 [R coding standards](#R-coding-standards)
 
 [`makeinfo`](#index-makeinfo):
-
- 
 
 [R coding standards](#R-coding-standards)
 
 [`MISSING`](#index-MISSING):
 
- 
-
 [Rest of header](#Rest-of-header)
 
 [`MISSING`](#index-MISSING-1):
-
- 
 
 [Missingness](#Missingness)
 
 [`mkChar`](#index-mkChar):
 
- 
-
 [The CHARSXP cache](#The-CHARSXP-cache)
 
 [`mkCharLenCE`](#index-mkCharLenCE):
 
- 
-
 [The CHARSXP cache](#The-CHARSXP-cache)
 
-------------------------------------------------------------------------
+---
 
 N
 
 [`NAMED`](#index-NAMED):
 
- 
-
 [Rest of header](#Rest-of-header)
 
 [`NAMED`](#index-NAMED-1):
-
- 
 
 [Argument evaluation](#Argument-evaluation)
 
 [`NAMED`](#index-NAMED-2):
 
- 
-
 [.Internal vs .Primitive](#g_t_002eInternal-vs-_002ePrimitive)
 
 [`named bits`](#index-named-bits):
 
- 
-
 [Rest of header](#Rest-of-header)
 
-------------------------------------------------------------------------
+---
 
 P
 
 [`Perl`](#index-Perl):
 
- 
-
 [R coding standards](#R-coding-standards)
 
 [`PRIMPRINT`](#index-PRIMPRINT):
-
- 
 
 [Autoprinting](#Autoprinting)
 
 [`PRSEEN`](#index-PRSEEN):
 
- 
-
 [Rest of header](#Rest-of-header)
 
-------------------------------------------------------------------------
+---
 
 R
 
 [`Rdll.hide`](#index-Rdll_002ehide):
 
- 
-
 [Hiding C entry points](#Hiding-C-entry-points)
 
 [`Realloc`](#index-Realloc):
-
- 
 
 [Memory allocators](#Memory-allocators)
 
 [`R_alloc`](#index-R_005falloc):
 
- 
-
 [Memory allocators](#Memory-allocators)
 
 [`R_AllocStringBuffer`](#index-R_005fAllocStringBuffer):
-
- 
 
 [Memory allocators](#Memory-allocators)
 
 [`R_BaseNamespace`](#index-R_005fBaseNamespace):
 
- 
-
 [Namespaces](#Namespaces)
 
 [`R_CheckStack`](#index-R_005fCheckStack):
-
- 
 
 [Memory allocators](#Memory-allocators)
 
 [`R_CheckStack2`](#index-R_005fCheckStack2):
 
- 
-
 [Memory allocators](#Memory-allocators)
 
 [`R_FreeStringBuffer`](#index-R_005fFreeStringBuffer):
-
- 
 
 [Memory allocators](#Memory-allocators)
 
 [`R_FreeStringBufferL`](#index-R_005fFreeStringBufferL):
 
- 
-
 [Memory allocators](#Memory-allocators)
 
 [`R_MissingArg`](#index-R_005fMissingArg):
-
- 
 
 [Missingness](#Missingness)
 
 [`R_Visible`](#index-R_005fVisible):
 
- 
-
 [Autoprinting](#Autoprinting)
 
-------------------------------------------------------------------------
+---
 
 S
 
 [`SETLEVELS`](#index-SETLEVELS):
 
- 
-
 [Rest of header](#Rest-of-header)
 
 [`SET_ARGUSED`](#index-SET_005fARGUSED):
-
- 
 
 [Rest of header](#Rest-of-header)
 
 [`SET_ATTRIB`](#index-SET_005fATTRIB):
 
- 
-
 [Attributes](#Attributes)
 
 [`SET_DDVAL`](#index-SET_005fDDVAL):
-
- 
 
 [Rest of header](#Rest-of-header)
 
 [`SET_MISSING`](#index-SET_005fMISSING):
 
- 
-
 [Rest of header](#Rest-of-header)
 
 [`SET_NAMED`](#index-SET_005fNAMED):
-
- 
 
 [Rest of header](#Rest-of-header)
 
 [`spare bit`](#index-spare-bit):
 
- 
-
 [Rest of header](#Rest-of-header)
 
-------------------------------------------------------------------------
+---
 
 T
 
 [`trace bit`](#index-trace-bit):
 
- 
-
 [Rest of header](#Rest-of-header)
 
-------------------------------------------------------------------------
+---
 
 U
 
 [`UseMethod`](#index-UseMethod):
 
- 
-
 [Contexts](#Contexts)
 
-------------------------------------------------------------------------
+---
 
 V
 
 [`vmaxget`](#index-vmaxget):
 
- 
-
 [Memory allocators](#Memory-allocators)
 
 [`vmaxset`](#index-vmaxset):
 
- 
-
 [Memory allocators](#Memory-allocators)
 
-------------------------------------------------------------------------
+---
 
 W
 
 [`warning`](#index-warning):
 
- 
-
 [Warnings and errors](#Warnings-and-errors)
 
 [`warningcall`](#index-warningcall):
 
- 
-
 [Warnings and errors](#Warnings-and-errors)
 
-------------------------------------------------------------------------
+---
 
-  ----------------------------------- ---------------------------------------------------------------------
-  Jump to:                            [**.**](#Function-and-variable-index_vr_symbol-1)  
-                                      [**\_**](#Function-and-variable-index_vr_symbol-2)
-                                       \
-                                      [**A**](#Function-and-variable-index_vr_letter-A)  
-                                      [**C**](#Function-and-variable-index_vr_letter-C)  
-                                      [**D**](#Function-and-variable-index_vr_letter-D)  
-                                      [**E**](#Function-and-variable-index_vr_letter-E)  
-                                      [**F**](#Function-and-variable-index_vr_letter-F)  
-                                      [**G**](#Function-and-variable-index_vr_letter-G)  
-                                      [**I**](#Function-and-variable-index_vr_letter-I)  
-                                      [**L**](#Function-and-variable-index_vr_letter-L)  
-                                      [**M**](#Function-and-variable-index_vr_letter-M)  
-                                      [**N**](#Function-and-variable-index_vr_letter-N)  
-                                      [**P**](#Function-and-variable-index_vr_letter-P)  
-                                      [**R**](#Function-and-variable-index_vr_letter-R)  
-                                      [**S**](#Function-and-variable-index_vr_letter-S)  
-                                      [**T**](#Function-and-variable-index_vr_letter-T)  
-                                      [**U**](#Function-and-variable-index_vr_letter-U)  
-                                      [**V**](#Function-and-variable-index_vr_letter-V)  
-                                      [**W**](#Function-and-variable-index_vr_letter-W)  
+---
 
-  ----------------------------------- ---------------------------------------------------------------------
+Jump to:   [**.**](#Function-and-variable-index_vr_symbol-1){.summary-letter}  
+[**\_**](#Function-and-variable-index_vr_symbol-2){.summary-letter}
+ \
+ [**A**](#Function-and-variable-index_vr_letter-A){.summary-letter}  
+[**C**](#Function-and-variable-index_vr_letter-C){.summary-letter}  
+[**D**](#Function-and-variable-index_vr_letter-D){.summary-letter}  
+[**E**](#Function-and-variable-index_vr_letter-E){.summary-letter}  
+[**F**](#Function-and-variable-index_vr_letter-F){.summary-letter}  
+[**G**](#Function-and-variable-index_vr_letter-G){.summary-letter}  
+[**I**](#Function-and-variable-index_vr_letter-I){.summary-letter}  
+[**L**](#Function-and-variable-index_vr_letter-L){.summary-letter}  
+[**M**](#Function-and-variable-index_vr_letter-M){.summary-letter}  
+[**N**](#Function-and-variable-index_vr_letter-N){.summary-letter}  
+[**P**](#Function-and-variable-index_vr_letter-P){.summary-letter}  
+[**R**](#Function-and-variable-index_vr_letter-R){.summary-letter}  
+[**S**](#Function-and-variable-index_vr_letter-S){.summary-letter}  
+[**T**](#Function-and-variable-index_vr_letter-T){.summary-letter}  
+[**U**](#Function-and-variable-index_vr_letter-U){.summary-letter}  
+[**V**](#Function-and-variable-index_vr_letter-V){.summary-letter}  
+[**W**](#Function-and-variable-index_vr_letter-W){.summary-letter}
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Function and variable index](#Function-and-variable-index),
-Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-Concept index 
--------------
+## Concept index
 
-  ----------------------------------- ------------------------------------------------------
-  Jump to:                            [**.**](#Concept-index_cp_symbol-1)
-                                       \
-                                      [**A**](#Concept-index_cp_letter-A)  
-                                      [**B**](#Concept-index_cp_letter-B)  
-                                      [**C**](#Concept-index_cp_letter-C)  
-                                      [**E**](#Concept-index_cp_letter-E)  
-                                      [**F**](#Concept-index_cp_letter-F)  
-                                      [**G**](#Concept-index_cp_letter-G)  
-                                      [**L**](#Concept-index_cp_letter-L)  
-                                      [**M**](#Concept-index_cp_letter-M)  
-                                      [**N**](#Concept-index_cp_letter-N)  
-                                      [**P**](#Concept-index_cp_letter-P)  
-                                      [**S**](#Concept-index_cp_letter-S)  
-                                      [**U**](#Concept-index_cp_letter-U)  
-                                      [**V**](#Concept-index_cp_letter-V)  
-                                      [**W**](#Concept-index_cp_letter-W)  
+---
 
-  ----------------------------------- ------------------------------------------------------
+Jump to:   [**.**](#Concept-index_cp_symbol-1){.summary-letter}
+ \
+ [**A**](#Concept-index_cp_letter-A){.summary-letter}  
+[**B**](#Concept-index_cp_letter-B){.summary-letter}  
+[**C**](#Concept-index_cp_letter-C){.summary-letter}  
+[**E**](#Concept-index_cp_letter-E){.summary-letter}  
+[**F**](#Concept-index_cp_letter-F){.summary-letter}  
+[**G**](#Concept-index_cp_letter-G){.summary-letter}  
+[**L**](#Concept-index_cp_letter-L){.summary-letter}  
+[**M**](#Concept-index_cp_letter-M){.summary-letter}  
+[**N**](#Concept-index_cp_letter-N){.summary-letter}  
+[**P**](#Concept-index_cp_letter-P){.summary-letter}  
+[**S**](#Concept-index_cp_letter-S){.summary-letter}  
+[**U**](#Concept-index_cp_letter-U){.summary-letter}  
+[**V**](#Concept-index_cp_letter-V){.summary-letter}  
+[**W**](#Concept-index_cp_letter-W){.summary-letter}
+
+---
 
 Index Entry
 
- 
-
 Section
 
-------------------------------------------------------------------------
+---
 
 .
 
 [\... argument](#index-_002e_002e_002e-argument):
 
- 
-
 [Rest of header](#Rest-of-header)
 
 [\... argument](#index-_002e_002e_002e-argument-1):
-
- 
 
 [Dot-dot-dot arguments](#Dot_002ddot_002ddot-arguments)
 
 [.Internal function](#index-_002eInternal-function):
 
- 
-
 [Argument evaluation](#Argument-evaluation)
 
-------------------------------------------------------------------------
+---
 
 A
 
 [allocation classes](#index-allocation-classes):
 
- 
-
 [Allocation classes](#Allocation-classes)
 
 [argument evaluation](#index-argument-evaluation):
-
- 
 
 [Argument evaluation](#Argument-evaluation)
 
 [argument list](#index-argument-list):
 
- 
-
 [SEXPTYPEs](#SEXPTYPEs)
 
 [atomic vector type](#index-atomic-vector-type):
-
- 
 
 [SEXPTYPEs](#SEXPTYPEs)
 
 [attributes](#index-attributes):
 
- 
-
 [Attributes](#Attributes)
 
 [attributes, preserving](#index-attributes_002c-preserving):
-
- 
 
 [Attributes](#Attributes)
 
 [autoprinting](#index-autoprinting):
 
- 
-
 [Autoprinting](#Autoprinting)
 
-------------------------------------------------------------------------
+---
 
 B
 
 [base environment](#index-base-environment):
 
- 
-
 [Environments and variable lookup](#Environments-and-variable-lookup)
 
 [base environment](#index-base-environment-1):
-
- 
 
 [Base environment](#Base-environment)
 
 [base namespace](#index-base-namespace):
 
- 
-
 [Namespaces](#Namespaces)
 
 [builtin function](#index-builtin-function):
 
- 
-
 [Argument evaluation](#Argument-evaluation)
 
-------------------------------------------------------------------------
+---
 
 C
 
 [coding standards](#index-coding-standards):
 
- 
-
 [R coding standards](#R-coding-standards)
 
 [context](#index-context):
-
- 
 
 [Contexts](#Contexts)
 
 [copying semantics](#index-copying-semantics):
 
- 
-
 [Rest of header](#Rest-of-header)
 
 [copying semantics](#index-copying-semantics-1):
 
- 
-
 [Attributes](#Attributes)
 
-------------------------------------------------------------------------
+---
 
 E
 
 [environment](#index-environment):
 
- 
-
 [Environments and variable lookup](#Environments-and-variable-lookup)
 
 [environment, base](#index-environment_002c-base):
-
- 
 
 [Environments and variable lookup](#Environments-and-variable-lookup)
 
 [environment, base](#index-environment_002c-base-1):
 
- 
-
 [Base environment](#Base-environment)
 
 [environment, global](#index-environment_002c-global):
-
- 
 
 [Global environment](#Global-environment)
 
 [expression](#index-expression):
 
- 
-
 [SEXPTYPEs](#SEXPTYPEs)
 
-------------------------------------------------------------------------
+---
 
 F
 
 [function](#index-function):
 
- 
-
 [SEXPTYPEs](#SEXPTYPEs)
 
-------------------------------------------------------------------------
+---
 
 G
 
 [garbage collector](#index-garbage-collector):
 
- 
-
 [The write barrier](#The-write-barrier)
 
 [generic, generic](#index-generic_002c-generic):
-
- 
 
 [Argument evaluation](#Argument-evaluation)
 
 [generic, internal](#index-generic_002c-internal):
 
- 
-
 [Argument evaluation](#Argument-evaluation)
 
 [global environment](#index-global-environment):
 
- 
-
 [Global environment](#Global-environment)
 
-------------------------------------------------------------------------
+---
 
 L
 
 [language object](#index-language-object):
 
- 
-
 [SEXPTYPEs](#SEXPTYPEs)
 
-------------------------------------------------------------------------
+---
 
 M
 
 [method dispatch](#index-method-dispatch):
 
- 
-
 [Contexts](#Contexts)
 
 [missingness](#index-missingness):
-
- 
 
 [Missingness](#Missingness)
 
 [modules](#index-modules):
 
- 
-
 [Modules](#Modules)
 
-------------------------------------------------------------------------
+---
 
 N
 
 [namespace](#index-namespace):
 
- 
-
 [Namespaces](#Namespaces)
 
 [namespace, base](#index-namespace_002c-base):
-
- 
 
 [Namespaces](#Namespaces)
 
 [node](#index-node):
 
- 
-
 [SEXPs](#SEXPs)
 
-------------------------------------------------------------------------
+---
 
 P
 
 [preserving attributes](#index-preserving-attributes):
 
- 
-
 [Attributes](#Attributes)
 
 [primitive function](#index-primitive-function):
-
- 
 
 [Argument evaluation](#Argument-evaluation)
 
 [promise](#index-promise):
 
- 
-
 [Rest of header](#Rest-of-header)
 
-------------------------------------------------------------------------
+---
 
 S
 
 [S4 type](#index-S4-type):
 
- 
-
 [SEXPTYPEs](#SEXPTYPEs)
 
 [search path](#index-search-path):
-
- 
 
 [Search paths](#Search-paths)
 
 [serialization](#index-serialization):
 
- 
-
 [Serialization Formats](#Serialization-Formats)
 
 [SEXP](#index-SEXP):
-
- 
 
 [SEXPs](#SEXPs)
 
 [SEXPRREC](#index-SEXPRREC):
 
- 
-
 [SEXPs](#SEXPs)
 
 [SEXPTYPE](#index-SEXPTYPE):
-
- 
 
 [SEXPTYPEs](#SEXPTYPEs)
 
 [SEXPTYPE table](#index-SEXPTYPE-table):
 
- 
-
 [SEXPTYPEs](#SEXPTYPEs)
 
 [special function](#index-special-function):
 
- 
-
 [Argument evaluation](#Argument-evaluation)
 
-------------------------------------------------------------------------
+---
 
 U
 
 [user databases](#index-user-databases):
 
- 
-
 [Environments and variable lookup](#Environments-and-variable-lookup)
 
-------------------------------------------------------------------------
+---
 
 V
 
 [variable lookup](#index-variable-lookup):
 
- 
-
 [Environments and variable lookup](#Environments-and-variable-lookup)
 
 [vector type](#index-vector-type):
-
- 
 
 [The \'data\'](#The-_0027data_0027)
 
 [visibility](#index-visibility):
 
- 
-
 [Visibility](#Visibility)
 
-------------------------------------------------------------------------
+---
 
 W
 
 [write barrier](#index-write-barrier):
 
- 
-
 [The write barrier](#The-write-barrier)
 
-------------------------------------------------------------------------
+---
 
-  ----------------------------------- ------------------------------------------------------
-  Jump to:                            [**.**](#Concept-index_cp_symbol-1)
-                                       \
-                                      [**A**](#Concept-index_cp_letter-A)  
-                                      [**B**](#Concept-index_cp_letter-B)  
-                                      [**C**](#Concept-index_cp_letter-C)  
-                                      [**E**](#Concept-index_cp_letter-E)  
-                                      [**F**](#Concept-index_cp_letter-F)  
-                                      [**G**](#Concept-index_cp_letter-G)  
-                                      [**L**](#Concept-index_cp_letter-L)  
-                                      [**M**](#Concept-index_cp_letter-M)  
-                                      [**N**](#Concept-index_cp_letter-N)  
-                                      [**P**](#Concept-index_cp_letter-P)  
-                                      [**S**](#Concept-index_cp_letter-S)  
-                                      [**U**](#Concept-index_cp_letter-U)  
-                                      [**V**](#Concept-index_cp_letter-V)  
-                                      [**W**](#Concept-index_cp_letter-W)  
+---
 
-  ----------------------------------- ------------------------------------------------------
+Jump to:   [**.**](#Concept-index_cp_symbol-1){.summary-letter}
+ \
+ [**A**](#Concept-index_cp_letter-A){.summary-letter}  
+[**B**](#Concept-index_cp_letter-B){.summary-letter}  
+[**C**](#Concept-index_cp_letter-C){.summary-letter}  
+[**E**](#Concept-index_cp_letter-E){.summary-letter}  
+[**F**](#Concept-index_cp_letter-F){.summary-letter}  
+[**G**](#Concept-index_cp_letter-G){.summary-letter}  
+[**L**](#Concept-index_cp_letter-L){.summary-letter}  
+[**M**](#Concept-index_cp_letter-M){.summary-letter}  
+[**N**](#Concept-index_cp_letter-N){.summary-letter}  
+[**P**](#Concept-index_cp_letter-P){.summary-letter}  
+[**S**](#Concept-index_cp_letter-S){.summary-letter}  
+[**U**](#Concept-index_cp_letter-U){.summary-letter}  
+[**V**](#Concept-index_cp_letter-V){.summary-letter}  
+[**W**](#Concept-index_cp_letter-W){.summary-letter}
 
- 
+---
 
-------------------------------------------------------------------------
+---
 
-#### Footnotes 
+#### Footnotes
 
 [(1)](#DOCF1)
 
@@ -6754,7 +5775,7 @@ see the previous footnote.
 
 [(24)](#DOCF24)
 
-The usual culprits are calls to compiled code *via* `.Call` or
+The usual culprits are calls to compiled code _via_ `.Call` or
 `.External` which alter their arguments.
 
 [(25)](#DOCF25)
@@ -6771,4 +5792,4 @@ Linux distributions tend to unbundle `texinfo.tex` from
 
 but `LENGTH` is a macro under some internal uses.
 
-------------------------------------------------------------------------
+---

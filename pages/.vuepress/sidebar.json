@@ -1,0 +1,130 @@
+[
+  {
+    "title": "R-FAQ",
+    "collapsable": false,
+    "path": "/R-FAQ/",
+    "sidebarDepth": 3,
+    "children": [
+      "/R-FAQ/1-Introduction",
+      "/R-FAQ/2-R-Basics",
+      "/R-FAQ/3-R-and-S",
+      "/R-FAQ/4-R-Web-Interfaces",
+      "/R-FAQ/5-R-Add-On-Packages",
+      "/R-FAQ/6-R-and-Emacs",
+      "/R-FAQ/7-R-Miscellanea",
+      "/R-FAQ/8-R-Programming",
+      "/R-FAQ/9-R-Bugs",
+      "/R-FAQ/10-Acknowledgments"
+    ]
+  },
+  {
+    "title": "R-admin",
+    "collapsable": false,
+    "path": "/R-admin/",
+    "sidebarDepth": 3,
+    "children": [
+      "/R-admin/1-Obtaining-R",
+      "/R-admin/2-Installing-R-under-Unix-alikes",
+      "/R-admin/3-Installing-R-under-Windows",
+      "/R-admin/4-Installing-R-under-macOS",
+      "/R-admin/5-Running-R",
+      "/R-admin/6-Add-on-packages",
+      "/R-admin/7-Internationalization-and-Localization",
+      "/R-admin/8-Choosing-between-32--and-64-bit-builds",
+      "/R-admin/9-The-standalone-Rmath-library"
+    ]
+  },
+  {
+    "title": "R-lang",
+    "collapsable": false,
+    "path": "/R-lang/",
+    "sidebarDepth": 3,
+    "children": [
+      "/R-lang/1-Introduction",
+      "/R-lang/2-Objects",
+      "/R-lang/3-Evaluation-of-expressions",
+      "/R-lang/4-Functions",
+      "/R-lang/5-Object-oriented-programming",
+      "/R-lang/6-Computing-on-the-language",
+      "/R-lang/7-System-and-foreign-language-interfaces",
+      "/R-lang/8-Exception-handling",
+      "/R-lang/9-Debugging",
+      "/R-lang/10-Parser"
+    ]
+  },
+  {
+    "title": "R-intro",
+    "collapsable": false,
+    "path": "/R-intro/",
+    "sidebarDepth": 3,
+    "children": [
+      "/R-intro/1-Introduction-and-preliminaries",
+      "/R-intro/2-Simple-manipulations;-numbers-and-vectors",
+      "/R-intro/3-Objects,-their-modes-and-attributes",
+      "/R-intro/4-Ordered-and-unordered-factors",
+      "/R-intro/5-Arrays-and-matrices",
+      "/R-intro/6-Lists-and-data-frames",
+      "/R-intro/7-Reading-data-from-files",
+      "/R-intro/8-Probability-distributions",
+      "/R-intro/9-Grouping,-loops-and-conditional-execution",
+      "/R-intro/10-Writing-your-own-functions",
+      "/R-intro/11-Statistical-models-in-R",
+      "/R-intro/12-Graphical-procedures",
+      "/R-intro/13-Packages",
+      "/R-intro/14-OS-facilities"
+    ]
+  },
+  {
+    "title": "R-data",
+    "collapsable": false,
+    "path": "/R-data/",
+    "sidebarDepth": 3,
+    "children": [
+      "/R-data/1-Introduction",
+      "/R-data/2-Spreadsheet-like-data",
+      "/R-data/3-Importing-from-other-statistical-systems",
+      "/R-data/4-Relational-databases",
+      "/R-data/5-Binary-files",
+      "/R-data/6-Image-files",
+      "/R-data/7-Connections",
+      "/R-data/8-Network-interfaces",
+      "/R-data/9-Reading-Excel-spreadsheets"
+    ]
+  },
+  {
+    "title": "R-exts",
+    "collapsable": false,
+    "path": "/R-exts/",
+    "sidebarDepth": 3,
+    "children": [
+      "/R-exts/1-Creating-R-packages",
+      "/R-exts/2-Writing-R-documentation-files",
+      "/R-exts/3-Tidying-and-profiling-R-code",
+      "/R-exts/4-Debugging",
+      "/R-exts/5-System-and-foreign-language-interfaces",
+      "/R-exts/6-The-R-API:-entry-points-for-C-code",
+      "/R-exts/7-Generic-functions-and-methods",
+      "/R-exts/8-Linking-GUIs-and-other-front-ends-to-R"
+    ]
+  },
+  {
+    "title": "R-ints",
+    "collapsable": false,
+    "path": "/R-ints/",
+    "sidebarDepth": 3,
+    "children": [
+      "/R-ints/1-R-Internal-Structures",
+      "/R-ints/2-`.Internal`-vs-`.Primitive`",
+      "/R-ints/3-Internationalization-in-the-R-sources",
+      "/R-ints/4-Structure-of-an-Installed-Package",
+      "/R-ints/5-Files",
+      "/R-ints/6-Graphics",
+      "/R-ints/7-GUI-consoles",
+      "/R-ints/8-Tools",
+      "/R-ints/9-R-coding-standards",
+      "/R-ints/10-Testing-R-code",
+      "/R-ints/11-Use-of-TeX-dialects",
+      "/R-ints/12-Current-and-future-directions"
+    ]
+  }
+]

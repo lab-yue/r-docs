@@ -7,216 +7,208 @@ resource-type: document
 title: R Installation and Administration
 ---
 
-R Installation and Administration 
-=================================
+# R Installation and Administration
 
-Table of Contents 
------------------
+## Table of Contents
 
- 
--   [1 Obtaining R](#Obtaining-R)
-    -   [1.1 Getting and unpacking the
-        sources](#Getting-and-unpacking-the-sources)
-    -   [1.2 Getting patched and development
-        versions](#Getting-patched-and-development-versions)
-        -   [1.2.1 Using Subversion and
-            rsync](#Using-Subversion-and-rsync)
--   [2 Installing R under
-    Unix-alikes](#Installing-R-under-Unix_002dalikes)
-    -   [2.1 Simple
-        compilation](#Simple-compilation)
-    -   [2.2 Help options](#Help-options)
-    -   [2.3 Making the
-        manuals](#Making-the-manuals)
-    -   [2.4 Installation](#Installation)
-    -   [2.5 Uninstallation](#Uninstallation)
-    -   [2.6
-        Sub-architectures](#Sub_002darchitectures)
-        -   [2.6.1 Multilib](#Multilib)
-    -   [2.7 Other Options](#Other-Options)
-        -   [2.7.1 Debugging
-            Symbols](#Debugging-Symbols)
-        -   [2.7.2 OpenMP
-            Support](#OpenMP-Support)
-        -   [2.7.3 C++
-            Support](#C_002b_002b-Support)
-        -   [2.7.4 Link-Time
-            Optimization](#Link_002dTime-Optimization)
-    -   [2.8 Testing an
-        Installation](#Testing-a-Unix_002dalike-Installation)
--   [3 Installing R under
-    Windows](#Installing-R-under-Windows)
-    -   [3.1 Building from
-        source](#Building-from-source)
-        -   [3.1.1 Getting the
-            tools](#Getting-the-tools)
-        -   [3.1.2 Getting the source
-            files](#Getting-the-source-files)
-        -   [3.1.3 Building the core
-            files](#Building-the-core-files)
-        -   [3.1.4 Building the cairo
-            devices](#Building-the-cairo-devices-files)
-        -   [3.1.5 Using ICU for
-            collation](#Using-ICU-for-collation)
-        -   [3.1.6 Support for
-            libcurl](#Support-for-libcurl)
-        -   [3.1.7 Checking the
-            build](#Checking-the-build)
-        -   [3.1.8 Building the
-            manuals](#Building-the-manuals)
-        -   [3.1.9 Building the Inno Setup
-            installer](#Building-the-Inno-Setup-installer)
-        -   [3.1.10 Building the MSI
-            installer](#Building-the-MSI-installer)
-        -   [3.1.11 64-bit Windows
-            builds](#g_t64_002dbit-Windows-builds)
-    -   [3.2 Testing an
-        Installation](#Testing-a-Windows-Installation)
--   [4 Installing R under
-    macOS](#Installing-R-under-macOS)
-    -   [4.1 Running R under
-        macOS](#Running-R-under-macOS)
-    -   [4.2 Uninstalling under
-        macOS](#Uninstalling-under-macOS)
-    -   [4.3 Multiple
-        versions](#Multiple-versions)
--   [5 Running R](#Running-R)
--   [6 Add-on
-    packages](#Add_002don-packages)
-    -   [6.1 Default
-        packages](#Default-packages)
-    -   [6.2 Managing
-        libraries](#Managing-libraries)
-    -   [6.3 Installing
-        packages](#Installing-packages)
-        -   [6.3.1 Windows](#Windows-packages)
-        -   [6.3.2 macOS](#macOS-packages)
-        -   [6.3.3 Customizing package
-            compilation](#Customizing-package-compilation)
-        -   [6.3.4 Multiple
-            sub-architectures](#Multiple-sub_002darchitectures)
-        -   [6.3.5
-            Byte-compilation](#Byte_002dcompilation)
-        -   [6.3.6 External
-            software](#External-software)
-    -   [6.4 Updating
-        packages](#Updating-packages)
-    -   [6.5 Removing
-        packages](#Removing-packages)
-    -   [6.6 Setting up a package
-        repository](#Setting-up-a-package-repository)
-    -   [6.7 Checking installed source
-        packages](#Checking-installed-source-packages)
--   [7 Internationalization and
-    Localization](#Internationalization)
-    -   [7.1 Locales](#Locales)
-        -   [7.1.1 Locales under
-            Unix-alikes](#Locales-under-Unix_002dalikes)
-        -   [7.1.2 Locales under
-            Windows](#Locales-under-Windows)
-        -   [7.1.3 Locales under
-            macOS](#Locales-under-macOS)
-    -   [7.2 Localization of
-        messages](#Localization-of-messages)
--   [8 Choosing between 32- and 64-bit
-    builds](#Choosing-between-32_002d-and-64_002dbit-builds)
--   [9 The standalone Rmath
-    library](#The-standalone-Rmath-library)
-    -   [9.1
-        Unix-alikes](#Unix_002dalike-standalone)
-    -   [9.2 Windows](#Windows-standalone)
--   [Appendix A Essential and useful other programs under a
-    Unix-alike](#Essential-and-useful-other-programs-under-a-Unix_002dalike)
-    -   [A.1 Essential programs and
-        libraries](#Essential-programs-and-libraries)
-    -   [A.2 Useful libraries and
-        programs](#Useful-libraries-and-programs)
-        -   [A.2.1 Tcl/Tk](#Tcl_002fTk)
-        -   [A.2.2 Java support](#Java-support)
-        -   [A.2.3 Other compiled
-            languages](#Other-compiled-languages)
-    -   [A.3 Linear algebra](#Linear-algebra)
-        -   [A.3.1 BLAS](#BLAS)
-            -   [A.3.1.1 ATLAS](#ATLAS)
-            -   [A.3.1.2 OpenBLAS](#OpenBLAS)
-            -   [A.3.1.3 Intel MKL](#MKL)
-            -   [A.3.1.4 Shared BLAS](#Shared-BLAS)
-        -   [A.3.2 LAPACK](#LAPACK)
-        -   [A.3.3 Caveats](#Caveats)
--   [Appendix B Configuration on a
-    Unix-alike](#Configuration-on-a-Unix_002dalike)
-    -   [B.1 Configuration
-        options](#Configuration-options)
-    -   [B.2 Internationalization
-        support](#Internationalization-support)
-    -   [B.3 Configuration
-        variables](#Configuration-variables)
-        -   [B.3.1 Setting paper
-            size](#Setting-paper-size)
-        -   [B.3.2 Setting the
-            browsers](#Setting-the-browsers)
-        -   [B.3.3 Compilation
-            flags](#Compilation-flags)
-        -   [B.3.4 Making
-            manuals](#Making-manuals)
-    -   [B.4 Setting the
-        shell](#Setting-the-shell)
-    -   [B.5 Using make](#Using-make)
-    -   [B.6 Using Fortran](#Using-Fortran)
-    -   [B.7 Compile and load
-        flags](#Compile-and-load-flags)
-    -   [B.8 Maintainer mode](#Maintainer-mode)
--   [Appendix C Platform notes](#Platform-notes)
-    -   [C.1 X11 issues](#X11-issues)
-    -   [C.2 Linux](#Linux)
-        -   [C.2.1 Clang](#Clang)
-        -   [C.2.2 Intel
-            compilers](#Intel-compilers)
-    -   [C.3 macOS](#macOS)
-        -   [C.3.1 Prerequisites](#Prerequisites)
-            -   [C.3.1.1 Note for Catalina
-                users](#Note-for-Catalina-users)
-        -   [C.3.2 Recommended C/C++
-            compilers](#Recommended-C_002fC_002b_002b-compilers)
-        -   [C.3.3 Other
-            libraries](#Other-libraries)
-        -   [C.3.4 Tcl/Tk headers and
-            libraries](#Tcl_002fTk-headers-and-libraries)
-        -   [C.3.5 Java](#Java-_0028macOS_0029)
-        -   [C.3.6 Frameworks](#Frameworks)
-        -   [C.3.7 Building
-            R.app](#Building-R_002eapp)
-    -   [C.4 Solaris](#Solaris)
-        -   [C.4.1 64-bit
-            builds](#g_t64_002dbit-builds)
-        -   [C.4.2 Using gcc](#Using-gcc)
-    -   [C.5 FreeBSD](#FreeBSD)
-    -   [C.6 OpenBSD](#OpenBSD)
-    -   [C.7 Cygwin](#Cygwin)
-    -   [C.8 New platforms](#New-platforms)
--   [Appendix D The Windows
-    toolset](#The-Windows-toolset)
-    -   [D.1 LaTeX](#LaTeX)
-    -   [D.2 The Inno Setup
-        installer](#The-Inno-Setup-installer)
-    -   [D.3 The command line
-        tools](#The-command-line-tools)
-    -   [D.4 The MinGW-w64
-        toolchain](#The-MinGW_002dw64-toolchain)
-    -   [D.5 Useful additional
-        programs](#Useful-additional-programs)
--   [Function and variable
-    index](#Function-and-variable-index)
--   [Concept index](#Concept-index)
--   [Environment variable
-    index](#Environment-variable-index)
+- [1 Obtaining R](#Obtaining-R)
+  - [1.1 Getting and unpacking the
+    sources](#Getting-and-unpacking-the-sources)
+  - [1.2 Getting patched and development
+    versions](#Getting-patched-and-development-versions)
+    - [1.2.1 Using Subversion and
+      rsync](#Using-Subversion-and-rsync)
+- [2 Installing R under
+  Unix-alikes](#Installing-R-under-Unix_002dalikes)
+  - [2.1 Simple
+    compilation](#Simple-compilation)
+  - [2.2 Help options](#Help-options)
+  - [2.3 Making the
+    manuals](#Making-the-manuals)
+  - [2.4 Installation](#Installation)
+  - [2.5 Uninstallation](#Uninstallation)
+  - [2.6
+    Sub-architectures](#Sub_002darchitectures)
+    - [2.6.1 Multilib](#Multilib)
+  - [2.7 Other Options](#Other-Options)
+    - [2.7.1 Debugging
+      Symbols](#Debugging-Symbols)
+    - [2.7.2 OpenMP
+      Support](#OpenMP-Support)
+    - [2.7.3 C++
+      Support](#C_002b_002b-Support)
+    - [2.7.4 Link-Time
+      Optimization](#Link_002dTime-Optimization)
+  - [2.8 Testing an
+    Installation](#Testing-a-Unix_002dalike-Installation)
+- [3 Installing R under
+  Windows](#Installing-R-under-Windows)
+  - [3.1 Building from
+    source](#Building-from-source)
+    - [3.1.1 Getting the
+      tools](#Getting-the-tools)
+    - [3.1.2 Getting the source
+      files](#Getting-the-source-files)
+    - [3.1.3 Building the core
+      files](#Building-the-core-files)
+    - [3.1.4 Building the cairo
+      devices](#Building-the-cairo-devices-files)
+    - [3.1.5 Using ICU for
+      collation](#Using-ICU-for-collation)
+    - [3.1.6 Support for
+      libcurl](#Support-for-libcurl)
+    - [3.1.7 Checking the
+      build](#Checking-the-build)
+    - [3.1.8 Building the
+      manuals](#Building-the-manuals)
+    - [3.1.9 Building the Inno Setup
+      installer](#Building-the-Inno-Setup-installer)
+    - [3.1.10 Building the MSI
+      installer](#Building-the-MSI-installer)
+    - [3.1.11 64-bit Windows
+      builds](#g_t64_002dbit-Windows-builds)
+  - [3.2 Testing an
+    Installation](#Testing-a-Windows-Installation)
+- [4 Installing R under
+  macOS](#Installing-R-under-macOS)
+  - [4.1 Running R under
+    macOS](#Running-R-under-macOS)
+  - [4.2 Uninstalling under
+    macOS](#Uninstalling-under-macOS)
+  - [4.3 Multiple
+    versions](#Multiple-versions)
+- [5 Running R](#Running-R)
+- [6 Add-on
+  packages](#Add_002don-packages)
+  - [6.1 Default
+    packages](#Default-packages)
+  - [6.2 Managing
+    libraries](#Managing-libraries)
+  - [6.3 Installing
+    packages](#Installing-packages)
+    - [6.3.1 Windows](#Windows-packages)
+    - [6.3.2 macOS](#macOS-packages)
+    - [6.3.3 Customizing package
+      compilation](#Customizing-package-compilation)
+    - [6.3.4 Multiple
+      sub-architectures](#Multiple-sub_002darchitectures)
+    - [6.3.5
+      Byte-compilation](#Byte_002dcompilation)
+    - [6.3.6 External
+      software](#External-software)
+  - [6.4 Updating
+    packages](#Updating-packages)
+  - [6.5 Removing
+    packages](#Removing-packages)
+  - [6.6 Setting up a package
+    repository](#Setting-up-a-package-repository)
+  - [6.7 Checking installed source
+    packages](#Checking-installed-source-packages)
+- [7 Internationalization and
+  Localization](#Internationalization)
+  - [7.1 Locales](#Locales)
+    - [7.1.1 Locales under
+      Unix-alikes](#Locales-under-Unix_002dalikes)
+    - [7.1.2 Locales under
+      Windows](#Locales-under-Windows)
+    - [7.1.3 Locales under
+      macOS](#Locales-under-macOS)
+  - [7.2 Localization of
+    messages](#Localization-of-messages)
+- [8 Choosing between 32- and 64-bit
+  builds](#Choosing-between-32_002d-and-64_002dbit-builds)
+- [9 The standalone Rmath
+  library](#The-standalone-Rmath-library)
+  - [9.1
+    Unix-alikes](#Unix_002dalike-standalone)
+  - [9.2 Windows](#Windows-standalone)
+- [Appendix A Essential and useful other programs under a
+  Unix-alike](#Essential-and-useful-other-programs-under-a-Unix_002dalike)
+  - [A.1 Essential programs and
+    libraries](#Essential-programs-and-libraries)
+  - [A.2 Useful libraries and
+    programs](#Useful-libraries-and-programs)
+    - [A.2.1 Tcl/Tk](#Tcl_002fTk)
+    - [A.2.2 Java support](#Java-support)
+    - [A.2.3 Other compiled
+      languages](#Other-compiled-languages)
+  - [A.3 Linear algebra](#Linear-algebra)
+    - [A.3.1 BLAS](#BLAS)
+      - [A.3.1.1 ATLAS](#ATLAS)
+      - [A.3.1.2 OpenBLAS](#OpenBLAS)
+      - [A.3.1.3 Intel MKL](#MKL)
+      - [A.3.1.4 Shared BLAS](#Shared-BLAS)
+    - [A.3.2 LAPACK](#LAPACK)
+    - [A.3.3 Caveats](#Caveats)
+- [Appendix B Configuration on a
+  Unix-alike](#Configuration-on-a-Unix_002dalike)
+  - [B.1 Configuration
+    options](#Configuration-options)
+  - [B.2 Internationalization
+    support](#Internationalization-support)
+  - [B.3 Configuration
+    variables](#Configuration-variables)
+    - [B.3.1 Setting paper
+      size](#Setting-paper-size)
+    - [B.3.2 Setting the
+      browsers](#Setting-the-browsers)
+    - [B.3.3 Compilation
+      flags](#Compilation-flags)
+    - [B.3.4 Making
+      manuals](#Making-manuals)
+  - [B.4 Setting the
+    shell](#Setting-the-shell)
+  - [B.5 Using make](#Using-make)
+  - [B.6 Using Fortran](#Using-Fortran)
+  - [B.7 Compile and load
+    flags](#Compile-and-load-flags)
+  - [B.8 Maintainer mode](#Maintainer-mode)
+- [Appendix C Platform notes](#Platform-notes)
+  - [C.1 X11 issues](#X11-issues)
+  - [C.2 Linux](#Linux)
+    - [C.2.1 Clang](#Clang)
+    - [C.2.2 Intel
+      compilers](#Intel-compilers)
+  - [C.3 macOS](#macOS)
+    - [C.3.1 Prerequisites](#Prerequisites)
+      - [C.3.1.1 Note for Catalina
+        users](#Note-for-Catalina-users)
+    - [C.3.2 Recommended C/C++
+      compilers](#Recommended-C_002fC_002b_002b-compilers)
+    - [C.3.3 Other
+      libraries](#Other-libraries)
+    - [C.3.4 Tcl/Tk headers and
+      libraries](#Tcl_002fTk-headers-and-libraries)
+    - [C.3.5 Java](#Java-_0028macOS_0029)
+    - [C.3.6 Frameworks](#Frameworks)
+    - [C.3.7 Building
+      R.app](#Building-R_002eapp)
+  - [C.4 Solaris](#Solaris)
+    - [C.4.1 64-bit
+      builds](#g_t64_002dbit-builds)
+    - [C.4.2 Using gcc](#Using-gcc)
+  - [C.5 FreeBSD](#FreeBSD)
+  - [C.6 OpenBSD](#OpenBSD)
+  - [C.7 Cygwin](#Cygwin)
+  - [C.8 New platforms](#New-platforms)
+- [Appendix D The Windows
+  toolset](#The-Windows-toolset)
+  - [D.1 LaTeX](#LaTeX)
+  - [D.2 The Inno Setup
+    installer](#The-Inno-Setup-installer)
+  - [D.3 The command line
+    tools](#The-command-line-tools)
+  - [D.4 The MinGW-w64
+    toolchain](#The-MinGW_002dw64-toolchain)
+  - [D.5 Useful additional
+    programs](#Useful-additional-programs)
+- [Function and variable
+  index](#Function-and-variable-index)
+- [Concept index](#Concept-index)
+- [Environment variable
+  index](#Environment-variable-index)
 
- 
-Next: [Obtaining R](#Obtaining-R)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-R Installation and Administration 
-=================================
+# R Installation and Administration
 
 This is a guide to installation and administration for R.
 
@@ -238,60 +230,50 @@ Copyright © 2001--2018 R Core Team
 > versions, except that this permission notice may be stated in a
 > translation approved by the R Core Team.
 
-  ------------------------------------------------------------------------------------------------------------------------- ---- --
-  • [Obtaining R](#Obtaining-R)                                                                                                  
-  • [Installing R under Unix-alikes](#Installing-R-under-Unix_002dalikes)                                                        
-  • [Installing R under Windows](#Installing-R-under-Windows)                                                                    
-  • [Installing R under macOS](#Installing-R-under-macOS)                                                                        
-  • [Running R](#Running-R)                                                                                                      
-  • [Add-on packages](#Add_002don-packages)                                                                                      
-  • [Internationalization](#Internationalization)                                                                                
-  • [Choosing between 32- and 64-bit builds](#Choosing-between-32_002d-and-64_002dbit-builds)                                    
-  • [The standalone Rmath library](#The-standalone-Rmath-library)                                                                
-  • [Essential and useful other programs under a Unix-alike](#Essential-and-useful-other-programs-under-a-Unix_002dalike)        
-  • [Configuration on a Unix-alike](#Configuration-on-a-Unix_002dalike)                                                          
-  • [Platform notes](#Platform-notes)                                                                                            
-  • [The Windows toolset](#The-Windows-toolset)                                                                                  
-  • [Function and variable index](#Function-and-variable-index)                                                                  
-  • [Concept index](#Concept-index)                                                                                              
-  • [Environment variable index](#Environment-variable-index)                                                                    
-  ------------------------------------------------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Obtaining R](#Obtaining-R)     
+ • [Installing R under Unix-alikes](#Installing-R-under-Unix_002dalikes)     
+ • [Installing R under Windows](#Installing-R-under-Windows)     
+ • [Installing R under macOS](#Installing-R-under-macOS)     
+ • [Running R](#Running-R)     
+ • [Add-on packages](#Add_002don-packages)     
+ • [Internationalization](#Internationalization)     
+ • [Choosing between 32- and 64-bit builds](#Choosing-between-32_002d-and-64_002dbit-builds)     
+ • [The standalone Rmath library](#The-standalone-Rmath-library)     
+ • [Essential and useful other programs under a Unix-alike](#Essential-and-useful-other-programs-under-a-Unix_002dalike)     
+ • [Configuration on a Unix-alike](#Configuration-on-a-Unix_002dalike)     
+ • [Platform notes](#Platform-notes)     
+ • [The Windows toolset](#The-Windows-toolset)     
+ • [Function and variable index](#Function-and-variable-index)     
+ • [Concept index](#Concept-index)     
+ • [Environment variable index](#Environment-variable-index)
 
- 
-Next: [Installing R under
-Unix-alikes](#Installing-R-under-Unix_002dalikes), Previous:
-[Top](#Top), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-1 Obtaining R 
--------------
+---
+
+## 1 Obtaining R
 
 Sources, binaries and documentation for R can be obtained via CRAN, the
 "Comprehensive R Archive Network" whose current members are listed at
 <https://CRAN.R-project.org/mirrors.html>.
 
-  ----------------------------------------------------------------------------------------- ---- --
-  • [Getting and unpacking the sources](#Getting-and-unpacking-the-sources)                      
-  • [Getting patched and development versions](#Getting-patched-and-development-versions)        
-  ----------------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Getting and unpacking the sources](#Getting-and-unpacking-the-sources)     
+ • [Getting patched and development versions](#Getting-patched-and-development-versions)
 
- 
-Next: [Getting patched and development
-versions](#Getting-patched-and-development-versions), Previous:
-[Obtaining R](#Obtaining-R), Up: [Obtaining R](#Obtaining-R)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 1.1 Getting and unpacking the sources 
+---
+
+### 1.1 Getting and unpacking the sources
 
 The simplest way is to download the most recent
 `R-x.y.z.tar.gz` file, and unpack it with
 
- 
-``` 
+```r
 tar -xf R-x.y.z.tar.gz
 ```
 
@@ -299,8 +281,7 @@ on systems that have a suitable[^1^](#FOOT1) `tar` installed. On
 other systems you need to have the `gzip` program installed, when you
 can use
 
- 
-``` 
+```r
 gzip -dc R-x.y.z.tar.gz | tar -xf -
 ```
 
@@ -318,25 +299,18 @@ account (which on Windows includes accounts with administrator
 privileges) you may see many warnings about changing ownership. In which
 case you can use
 
- 
-``` 
+```r
 tar --no-same-owner -xf R-x.y.z.tar.gz
 ```
 
 and perhaps also include the option `--no-same-permissions`.
- (These options can also be set in the
+(These options can also be set in the
 `TAR_OPTIONS` environment variable: if more than one option is included
 they should be separated by spaces.)
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Getting and unpacking the
-sources](#Getting-and-unpacking-the-sources), Up: [Obtaining
-R](#Obtaining-R)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.2 Getting patched and development versions 
+### 1.2 Getting patched and development versions
 
 A patched version of the current release, '`r-patched`', and
 the current development version, '`r-devel`', are available as
@@ -352,20 +326,15 @@ The tarballs are available from <https://stat.ethz.ch/R/daily>. Download
 section. They are built in exactly the same way as distributions of R
 releases.
 
-  ------------------------------------------------------------- ---- --
-  • [Using Subversion and rsync](#Using-Subversion-and-rsync)        
-  ------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Using Subversion and rsync](#Using-Subversion-and-rsync)
 
- 
-Previous: [Getting patched and development
-versions](#Getting-patched-and-development-versions), Up: [Getting
-patched and development
-versions](#Getting-patched-and-development-versions)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.2.1 Using Subversion and rsync 
+---
+
+#### 1.2.1 Using Subversion and rsync
 
 Sources are also available via <https://svn.R-project.org/R/>, the R
 Subversion repository. If you have a Subversion client (see
@@ -373,17 +342,16 @@ Subversion repository. If you have a Subversion client (see
 current '`r-devel`' from <https://svn.r-project.org/R/trunk/>
 and the current '`r-patched`' from
 '`https://svn.r-project.org/R/branches/R-x-y-branch/`' (where
-`x` and `y` are the major and minor number of the
+`x`{.variable} and `y`{.variable} are the major and minor number of the
 current released version of R). E.g., use
 
- 
-``` 
+```r
 svn checkout https://svn.r-project.org/R/trunk/ path
 ```
 
-to check out '`r-devel`' into directory `path`
+to check out '`r-devel`' into directory `path`{.variable}
 (which will be created if necessary). The alpha, beta and RC versions of
-an upcoming `x.y.0` release are available from
+an upcoming `x.y.0`{.variable} release are available from
 '`https://svn.r-project.org/R/branches/R-x-y-branch/`' in the
 four-week period prior to the release.
 
@@ -405,7 +373,7 @@ If downloading manually from CRAN, do ensure that you have the correct
 versions of the recommended packages: if the number in the file
 `VERSION` is '`x.y.z`' you need to download the
 contents of '`https://CRAN.R-project.org/src/contrib/dir`',
-where `dir` is '`x.y.z/Recommended`' for r-devel or
+where `dir`{.variable} is '`x.y.z/Recommended`' for r-devel or
 `x.y-patched/Recommended` for r-patched, respectively, to
 directory `src/library/Recommended` in the sources you have
 unpacked. After downloading manually you need to execute
@@ -414,22 +382,15 @@ requisite links in `src/library/Recommended`. A suitable
 incantation from the top level of the R sources using `wget` might be
 (for the correct value of `dir`)
 
- 
-``` 
+```r
 wget -r -l1 --no-parent -A\*.gz -nd -P src/library/Recommended \
   https://CRAN.R-project.org/src/contrib/dir
 ./tools/link-recommended
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Installing R under Windows](#Installing-R-under-Windows),
-Previous: [Obtaining R](#Obtaining-R), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-2 Installing R under Unix-alikes 
---------------------------------
+## 2 Installing R under Unix-alikes
 
 R will configure and build under most common Unix and Unix-alike
 platforms including '`cpu-*-linux-gnu`' for the
@@ -443,8 +404,6 @@ frequently on these platforms) '`i386-*-freebsd`',
 '`x86_64-*-freebsd`', '`i386-*-netbsd`',
 '`x86_64-*-openbsd`' and '`powerpc-ibm-aix6*`'
 
- 
-
 In addition, binary distributions are available for some common Linux
 distributions and for macOS (formerly OS X and Mac OS). See the FAQ for
 current details. These are installed in platform-specific ways, so for
@@ -453,31 +412,27 @@ the rest of this chapter we consider only building from the sources.
 Cross-building is not possible: installing R builds a minimal version of
 R and then runs many R scripts to complete the build.
 
-  ------------------------------------------------------------------------------- ---- --
-  • [Simple compilation](#Simple-compilation)                                          
-  • [Help options](#Help-options)                                                      
-  • [Making the manuals](#Making-the-manuals)                                          
-  • [Installation](#Installation)                                                      
-  • [Uninstallation](#Uninstallation)                                                  
-  • [Sub-architectures](#Sub_002darchitectures)                                        
-  • [Other Options](#Other-Options)                                                    
-  • [Testing a Unix-alike Installation](#Testing-a-Unix_002dalike-Installation)        
-  ------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Simple compilation](#Simple-compilation)     
+ • [Help options](#Help-options)     
+ • [Making the manuals](#Making-the-manuals)     
+ • [Installation](#Installation)     
+ • [Uninstallation](#Uninstallation)     
+ • [Sub-architectures](#Sub_002darchitectures)     
+ • [Other Options](#Other-Options)     
+ • [Testing a Unix-alike Installation](#Testing-a-Unix_002dalike-Installation)
 
- 
-Next: [Help options](#Help-options), Previous: [Installing R under
-Unix-alikes](#Installing-R-under-Unix_002dalikes), Up: [Installing R
-under Unix-alikes](#Installing-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 2.1 Simple compilation 
+---
+
+### 2.1 Simple compilation
 
 First review the essential and useful tools and libraries in [Essential
 and useful other programs under a
 Unix-alike](#Essential-and-useful-other-programs-under-a-Unix_002dalike),
-and install those you  want or need. Ensure that either
+and install those you want or need. Ensure that either
 the environment variable `TMPDIR` is either unset (and `/tmp`
 exists and can be written in and scripts can be executed from) or points
 to the absolute path to a valid temporary directory (one from which
@@ -486,14 +441,12 @@ spaces.[^3^](#FOOT3)
 
 Choose a directory to install the R tree (R is not just a binary, but
 has additional data sets, help files, font metrics etc). Let us call
-this place `R_HOME`. Untar the source code. This should
+this place `R_HOME`{.variable}. Untar the source code. This should
 create directories `src`, `doc`, and several more
 under a top-level directory: change to that top-level directory (At this
-point North American readers should consult [Setting paper
-size](#Setting-paper-size).) Issue the following commands:
+point North American readers should consult [Setting paper size](#Setting-paper-size).) Issue the following commands:
 
- 
-``` 
+```r
 ./configure
 make
 ```
@@ -502,16 +455,14 @@ make
 '`make`'.) Users of Debian-based 64-bit
 systems[^4^](#FOOT4) may need
 
- 
-``` 
+```r
 ./configure LIBnn=lib
 make
 ```
 
 Then check the built system works correctly by
 
- 
-``` 
+```r
 make check
 ```
 
@@ -524,20 +475,17 @@ may indicate inadequate resource limits (see [Running R](#Running-R)).
 
 More comprehensive testing can be done by
 
- 
-``` 
+```r
 make check-devel
 ```
 
 or
 
- 
-``` 
+```r
 make check-all
 ```
 
-see file `tests/README` and [Testing a Unix-alike
-Installation](#Testing-a-Unix_002dalike-Installation) for the
+see file `tests/README` and [Testing a Unix-alike Installation](#Testing-a-Unix_002dalike-Installation) for the
 possibilities of doing this in parallel. Note that these checks are only
 run completely if the recommended packages are installed.
 
@@ -548,14 +496,13 @@ users can invoke it, for example to `/usr/local/bin/R`. You
 could also copy the man page `R.1` to a place where your `man`
 reader finds it, such as `/usr/local/man/man1`. If you want to
 install the complete R tree to, e.g., `/usr/local/lib/R`, see
-[Installation](#Installation). Note: you do not *need* to install R: you
+[Installation](#Installation). Note: you do not _need_ to install R: you
 can run it from where it was built.
 
 You do not necessarily have to build R in the top-level source directory
 (say, `TOP_SRCDIR`). To build in `BUILDDIR`, run
 
- 
-``` 
+```r
 cd BUILDDIR
 TOP_SRCDIR/configure
 make
@@ -568,7 +515,7 @@ allow this, and you will need no spaces in the path to the build
 directory. It is unlikely to work if the source directory has previously
 been used for a build.)
 
-Now `rehash` if necessary, type [R], and read the R manuals and
+Now `rehash` if necessary, type [R]{.kbd}, and read the R manuals and
 the R FAQ (files `FAQ` or `doc/manual/R-FAQ.html`, or
 <https://CRAN.R-project.org/doc/FAQ/R-FAQ.html> which always has the
 version for the latest release of R).
@@ -580,15 +527,9 @@ for a system installation) ahead of `/usr/local/bin` (the
 default place for installation of R) in their default path, and some do
 not have `/usr/local/bin` on the default path.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Making the manuals](#Making-the-manuals), Previous: [Simple
-compilation](#Simple-compilation), Up: [Installing R under
-Unix-alikes](#Installing-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.2 Help options 
+### 2.2 Help options
 
 R by default provides help pages a plain text displayed in a pager, with
 the options (see the help for `help` of displaying help as HTML or PDF.
@@ -606,64 +547,57 @@ overridden by specifying one of the `INSTALL` options `--html`
 or `--no-html`.
 
 The server is disabled by setting the environment variable
- `R_DISABLE_HTTPD` to a non-empty
+`R_DISABLE_HTTPD` to a non-empty
 value, either before R is started or within the R session before HTML
 help (including `help.start`) is used. It is also possible that system
 security measures will prevent the server from being started, for
 example if the loopback interface has been disabled. See
 `?tools::startDynamicHelp` for more details.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Installation](#Installation), Previous: [Help
-options](#Help-options), Up: [Installing R under
-Unix-alikes](#Installing-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.3 Making the manuals 
+### 2.3 Making the manuals
 
 There is a set of manuals that can be built from the sources,
 
 '`fullrefman`'
 
-:   Printed versions of all the help pages for base and recommended
-    packages (around 3600 pages).
+: Printed versions of all the help pages for base and recommended
+packages (around 3600 pages).
 
 '`refman`'
 
-:   Printed versions of the help pages for selected base packages
-    (around 2200 pages)
+: Printed versions of the help pages for selected base packages
+(around 2200 pages)
 
 '`R-FAQ`'
 
-:   R FAQ
+: R FAQ
 
 '`R-intro`'
 
-:   "An Introduction to R".
+: "An Introduction to R".
 
 '`R-data`'
 
-:   "R Data Import/Export".
+: "R Data Import/Export".
 
 '`R-admin`'
 
-:   "R Installation and Administration", this manual.
+: "R Installation and Administration", this manual.
 
 '`R-exts`'
 
-:   "Writing R Extensions".
+: "Writing R Extensions".
 
 '`R-lang`'
 
-:   "The R Language Definition".
+: "The R Language Definition".
 
 To make these (with '`fullrefman`' rather than
 '`refman`'), use
 
- 
-``` 
+```r
 make pdf      to create PDF versions
 make info     to create info files (not ‘refman’ nor ‘fullrefman’).
 ```
@@ -681,7 +615,7 @@ hyperlinks that can be followed. The info files are suitable for reading
 online with Emacs or the standalone GNU `info` program. The PDF versions
 will be created using the paper size selected at configuration (default
 ISO a4): this can be overridden by setting `R_PAPERSIZE`
- on the `make` command line, or setting
+on the `make` command line, or setting
 `R_PAPERSIZE` in the environment and using `make -e`. (If re-making the
 manuals for a different paper size, you should first delete the file
 `doc/manual/version.texi`. The usual value for North America
@@ -695,15 +629,15 @@ Computer Modern fonts. We have provided four alternatives:
 
 `times`
 
-:   (The default.) Using standard PostScript fonts, Times Roman,
-    Helvetica and Courier. This works well both for on-screen viewing
-    and for printing. One disadvantage is that the Usage and Examples
-    sections may come out rather wide: this can be overcome by using *in
-    addition* either of the options `inconsolata` (on a Unix-alike only
-    if found by `configure`) or `beramono`, which replace the Courier
-    monospaced font by Inconsolata or Bera Sans mono respectively. (You
-    will need a recent version of the appropriate LaTeX package
-    **inconsolata**[^5^](#FOOT5) or **bera** installed.)
+: (The default.) Using standard PostScript fonts, Times Roman,
+Helvetica and Courier. This works well both for on-screen viewing
+and for printing. One disadvantage is that the Usage and Examples
+sections may come out rather wide: this can be overcome by using _in
+addition_ either of the options `inconsolata` (on a Unix-alike only
+if found by `configure`) or `beramono`, which replace the Courier
+monospaced font by Inconsolata or Bera Sans mono respectively. (You
+will need a recent version of the appropriate LaTeX package
+**inconsolata**[^5^](#FOOT5) or **bera** installed.)
 
     Note that in most LaTeX installations this will not actually use the
     standard fonts for PDF, but rather embed the URW clones NimbusRom,
@@ -714,33 +648,33 @@ Computer Modern fonts. We have provided four alternatives:
 
 `lm`
 
-:   Using the *Latin Modern* fonts. These are not often installed as
-    part of a TeX distribution, but can obtained from
-    <https://www.ctan.org/tex-archive/fonts/ps-type1/lm/> and mirrors.
-    This uses fonts rather similar to Computer Modern, but is not so
-    good on-screen as `times`.
+: Using the _Latin Modern_ fonts. These are not often installed as
+part of a TeX distribution, but can obtained from
+<https://www.ctan.org/tex-archive/fonts/ps-type1/lm/> and mirrors.
+This uses fonts rather similar to Computer Modern, but is not so
+good on-screen as `times`.
 
 `cm-super`
 
-:   Using type-1 versions of the Computer Modern fonts by Vladimir
-    Volovich. This is a large installation, obtainable from
-    <https://www.ctan.org/tex-archive/fonts/ps-type1/cm-super/> and its
-    mirrors. These type-1 fonts have poor hinting and so are nowhere
-    near as readable on-screen as the other three options.
+: Using type-1 versions of the Computer Modern fonts by Vladimir
+Volovich. This is a large installation, obtainable from
+<https://www.ctan.org/tex-archive/fonts/ps-type1/cm-super/> and its
+mirrors. These type-1 fonts have poor hinting and so are nowhere
+near as readable on-screen as the other three options.
 
 `ae`
 
-:   A package to use composites of Computer Modern fonts. This works
-    well most of the time, and its PDF is more readable on-screen than
-    the previous two options. There are three fonts for which it will
-    need to use bitmapped fonts, `tctt0900.600pk`,
-    `tctt1000.600pk` and `tcrm1000.600pk`.
-    Unfortunately, if those files are not available, Acrobat Reader will
-    substitute completely incorrect glyphs so you need to examine the
-    logs carefully.
+: A package to use composites of Computer Modern fonts. This works
+well most of the time, and its PDF is more readable on-screen than
+the previous two options. There are three fonts for which it will
+need to use bitmapped fonts, `tctt0900.600pk`,
+`tctt1000.600pk` and `tcrm1000.600pk`.
+Unfortunately, if those files are not available, Acrobat Reader will
+substitute completely incorrect glyphs so you need to examine the
+logs carefully.
 
 The default can be overridden by setting the environment variable
- `R_RD4PDF`. (On Unix-alikes, this will be picked
+`R_RD4PDF`. (On Unix-alikes, this will be picked
 up at install time and stored in `etc/Renviron`, but can still
 be overridden when the manuals are built, using `make -e`.) The
 usual[^6^](#FOOT6) default value for `R_RD4PDF` is
@@ -754,16 +688,14 @@ Further options, e.g for **hyperref**, can be included in a file
 you prefer to hyperlink the text and not the page number in the table of
 contents use
 
- 
-``` 
-\ifthenelse}}{}
+```r
+\ifthenelse{\boolean{Rd@use@hyper}}{\hypersetup{linktoc=section}}{}
 ```
 
 or
 
- 
-``` 
-\ifthenelse}}{}
+```r
+\ifthenelse{\boolean{Rd@use@hyper}}{\hypersetup{linktoc=all}}{}
 ```
 
 to hyperlink both text and page number.
@@ -772,8 +704,7 @@ Ebook versions of most of the manuals in one or both of `.epub`
 and `.mobi` formats can be made by running in
 `doc/manual` one of
 
- 
-``` 
+```r
 make ebooks
 make epub
 make mobi
@@ -785,15 +716,9 @@ If necessary the path to `ebook-convert` can be set as make macro
 `EBOOK` to by editing `doc/manual/Makefile` (which contains a
 commented value suitable for macOS) or using `make -e`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Uninstallation](#Uninstallation), Previous: [Making the
-manuals](#Making-the-manuals), Up: [Installing R under
-Unix-alikes](#Installing-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.4 Installation 
+### 2.4 Installation
 
 To ensure that the installed tree is usable by the right group of users,
 set `umask` appropriately (perhaps to '`022`') before unpacking
@@ -801,8 +726,7 @@ the sources and throughout the build process.
 
 After
 
- 
-``` 
+```r
 ./configure
 make
 make check
@@ -812,8 +736,7 @@ make check
 been completed successfully, you can install the complete R tree to your
 system by typing
 
- 
-``` 
+```r
 make install
 ```
 
@@ -825,25 +748,24 @@ This will install to the following directories:
 
 `prefix/bin` or `bindir`
 
-:   the front-end shell script and other scripts and executables
+: the front-end shell script and other scripts and executables
 
 `prefix/man/man1` or `mandir/man1`
 
-:   the man page
+: the man page
 
 `prefix/LIBnn/R` or `libdir/R`
 
-:   all the rest (libraries, on-line help system, ...). Here
-    `LIBnn` is usually '`lib`', but may be
-    '`lib64`' on some 64-bit Linux systems. This is known as
-    the R home directory.
+: all the rest (libraries, on-line help system, ...). Here
+`LIBnn`{.variable} is usually '`lib`', but may be
+'`lib64`' on some 64-bit Linux systems. This is known as
+the R home directory.
 
-where `prefix` is determined during configuration (typically
+where `prefix`{.variable} is determined during configuration (typically
 `/usr/local`) and can be set by running `configure` with the
 option `--prefix`, as in
 
- 
-``` 
+```r
 ./configure --prefix=/where/you/want/R/to/go
 ```
 
@@ -854,13 +776,11 @@ status message that is displayed at the end of `configure`. The
 installation may need to be done by the owner of `prefix`,
 often a root account.
 
-There is the option of using `make install-strip` (see [Debugging
-Symbols](#Debugging-Symbols)).
+There is the option of using `make install-strip` (see [Debugging Symbols](#Debugging-Symbols)).
 
 You can install into another directory tree by using
 
- 
-``` 
+```r
 make prefix=/path/to/here install
 ```
 
@@ -876,8 +796,8 @@ are installed.
 
 The configure option `--libdir` controls where the main R files
 are installed: the default is '`eprefix/LIBnn`', where
-`eprefix` is the prefix used for installing
-architecture-dependent files, defaults to `prefix`, and can
+`eprefix`{.variable} is the prefix used for installing
+architecture-dependent files, defaults to `prefix`{.variable}, and can
 be set via the configure option `--exec-prefix`.
 
 Each of `bindir`, `mandir` and `libdir` can also be specified on the
@@ -893,8 +813,7 @@ something like `rincludedir=/usr/local/include/R-3.6.3`.
 If you want the R home to be something other than `libdir/R`,
 use `rhome`: for example
 
- 
-``` 
+```r
 make install rhome=/usr/local/lib64/R-3.6.3
 ```
 
@@ -903,8 +822,7 @@ will use a version-specific R home on a non-Debian Linux 64-bit system.
 If you have made R as a shared/static library you can install it in your
 system's library directory by
 
- 
-``` 
+```r
 make prefix=/path/to/here install-libR
 ```
 
@@ -915,8 +833,7 @@ you intend to work with multiple versions of R, since that directory may
 be given precedence over the `lib` directory of other R
 installations.
 
- 
-``` 
+```r
 make install-strip
 ```
 
@@ -930,8 +847,7 @@ will not work.
 
 To install info and PDF versions of the manuals, use one or both of
 
- 
-``` 
+```r
 make install-info
 make install-pdf
 ```
@@ -947,33 +863,25 @@ More precise control is possible. For info, the setting used is that of
 A staged installation is possible, that it is installing R into a
 temporary directory in order to move the installed tree to its final
 destination. In this case `prefix` (and so on) should reflect the
- final destination, and `DESTDIR` should be used: see
+final destination, and `DESTDIR` should be used: see
 <https://www.gnu.org/prep/standards/html_node/DESTDIR.html>.
 
 You can optionally install the run-time tests that are part of
 `make check-all` by
 
- 
-``` 
+```r
 make install-tests
 ```
 
 which populates a `tests` directory in the installation.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Sub-architectures](#Sub_002darchitectures), Previous:
-[Installation](#Installation), Up: [Installing R under
-Unix-alikes](#Installing-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.5 Uninstallation 
+### 2.5 Uninstallation
 
 You can uninstall R by
 
- 
-``` 
+```r
 make uninstall
 ```
 
@@ -989,27 +897,20 @@ removing the directory `tests` containing the test results.
 
 An installed shared/static `libR` can be uninstalled by
 
- 
-``` 
+```r
 make prefix=/path/to/here uninstall-libR
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Other Options](#Other-Options), Previous:
-[Uninstallation](#Uninstallation), Up: [Installing R under
-Unix-alikes](#Installing-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.6 Sub-architectures 
+### 2.6 Sub-architectures
 
 Some platforms can support closely related builds of R which can share
 all but the executables and dynamic objects. Examples include builds
 under Linux and Solaris for different CPUs or 32- and 64-bit builds.
 
 R supports the idea of architecture-specific builds, specified by adding
-'`r_arch=name`' to the `configure` line. Here `name`
+'`r_arch=name`' to the `configure` line. Here `name`{.variable}
 can be anything non-empty, and is used to name subdirectories of
 `lib`, `etc`, `include` and the package
 `libs` subdirectories. Example names from other software are
@@ -1023,8 +924,7 @@ without '`r_arch`'). The space savings can be considerable: on
 took 74Mb, and adding a 32-bit build added 6Mb. If you have installed
 multiple builds you can select which build to run by
 
- 
-``` 
+```r
 R --arch=name
 ```
 
@@ -1037,8 +937,7 @@ will not be done if the package has an executable `configure` script or
 a `src/Makefile` file. In such cases you can install for extra
 builds by
 
- 
-``` 
+```r
 R --arch=name CMD INSTALL --libs-only pkg1 pkg2 …
 ```
 
@@ -1050,16 +949,15 @@ is wise to use explicit names for each, and you may also need to set
 When sub-architectures are used the version of `Rscript` in e.g.
 `/usr/bin` will be the last installed, but
 architecture-specific versions will be available in e.g.
-`/usr/lib64/R/bin/exec$`. Normally all installed
+`/usr/lib64/R/bin/exec${R_ARCH}`. Normally all installed
 architectures will run on the platform so the architecture of `Rscript`
 itself does not matter. The executable `Rscript` will run the `R`
-script, and at that time the  setting of the
+script, and at that time the setting of the
 `R_ARCH` environment variable determines the architecture which is run.
 
 When running post-install tests with sub-architectures, use
 
- 
-``` 
+```r
 R --arch=name CMD make check[-devel|all]
 ```
 
@@ -1071,34 +969,30 @@ within the appropriate `bin` directory,
 compatibility there are executables `R_HOME/bin/R.exe` and
 `R_HOME/bin/Rscript.exe`: these will run an executable from one
 of the subdirectories, which one being taken first from the
- `R_ARCH` environment variable, then from the
+`R_ARCH` environment variable, then from the
 `--arch` command-line option[^8^](#FOOT8) and finally
 from the installation default (which is 32-bit for a combined 32/64 bit
 R installation).
 
-  ------------------------- ---- --
-  • [Multilib](#Multilib)        
-  ------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Multilib](#Multilib)
 
- 
-Previous: [Sub-architectures](#Sub_002darchitectures), Up:
-[Sub-architectures](#Sub_002darchitectures)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 2.6.1 Multilib 
+---
+
+#### 2.6.1 Multilib
 
 For some Linux distributions[^9^](#FOOT9), there is an
 alternative mechanism for mixing 32-bit and 64-bit libraries known as
-*multilib*. If the Linux distribution supports multilib, then parallel
+_multilib_. If the Linux distribution supports multilib, then parallel
 builds of R may be installed in the sub-directories `lib`
 (32-bit) and `lib64` (64-bit). The build to be run may then be
 selected using the `setarch` command. For example, a 32-bit build may be
 run by
 
- 
-``` 
+```r
 setarch i686 R
 ```
 
@@ -1118,8 +1012,7 @@ post-install for a '`i686`' RPM on '`x86_64`' Linux
 reconfigures Java and will find the '`x86_64`' Java. If you
 know where a 32-bit Java is installed you may be able to run (as root)
 
- 
-``` 
+```r
 export JAVA_HOME=<path to jre directory of 32-bit Java>
 setarch i686 R CMD javareconf
 ```
@@ -1132,16 +1025,9 @@ architecture-specific version will be available in e.g.
 `/usr/lib64/R/bin`. Normally all installed architectures will
 run on the platform so the architecture of `Rscript` does not matter.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Testing a Unix-alike
-Installation](#Testing-a-Unix_002dalike-Installation), Previous:
-[Sub-architectures](#Sub_002darchitectures), Up: [Installing R under
-Unix-alikes](#Installing-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.7 Other Options 
+### 2.7 Other Options
 
 There are many other installation options, most of which are listed by
 `configure --help`. Almost all of those not listed elsewhere in this
@@ -1164,21 +1050,18 @@ variable `TZDIR`: this should contain files such as
 deduced correctly, but if necessary it can be set as the value of
 environment variable `TZ`.
 
-  --------------------------------------------------------- ---- --
-  • [Debugging Symbols](#Debugging-Symbols)                      
-  • [OpenMP Support](#OpenMP-Support)                            
-  • [C++ Support](#C_002b_002b-Support)                          
-  • [Link-Time Optimization](#Link_002dTime-Optimization)        
-  --------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Debugging Symbols](#Debugging-Symbols)     
+ • [OpenMP Support](#OpenMP-Support)     
+ • [C++ Support](#C_002b_002b-Support)     
+ • [Link-Time Optimization](#Link_002dTime-Optimization)
 
- 
-Next: [OpenMP Support](#OpenMP-Support), Previous: [Other
-Options](#Other-Options), Up: [Other Options](#Other-Options)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 2.7.1 Debugging Symbols 
+---
+
+#### 2.7.1 Debugging Symbols
 
 By default, `configure` adds a flag (usually `-g`) to the
 compilation flags for C, Fortran and CXX sources. This will slow down
@@ -1195,8 +1078,7 @@ all things intended for experts.
 Debugging symbols (and some others) can be 'stripped' on installation by
 using
 
- 
-``` 
+```r
 make install-strip
 ```
 
@@ -1206,14 +1088,9 @@ reduction in overall size was from 92MB to 66MB. On macOS debugging
 symbols are not by default included in `.dylib` and
 `.so` files, so there is negligible difference.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [C++ Support](#C_002b_002b-Support), Previous: [Debugging
-Symbols](#Debugging-Symbols), Up: [Other Options](#Other-Options)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 2.7.2 OpenMP Support 
+#### 2.7.2 OpenMP Support
 
 By default `configure` searches for suitable
 flags[^11^](#FOOT11) for OpenMP support for the C, C++ (default
@@ -1223,8 +1100,7 @@ Only the C result is currently used for R itself, and only if
 `MAIN_LD`/`DYLIB_LD` were not specified. This can be overridden by
 specifying
 
- 
-``` 
+```r
 R_OPENMP_CFLAGS
 ```
 
@@ -1233,8 +1109,7 @@ similar: note that as Fortran code is by default linked by the C (or
 C++) compiler, both need to support OpenMP) and can be overridden by
 specifying some of
 
- 
-``` 
+```r
 SHLIB_OPENMP_CFLAGS
 SHLIB_OPENMP_CXXFLAGS
 SHLIB_OPENMP_FFLAGS
@@ -1247,22 +1122,16 @@ test is to compile and link a standalone OpenMP program, which is not
 the same as compiling a shared object and loading it into the C program
 of R's executable. Note that overridden values are not tested.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Link-Time Optimization](#Link_002dTime-Optimization), Previous:
-[OpenMP Support](#OpenMP-Support), Up: [Other Options](#Other-Options)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 2.7.3 C++ Support 
+#### 2.7.3 C++ Support
 
 C++ is not used by R itself, but support is provided for installing
 packages with C++ code via `make` macros defined in file
 `etc/Makeconf` (and with explanations in file
 `config.site`):
 
- 
-``` 
+```r
 CXX
 CXXFLAGS
 CXXPICFLAGS
@@ -1307,8 +1176,7 @@ The `-std` flag is supported by the GCC, `clang++`, Intel and
 Solaris compilers (the latter from version 12.4). Currently accepted
 values are (plus some synonyms)
 
- 
-``` 
+```r
 g++:     c++98 gnu++98 c++11 gnu+11 c++14 gnu++14 c++17 gnu++17
 Intel:   gnu+98 c++11 c++14 (from 16.0) c++17 (from 17.0)
 Solaris: c++03 c++11 c++14 (from 12.5)
@@ -1331,14 +1199,9 @@ of the compiler used: currently it is C++11 if supported by the
 compiler: this can be overridden by setting '`CXXSTD`' when R
 is configured, for example to '`-std=gnu++14`'.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [C++ Support](#C_002b_002b-Support), Up: [Other
-Options](#Other-Options)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 2.7.4 Link-Time Optimization 
+#### 2.7.4 Link-Time Optimization
 
 There is support for using link-time optimization (LTO) if the toolchain
 supports it: configure with flag `--enable-lto`.
@@ -1350,8 +1213,7 @@ non-system linker such as `gold`[^16^](#FOOT16) may be needed).
 It has been tested recently on Linux with `gcc`/`gfortran` 8.x and 9.x:
 that needed setting
 
- 
-``` 
+```r
 AR=gcc-ar
 RANLIB=gcc-ranlib
 ```
@@ -1359,8 +1221,7 @@ RANLIB=gcc-ranlib
 (e.g. in `config.site`). For non-system compilers or if those
 wrappers have not been installed one may need something like
 
- 
-``` 
+```r
 AR="ar --plugin=/path/to/liblto_plugin.so"
 RANLIB="ranlib --plugin=/path/to/liblto_plugin.so"
 ```
@@ -1379,8 +1240,7 @@ this can flag inconsistencies between source files in a package.
 Under some circumstances and for a few packages, the PIC flags have
 needed overriding on Linux with GCC 9: e.g in `config.site`:
 
- 
-``` 
+```r
 CPICFLAGS=-fPIC
 CXXPICFLAGS=-fPIC
 CXX11PICFLAGS=-fPIC
@@ -1400,20 +1260,14 @@ prototypes from Fortran source files with its
 `-fc-prototypes-external` option, e.g. that (at the time of
 writing) Fortran `LOGICAL` corresponds to `int_least32_t *`.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Other Options](#Other-Options), Up: [Installing R under
-Unix-alikes](#Installing-R-under-Unix_002dalikes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.8 Testing an Installation 
+### 2.8 Testing an Installation
 
 Full post-installation testing is possible only if the test files have
 been installed with
 
- 
-``` 
+```r
 make install-tests
 ```
 
@@ -1423,8 +1277,7 @@ If this has been done, two testing routes are available. The first is to
 move to the home directory of the R installation (as given by `R RHOME`
 or from R as `R.home()`) and run
 
- 
-``` 
+```r
 cd tests
 ## followed by one of
 ../bin/R CMD make check
@@ -1452,10 +1305,9 @@ supports the `make -j n` option: most do but on Solaris you need to
 select GNU `make` or `dmake`.
 
 Alternatively, the installed R can be run, preferably with
-`--vanilla`. Then 
+`--vanilla`. Then
 
- 
-``` 
+```r
 Sys.setenv(LC_COLLATE = "C", LC_TIME = "C", LANGUAGE = "en")
 tools::testInstalledBasic("both")
 tools::testInstalledPackages(scope = "base")
@@ -1469,8 +1321,7 @@ directory and run fewer tests than the first approach: in particular
 they do not test things which need Internet access---that can be tested
 by
 
- 
-``` 
+```r
 tools::testInstalledBasic("internet")
 ```
 
@@ -1485,23 +1336,15 @@ Note that the results may depend on the language set for times and
 messages: for maximal similarity to reference results you may want to
 try setting (before starting the R session)
 
- 
-``` 
+```r
 LANGUAGE=en
 ```
 
 and use a UTF-8 or Latin-1 locale.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Installing R under macOS](#Installing-R-under-macOS), Previous:
-[Installing R under Unix-alikes](#Installing-R-under-Unix_002dalikes),
-Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-3 Installing R under Windows 
-----------------------------
+## 3 Installing R under Windows
 
 The `bin/windows` directory of a CRAN site contains binaries
 for a base distribution and a large number of add-on packages from CRAN
@@ -1511,10 +1354,10 @@ CPUs.
 
 Your file system must allow long file names (as is likely except perhaps
 for some network-mounted systems). If it doesn't also support conversion
-to short name equivalents (a.k.a. DOS 8.3 names), then R *must* be
+to short name equivalents (a.k.a. DOS 8.3 names), then R _must_ be
 installed in a path that does not contain spaces.
 
-Installation is *via* the installer `R-3.6.3-win.exe`. Just
+Installation is _via_ the installer `R-3.6.3-win.exe`. Just
 double-click on the icon and follow the instructions. When installing on
 a 64-bit version of Windows the options will include 32- or 64-bit
 versions of R (and the default is to install both). You can uninstall R
@@ -1524,24 +1367,19 @@ Note that you will be asked to choose a language for installation, and
 that choice applies to both installation and un-installation but not to
 running R itself.
 
-See the [R Windows
-FAQ](https://CRAN.R-project.org/bin/windows/base/rw-FAQ.html) for more
+See the [R Windows FAQ](https://CRAN.R-project.org/bin/windows/base/rw-FAQ.html) for more
 details on the binary installer.
 
-  --------------------------------------------------------------------- ---- --
-  • [Building from source](#Building-from-source)                            
-  • [Testing a Windows Installation](#Testing-a-Windows-Installation)        
-  --------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Building from source](#Building-from-source)     
+ • [Testing a Windows Installation](#Testing-a-Windows-Installation)
 
- 
-Next: [Testing a Windows Installation](#Testing-a-Windows-Installation),
-Previous: [Installing R under Windows](#Installing-R-under-Windows), Up:
-[Installing R under Windows](#Installing-R-under-Windows)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 3.1 Building from source 
+---
+
+### 3.1 Building from source
 
 R can be built as either a 32-bit or 64-bit application on Windows: to
 build the 64-bit application you need a 64-bit edition of Windows: such
@@ -1559,7 +1397,7 @@ try to select a '`C`' locale; Windows may not honour this).
 **NB:** The build process is currently being changed to require external
 binary distributions of third-party software. Their location is set
 using macro `EXT_LIBS` with default setting `$(LOCAL_SOFT)`;
-the \$(LOCAL\_SOFT) macro defaults to `$(R_HOME)/extsoft`. This
+the \$(LOCAL_SOFT) macro defaults to `$(R_HOME)/extsoft`. This
 directory can be populated using `make rsync-extsoft`. The location can
 be overridden by setting `EXT_LIBS` to a different path in
 `src/gnuwin32/MkRules.local`. A suitable collection of files
@@ -1567,33 +1405,28 @@ can also be obtained from
 <https://CRAN.R-project.org/bin/windows/extsoft> or
 <https://www.stats.ox.ac.uk/pub/Rtools/libs.html>.
 
-  --------------------------------------------------------------------------- ---- --
-  • [Getting the tools](#Getting-the-tools)                                        
-  • [Getting the source files](#Getting-the-source-files)                          
-  • [Building the core files](#Building-the-core-files)                            
-  • [Building the cairo devices files](#Building-the-cairo-devices-files)          
-  • [Using ICU for collation](#Using-ICU-for-collation)                            
-  • [Support for libcurl](#Support-for-libcurl)                                    
-  • [Checking the build](#Checking-the-build)                                      
-  • [Building the manuals](#Building-the-manuals)                                  
-  • [Building the Inno Setup installer](#Building-the-Inno-Setup-installer)        
-  • [Building the MSI installer](#Building-the-MSI-installer)                      
-  • [64-bit Windows builds](#g_t64_002dbit-Windows-builds)                         
-  --------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Getting the tools](#Getting-the-tools)     
+ • [Getting the source files](#Getting-the-source-files)     
+ • [Building the core files](#Building-the-core-files)     
+ • [Building the cairo devices files](#Building-the-cairo-devices-files)     
+ • [Using ICU for collation](#Using-ICU-for-collation)     
+ • [Support for libcurl](#Support-for-libcurl)     
+ • [Checking the build](#Checking-the-build)     
+ • [Building the manuals](#Building-the-manuals)     
+ • [Building the Inno Setup installer](#Building-the-Inno-Setup-installer)     
+ • [Building the MSI installer](#Building-the-MSI-installer)     
+ • [64-bit Windows builds](#g_t64_002dbit-Windows-builds)
 
- 
-Next: [Getting the source files](#Getting-the-source-files), Previous:
-[Building from source](#Building-from-source), Up: [Building from
-source](#Building-from-source)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 3.1.1 Getting the tools 
+---
+
+#### 3.1.1 Getting the tools
 
 If you want to build R from the sources, you will first need to collect,
-install and test an extensive set of tools. See [The Windows
-toolset](#The-Windows-toolset) (and perhaps updates in
+install and test an extensive set of tools. See [The Windows toolset](#The-Windows-toolset) (and perhaps updates in
 <https://CRAN.R-project.org/bin/windows/Rtools/>) for details.
 
 The `Rtools*.exe` executable installer described in [The
@@ -1601,115 +1434,91 @@ Windows toolset](#The-Windows-toolset) also includes some source files
 in addition to the R source as noted below. You should run it first, to
 obtain a working `tar` and other necessities. Choose a "Full
 installation", and install the extra files into your intended R source
-directory, e.g. `C:/R`. The directory name *should not contain
-spaces*. We will call this directory `R_HOME` below.
+directory, e.g. `C:/R`. The directory name _should not contain
+spaces_. We will call this directory `R_HOME` below.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Building the core files](#Building-the-core-files), Previous:
-[Getting the tools](#Getting-the-tools), Up: [Building from
-source](#Building-from-source)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.1.2 Getting the source files 
+#### 3.1.2 Getting the source files
 
 You need to collect the following sets of files:
 
--   Get the R source code tarball `R-3.6.3.tar.gz` from CRAN.
-    Open a command window (or another shell) at directory
-    `R_HOME`, and run
+- Get the R source code tarball `R-3.6.3.tar.gz` from CRAN.
+  Open a command window (or another shell) at directory
+  `R_HOME`{.variable}, and run
 
-     
-    ``` 
-    tar -xf R-3.6.3.tar.gz
-    ```
-    
+```r
+tar -xf R-3.6.3.tar.gz
+```
 
-    to create the source tree in `R_HOME`. **Beware**: do use
-    `tar` to extract the sources rather than tools such as WinZip. If
-    you are using an account with administrative privileges you may get
-    a lot of messages which can be suppressed by
+to create the source tree in `R_HOME`{.variable}. **Beware**: do use
+`tar` to extract the sources rather than tools such as WinZip. If
+you are using an account with administrative privileges you may get
+a lot of messages which can be suppressed by
 
-     
-    ``` 
-    tar --no-same-owner -xf R-3.6.3.tar.gz
-    ```
-    
+```r
+tar --no-same-owner -xf R-3.6.3.tar.gz
+```
 
-     or perhaps better, set the environment
-    variable `TAR_OPTIONS` to the value
-    '`--no-same-owner --no-same-permissions`'.
+or perhaps better, set the environment
+variable `TAR_OPTIONS` to the value
+'`--no-same-owner --no-same-permissions`'.
 
-    It is also possible to obtain the source code using Subversion; see
-    [Obtaining R](#Obtaining-R) for details.
+It is also possible to obtain the source code using Subversion; see
+[Obtaining R](#Obtaining-R) for details.
 
--   If you are not using a tarball you need to obtain copies of the
-    recommended packages from CRAN. Put the `.tar.gz` files in
-    `R_HOME/src/library/Recommended` and run
-    `make link-recommended`. If you have an Internet connection, you can
-    do this automatically by running in `R_HOME/src/gnuwin32`
-     
-    ``` 
-    make rsync-recommended
-    ```
-    
+- If you are not using a tarball you need to obtain copies of the
+  recommended packages from CRAN. Put the `.tar.gz` files in
+  `R_HOME/src/library/Recommended` and run
+  `make link-recommended`. If you have an Internet connection, you can
+  do this automatically by running in `R_HOME/src/gnuwin32`
 
--   The binary distributions of external software. Download
+```r
+make rsync-recommended
+```
 
-     
-    ``` 
-    https://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/local323.zip
-    ```
-    
+- The binary distributions of external software. Download
 
-    (or a more recent version if appropriate), create an empty
-    directory, say `c:/R/extsoft`, and unpack it in that
-    directory by e.g.
+```r
+https://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/local323.zip
+```
 
-     
-    ``` 
-    unzip local323.zip -d c:/R/extsoft
-    ```
-    
+(or a more recent version if appropriate), create an empty
+directory, say `c:/R/extsoft`, and unpack it in that
+directory by e.g.
 
--   Make a local copy of the configuration rules by
+```r
+unzip local323.zip -d c:/R/extsoft
+```
 
-     
-    ``` 
-    cd R_HOME/src/gnuwin32
-    cp MkRules.dist MkRules.local
-    ```
-    
+- Make a local copy of the configuration rules by
 
-    and edit `MkRules.local`, uncommenting `EXT_LIBS` and
-    setting it to the appropriate path (in our example
-    `c:/R/extsoft`).
+```r
+cd R_HOME/src/gnuwin32
+cp MkRules.dist MkRules.local
+```
 
-    Look through the file `MkRules.local` and make any other
-    changes needed: in particular, this is where a 64-bit build is
-    selected and the locations are set of external software for ICU
-    collation and the cairo-based devices.
+and edit `MkRules.local`, uncommenting `EXT_LIBS` and
+setting it to the appropriate path (in our example
+`c:/R/extsoft`).
+
+Look through the file `MkRules.local` and make any other
+changes needed: in particular, this is where a 64-bit build is
+selected and the locations are set of external software for ICU
+collation and the cairo-based devices.
 
 The following additional item is normally installed by
 `Rtools*.exe`. If instead you choose to do a completely manual
 build you will also need
 
--   The Tcl/Tk support files are contained in `Rtools*.exe`.
-    Please make sure you install the right version: there is a 32-bit
-    version and a 64-bit version. They should be installed to
-    `R_HOME`, creating directory `Tcl` there.
+- The Tcl/Tk support files are contained in `Rtools*.exe`.
+  Please make sure you install the right version: there is a 32-bit
+  version and a 64-bit version. They should be installed to
+  `R_HOME`, creating directory `Tcl` there.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Building the cairo devices
-files](#Building-the-cairo-devices-files), Previous: [Getting the source
-files](#Getting-the-source-files), Up: [Building from
-source](#Building-from-source)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.1.3 Building the core files 
+#### 3.1.3 Building the core files
 
 Set the environment variable `TMPDIR` to the absolute path to a writable
 directory, with a path specified with forward slashes and no spaces.
@@ -1721,8 +1530,7 @@ case) did not work.
 
 Open a command window at `R_HOME/src/gnuwin32`, then run
 
- 
-``` 
+```r
 make all recommended vignettes
 ```
 
@@ -1730,38 +1538,30 @@ and sit back and wait while the basic compile takes place.
 
 Notes:
 
--   We have had reports that earlier versions of anti-virus software
-    locking up the machine, but not for several years. However,
-    aggressive anti-virus checking such as the on-access scanning of
-    Sophos can slow the build down several-fold.
+- We have had reports that earlier versions of anti-virus software
+  locking up the machine, but not for several years. However,
+  aggressive anti-virus checking such as the on-access scanning of
+  Sophos can slow the build down several-fold.
 
--   You can run a parallel make by e.g.
+- You can run a parallel make by e.g.
 
-     
-    ``` 
-    make -j4 all
-    make -j4 recommended
-    make vignettes
-    ```
-    
+```r
+make -j4 all
+make -j4 recommended
+make vignettes
+```
 
-    but this is only likely to be worthwhile on a multi-core machine
-    with ample memory, and is not 100% reliable.
+but this is only likely to be worthwhile on a multi-core machine
+with ample memory, and is not 100% reliable.
 
--   It is possible (mainly for those working on R itself) to set the
-    (make or environment) variable `R_NO_BASE_COMPILE` to a non-empty
-    value, which inhibits the byte-compilation of the base and
-    recommended packages.
+- It is possible (mainly for those working on R itself) to set the
+  (make or environment) variable `R_NO_BASE_COMPILE` to a non-empty
+  value, which inhibits the byte-compilation of the base and
+  recommended packages.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using ICU for collation](#Using-ICU-for-collation), Previous:
-[Building the core files](#Building-the-core-files), Up: [Building from
-source](#Building-from-source)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.1.4 Building the cairo devices 
+#### 3.1.4 Building the cairo devices
 
 The devices based on cairographics (`svg`, `cairo_pdf`, `cairo_ps` and
 the `type = "cairo"` versions of `png`, `jpeg`, `tiff` and `bmp`) are
@@ -1776,15 +1576,9 @@ macro '`CAIRO_HOME`' in `MkRules.local`. (Note that
 this tarball unpacks with a top-level directory `src/`:
 '`CAIRO_HOME`' needs to include that directory in its path.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Support for libcurl](#Support-for-libcurl), Previous: [Building
-the cairo devices files](#Building-the-cairo-devices-files), Up:
-[Building from source](#Building-from-source)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.1.5 Using ICU for collation 
+#### 3.1.5 Using ICU for collation
 
 It is recommended to build R to support ICU (International Components
 for Unicode, <http://site.icu-project.org/>) for collation, as is
@@ -1792,8 +1586,7 @@ commonly done on Unix-alikes.
 
 Two settings are needed in `MkRules.local`,
 
- 
-``` 
+```r
 # set to use ICU
 # USE_ICU = YES
 # path to parent of ICU headers
@@ -1810,62 +1603,46 @@ Unlike on a Unix-alike, it is normally necessary to call `icuSetCollate`
 to set a locale before ICU is actually used for collation, or set the
 environment variable `R_ICU_LOCALE`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Checking the build](#Checking-the-build), Previous: [Using ICU
-for collation](#Using-ICU-for-collation), Up: [Building from
-source](#Building-from-source)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.1.6 Support for libcurl 
+#### 3.1.6 Support for libcurl
 
 `libcurl` version 7.28.0 or later is used to support `curlGetHeaders`
 and the `"libcurl"` methods of `download.file` and `url`.
 
-A suitable distribution can be found *via*
+A suitable distribution can be found _via_
 <https://www.stats.ox.ac.uk/pub/Rtools/libs.html> and its unpacked
 location should be specified in file `MkRules.local`.
 
 For secure use of e.g. '`https://`' URLs Windows users may need
-to specify the path to up-to-date *CA root certificates*: see
+to specify the path to up-to-date _CA root certificates_: see
 `?download.file`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Building the manuals](#Building-the-manuals), Previous: [Support
-for libcurl](#Support-for-libcurl), Up: [Building from
-source](#Building-from-source)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.1.7 Checking the build 
+#### 3.1.7 Checking the build
 
 You can test a build by running
 
- 
-``` 
+```r
 make check
 ```
 
 The recommended packages can be checked by
 
- 
-``` 
+```r
 make check-recommended
 ```
 
 Other levels of checking are
 
- 
-``` 
+```r
 make check-devel
 ```
 
 for a more thorough check of the R functionality, and
 
- 
-``` 
+```r
 make check-all
 ```
 
@@ -1880,29 +1657,20 @@ Parallel checking of package sources (part of `make check-devel` and
 `TEST_MC_CORES` to the maximum number of processes to be run in
 parallel.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Building the Inno Setup
-installer](#Building-the-Inno-Setup-installer), Previous: [Checking the
-build](#Checking-the-build), Up: [Building from
-source](#Building-from-source)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.1.8 Building the manuals 
+#### 3.1.8 Building the manuals
 
 The PDF manuals require **texinfo** 5.1 or later, and can be made by
 
- 
-``` 
+```r
 make manuals
 ```
 
 If you want to make the info versions (not including the Reference
 Manual), use
 
- 
-``` 
+```r
 cd ../../doc/manual
 make -f Makefile.win info
 ```
@@ -1920,25 +1688,17 @@ describe settings to build them. (Copy that file to
 use on Windows is available at <https://www.stats.ox.ac.uk/pub/Rtools/>:
 you will also need to install `Perl`[^19^](#FOOT19)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Building the MSI installer](#Building-the-MSI-installer),
-Previous: [Building the manuals](#Building-the-manuals), Up: [Building
-from source](#Building-from-source)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.1.9 Building the Inno Setup installer 
+#### 3.1.9 Building the Inno Setup installer
 
 You need to have the files for a complete R build, including bitmap and
 Tcl/Tk support and the manuals (which requires **texinfo** installed),
-as well as the recommended packages and Inno Setup (see [The Inno Setup
-installer](#The-Inno-Setup-installer)).
+as well as the recommended packages and Inno Setup (see [The Inno Setup installer](#The-Inno-Setup-installer)).
 
 Once everything is set up
 
- 
-``` 
+```r
 make distribution
 make check-all
 ```
@@ -1947,8 +1707,7 @@ will make all the pieces and the installer and put them in the
 `gnuwin32/cran` subdirectory, then check the build. This works
 by building all the parts in the sequence:
 
- 
-``` 
+```r
 rbuild (the executables, the FAQ docs etc.)
 rpackages (the base packages)
 htmldocs (the HTML documentation)
@@ -1972,8 +1731,7 @@ Parallel make is not supported and likely to fail.
 If you want to customize the installation by adding extra packages,
 replace `make rinstaller` by something like
 
- 
-``` 
+```r
 make rinstaller EXTRA_PKGS='pkg1 pkg2 pkg3'
 ```
 
@@ -1981,11 +1739,10 @@ An alternative way to customize the installer starting with a binary
 distribution is to first make an installation of R from the standard
 installer, then add packages and make other customizations to that
 installation. Then (after having customized file `MkRules`,
-possibly *via* `MkRules.local`, and having made R in the source
+possibly _via_ `MkRules.local`, and having made R in the source
 tree) in `src/gnuwin32/installer` run
 
- 
-``` 
+```r
 make myR IMAGEDIR=rootdir
 ```
 
@@ -1994,10 +1751,10 @@ installation (in double quotes if it contains spaces or backslashes).
 
 Both methods create an executable with a standard name such as
 `R-3.6.3-win.exe`, so please rename it to indicate that it is
-customized. If you intend to *distribute* a customized installer please
+customized. If you intend to _distribute_ a customized installer please
 do check that license requirements are met -- note that the installer
 will state that the contents are distributed under GPL and this has a
-requirement for *you* to supply the complete sources (including the R
+requirement for _you_ to supply the complete sources (including the R
 sources even if you started with a binary distribution of R, and also
 the sources of any extra packages (including their external software)
 which are included).
@@ -2005,8 +1762,7 @@ which are included).
 The defaults for the startup parameters may also be customized. For
 example
 
- 
-``` 
+```r
 make myR IMAGEDIR=rootdir MDISDI=1
 ```
 
@@ -2017,8 +1773,7 @@ values that can be set.
 The standard CRAN distribution of a 32/64-bit installer is made by first
 building 32-bit R (just
 
- 
-``` 
+```r
 make 32-bit
 ```
 
@@ -2028,21 +1783,15 @@ directory of the 32-bit build. Then the `make rinstaller` step copies
 the files that differ between architectures from the 32-bit build as it
 builds the installer image.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [64-bit Windows builds](#g_t64_002dbit-Windows-builds), Previous:
-[Building the Inno Setup installer](#Building-the-Inno-Setup-installer),
-Up: [Building from source](#Building-from-source)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.1.10 Building the MSI installer 
+#### 3.1.10 Building the MSI installer
 
 It is also possible to build an installer for use with Microsoft
 Installer. This is intended for use by sysadmins doing automated
 installs, and is not recommended for casual use.
 
-It makes use of the Windows Installer XML (WiX) toolkit *version 3.5*
+It makes use of the Windows Installer XML (WiX) toolkit _version 3.5_
 (or perhaps later, untested) available from <http://wixtoolset.org/>.
 Once WiX is installed, set the path to its home directory in
 `MkRules.local`.
@@ -2053,8 +1802,7 @@ There is no option in the installer to customize startup options, so
 edit `etc/Rconsole` and `etc/Rprofile.site` to set
 these as required. Then
 
- 
-``` 
+```r
 cd installer
 make msi
 ```
@@ -2080,14 +1828,9 @@ installer can only be run on 64-bit Windows.
 Thanks to David del Campo (Dept of Statistics, University of Oxford) for
 suggesting WiX and building a prototype installer.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Building the MSI installer](#Building-the-MSI-installer), Up:
-[Building from source](#Building-from-source)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 3.1.11 64-bit Windows builds 
+#### 3.1.11 64-bit Windows builds
 
 To build a 64-bit version of R you need a 64-bit toolchain: the only one
 discussed here is based on the work of the MinGW-w64 project
@@ -2104,14 +1847,9 @@ MinGW-w64 project.
 Windows 64-bit is now completely integrated into the R and package build
 systems: a 64-bit build is selected in file `MkRules.local`.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Building from source](#Building-from-source), Up: [Installing
-R under Windows](#Installing-R-under-Windows)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 3.2 Testing an Installation 
+### 3.2 Testing an Installation
 
 The Windows installer contains a set of test files used when building R.
 
@@ -2122,8 +1860,7 @@ analysis of errors will be given if `diff` is in the path (and
 Launch either `Rgui` or `Rterm`, preferably with `--vanilla`.
 Then run
 
- 
-``` 
+```r
 Sys.setenv(LC_COLLATE = "C", LANGUAGE = "en")
 library("tools")
 testInstalledBasic("both")
@@ -2141,15 +1878,9 @@ The results of `example(md5sums)` when testing **tools** will differ
 from the reference output as some files are installed with Windows' CRLF
 line endings.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Running R](#Running-R), Previous: [Installing R under
-Windows](#Installing-R-under-Windows), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-4 Installing R under macOS 
---------------------------
+## 4 Installing R under macOS
 
 ('macOS' was known as 'OS X' from 2012--2016 and as 'Mac OS X' before
 that.)
@@ -2198,21 +1929,17 @@ version of the OS.
 
 For building R from source, see [macOS](#macOS).
 
-  --------------------------------------------------------- ---- --
-  • [Running R under macOS](#Running-R-under-macOS)              
-  • [Uninstalling under macOS](#Uninstalling-under-macOS)        
-  • [Multiple versions](#Multiple-versions)                      
-  --------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Running R under macOS](#Running-R-under-macOS)     
+ • [Uninstalling under macOS](#Uninstalling-under-macOS)     
+ • [Multiple versions](#Multiple-versions)
 
- 
-Next: [Uninstalling under macOS](#Uninstalling-under-macOS), Previous:
-[Installing R under macOS](#Installing-R-under-macOS), Up: [Installing R
-under macOS](#Installing-R-under-macOS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 4.1 Running R under macOS 
+---
+
+### 4.1 Running R under macOS
 
 There are two ways to run R on macOS from a CRAN binary distribution.
 
@@ -2220,10 +1947,10 @@ There is a GUI console normally installed with the R icon in
 `/Applications` which you can run by double-clicking (e.g. from
 Launchpad or Finder). (If you cannot find it there it was possibly
 installed elsewhere so try searching for it in Spotlight.) This is
-usually referred to as [R.APP] to distinguish it from
+usually referred to as [R.APP]{.small} to distinguish it from
 command-line R: its user manual is currently part of the macOS FAQ at
 <https://cran.r-project.org/bin/macosx/RMacOSX-FAQ.html> and can be
-viewed from [R.APP]'s 'Help' menu.
+viewed from [R.APP]{.small}'s 'Help' menu.
 
 You can run command-line R and `Rscript` from a
 Terminal[^20^](#FOOT20) so these can be typed as commands like
@@ -2234,46 +1961,38 @@ notably the default location of the personal library directory (under
 that warnings, messages and other output to `stderr` are
 highlighted in bold.
 
-It has been reported that running [R.APP] may fail if no
+It has been reported that running [R.APP]{.small} may fail if no
 preferences are stored, so if it fails when launched for the very first
 time, try it again (the first attempt will store some preferences).
 
-Users of [R.APP] need to be aware of the 'App Nap' feature
+Users of [R.APP]{.small} need to be aware of the 'App Nap' feature
 (<https://developer.apple.com/library/mac/releasenotes/MacOSX/WhatsNewInOSX/Articles/MacOSX10_9.html>)
 which can cause R tasks to appear to run very slowly when not producing
 output in the console. Here are ways to avoid it:
 
--   Ensure that the console is completely visible (or at least the
-    activity indicator at the top right corner is visible).
+- Ensure that the console is completely visible (or at least the
+  activity indicator at the top right corner is visible).
 
--   In a Terminal, run
+- In a Terminal, run
 
-     
-    ``` 
-    defaults write org.R-project.R NSAppSleepDisabled -bool YES
-    ```
-    
+```r
+defaults write org.R-project.R NSAppSleepDisabled -bool YES
+```
 
-    (see
-    <https://developer.apple.com/library/mac/releasenotes/MacOSX/WhatsNewInOSX/Articles/MacOSX10_9.html>).
+(see
+<https://developer.apple.com/library/mac/releasenotes/MacOSX/WhatsNewInOSX/Articles/MacOSX10_9.html>).
 
 Using the `X11` device or the X11-based versions of `View()` and
 `edit()` for data frames and matrices (the latter are the default for
-command-line R but not [R.APP]) requires an X sub-system to be
+command-line R but not [R.APP]{.small}) requires an X sub-system to be
 installed: see [macOS](#macOS). So do the **tcltk** package and some
 third-party packages.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Multiple versions](#Multiple-versions), Previous: [Running R
-under macOS](#Running-R-under-macOS), Up: [Installing R under
-macOS](#Installing-R-under-macOS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 4.2 Uninstalling under macOS
 
-### 4.2 Uninstalling under macOS 
-
-R for macOS consists of two parts: the GUI ([R.APP]) and the R
+R for macOS consists of two parts: the GUI ([R.APP]{.small}) and the R
 framework. The un-installation is as simple as removing those folders
 (e.g. by dragging them onto the Trash). The typical installation will
 install the GUI into the `/Applications/R.app` folder and the R
@@ -2284,8 +2003,7 @@ The links to `R` and `Rscript` in
 If you want to get rid of R more completely using a Terminal, simply
 run:
 
- 
-``` 
+```r
 sudo rm -Rf /Library/Frameworks/R.framework /Applications/R.app \
    /usr/local/bin/R /usr/local/bin/Rscript
 ```
@@ -2302,22 +2020,16 @@ Uninstalling the Tcl/Tk or Texinfo components (which are installed under
 `/usr/local`) is not as simple. You can list the files they
 installed in a Terminal by
 
- 
-``` 
+```r
 pkgutil --files org.r-project.x86_64.tcltk.x11
 pkgutil --files org.r-project.x86_64.texinfo
 ```
 
 These are paths relative to `/`, the root of the file system.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Uninstalling under macOS](#Uninstalling-under-macOS), Up:
-[Installing R under macOS](#Installing-R-under-macOS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 4.3 Multiple versions 
+### 4.3 Multiple versions
 
 The installer will remove any previous version[^22^](#FOOT22)
 of the R framework which it finds installed. This can be avoided by
@@ -2329,29 +2041,22 @@ different versions are installed under
 
 A version of R can be run directly from the command-line as e.g.
 
- 
-``` 
+```r
 /Library/Frameworks/R.framework/Versions/3.6/Resources/bin/R
 ```
 
-However, [R.APP] will always run the 'current' version, that is
+However, [R.APP]{.small} will always run the 'current' version, that is
 the last installed version. A small utility, `Rswitch.app` (available at
 <https://mac.R-project.org/#other>: it is 32-bit so not usable on
 Catalina), can be used to change the 'current' version. This is of
-limited use as [R.APP] is compiled against a particular version
+limited use as [R.APP]{.small} is compiled against a particular version
 of R and will likely crash if switched to an earlier version. This may
 allow you to install a development version of R (de-selecting
-[R.APP]) and then switch back to the release version.
+[R.APP]{.small}) and then switch back to the release version.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Add-on packages](#Add_002don-packages), Previous: [Installing R
-under macOS](#Installing-R-under-macOS), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-5 Running R 
------------
+## 5 Running R
 
 How to start R and what command-line options are available is discussed
 in [Invoking R](./R-intro.html#Invoking-R) in An Introduction to R.
@@ -2368,7 +2073,7 @@ R makes use of a number of environment variables, the default values of
 many of which are set in file `R_HOME/etc/Renviron` (there are
 none set by default on Windows and hence no such file). These are set at
 `configure` time, and you would not normally want to
- change them -- a possible exception is
+change them -- a possible exception is
 `R_PAPERSIZE` (see [Setting paper size](#Setting-paper-size)). The paper
 size will be deduced from the '`LC_PAPER`' locale category if
 it exists and `R_PAPERSIZE` is unset, and this will normally produce the
@@ -2377,17 +2082,17 @@ Unix-alikes (but can always be overridden by setting `R_PAPERSIZE`).
 
 Various environment variables can be set to determine where R creates
 its per-session temporary directory. The environment variables
-   `TMPDIR`, `TMP` and
+`TMPDIR`, `TMP` and
 `TEMP` are searched in turn and the first one which is set and points to
 a writable area is used. If none do, the final default is
-`/tmp` on Unix-alikes and the value of 
+`/tmp` on Unix-alikes and the value of
 `R_USER` on Windows. The path should be an absolute path not containing
 spaces (and it is best to avoid non-alphanumeric characters such as
 `+`).
 
 Some Unix-alike systems are set up to remove files and directories
 periodically from `/tmp`, for example by a `cron` job
- running `tmpwatch`. Set `TMPDIR` to another
+running `tmpwatch`. Set `TMPDIR` to another
 directory before starting long-running jobs on such a system.
 
 Note that `TMPDIR` will be used to execute `configure` scripts when
@@ -2395,57 +2100,44 @@ installing packages, so if `/tmp` has been mounted as
 '`noexec`', `TMPDIR` needs to be set to a directory from which
 execution is allowed.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Internationalization](#Internationalization), Previous: [Running
-R](#Running-R), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 6 Add-on packages
 
-6 Add-on packages 
------------------
+---
 
- 
+• [Default packages](#Default-packages)     
+ • [Managing libraries](#Managing-libraries)     
+ • [Installing packages](#Installing-packages)     
+ • [Updating packages](#Updating-packages)     
+ • [Removing packages](#Removing-packages)     
+ • [Setting up a package repository](#Setting-up-a-package-repository)     
+ • [Checking installed source packages](#Checking-installed-source-packages)
 
-  ----------------------------------------------------------------------------- ---- --
-  • [Default packages](#Default-packages)                                            
-  • [Managing libraries](#Managing-libraries)                                        
-  • [Installing packages](#Installing-packages)                                      
-  • [Updating packages](#Updating-packages)                                          
-  • [Removing packages](#Removing-packages)                                          
-  • [Setting up a package repository](#Setting-up-a-package-repository)              
-  • [Checking installed source packages](#Checking-installed-source-packages)        
-  ----------------------------------------------------------------------------- ---- --
+---
 
-It is helpful to use the correct terminology. A *package* is loaded from
-a *library* by the function `library()`. Thus a library is a directory
+It is helpful to use the correct terminology. A _package_ is loaded from
+a _library_ by the function `library()`. Thus a library is a directory
 containing installed packages; the main library is
 `R_HOME/library`, but others can be used, for example by
- setting the environment variable `R_LIBS` or using
+setting the environment variable `R_LIBS` or using
 the R function `.libPaths()`. To avoid any confusion you will often see
 a library directory referred to as a 'library tree'.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Managing libraries](#Managing-libraries), Previous: [Add-on
-packages](#Add_002don-packages), Up: [Add-on
-packages](#Add_002don-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.1 Default packages 
+### 6.1 Default packages
 
 The set of packages loaded on startup is by default
 
- 
-``` 
+```r
 > getOption("defaultPackages")
 [1] "datasets"  "utils"     "grDevices" "graphics"  "stats"     "methods"
 ```
 
 (plus, of course, **base**) and this can be changed by setting the
 option in startup code (e.g. in `~/.Rprofile`). It is initially
- set to the value of the
+set to the value of the
 environment variable `R_DEFAULT_PACKAGES` if set (as a comma-separated
 list). Setting `R_DEFAULT_PACKAGES=NULL` ensures that only package
 **base** is loaded.
@@ -2455,20 +2147,14 @@ for speed when scripting: in particular not using **methods** will
 reduce the start-up time by a factor of up to two. But it can also be
 used to customize R, e.g. for class use. `Rscript` also checks the
 environment variable `R_SCRIPT_DEFAULT_PACKAGES`;
- if set, this takes
+if set, this takes
 precedence over `R_DEFAULT_PACKAGES`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Installing packages](#Installing-packages), Previous: [Default
-packages](#Default-packages), Up: [Add-on
-packages](#Add_002don-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 6.2 Managing libraries
 
-### 6.2 Managing libraries 
-
-R packages are installed into *libraries*, which are directories in the
+R packages are installed into _libraries_, which are directories in the
 file system containing a subdirectory for each package installed there.
 
 R comes with a single library, `R_HOME/library` which is the
@@ -2478,18 +2164,14 @@ create others and make use of them (or not) in an R session. At the
 lowest level '`.libPaths()`' can be used to add paths to the
 collection of libraries or to report the current collection.
 
- 
-
 R will automatically make use of a site-specific library
 `R_HOME/site-library` if this exists (it does not in a vanilla
 R installation). This location can be overridden by
 setting[^25^](#FOOT25) '`.Library.site`' in
 `R_HOME/etc/Rprofile.site`, or (not recommended) by setting the
- environment variable `R_LIBS_SITE`. Like
+environment variable `R_LIBS_SITE`. Like
 '`.Library`', the site libraries are always included by
 '`.libPaths()`'.
-
- 
 
 Users can have one or more libraries, normally specified by the
 environment variable `R_LIBS_USER`. This has a default value (to see it,
@@ -2500,24 +2182,20 @@ by default it will not).
 Both `R_LIBS_USER` and `R_LIBS_SITE` can specify multiple library paths,
 separated by colons (semicolons on Windows).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Updating packages](#Updating-packages), Previous: [Managing
-libraries](#Managing-libraries), Up: [Add-on
-packages](#Add_002don-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 6.3 Installing packages
 
-### 6.3 Installing packages 
+---
 
-  ----------------------------------------------------------------------- ---- --
-  • [Windows packages](#Windows-packages)                                      
-  • [macOS packages](#macOS-packages)                                          
-  • [Customizing package compilation](#Customizing-package-compilation)        
-  • [Multiple sub-architectures](#Multiple-sub_002darchitectures)              
-  • [Byte-compilation](#Byte_002dcompilation)                                  
-  • [External software](#External-software)                                    
-  ----------------------------------------------------------------------- ---- --
+• [Windows packages](#Windows-packages)     
+ • [macOS packages](#macOS-packages)     
+ • [Customizing package compilation](#Customizing-package-compilation)     
+ • [Multiple sub-architectures](#Multiple-sub_002darchitectures)     
+ • [Byte-compilation](#Byte_002dcompilation)     
+ • [External software](#External-software)
+
+---
 
 Packages may be distributed in source form or compiled binary form.
 Installing source packages which contain C/C++/Fortran code requires
@@ -2542,8 +2220,7 @@ a list box (typically with thousands of items).
 
 To install packages from source on a Unix-alike use in a terminal
 
- 
-``` 
+```r
 R CMD INSTALL -l /path/to/library pkg1 pkg2 …
 ```
 
@@ -2558,8 +2235,7 @@ Alternatively, packages can be downloaded and installed from within R.
 First choose your nearest CRAN mirror using `chooseCRANmirror()`. Then
 download and install packages **pkg1** and **pkg2** by
 
- 
-``` 
+```r
 > install.packages(c("pkg1", "pkg2"))
 ```
 
@@ -2573,8 +2249,7 @@ there.
 If you want to fetch a package and all those it depends on (in any way)
 that are not already installed, use e.g.
 
- 
-``` 
+```r
 > install.packages("Rcmdr", dependencies = TRUE)
 ```
 
@@ -2592,22 +2267,16 @@ that the R installation is aware of.
 Naive users sometimes forget that as well as installing a package, they
 have to use `library` to make its functionality available.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [macOS packages](#macOS-packages), Previous: [Installing
-packages](#Installing-packages), Up: [Installing
-packages](#Installing-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.3.1 Windows 
+#### 6.3.1 Windows
 
 What `install.packages` does by default is different on Unix-alikes
 (except macOS) and Windows. On Unix-alikes it consults the list of
-available *source* packages on CRAN (or other repository/ies), downloads
+available _source_ packages on CRAN (or other repository/ies), downloads
 the latest version of the package sources, and installs them (via
 `R CMD INSTALL`). On Windows it looks (by default) first at the list of
-*binary* versions of packages available for your version of R and
+_binary_ versions of packages available for your version of R and
 downloads the latest versions (if any). If no binary version is
 available or the source version is newer, it will install the source
 versions of packages without compiled C/C++/Fortran code, and offer to
@@ -2638,8 +2307,7 @@ in the path on a 64-bit version of R.
 `R CMD INSTALL` works in Windows to install source packages. No
 additional tools are needed if the package does not contain compiled
 code, and `install.packages(type="source")` will work for such packages
-(and for those with compiled code if the tools (see [The Windows
-toolset](#The-Windows-toolset)) are on the path, and the variables
+(and for those with compiled code if the tools (see [The Windows toolset](#The-Windows-toolset)) are on the path, and the variables
 `BINPREF` and `BINPREF64` are set properly; see the discussion below).
 We have seen occasional permission problems after unpacking source
 packages on some systems: these have been circumvented by setting the
@@ -2667,8 +2335,6 @@ help, you can zip up an installation on another OS and install from that
 zip file on Windows. However, such a package can be installed from the
 sources on Windows without any additional tools.
 
-  
-
 Packages with compiled code may need to have paths to the compilers set
 explicitly, and there is provision to make use of a system-wide library
 of installed external software. The compiler paths are set using the
@@ -2683,16 +2349,9 @@ case only `BINPREF` is used, with the 64 bit path used in
 `etc/x64/Makeconf`. The version used by CRAN can be installed
 as described in [Building from source](#Building-from-source).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Customizing package
-compilation](#Customizing-package-compilation), Previous: [Windows
-packages](#Windows-packages), Up: [Installing
-packages](#Installing-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.3.2 macOS 
+#### 6.3.2 macOS
 
 On macOS (formerly OS X) `install.packages` works as it does on other
 Unix-alike systems, but there are additional types starting with
@@ -2701,7 +2360,7 @@ R from source: `mac.binary.el-capitan` for an 'El Capitan and later'
 build with `"default"` a synonym for the appropriate variant) which can
 be passed to `install.packages` in order to download and install binary
 packages from a suitable repository. These binary package files for
-macOS have the extension '`.tgz`'. The [R.APP] GUI
+macOS have the extension '`.tgz`'. The [R.APP]{.small} GUI
 provides menus for installation of either binary or source packages,
 from CRAN or local files.
 
@@ -2753,8 +2412,7 @@ and '`SHLIB_LD`', as well as the '`CXX11`',
 So for example you could select a specific build of `clang` for both C
 and C++ with extensive checking by having in `~/.R/Makevars`
 
- 
-``` 
+```r
 CC = /usr/local/clang7/bin/clang
 CXX = /usr/local/clang7/bin/clang++
 CXX11 = $CXX
@@ -2769,8 +2427,7 @@ CXX17FLAGS = $CXXFLAGS
 
 and `gfortran` by (El Capitan)
 
- 
-``` 
+```r
 FC = /usr/local/gfortran/bin/gfortran
 FLIBS = -L/usr/local/gfortran/lib/gcc/x86_64-apple-darwin15/6.1.0
   -L/usr/local/gfortran/lib -lgfortran -lquadmath -lm
@@ -2778,8 +2435,7 @@ FLIBS = -L/usr/local/gfortran/lib/gcc/x86_64-apple-darwin15/6.1.0
 
 or (Sierra or High Sierra)
 
- 
-``` 
+```r
 FC = /usr/local/gfortran/bin/gfortran
 FLIBS = -L/usr/local/gfortran/lib/gcc/x86_64-apple-darwin16/6.3.0
   -L/usr/local/gfortran/lib -lgfortran -lquadmath -lm
@@ -2787,8 +2443,7 @@ FLIBS = -L/usr/local/gfortran/lib/gcc/x86_64-apple-darwin16/6.3.0
 
 or (Mojave or later)
 
- 
-``` 
+```r
 FC = /usr/local/gfortran/bin/gfortran
 FLIBS = -L/usr/local/gfortran/lib/gcc/x86_64-apple-darwin18/8.2.0
   -L/usr/local/gfortran/lib -lgfortran -lquadmath -lm
@@ -2799,8 +2454,7 @@ FLIBS = -L/usr/local/gfortran/lib/gcc/x86_64-apple-darwin18/8.2.0
 If using the C/C++ compilers from the Command Line Tools (which do not
 have OpenMP support) one will need to include
 
- 
-``` 
+```r
 SHLIB_OPENMP_CFLAGS =
 SHLIB_OPENMP_CXXFLAGS =
 ```
@@ -2815,18 +2469,12 @@ statically-linked up-to-date copy of the Open Source package from its
 sources or from <https://mac.R-project.org/libs>. But sometimes it is
 desirable/necessary to use Apple's dynamically linked library, in which
 case appropriate headers could be extracted from the
-sources[^29^](#FOOT29) available *via*
+sources[^29^](#FOOT29) available _via_
 <https://opensource.apple.com>.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Multiple sub-architectures](#Multiple-sub_002darchitectures),
-Previous: [macOS packages](#macOS-packages), Up: [Installing
-packages](#Installing-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.3.3 Customizing package compilation 
+#### 6.3.3 Customizing package compilation
 
 The R system and package-specific compilation flags can be overridden or
 added to by setting the appropriate Make variables in the personal file
@@ -2836,7 +2484,7 @@ Windows), or if that does not exist, `HOME/.R/Makevars`, where
 '`R_PLATFORM`' is the platform for which R was built, as
 available in the `platform` component of the R variable `R.version`. The
 path to an alternative personal file[^30^](#FOOT30) can be
-specified *via* the environment variable `R_MAKEVARS_USER`.
+specified _via_ the environment variable `R_MAKEVARS_USER`.
 
 Package developers are encouraged to use this mechanism to enable a
 reasonable amount of diagnostic messaging ("warnings") when compiling,
@@ -2847,8 +2495,7 @@ Note that this mechanism can also be used when it necessary to change
 the optimization level whilst installing a particular package. For
 example
 
- 
-``` 
+```r
 ## for C code
 CFLAGS = -g -O -mtune=native
 ## for C++ code
@@ -2860,10 +2507,9 @@ FFLAGS = -g -O -mtune=native
 Another use is to override the settings in a binary installation of R.
 For example, to use a different Fortran compiler on macOS
 
- 
-``` 
+```r
 FC = /usr/local/gfortran/bin/gfortran
-FLIBS = -L/usr/local/gfortran/lib/gcc/x86_64-apple-darwin16/6.3.0 
+FLIBS = -L/usr/local/gfortran/lib/gcc/x86_64-apple-darwin16/6.3.0
   -L/usr/local/gfortran/lib -lgfortran -lquadmath -lm
 ```
 
@@ -2879,15 +2525,9 @@ Note that these mechanisms do not work with packages which fail to pass
 settings down to sub-makes, perhaps reading `etc/Makeconf` in
 makefiles in subdirectories. Fortunately such packages are unusual.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Byte-compilation](#Byte_002dcompilation), Previous: [Customizing
-package compilation](#Customizing-package-compilation), Up: [Installing
-packages](#Installing-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.3.4 Multiple sub-architectures 
+#### 6.3.4 Multiple sub-architectures
 
 When installing packages from their sources, there are some extra
 considerations on installations which use sub-architectures. These are
@@ -2898,25 +2538,24 @@ When a source package is installed by a build of R which supports
 multiple sub-architectures, the normal installation process installs the
 packages for all sub-architectures. The exceptions are
 
-*Unix-alikes*
+_Unix-alikes_
 
-:   where there is an `configure` script, or a file
-    `src/Makefile`.
+: where there is an `configure` script, or a file
+`src/Makefile`.
 
-*Windows*
+_Windows_
 
-:   where there is a non-empty `configure.win` script, or a
-    file `src/Makefile.win` (with some exceptions where the
-    package is known to have an architecture-independent
-    `configure.win`, or if `--force-biarch` or field
-    '`Biarch`' in the `DESCRIPTION` file is used to
-    assert so).
+: where there is a non-empty `configure.win` script, or a
+file `src/Makefile.win` (with some exceptions where the
+package is known to have an architecture-independent
+`configure.win`, or if `--force-biarch` or field
+'`Biarch`' in the `DESCRIPTION` file is used to
+assert so).
 
 In those cases only the current architecture is installed. Further
 sub-architectures can be installed by
 
- 
-``` 
+```r
 R CMD INSTALL --libs-only pkg
 ```
 
@@ -2924,29 +2563,18 @@ using the path to `R` or `R --arch` to select the additional
 sub-architecture. There is also `R CMD INSTALL --merge-multiarch` to
 build and merge the two architectures, starting with a source tarball.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [External software](#External-software), Previous: [Multiple
-sub-architectures](#Multiple-sub_002darchitectures), Up: [Installing
-packages](#Installing-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.3.5 Byte-compilation 
+#### 6.3.5 Byte-compilation
 
 As from R 3.6.0, all packages are by default byte-compiled.
 
 Byte-compilation can be controlled on a per-package basis by the
 '`ByteCompile`' field in the `DESCRIPTION` file.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Byte-compilation](#Byte_002dcompilation), Up: [Installing
-packages](#Installing-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 6.3.6 External software 
+#### 6.3.6 External software
 
 Some R packages contain compiled code which links to external software
 libraries. Unless the external library is statically linked (which is
@@ -2970,7 +2598,7 @@ best choice for a user to set.
 On macOS the primary mechanism is to embed the absolute path to
 dependent dynamic libraries into an object when it is compiled. Few R
 packages arrange to do so, but it can be edited[^31^](#FOOT31)
-*via* `install_name_tool` --- that only deals with direct dependencies
+_via_ `install_name_tool` --- that only deals with direct dependencies
 and those would also need to be compiled to include the absolute paths
 of their dependencies. If the choice of absolute path is to be deferred
 to load time, how they are resolved is described in `man dyld`: the role
@@ -2984,8 +2612,7 @@ these environment variables when invoking a shell script (and
 `R` is a shell script). That makes the only portable option to
 set `R_LD_LIBRARY_PATH` in the environment, something like
 
- 
-``` 
+```r
 export R_LD_LIBRARY_PATH="`R RHOME`/lib:/opt/local/lib"
 ```
 
@@ -2993,24 +2620,16 @@ The precise rules for where Windows looks for DLLs are complex and
 depend on the version of Windows. But for present purposes the main
 solution is to put the directories containing the DLLs the package links
 to (and any those DLLs link to) on the `PATH`. 64-bit versions of
-Windows will ignore 32-bit DLLs from 64-bit R and *vice versa*.
+Windows will ignore 32-bit DLLs from 64-bit R and _vice versa_.
 
 The danger with any of the methods which involve setting environment
 variables is of inadvertently masking a system library. This is less for
-`DYLD_FALLBACK_LIBRARY_PATH` and for *appending* to `PATH` on Windows
+`DYLD_FALLBACK_LIBRARY_PATH` and for _appending_ to `PATH` on Windows
 (as it should already contain the system library paths).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Removing packages](#Removing-packages), Previous: [Installing
-packages](#Installing-packages), Up: [Add-on
-packages](#Add_002don-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.4 Updating packages 
-
- 
+### 6.4 Updating packages
 
 The command `update.packages()` is the simplest way to ensure that all
 the packages on your system are up to date. It downloads the list of
@@ -3030,8 +2649,7 @@ One sometimes-useful additional piece of information that
 `"upgrade"` or `"unavailable"` (in the currently selected repositories).
 For example
 
- 
-``` 
+```r
 > inst <- packageStatus()$inst
 > inst[inst$Status != "ok", c("Package", "Version", "Status")]
                   Package Version      Status
@@ -3041,47 +2659,29 @@ Rgraphviz       Rgraphviz  1.26.0 unavailable
 rgdal               rgdal  0.6-27     upgrade
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Setting up a package
-repository](#Setting-up-a-package-repository), Previous: [Updating
-packages](#Updating-packages), Up: [Add-on
-packages](#Add_002don-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.5 Removing packages 
-
- 
+### 6.5 Removing packages
 
 Packages can be removed in a number of ways. From a command prompt they
 can be removed by
 
- 
-``` 
+```r
 R CMD REMOVE -l /path/to/library pkg1 pkg2 …
 ```
 
 From a running R process they can be removed by
 
- 
-``` 
+```r
 > remove.packages(c("pkg1", "pkg2"),
                   lib = file.path("path", "to", "library"))
 ```
 
 Finally, one can just remove the package directory from the library.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Checking installed source
-packages](#Checking-installed-source-packages), Previous: [Removing
-packages](#Removing-packages), Up: [Add-on
-packages](#Add_002don-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.6 Setting up a package repository 
+### 6.6 Setting up a package repository
 
 Utilities such as `install.packages` can be pointed at any CRAN-style
 repository, and R users may want to set up their own. The 'base' of a
@@ -3091,20 +2691,20 @@ includes '`https://`', '`ftp://`' and
 '`file://`'). Under that base URL there should be directory
 trees for one or more of the following types of package distributions:
 
--   `"source"`: located at `src/contrib` and containing
-    `.tar.gz` files. Other forms of compression can be used,
-    e.g. `.tar.bz2` or `.tar.xz` files. Complete
-    repositories contain the sources corresponding to any binary
-    packages, and in any case it is wise to have a
-    `src/contrib` area with a possibly empty
-    `PACKAGES` file.
--   `"win.binary"`: located at `bin/windows/contrib/x.y` for R
-    versions `x.y.z` and containing `.zip` files for
-    Windows.
--   `"mac.binary.el-capitan"`: located at
-    `bin/macosx/el-capitan/contrib/3.y` for the CRAN builds for
-    'El Capitan (and later) for R versions `3.y.z`,
-    containing `.tgz` files.
+- `"source"`: located at `src/contrib` and containing
+  `.tar.gz` files. Other forms of compression can be used,
+  e.g. `.tar.bz2` or `.tar.xz` files. Complete
+  repositories contain the sources corresponding to any binary
+  packages, and in any case it is wise to have a
+  `src/contrib` area with a possibly empty
+  `PACKAGES` file.
+- `"win.binary"`: located at `bin/windows/contrib/x.y` for R
+  versions `x.y.z`{.variable} and containing `.zip` files for
+  Windows.
+- `"mac.binary.el-capitan"`: located at
+  `bin/macosx/el-capitan/contrib/3.y` for the CRAN builds for
+  'El Capitan (and later) for R versions `3.y.z`{.variable},
+  containing `.tgz` files.
 
 Each terminal directory must also contain a `PACKAGES` file.
 This can be a concatenation of the `DESCRIPTION` files of the
@@ -3121,37 +2721,29 @@ you may need these files.)
 To add your repository to the list offered by `setRepositories()`, see
 the help file for that function.
 
-Incomplete repositories are better specified *via* a `contriburl`
-argument than *via* being set as a repository.
+Incomplete repositories are better specified _via_ a `contriburl`
+argument than _via_ being set as a repository.
 
 A repository can contain subdirectories, when the descriptions in the
 `PACKAGES` file of packages in subdirectories must include a
 line of the form
 
- 
-``` 
+```r
 Path: path/to/subdirectory
 ```
 
 ---once again `write_PACKAGES` is the simplest way to set this up.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Setting up a package
-repository](#Setting-up-a-package-repository), Up: [Add-on
-packages](#Add_002don-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 6.7 Checking installed source packages 
+### 6.7 Checking installed source packages
 
 It can be convenient to run `R CMD check` on an installed package,
 particularly on a platform which uses sub-architectures. The outline of
 how to do this is, with the source package in directory `pkg`
 (or a tarball filename):
 
- 
-``` 
+```r
 R CMD INSTALL -l libdir pkg > pkg.log 2>&1
 R CMD check -l libdir --install=check:pkg.log pkg
 ```
@@ -3159,8 +2751,7 @@ R CMD check -l libdir --install=check:pkg.log pkg
 Where sub-architectures are in use the `R CMD check` line can be
 repeated with additional architectures by
 
- 
-``` 
+```r
 R --arch arch CMD check -l libdir --extra-arch --install=check:pkg.log pkg
 ```
 
@@ -3177,8 +2768,7 @@ So on Windows to install, check and package for distribution a source
 package from a tarball which has been tested on another platform one
 might use
 
- 
-``` 
+```r
 .../bin/i386/Rcmd INSTALL -l libdir tarball --build > pkg.log 2>&1
 .../bin/i386/Rcmd check -l libdir --extra-arch --install=check:pkg.log pkg
 .../bin/x64/Rcmd check -l libdir --extra-arch --install=check:pkg.log pkg
@@ -3191,32 +2781,22 @@ find external software, notably for Gtk+).
 `R CMD INSTALL` can do a `i386` install and then add the `x64` DLL from
 a single command by
 
- 
-``` 
+```r
 R CMD INSTALL --merge-multiarch -l libdir tarball
 ```
 
 and `--build` can be added to zip up the installation.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Choosing between 32- and 64-bit
-builds](#Choosing-between-32_002d-and-64_002dbit-builds), Previous:
-[Add-on packages](#Add_002don-packages), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 7 Internationalization and Localization
 
-7 Internationalization and Localization 
----------------------------------------
-
- 
-
-*Internationalization* refers to the process of enabling support for
-many human languages, and *localization* to adapting to a specific
+_Internationalization_ refers to the process of enabling support for
+many human languages, and _localization_ to adapting to a specific
 country and language.
 
 Current builds of R support all the character sets that the underlying
-OS can handle. These are interpreted according to the 
+OS can handle. These are interpreted according to the
 current `locale`, a sufficiently complicated topic to merit a separate
 section. Note though that R has no built-in support for right-to-left
 languages and bidirectional output, relying on the OS services. For
@@ -3227,22 +2807,18 @@ locale-dependent).
 The other aspect of the internationalization is support for the
 translation of messages. This is enabled in almost all builds of R.
 
-  --------------------------------------------------------- ---- --
-  • [Locales](#Locales)                                          
-  • [Localization of messages](#Localization-of-messages)        
-  --------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Locales](#Locales)     
+ • [Localization of messages](#Localization-of-messages)
 
- 
-Next: [Localization of messages](#Localization-of-messages), Previous:
-[Internationalization](#Internationalization), Up:
-[Internationalization](#Internationalization)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 7.1 Locales 
+---
 
-A *locale* is a description of the local environment of the user,
+### 7.1 Locales
+
+A _locale_ is a description of the local environment of the user,
 including the preferred language, the encoding of characters, the
 currency used and its conventions, and so on. Aspects of the locale are
 accessed by the R functions `Sys.getlocale` and `Sys.localeconv`.
@@ -3251,43 +2827,40 @@ The system of naming locales is OS-specific. There is quite wide
 agreement on schemes, but not on the details of their implementation. A
 locale needs to specify
 
--   A human language. These are generally specified by a lower-case
-    two-character abbreviation following ISO 639 (see e.g.
-    <https://en.wikipedia.org/wiki/ISO_639-1>).
--   A 'territory', used mainly to specify the currency. These are
-    generally specified by an upper-case two-character abbreviation
-    following ISO 3166 (see e.g.
-    <https://en.wikipedia.org/wiki/ISO_3166>).
--   A charset encoding, which determines both how a byte stream should
-    be divided into characters, and which characters the subsequences of
-    bytes represent. Sometimes the combination of language and territory
-    is used to specify the encoding, for example to distinguish between
-    traditional and simplified Chinese.
--   Optionally, a modifier, for example to indicate that Austria is to
-    be considered pre- or post-Euro. The modifier is also used to
-    indicate the script (`@latin`, `@cyrillic` for Serbian, `@iqtelif`)
-    or language dialect (e.g. `@saaho`, a dialect of Afar, and `@bokmal`
-    and `@nynorsk`, dialects of Norwegian regarded by some OSes as
-    separate languages, `no` and `nn`).
+- A human language. These are generally specified by a lower-case
+  two-character abbreviation following ISO 639 (see e.g.
+  <https://en.wikipedia.org/wiki/ISO_639-1>).
+- A 'territory', used mainly to specify the currency. These are
+  generally specified by an upper-case two-character abbreviation
+  following ISO 3166 (see e.g.
+  <https://en.wikipedia.org/wiki/ISO_3166>).
+- A charset encoding, which determines both how a byte stream should
+  be divided into characters, and which characters the subsequences of
+  bytes represent. Sometimes the combination of language and territory
+  is used to specify the encoding, for example to distinguish between
+  traditional and simplified Chinese.
+- Optionally, a modifier, for example to indicate that Austria is to
+  be considered pre- or post-Euro. The modifier is also used to
+  indicate the script (`@latin`, `@cyrillic` for Serbian, `@iqtelif`)
+  or language dialect (e.g. `@saaho`, a dialect of Afar, and `@bokmal`
+  and `@nynorsk`, dialects of Norwegian regarded by some OSes as
+  separate languages, `no` and `nn`).
 
 R is principally concerned with the first (for translations) and third.
 Note that the charset may be deducible from the language, as some OSes
 offer only one charset per language.
 
-  --------------------------------------------------------------- ---- --
-  • [Locales under Unix-alikes](#Locales-under-Unix_002dalikes)        
-  • [Locales under Windows](#Locales-under-Windows)                    
-  • [Locales under macOS](#Locales-under-macOS)                        
-  --------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Locales under Unix-alikes](#Locales-under-Unix_002dalikes)     
+ • [Locales under Windows](#Locales-under-Windows)     
+ • [Locales under macOS](#Locales-under-macOS)
 
- 
-Next: [Locales under Windows](#Locales-under-Windows), Previous:
-[Locales](#Locales), Up: [Locales](#Locales)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 7.1.1 Locales under Unix-alikes 
+---
+
+#### 7.1.1 Locales under Unix-alikes
 
 Modern Linux uses the XPG[^32^](#FOOT32) locale specifications
 which have the form '`en_GB`', '`en_GB.UTF-8`',
@@ -3301,15 +2874,9 @@ Note that whereas UTF-8 locales are nowadays almost universally used,
 locales such as '`en_GB`' use 8-bit encodings for backwards
 compatibility.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Locales under macOS](#Locales-under-macOS), Previous: [Locales
-under Unix-alikes](#Locales-under-Unix_002dalikes), Up:
-[Locales](#Locales)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 7.1.2 Locales under Windows 
+#### 7.1.2 Locales under Windows
 
 Windows also uses locales, but specified in a rather less concise way.
 Most users will encounter locales only via drop-down menus, but more
@@ -3322,14 +2889,9 @@ Some care is needed with Windows' locale names. For example, `chinese`
 is Traditional Chinese and not Simplified Chinese as used in most of the
 Chinese-speaking world.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Locales under Windows](#Locales-under-Windows), Up:
-[Locales](#Locales)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 7.1.3 Locales under macOS 
+#### 7.1.3 Locales under macOS
 
 macOS supports locales in its own particular way, but the R GUI tries to
 make this easier for users. See
@@ -3346,19 +2908,14 @@ Internally macOS uses a form similar to Linux: the main difference from
 other Unix-alikes is that where a character set is not specified it is
 assumed to be `UTF-8`.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Locales](#Locales), Up:
-[Internationalization](#Internationalization)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 7.2 Localization of messages 
+### 7.2 Localization of messages
 
 The preferred language for messages is by default taken from the locale.
 This can be overridden first by the setting of the environment variable
-  
- `LANGUAGE` and then[^33^](#FOOT33) by the
+
+by the
 environment variables `LC_ALL`, `LC_MESSAGES` and `LANG`. (The last
 three are normally used to set the locale and so should not be needed,
 but the first is only used to select the language for messages.) The
@@ -3368,23 +2925,23 @@ code tries hard to map locales to languages, but on some systems
 may need to be set. (One example is '`LC_ALL=es`' on Windows
 which sets the locale to Estonian and the language to Spanish.)
 
-It is usually possible to change the language once R is running *via*
+It is usually possible to change the language once R is running _via_
 (not Windows) `Sys.setlocale("LC_MESSAGES", "new_locale")`, or by
 setting an environment variable such as `LANGUAGE`,
-*provided*[^34^](#FOOT34) the language you are changing to can
+_provided_[^34^](#FOOT34) the language you are changing to can
 be output in the current character set. But this is OS-specific, and has
 been known to stop working on an OS upgrade.
 
-Messages are divided into *domains*, and translations may be available
+Messages are divided into _domains_, and translations may be available
 for some or all messages in a domain. R makes use of the following
 domains.
 
--   Domain `R` for the C-level error and warning messages from the R
-    interpreter.
--   Domain `R-pkg` for the R `stop`, `warning` and `message` messages in
-    each package, including `R-base` for the **base** package.
--   Domain `pkg` for the C-level messages in each package.
--   Domain `RGui` for the menus etc of the R for Windows GUI front-end.
+- Domain `R` for the C-level error and warning messages from the R
+  interpreter.
+- Domain `R-pkg` for the R `stop`, `warning` and `message` messages in
+  each package, including `R-base` for the **base** package.
+- Domain `pkg` for the C-level messages in each package.
+- Domain `RGui` for the menus etc of the R for Windows GUI front-end.
 
 Dividing up the messages in this way allows R to be extensible: as
 packages are loaded, their message translation catalogues can be loaded
@@ -3411,7 +2968,7 @@ countries, and also for '`pt_BR`', which are used for Brazilian
 locales but not for locales specifying Portugal.
 
 Translations in the right language but the wrong charset are made use of
- by on-the-fly re-encoding. The `LANGUAGE` variable
+by on-the-fly re-encoding. The `LANGUAGE` variable
 (only) can be a colon-separated list, for example '`se:de`',
 giving a set of languages in decreasing order of preference. One special
 value is '`en@quot`', which can be used in a UTF-8 locale to
@@ -3425,16 +2982,9 @@ not translated in any suitable catalogue,
 See <https://developer.r-project.org/Translations30.html> for how to
 prepare and install translation catalogues.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [The standalone Rmath library](#The-standalone-Rmath-library),
-Previous: [Internationalization](#Internationalization), Up: [Top](#Top)
- 
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-8 Choosing between 32- and 64-bit builds 
-----------------------------------------
+## 8 Choosing between 32- and 64-bit builds
 
 Almost all current CPUs have both 32- and 64-bit sets of instructions.
 Most OSes running on such CPUs offer the choice of building a 32-bit or
@@ -3450,45 +3000,45 @@ difference is in the size of the pointers.
 
 64-bit builds have both advantages and disadvantages:
 
--   The total virtual memory space made available to a 32-bit process is
-    limited by the pointer size to 4GB, and on most OSes to 3GB (or even
-    2GB). The limits for 64-bit processes are much larger (e.g.
-    8--128TB).
+- The total virtual memory space made available to a 32-bit process is
+  limited by the pointer size to 4GB, and on most OSes to 3GB (or even
+  2GB). The limits for 64-bit processes are much larger (e.g.
+  8--128TB).
 
-    R allocates memory for large objects as needed, and removes any
-    unused ones at garbage collection. When the sizes of objects become
-    an appreciable fraction of the address limit, fragmentation of the
-    address space becomes an issue and there may be no hole available
-    that is the size requested. This can cause more frequent garbage
-    collection or the inability to allocate large objects. As a guide,
-    this will become an issue for 32-bit builds with objects more than
-    10% of the size of the address space (around 300Mb) or when the
-    total size of objects in use is around one third (around 1Gb).
+  R allocates memory for large objects as needed, and removes any
+  unused ones at garbage collection. When the sizes of objects become
+  an appreciable fraction of the address limit, fragmentation of the
+  address space becomes an issue and there may be no hole available
+  that is the size requested. This can cause more frequent garbage
+  collection or the inability to allocate large objects. As a guide,
+  this will become an issue for 32-bit builds with objects more than
+  10% of the size of the address space (around 300Mb) or when the
+  total size of objects in use is around one third (around 1Gb).
 
--   Only 64-bit builds support 'long vectors', those with *2\^* or
-    more elements (which needs at least 16GB of storage for each numeric
-    vector).
+- Only 64-bit builds support 'long vectors', those with _2\^{31}_ or
+  more elements (which needs at least 16GB of storage for each numeric
+  vector).
 
--   Most 32-bit OSes by default limit file sizes to 2GB (and this may
-    also apply to 32-bit builds on 64-bit OSes). This can often be
-    worked around: `configure` selects suitable defines if this is
-    possible. (We have also largely worked around that limit on 32-bit
-    Windows.) 64-bit builds have much larger limits.
+- Most 32-bit OSes by default limit file sizes to 2GB (and this may
+  also apply to 32-bit builds on 64-bit OSes). This can often be
+  worked around: `configure` selects suitable defines if this is
+  possible. (We have also largely worked around that limit on 32-bit
+  Windows.) 64-bit builds have much larger limits.
 
--   Because the pointers are larger, R's basic structures are larger.
-    This means that R objects take more space and (usually) more time to
-    manipulate. So 64-bit builds of R will, all other things being
-    equal, run slower than 32-bit builds. (On Sparc Solaris the
-    difference was 15-20%.)
+- Because the pointers are larger, R's basic structures are larger.
+  This means that R objects take more space and (usually) more time to
+  manipulate. So 64-bit builds of R will, all other things being
+  equal, run slower than 32-bit builds. (On Sparc Solaris the
+  difference was 15-20%.)
 
--   However, 'other things' may not be equal. In the specific case of
-    '`x86_64`' *vs* '`ix86`', the 64-bit CPU has
-    features (such as SSE2 instructions) which are guaranteed to be
-    present but are optional on the 32-bit CPU, and also has more
-    general-purpose registers. This means that on chips like a desktop
-    Intel i7 the vanilla 64-bit version of R has been around 10% faster
-    on both Linux and macOS. (Laptop CPUs are usually relatively slower
-    in 64-bit mode.)
+- However, 'other things' may not be equal. In the specific case of
+  '`x86_64`' _vs_ '`ix86`', the 64-bit CPU has
+  features (such as SSE2 instructions) which are guaranteed to be
+  present but are optional on the 32-bit CPU, and also has more
+  general-purpose registers. This means that on chips like a desktop
+  Intel i7 the vanilla 64-bit version of R has been around 10% faster
+  on both Linux and macOS. (Laptop CPUs are usually relatively slower
+  in 64-bit mode.)
 
 So, for speed you may want to use a 32-bit build (especially on a
 laptop), but to handle large datasets (and perhaps large files) a 64-bit
@@ -3499,20 +3049,11 @@ Windows binary distributions.)
 Even on 64-bit builds of R there are limits on the size of R objects
 (see `help("Memory-limits")`), some of which stem from the use of 32-bit
 integers (especially in Fortran code). For example, each dimension of an
-array is limited to *2\^ - 1*.
+array is limited to _2\^{31} - 1_.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Essential and useful other programs under a
-Unix-alike](#Essential-and-useful-other-programs-under-a-Unix_002dalike),
-Previous: [Choosing between 32- and 64-bit
-builds](#Choosing-between-32_002d-and-64_002dbit-builds), Up:
-[Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-9 The standalone Rmath library 
-------------------------------
+## 9 The standalone Rmath library
 
 The routines supporting the distribution and
 special[^39^](#FOOT39) functions in R and a few others are
@@ -3533,8 +3074,7 @@ character string containing the current R version, for example
 There is full access to R's handling of `NaN`, `Inf` and `-Inf` via
 special versions of the macros and functions
 
- 
-``` 
+```r
     ISNAN, R_FINITE, R_log, R_pow and R_pow_di
 ```
 
@@ -3546,8 +3086,7 @@ for `NA_INTEGER` nor the distinction between `NA` and `NaN` for doubles.
 A little care is needed to use the random-number routines. You will need
 to supply the uniform random number generator
 
- 
-``` 
+```r
     double unif_rand(void)
 ```
 
@@ -3555,8 +3094,7 @@ or use the one supplied (and with a shared library or DLL you may have
 to use the one supplied, which is the Marsaglia-multicarry with an entry
 point
 
- 
-``` 
+```r
     set_seed(unsigned int, unsigned int)
 ```
 
@@ -3566,8 +3104,7 @@ The facilities to change the normal random number generator are
 available through the constant `N01_kind`. This takes values from the
 enumeration type
 
- 
-``` 
+```r
 typedef enum {
     BUGGY_KINDERMAN_RAMAGE,
     AHRENS_DIETER,
@@ -3580,28 +3117,23 @@ typedef enum {
 
 (and '`USER_NORM`' is not available).
 
-  ------------------------------------------------------- ---- --
-  • [Unix-alike standalone](#Unix_002dalike-standalone)        
-  • [Windows standalone](#Windows-standalone)                  
-  ------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Unix-alike standalone](#Unix_002dalike-standalone)     
+ • [Windows standalone](#Windows-standalone)
 
- 
-Next: [Windows standalone](#Windows-standalone), Previous: [The
-standalone Rmath library](#The-standalone-Rmath-library), Up: [The
-standalone Rmath library](#The-standalone-Rmath-library)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 9.1 Unix-alikes 
+---
+
+### 9.1 Unix-alikes
 
 If R has not already been made in the directory tree, `configure` must
 be run as described in the main build instructions.
 
 Then (in `src/nmath/standalone`)
 
- 
-``` 
+```r
 make
 ```
 
@@ -3612,8 +3144,7 @@ one of them.
 
 To use the routines in your own C or C++ programs, include
 
- 
-``` 
+```r
 #define MATHLIB_STANDALONE
 #include <Rmath.h>
 ```
@@ -3622,28 +3153,26 @@ and link against '`-lRmath`' (and '`-lm`' if needed on
 your OS). The example file `test.c` does nothing useful, but is
 provided to test the process (via `make test`). Note that you will
 probably not be able to run it unless you add the directory containing
- `libRmath.so` to the
+to the
 `LD_LIBRARY_PATH` environment variable (`libRmath.dylib`,
 `DYLD_FALLBACK_LIBRARY_PATH` on macOS).
 
 The targets
 
- 
-``` 
+```r
 make install
 make uninstall
 ```
 
 will (un)install the header `Rmath.h` and shared and static
- libraries (if built). Both `prefix=` and `DESTDIR`
+libraries (if built). Both `prefix=` and `DESTDIR`
 are supported, together with more precise control as described for the
 main build.
 
 '`make install`' installs a file for `pkg-config` to use by
 e.g.
 
- 
-``` 
+```r
 $(CC) `pkg-config --cflags libRmath` -c test.c
 $(CC) `pkg-config --libs libRmath` test.o -o test
 ```
@@ -3651,20 +3180,14 @@ $(CC) `pkg-config --libs libRmath` test.o -o test
 On some systems '`make install-strip`' will install a stripped
 shared library.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Unix-alike standalone](#Unix_002dalike-standalone), Up: [The
-standalone Rmath library](#The-standalone-Rmath-library)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 9.2 Windows 
+### 9.2 Windows
 
 You need to set up[^40^](#FOOT40) almost all the tools to make
 R and then run (in a Unix-like shell)
 
- 
-``` 
+```r
 (cd ../../gnuwin32; make MkRules)
 (cd ../../include; make -f Makefile.win config.h Rconfig.h Rmath.h)
 make -f Makefile.win
@@ -3672,8 +3195,7 @@ make -f Makefile.win
 
 Alternatively, in a `cmd.exe` shell use
 
- 
-``` 
+```r
 cd ../../include
 make -f Makefile.win config.h Rconfig.h Rmath.h
 cd ../nmath/standalone
@@ -3684,16 +3206,14 @@ This creates a static library `libRmath.a` and a DLL
 `Rmath.dll`. If you want an import library
 `libRmath.dll.a` (you don't need one), use
 
- 
-``` 
+```r
 make -f Makefile.win shared implib
 ```
 
 To use the routines in your own C or C++ programs using MinGW-w64,
 include
 
- 
-``` 
+```r
 #define MATHLIB_STANDALONE
 #include <Rmath.h>
 ```
@@ -3701,10 +3221,9 @@ include
 and link against '`-lRmath`'. This will use the first found of
 `libRmath.dll.a`, `libRmath.a` and
 `Rmath.dll` in that order, so the result depends on which files
-are present. You should be able to force static or dynamic linking *via*
+are present. You should be able to force static or dynamic linking _via_
 
- 
-``` 
+```r
 -Wl,-Bstatic -lRmath -Wl,Bdynamic
 -Wl,-Bdynamic -lRmath
 ```
@@ -3722,8 +3241,7 @@ systems such as Visual C++.
 
 If you make use of dynamic linking you should use
 
- 
-``` 
+```r
 #define MATHLIB_STANDALONE
 #define RMATH_DLL
 #include <Rmath.h>
@@ -3734,17 +3252,9 @@ to ensure that the constants like `NA_REAL` are linked correctly.
 sure. This is likely to also work with VC++, Borland and similar
 compilers.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Configuration on a
-Unix-alike](#Configuration-on-a-Unix_002dalike), Previous: [The
-standalone Rmath library](#The-standalone-Rmath-library), Up:
-[Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-Appendix A Essential and useful other programs under a Unix-alike 
------------------------------------------------------------------
+## Appendix A Essential and useful other programs under a Unix-alike
 
 This appendix gives details of programs you will need to build R on
 Unix-like platforms, or which will be used by R if found by `configure`.
@@ -3755,27 +3265,19 @@ package and the development version. The latter usually has the same
 name but with the extension '`-devel`' or '`-dev`':
 you need both versions installed.
 
-  ------------------------------------------------------------------------- ---- --
-  • [Essential programs and libraries](#Essential-programs-and-libraries)        
-  • [Useful libraries and programs](#Useful-libraries-and-programs)              
-  • [Linear algebra](#Linear-algebra)                                            
-  ------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Essential programs and libraries](#Essential-programs-and-libraries)     
+ • [Useful libraries and programs](#Useful-libraries-and-programs)     
+ • [Linear algebra](#Linear-algebra)
 
- 
-Next: [Useful libraries and programs](#Useful-libraries-and-programs),
-Previous: [Essential and useful other programs under a
-Unix-alike](#Essential-and-useful-other-programs-under-a-Unix_002dalike),
-Up: [Essential and useful other programs under a
-Unix-alike](#Essential-and-useful-other-programs-under-a-Unix_002dalike)
- 
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### A.1 Essential programs and libraries 
+---
 
-You need a means of compiling C and Fortran 90 (see [Using
-Fortran](#Using-Fortran)). Your C compiler should be
+### A.1 Essential programs and libraries
+
+You need a means of compiling C and Fortran 90 (see [Using Fortran](#Using-Fortran)). Your C compiler should be
 ISO/IEC 60059[^41^](#FOOT41), POSIX 1003.1 and
 C99-compliant.[^42^](#FOOT42) R tries to choose suitable
 flags[^43^](#FOOT43) for the C compilers it knows about, but
@@ -3831,8 +3333,7 @@ desirable for the best performance: support for this and Unicode
 properties can be checked at run-time by calling `pcre_config()`. If
 building PCRE for use with R a suitable `configure` command might be
 
- 
-``` 
+```r
 ./configure --enable-utf --enable-unicode-properties --enable-jit --disable-cpp
 ```
 
@@ -3849,7 +3350,7 @@ A `tar` program is needed to unpack the sources and packages (including
 the recommended packages). A version[^54^](#FOOT54) that can
 automagically detect compressed archives is preferred for use with
 `untar()`: the configure script looks for `gtar` and `gnutar` before
- `tar` -- use environment variable `TAR` to override this.
+`tar` -- use environment variable `TAR` to override this.
 (On NetBSD/OpenBSD systems set this to `bsdtar` if that is installed.)
 
 There need to be suitable versions of the tools `grep` and `sed`: the
@@ -3880,8 +3381,7 @@ distribution used is kept up-to-date. A number of standard LaTeX
 packages are required (including **url** and some of the font packages
 such as **times**, **helvetic**, **ec** and **cm-super**) and others
 such as **hyperref** and **inconsolata** are desirable (and without them
-you may need to change R's defaults: see [Making the
-manuals](#Making-the-manuals)). Note that package **hyperref**
+you may need to change R's defaults: see [Making the manuals](#Making-the-manuals)). Note that package **hyperref**
 (currently) requires packages **kvoptions**, **ltxcmds** and
 **refcount**. For distributions based on TeX Live the simplest approach
 may be to install collections **collection-latex**,
@@ -3903,17 +3403,9 @@ the licence (included in R's `COPYRIGHTS` file) in binary
 distributions. GNU `readline` is licensed under GPL (which version(s)
 depending on the `readline` version).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Linear algebra](#Linear-algebra), Previous: [Essential programs
-and libraries](#Essential-programs-and-libraries), Up: [Essential and
-useful other programs under a
-Unix-alike](#Essential-and-useful-other-programs-under-a-Unix_002dalike)
- 
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### A.2 Useful libraries and programs 
+### A.2 Useful libraries and programs
 
 The ability to use translated messages makes use of `gettext` and most
 likely needs GNU `gettext`: you do need this to work with new
@@ -4003,34 +3495,29 @@ or broken version of ICU be found this can be suppressed by
 The `bitmap` and `dev2bitmap` devices and function `embedFonts()` use
 ghostscript (<http://www.ghostscript.com/>). This should either be in
 your path when the command is run, or its full path specified by the
-environment variable `R_GSCMD` at that time. 
+environment variable `R_GSCMD` at that time.
 
 At the time of writing a full installation on Fedora Linux used the
 following packages and their development versions, and this may provide
 a useful checklist for other systems:
 
- 
-``` 
+```r
 bzip2 cairo fontconfig freetype fribidi glib2 libX11 libXext libXt
 libcurl libicu libjpeg libpng libtiff libtirpc libxcrypt ncurses pango
 pcre readline tcl tk xz zlib
 ```
 
-  --------------------------------------------------------- ---- --
-  • [Tcl/Tk](#Tcl_002fTk)                                        
-  • [Java support](#Java-support)                                
-  • [Other compiled languages](#Other-compiled-languages)        
-  --------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Tcl/Tk](#Tcl_002fTk)     
+ • [Java support](#Java-support)     
+ • [Other compiled languages](#Other-compiled-languages)
 
- 
-Next: [Java support](#Java-support), Previous: [Useful libraries and
-programs](#Useful-libraries-and-programs), Up: [Useful libraries and
-programs](#Useful-libraries-and-programs)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### A.2.1 Tcl/Tk 
+---
+
+#### A.2.1 Tcl/Tk
 
 The **tcltk** package needs Tcl/Tk ≥ 8.4 installed: the sources are
 available at <https://www.tcl.tk/>. To specify the locations of the
@@ -4038,15 +3525,15 @@ Tcl/Tk files you may need the configuration options
 
 `--with-tcltk`
 
-:   use Tcl/Tk, or specify its library directory
+: use Tcl/Tk, or specify its library directory
 
 `--with-tcl-config=TCL_CONFIG`
 
-:   specify location of `tclConfig.sh`
+: specify location of `tclConfig.sh`
 
 `--with-tk-config=TK_CONFIG`
 
-:   specify location of `tkConfig.sh`
+: specify location of `tkConfig.sh`
 
 or use the configure variables `TCLTK_LIBS` and `TCLTK_CPPFLAGS` to
 specify the flags needed for linking against the Tcl and Tk libraries
@@ -4061,22 +3548,16 @@ most versions of 8.4.x, but not recently).
 Note that the `tk.h` header includes[^61^](#FOOT61)
 X11 headers, so you will need X11 and its development files installed.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Other compiled languages](#Other-compiled-languages), Previous:
-[Tcl/Tk](#Tcl_002fTk), Up: [Useful libraries and
-programs](#Useful-libraries-and-programs)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### A.2.2 Java support 
+#### A.2.2 Java support
 
 The build process looks for Java support on the host system, and if it
 finds it sets some settings which are useful for Java-using packages
 (such as [**rJava**](https://CRAN.R-project.org/package=rJava) and
 [**JavaGD**](https://CRAN.R-project.org/package=JavaGD): these require a
 full JDK). This check can be suppressed by configure option
-`--disable-java`.  Configure variable
+`--disable-java`. Configure variable
 `JAVA_HOME` can be set to point to a specific JRE/JDK, on the
 `configure` command line or in the environment.
 
@@ -4087,10 +3568,9 @@ and JVM, which are stored in environment variable
 sub-architecture-specific version). A typical setting for
 '`x86_64`' Linux is
 
- 
-``` 
+```r
 JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.212.b04-0.fc30.x86_64/jre
-R_JAVA_LD_LIBRARY_PATH=$/lib/that/server
+R_JAVA_LD_LIBRARY_PATH=${JAVA_HOME}/lib/that/server
 ```
 
 Unfortunately this depends on the exact version of the JRE/JDK
@@ -4101,21 +3581,19 @@ See `R CMD javareconf --help` for details: note that this needs to be
 done by the account owning the R installation.
 
 Another way of overriding those settings is to set the environment
-variable 
+variable
 `R_JAVA_LD_LIBRARY_PATH` (before R is started, hence not in
 `~/.Renviron`), which suffices to run already-installed
 Java-using packages. For example
 
- 
-``` 
+```r
 R_JAVA_LD_LIBRARY_PATH=/usr/lib/jvm/java-1.8.0/jre/lib/amd64/server
 ```
 
 It may be possible to avoid this by specifying an invariant link as the
 path when configuring. For example, on that system any of
 
- 
-``` 
+```r
 JAVA_HOME=/usr/lib/jvm/java
 JAVA_HOME=/usr/lib/jvm/java-1.8.0
 JAVA_HOME=/usr/lib/jvm/java-1.8.0/jre
@@ -4126,8 +3604,7 @@ worked.
 'Non-server' distributions of Java as from version 11 are of a full JDK.
 However, Linux distributions can be confusing: for example Fedora 30 had
 
- 
-``` 
+```r
 java-1.8.0-openjdk
 java-1.8.0-openjdk-devel
 java-openjdk
@@ -4142,19 +3619,13 @@ where the `-devel` RPMs are needed to complete the JDK. (At the time of
 writing `java-openjdk` was Java 12.) Debian/Ubuntu use '`-jre`'
 and '`-jdk`', e.g.
 
- 
-``` 
+```r
 sudo apt install default-jdk
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Java support](#Java-support), Up: [Useful libraries and
-programs](#Useful-libraries-and-programs)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### A.2.3 Other compiled languages 
+#### A.2.3 Other compiled languages
 
 Some add-on packages need a C++ compiler. This is specified by the
 configure variables `CXX`, `CXXFLAGS` and similar. `configure` will
@@ -4176,32 +3647,21 @@ the configure variable `FC` to override this if necessary: variables
 See file `config.site` in the R source for more details about
 these variables.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Useful libraries and
-programs](#Useful-libraries-and-programs), Up: [Essential and useful
-other programs under a
-Unix-alike](#Essential-and-useful-other-programs-under-a-Unix_002dalike)
- 
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### A.3 Linear algebra
 
-### A.3 Linear algebra 
+---
 
-  ----------------------- ---- --
-  • [BLAS](#BLAS)              
-  • [LAPACK](#LAPACK)          
-  • [Caveats](#Caveats)        
-  ----------------------- ---- --
+• [BLAS](#BLAS)     
+ • [LAPACK](#LAPACK)     
+ • [Caveats](#Caveats)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [LAPACK](#LAPACK), Previous: [Linear algebra](#Linear-algebra),
-Up: [Linear algebra](#Linear-algebra)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### A.3.1 BLAS 
+#### A.3.1 BLAS
 
 The linear algebra routines in R can make use of enhanced BLAS (Basic
 Linear Algebra Subprograms, <http://www.netlib.org/blas/faq.html>)
@@ -4209,19 +3669,18 @@ routines. However, these have to be explicitly requested at configure
 time: R provides an internal BLAS which is well-tested and will be
 adequate for most uses of R.
 
-You can specify a particular BLAS library *via* a value for the
+You can specify a particular BLAS library _via_ a value for the
 configuration option `--with-blas` and not to use an external
 BLAS library by `--without-blas` (the default). If
 `--with-blas` is given with no `=`, its value is taken from the
- environment variable `BLAS_LIBS`, set for
+environment variable `BLAS_LIBS`, set for
 example in `config.site`. If neither the option nor the
 environment variable supply a value, a search is made for a
 suitable[^62^](#FOOT62) BLAS. If the value is not obviously a
 linker command (starting with a dash or giving the path to a library),
 it is prefixed by '`-l`', so
 
- 
-``` 
+```r
 --with-blas="foo"
 ```
 
@@ -4236,7 +3695,7 @@ and that is not checked.
 
 Some enhanced BLASes are compiler-system-specific (`sunperf` on
 Solaris[^63^](#FOOT63), `libessl` on IBM, `Accelerate` on
-macOS). The correct incantation for these is often found *via*
+macOS). The correct incantation for these is often found _via_
 `--with-blas` with no value on the appropriate platforms.
 
 Some of the external BLASes are multi-threaded. One issue is that R
@@ -4289,21 +3748,18 @@ results or segfaults.
 character lengths --- R itself does so but many packages do not and some
 segfault. (This applies also to external LAPACK libraries.)
 
-  ------------------------------- ---- --
-  • [ATLAS](#ATLAS)                    
-  • [OpenBLAS](#OpenBLAS)              
-  • [MKL](#MKL)                        
-  • [Shared BLAS](#Shared-BLAS)        
-  ------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [ATLAS](#ATLAS)     
+ • [OpenBLAS](#OpenBLAS)     
+ • [MKL](#MKL)     
+ • [Shared BLAS](#Shared-BLAS)
 
- 
-Next: [OpenBLAS](#OpenBLAS), Previous: [BLAS](#BLAS), Up: [BLAS](#BLAS)
- 
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### A.3.1.1 ATLAS 
+---
+
+#### A.3.1.1 ATLAS
 
 ATLAS (<http://math-atlas.sourceforge.net/>) is a "tuned" BLAS that runs
 on a wide range of Unix-alike platforms. Unfortunately it is built by
@@ -4321,16 +3777,14 @@ Recent versions of ATLAS can be built as a single shared library, either
 `libsatlas` or `libtatlas` (serial or threaded respectively): these may
 even contain a full LAPACK. Such builds can be used by one of
 
- 
-``` 
+```r
 --with-blas=satlas
 --with-blas=tatlas
 ```
 
 or, as on '`x86_64`' Fedora where a path needs to be specified,
 
- 
-``` 
+```r
 --with-blas="-L/usr/lib64/atlas -lsatlas"
 --with-blas="-L/usr/lib64/atlas -ltatlas"
 ```
@@ -4346,8 +3800,7 @@ need '`-devel`' or '`-dev`' packages installed.
 
 Linking against multiple static libraries requires one of
 
- 
-``` 
+```r
 --with-blas="-lf77blas -latlas"
 --with-blas="-lptf77blas -lpthread -latlas"
 --with-blas="-L/path/to/ATLAS/libs -lf77blas -latlas"
@@ -4365,13 +3818,9 @@ without restricting affinities at compile-time to one virtual core per
 physical CPU. (For the Fedora libraries the compile-time flag specifies
 4 threads.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [MKL](#MKL), Previous: [ATLAS](#ATLAS), Up: [BLAS](#BLAS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### A.3.1.2 OpenBLAS 
+#### A.3.1.2 OpenBLAS
 
 Dr Kazushige Goto wrote a tuned BLAS for several processors and OSes,
 which was frozen in mid-2010. OpenBLAS (<http://www.openblas.net/>) is a
@@ -4379,8 +3828,7 @@ descendant project with support for some later CPUs.
 
 This can be used by configuring R with something like
 
- 
-``` 
+```r
 --with-blas="-lopenblas"
 ```
 
@@ -4390,8 +3838,7 @@ preferable) way to use them.
 Some platforms provide multiple builds of OpenBLAS: for example Fedora
 30 has RPMs[^67^](#FOOT67)
 
- 
-``` 
+```r
 openblas
 openblas-threads
 openblas-openmp
@@ -4399,8 +3846,7 @@ openblas-openmp
 
 providing shared libraries
 
- 
-``` 
+```r
 libopenblas.so
 libopenblasp.so
 libopenblaso.so
@@ -4419,14 +3865,9 @@ For '`ix86`' and '`x86_64`' most distributed libraries
 contain several alternatives for different CPU microarchitectures with
 the choice being made at run time.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Shared BLAS](#Shared-BLAS), Previous: [OpenBLAS](#OpenBLAS), Up:
-[BLAS](#BLAS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### A.3.1.3 Intel MKL 
+#### A.3.1.3 Intel MKL
 
 For Intel processors (and perhaps others) and some distributions of
 Linux, there is Intel's Math Kernel Library. You are strongly encouraged
@@ -4446,11 +3887,10 @@ to 2019.4, for GCC compilers on '`x86_64`'.
 
 To use a sequential version of MKL we used
 
- 
-``` 
+```r
 MKL_LIB_PATH=/path/to/intel_mkl/mkl/lib/intel64
 export LD_LIBRARY_PATH=$MKL_LIB_PATH
-MKL="-L$ -lmkl_gf_lp64 -lmkl_core -lmkl_sequential"
+MKL="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_core -lmkl_sequential"
 ./configure --with-blas="$MKL" --with-lapack
 ```
 
@@ -4461,9 +3901,8 @@ copy of LAPACK (often older than the current version) as well as BLAS
 Threaded MKL may be used by replacing the line defining the variable
 `MKL` by
 
- 
-``` 
-MKL="-L$ -lmkl_gf_lp64 -lmkl_core \
+```r
+MKL="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_core \
      -lmkl_gnu_thread -dl -fopenmp"
 ```
 
@@ -4472,9 +3911,8 @@ for both BLAS and LAPACK, but the correct OpenMP and MKL interface layer
 then has to be selected via environment variables. With 64-bit builds
 and the GCC compilers, we used
 
- 
-``` 
-export MKL_INTERFACE_LAYER=GNU,LP64 
+```r
+export MKL_INTERFACE_LAYER=GNU,LP64
 export MKL_THREADING_LAYER=GNU
 ```
 
@@ -4502,20 +3940,15 @@ the FFTW3 wrappers.
 
 It was reported in 2015 that
 
- 
-``` 
+```r
 --with-blas='-mkl=parallel' --with-lapack
 ```
 
 worked with the Intel 2015.3 compilers on Centos 6.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [MKL](#MKL), Up: [BLAS](#BLAS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### A.3.1.4 Shared BLAS 
+#### A.3.1.4 Shared BLAS
 
 The BLAS library will be used for many of the add-on packages as well as
 for R itself. This means that it is better to use a shared/dynamic BLAS
@@ -4533,28 +3966,27 @@ option `--enable-BLAS-shlib`, and it can always be disabled via
 
 This has both advantages and disadvantages.
 
--   It saves space by having only a single copy of the BLAS routines,
-    which is helpful if there is an external static BLAS (as used to be
-    standard for ATLAS).
--   There may be performance disadvantages in using a shared BLAS.
-    Probably the most likely is when R's internal BLAS is used and R is
-    *not* built as a shared library, when it is possible to build the
-    BLAS into `R.bin` (and `libR.a`) without using
-    position-independent code. However, experiments showed that in many
-    cases using a shared BLAS was as fast, provided high levels of
-    compiler optimization are used.
--   It is easy to change the BLAS without needing to re-install R and
-    all the add-on packages, since all references to the BLAS go through
-    `libRblas`, and that can be replaced. Note though that any dynamic
-    libraries the replacement links to will need to be found by the
-    linker: this may need the library path to be changed in
-    `R_HOME/etc/ldpaths`.
+- It saves space by having only a single copy of the BLAS routines,
+  which is helpful if there is an external static BLAS (as used to be
+  standard for ATLAS).
+- There may be performance disadvantages in using a shared BLAS.
+  Probably the most likely is when R's internal BLAS is used and R is
+  _not_ built as a shared library, when it is possible to build the
+  BLAS into `R.bin` (and `libR.a`) without using
+  position-independent code. However, experiments showed that in many
+  cases using a shared BLAS was as fast, provided high levels of
+  compiler optimization are used.
+- It is easy to change the BLAS without needing to re-install R and
+  all the add-on packages, since all references to the BLAS go through
+  `libRblas`, and that can be replaced. Note though that any dynamic
+  libraries the replacement links to will need to be found by the
+  linker: this may need the library path to be changed in
+  `R_HOME/etc/ldpaths`.
 
 Another option to change the BLAS in use is to symlink a single dynamic
 BLAS library to `R_HOME/lib/libRblas.so`. For example, just
 
- 
-``` 
+```r
 mv R_HOME/lib/libRblas.so R_HOME/lib/libRblas.so.keep
 ln -s /usr/lib64/libopenblasp.so.0 R_HOME/lib/libRblas.so
 ```
@@ -4565,8 +3997,7 @@ OpenBLAS. A similar link works for most versions of the OpenBLAS
 library path or `ld.so` cache). It can also be used for a single-library
 ATLAS, so on '`x86_64`' Fedora
 
- 
-``` 
+```r
 ln -s /usr/lib64/atlas/libsatlas.so.3 R_HOME/lib/libRblas.so
 ln -s /usr/lib64/atlas/libtatlas.so.3 R_HOME/lib/libRblas.so
 ```
@@ -4580,14 +4011,9 @@ external BLAS: the latter could even cause conflicts. However, on Fedora
 where the OpenBLAS distribution contains a copy of LAPACK, it is the
 latter which is used.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Caveats](#Caveats), Previous: [BLAS](#BLAS), Up: [Linear
-algebra](#Linear-algebra)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### A.3.2 LAPACK 
+#### A.3.2 LAPACK
 
 Provision is made for using an external LAPACK library, principally to
 cope with BLAS libraries which contain a copy of LAPACK (such as
@@ -4608,8 +4034,8 @@ the ATLAS-optimized subset of LAPACK: this is simplest with a dynamic
 ATLAS library which contains a full LAPACK, when
 `--with-lapack` suffices.
 
-A value for `--with-lapack` can be set *via* the environment
-variable  `LAPACK_LIBS`, but this will only be
+A value for `--with-lapack` can be set _via_ the environment
+variable `LAPACK_LIBS`, but this will only be
 used if `--with-lapack` is specified (as the default value is
 `no`) and the BLAS library does not contain LAPACK.
 
@@ -4618,8 +4044,7 @@ with bugs in the LAPACK sources (or in the posted corrections to those
 sources). In particular, bugs in `DGEEV` and `DGESDD` have resulted in
 error messages such as
 
- 
-``` 
+```r
 DGEBRD gave error code -10
 ```
 
@@ -4640,17 +4065,13 @@ example the Intel MKL documentation has said
 > special values such as INF or NaN values. Using these special values
 > may cause LAPACK to return unexpected results or become unstable.
 
-We rely on limited support in LAPACK for matrices with *2\^* or more
+We rely on limited support in LAPACK for matrices with _2\^{31}_ or more
 elements: it is possible that an external LAPACK will not have that
 support.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [LAPACK](#LAPACK), Up: [Linear algebra](#Linear-algebra)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### A.3.3 Caveats 
+#### A.3.3 Caveats
 
 As with all libraries, you need to ensure that they and R were compiled
 with compatible compilers and flags. For example, this has meant that on
@@ -4666,8 +4087,7 @@ you use an external LAPACK, you may need to fix it there.
 
 The code (in `dlapack.f`) should read
 
- 
-``` 
+```r
 *     ..
 *     .. Executable Statements ..
 *
@@ -4686,44 +4106,30 @@ The code (in `dlapack.f`) should read
 
 (The inner ELSE clause was missing in LAPACK 3.9.0).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Platform notes](#Platform-notes), Previous: [Essential and useful
-other programs under a
-Unix-alike](#Essential-and-useful-other-programs-under-a-Unix_002dalike),
-Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## Appendix B Configuration on a Unix-alike
 
-Appendix B Configuration on a Unix-alike 
-----------------------------------------
+---
 
-  ----------------------------------------------------------------- ---- --
-  • [Configuration options](#Configuration-options)                      
-  • [Internationalization support](#Internationalization-support)        
-  • [Configuration variables](#Configuration-variables)                  
-  • [Setting the shell](#Setting-the-shell)                              
-  • [Using make](#Using-make)                                            
-  • [Using Fortran](#Using-Fortran)                                      
-  • [Compile and load flags](#Compile-and-load-flags)                    
-  • [Maintainer mode](#Maintainer-mode)                                  
-  ----------------------------------------------------------------- ---- --
+• [Configuration options](#Configuration-options)     
+ • [Internationalization support](#Internationalization-support)     
+ • [Configuration variables](#Configuration-variables)     
+ • [Setting the shell](#Setting-the-shell)     
+ • [Using make](#Using-make)     
+ • [Using Fortran](#Using-Fortran)     
+ • [Compile and load flags](#Compile-and-load-flags)     
+ • [Maintainer mode](#Maintainer-mode)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Internationalization support](#Internationalization-support),
-Previous: [Configuration on a
-Unix-alike](#Configuration-on-a-Unix_002dalike), Up: [Configuration on a
-Unix-alike](#Configuration-on-a-Unix_002dalike)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### B.1 Configuration options 
+### B.1 Configuration options
 
 `configure` has many options: running
 
- 
-``` 
+```r
 ./configure --help
 ```
 
@@ -4732,42 +4138,42 @@ are (defaults in brackets)
 
 `--with-x`
 
-:   use the X Window System \[yes\]
+: use the X Window System \[yes\]
 
 `--x-includes=DIR`
 
-:   X include files are in `DIR`
+: X include files are in `DIR`{.variable}
 
 `--x-libraries=DIR`
 
-:   X library files are in `DIR`
+: X library files are in `DIR`{.variable}
 
 `--with-readline`
 
-:   use readline library (if available) \[yes\]
+: use readline library (if available) \[yes\]
 
 `--enable-R-profiling`
 
-:   attempt to compile support for `Rprof()` \[yes\]
+: attempt to compile support for `Rprof()` \[yes\]
 
 `--enable-memory-profiling`
 
-:   attempt to compile support for `Rprofmem()` and `tracemem()` \[no\]
+: attempt to compile support for `Rprofmem()` and `tracemem()` \[no\]
 
 `--enable-R-shlib`
 
-:   build R as a shared/dynamic library \[no\]
+: build R as a shared/dynamic library \[no\]
 
 `--enable-BLAS-shlib`
 
-:   build the BLAS as a shared/dynamic library \[yes, except on AIX\]
+: build the BLAS as a shared/dynamic library \[yes, except on AIX\]
 
 You can use `--without-foo` or `--disable-foo` for the
 negatives.
 
 You will want to use `--disable-R-profiling` if you are
 building a profiled executable of R (e.g. with '`-pg)`'.
-Support for R profiling requires OS support for POSIX threads (*aka*
+Support for R profiling requires OS support for POSIX threads (_aka_
 '`pthreads`'), which are available on all mainstream Unix-alike
 platforms.
 
@@ -4788,7 +4194,7 @@ this can lead to symbol conflicts.
 For maximally effective use of `valgrind`, R should be compiled with
 valgrind instrumentation. The `configure` option is
 `--with-valgrind-instrumentation=level`, where
-`level` is 0, 1 or 2. (Level 0 is the default and does not
+`level`{.variable} is 0, 1 or 2. (Level 0 is the default and does not
 add anything.) The system headers for `valgrind` can be requested by
 option `--with-system-valgrind-headers`: they will be used if
 present (on Linux they may be in a separate package such as
@@ -4803,15 +4209,9 @@ The `configure` script has other generic options added by
 `autoconf` and which are not supported for R: in particular building for
 one architecture on a different host is not possible.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Configuration variables](#Configuration-variables), Previous:
-[Configuration options](#Configuration-options), Up: [Configuration on a
-Unix-alike](#Configuration-on-a-Unix_002dalike)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### B.2 Internationalization support 
+### B.2 Internationalization support
 
 Translation of messages is supported via GNU `gettext` unless disabled
 by the configure option `--disable-nls`. The `configure` report
@@ -4819,22 +4219,15 @@ will show `NLS` as one of the 'Additional capabilities' if support has
 been compiled in, and running in an English locale (but not the `C`
 locale) will include
 
- 
-``` 
+```r
   Natural language support but running in an English locale
 ```
 
 in the greeting on starting R.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Setting the shell](#Setting-the-shell), Previous:
-[Internationalization support](#Internationalization-support), Up:
-[Configuration on a Unix-alike](#Configuration-on-a-Unix_002dalike)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### B.3 Configuration variables 
+### B.3 Configuration variables
 
 If you need or want to set certain configure variables to something
 other than their default, you can do that by either editing the file
@@ -4842,8 +4235,7 @@ other than their default, you can do that by either editing the file
 want to set: others can be seen in file `etc/Renviron.in`) or
 on the command line as
 
- 
-``` 
+```r
 ./configure VAR=value
 ```
 
@@ -4856,12 +4248,12 @@ there is a file `~/.R/config`, it is read between the
 There is also a general `autoconf` mechanism for `config.site`
 files, which are read before any of those mentioned in the previous
 paragraph. This looks first at a file specified by the
- environment variable `CONFIG_SITE`, and if
+environment variable `CONFIG_SITE`, and if
 not is set at files such as `/usr/local/share/config.site` and
 `/usr/local/etc/config.site` in the area (exemplified by
 `/usr/local`) where R would be installed.
 
-These variables are *precious*, implying that they do not have to be
+These variables are _precious_, implying that they do not have to be
 exported to the environment, are kept in the cache even if not specified
 on the command line, checked for consistency between two configure runs
 (provided that caching is used), and are kept during automatic
@@ -4874,26 +4266,22 @@ these variables.
 If you find you need to alter configure variables, it is worth noting
 that some settings may be cached in the file `config.cache`,
 and it is a good idea to remove that file (if it exists) before
-re-configuring. Note that caching is turned *off* by default: use the
+re-configuring. Note that caching is turned _off_ by default: use the
 command line option `--config-cache` (or `-C`) to
 enable caching.
 
-  ------------------------------------------------- ---- --
-  • [Setting paper size](#Setting-paper-size)            
-  • [Setting the browsers](#Setting-the-browsers)        
-  • [Compilation flags](#Compilation-flags)              
-  • [Making manuals](#Making-manuals)                    
-  ------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Setting paper size](#Setting-paper-size)     
+ • [Setting the browsers](#Setting-the-browsers)     
+ • [Compilation flags](#Compilation-flags)     
+ • [Making manuals](#Making-manuals)
 
- 
-Next: [Setting the browsers](#Setting-the-browsers), Previous:
-[Configuration variables](#Configuration-variables), Up: [Configuration
-variables](#Configuration-variables)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### B.3.1 Setting paper size 
+---
+
+#### B.3.1 Setting paper size
 
 One common variable to change is `R_PAPERSIZE`, which defaults to
 '`a4`', not '`letter`'. (Valid values are
@@ -4906,18 +4294,12 @@ when making PDF manuals.
 
 The configure default will most often be '`a4`' if
 `R_PAPERSIZE` is unset. (If the (Debian Linux) program `paperconf` is
-found  or the environment variable `PAPERSIZE` is
+found or the environment variable `PAPERSIZE` is
 set, these are used to produce the default.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Compilation flags](#Compilation-flags), Previous: [Setting paper
-size](#Setting-paper-size), Up: [Configuration
-variables](#Configuration-variables)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### B.3.2 Setting the browsers 
+#### B.3.2 Setting the browsers
 
 Another precious variable is `R_BROWSER`, the default HTML browser,
 which should take a value of an executable in the user's path or specify
@@ -4925,15 +4307,9 @@ a full path.
 
 Its counterpart for PDF files is `R_PDFVIEWER`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Making manuals](#Making-manuals), Previous: [Setting the
-browsers](#Setting-the-browsers), Up: [Configuration
-variables](#Configuration-variables)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### B.3.3 Compilation flags 
+#### B.3.3 Compilation flags
 
 If you have libraries and header files, e.g., for GNU readline, in
 non-system directories, use the variables `LDFLAGS` (for libraries,
@@ -4963,29 +4339,16 @@ family (e.g. '`-mtune=native`' for `gcc`) can give worthwhile
 performance gains, especially on older architectures such as
 '`ix86`'.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Compilation flags](#Compilation-flags), Up: [Configuration
-variables](#Configuration-variables)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### B.3.4 Making manuals 
-
- 
+#### B.3.4 Making manuals
 
 The default settings for making the manuals are controlled by `R_RD4PDF`
 and `R_PAPERSIZE`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using make](#Using-make), Previous: [Configuration
-variables](#Configuration-variables), Up: [Configuration on a
-Unix-alike](#Configuration-on-a-Unix_002dalike)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### B.4 Setting the shell 
+### B.4 Setting the shell
 
 By default the shell scripts such as `R` will be
 '`#!/bin/sh`' scripts (or using the `SHELL` chosen by
@@ -4995,15 +4358,9 @@ to be used can be changed by setting the configure variable `R_SHELL` to
 a suitable value (a full path to a shell, e.g.
 `/usr/local/bin/bash`).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using Fortran](#Using-Fortran), Previous: [Setting the
-shell](#Setting-the-shell), Up: [Configuration on a
-Unix-alike](#Configuration-on-a-Unix_002dalike)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### B.5 Using make 
+### B.5 Using make
 
 To compile R, you will most likely find it easiest to use GNU `make`,
 although the Sun `make` works on Solaris.
@@ -5017,20 +4374,13 @@ If you want to use a `make` by another name, for example if your GNU
 `make` is called '`gmake`', you need to set the variable `MAKE`
 at configure time, for example
 
- 
-``` 
+```r
 ./configure MAKE=gmake
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Compile and load flags](#Compile-and-load-flags), Previous:
-[Using make](#Using-make), Up: [Configuration on a
-Unix-alike](#Configuration-on-a-Unix_002dalike)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### B.6 Using Fortran 
+### B.6 Using Fortran
 
 To compile R, you need a Fortran 90 compiler. The current default is to
 search for `gfortran`, `g95`, `xlf95` `f95`, `fort`, `ifort`, `ifc`,
@@ -5044,13 +4394,13 @@ this can be specified as part of `FCFLAGS`.
 
 The search mechanism can be changed using the configure variable `FC`
 which specifies the command that runs the Fortran compiler. If your
-Fortran compiler is in a non-standard location, you 
+Fortran compiler is in a non-standard location, you
 should set the environment variable `PATH` accordingly before running
 `configure`, or use the configure variable `FC` to specify its full
 path.
 
 If your Fortran libraries are in slightly peculiar places, you should
- also look at `LD_LIBRARY_PATH` (or
+also look at `LD_LIBRARY_PATH` (or
 your system's equivalent) to make sure that all libraries are on this
 path.
 
@@ -5074,95 +4424,89 @@ to allow this (with a warning), add
 `-fallow-argument-mismatch`[^71^](#FOOT71) to
 `FFLAGS`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Maintainer mode](#Maintainer-mode), Previous: [Using
-Fortran](#Using-Fortran), Up: [Configuration on a
-Unix-alike](#Configuration-on-a-Unix_002dalike)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### B.7 Compile and load flags 
+### B.7 Compile and load flags
 
 A wide range of flags can be set in the file `config.site` or
 as configure variables on the command line. We have already mentioned
 
 `CPPFLAGS`
 
-:   header file search directory (`-I`) and any other
-    miscellaneous options for the C and C++ preprocessors and compilers
+: header file search directory (`-I`) and any other
+miscellaneous options for the C and C++ preprocessors and compilers
 
 `LDFLAGS`
 
-:   path (`-L`), stripping (`-s`) and any other
-    miscellaneous options for the linker
+: path (`-L`), stripping (`-s`) and any other
+miscellaneous options for the linker
 
 and others include
 
 `CFLAGS`
 
-:   debugging and optimization flags, C
+: debugging and optimization flags, C
 
 `MAIN_CFLAGS`
 
-:   ditto, for compiling the main program (e.g. when profiling)
+: ditto, for compiling the main program (e.g. when profiling)
 
 `SHLIB_CFLAGS`
 
-:   for shared objects (no known examples)
+: for shared objects (no known examples)
 
 `FFLAGS`
 
-:   debugging and optimization flags, fixed-form Fortran
+: debugging and optimization flags, fixed-form Fortran
 
 `FCFLAGS`
 
-:   debugging and optimization flags, free-form Fortran
+: debugging and optimization flags, free-form Fortran
 
 `SAFE_FFLAGS`
 
-:   ditto for source files which need exact floating point behaviour
+: ditto for source files which need exact floating point behaviour
 
 `MAIN_FFLAGS`
 
-:   ditto, for compiling the main program (e.g. when profiling)
+: ditto, for compiling the main program (e.g. when profiling)
 
 `SHLIB_FFLAGS`
 
-:   for shared objects (no known examples)
+: for shared objects (no known examples)
 
 `MAIN_LDFLAGS`
 
-:   additional flags for the main link
+: additional flags for the main link
 
 `SHLIB_LDFLAGS`
 
-:   additional flags for linking the shared objects
+: additional flags for linking the shared objects
 
 `LIBnn`
 
-:   the primary library directory, `lib` or `lib64`
+: the primary library directory, `lib` or `lib64`
 
 `CPICFLAGS`
 
-:   special flags for compiling C code to be turned into a shared object
+: special flags for compiling C code to be turned into a shared object
 
 `FPICFLAGS`
 
-:   special flags for compiling Fortran code to be turned into a shared
-    object
+: special flags for compiling Fortran code to be turned into a shared
+object
 
 `CXXPICFLAGS`
 
-:   special flags for compiling C++ code to be turned into a shared
-    object
+: special flags for compiling C++ code to be turned into a shared
+object
 
 `DEFS`
 
-:   defines to be used when compiling C code in R itself
+: defines to be used when compiling C code in R itself
 
 Library paths specified as `-L/lib/path` in `LDFLAGS` are
- collected together and prepended to
+collected together and prepended to
 `LD_LIBRARY_PATH` (or your system's equivalent), so there should be no
 need for `-R` or `-rpath` flags.
 
@@ -5193,14 +4537,9 @@ On some platforms `configure` will select additional flags for `CFLAGS`,
 options which are always required, for example to force IEC 60559
 compliance.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Compile and load flags](#Compile-and-load-flags), Up:
-[Configuration on a Unix-alike](#Configuration-on-a-Unix_002dalike)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### B.8 Maintainer mode 
+### B.8 Maintainer mode
 
 There are several files that are part of the R sources but can be
 re-generated from their own sources by configuring with option
@@ -5234,16 +4573,9 @@ package **noweb**. It can also be installed from the sources at
 package sources are only re-created even in maintainer mode if
 `src/library/compiler/noweb/compiler.nw` has been updated.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [The Windows toolset](#The-Windows-toolset), Previous:
-[Configuration on a Unix-alike](#Configuration-on-a-Unix_002dalike), Up:
-[Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-Appendix C Platform notes 
--------------------------
+## Appendix C Platform notes
 
 This section provides some notes on building R on different Unix-alike
 platforms. These notes are based on tests run on one or two systems in
@@ -5263,8 +4595,7 @@ C macros to select particular platforms can be tricky to track down
 helpful. The R sources have used (often in included software under
 `src/extra`)
 
- 
-``` 
+```r
 AIX: _AIX
 Cygwin: __CYGWIN__
 FreeBSD: __FreeBSD__
@@ -5278,25 +4609,22 @@ Solaris: __sun, sun
 Windows: _WIN32, _WIN64
 ```
 
-  ----------------------------------- ---- --
-  • [X11 issues](#X11-issues)              
-  • [Linux](#Linux)                        
-  • [macOS](#macOS)                        
-  • [Solaris](#Solaris)                    
-  • [FreeBSD](#FreeBSD)                    
-  • [OpenBSD](#OpenBSD)                    
-  • [Cygwin](#Cygwin)                      
-  • [New platforms](#New-platforms)        
-  ----------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [X11 issues](#X11-issues)     
+ • [Linux](#Linux)     
+ • [macOS](#macOS)     
+ • [Solaris](#Solaris)     
+ • [FreeBSD](#FreeBSD)     
+ • [OpenBSD](#OpenBSD)     
+ • [Cygwin](#Cygwin)     
+ • [New platforms](#New-platforms)
 
- 
-Next: [Linux](#Linux), Previous: [Platform notes](#Platform-notes), Up:
-[Platform notes](#Platform-notes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### C.1 X11 issues 
+---
+
+### C.1 X11 issues
 
 The '`X11()`' graphics device is the one started automatically
 on Unix-alikes (except most macOS builds) when plotting. As its name
@@ -5317,8 +4645,7 @@ ones, it is likely that you are not using scalable fonts and have not
 installed the 100dpi versions of the X11 fonts. The names and details
 differ by system, but will likely have something like Fedora's
 
- 
-``` 
+```r
 xorg-x11-fonts-75dpi
 xorg-x11-fonts-100dpi
 xorg-x11-fonts-ISO8859-2-75dpi
@@ -5342,8 +4669,7 @@ idea of a close match. For text (as distinct from the symbols used by
 plotmath), the specification is the first element of the option
 `"X11fonts"` which defaults to
 
- 
-``` 
+```r
 "-adobe-helvetica-%s-%s-*-*-%d-*-*-*-*-*-*-*"
 ```
 
@@ -5358,7 +4684,7 @@ further font packages, such as
 Multi-byte encodings (most commonly UTF-8) are even more complicated.
 There are few fonts in '`iso10646-1`', the Unicode encoding,
 and they only contain a subset of the available glyphs (and are often
-fixed-width designed for use in terminals). In such locales *fontsets*
+fixed-width designed for use in terminals). In such locales _fontsets_
 are used, made up of fonts encoded in other encodings. If the locale you
 are using has an entry in the '`XLC_LOCALE`' directory
 (typically `/usr/share/X11/locale`), it is likely that all you
@@ -5381,20 +4707,14 @@ are generally not part of the default install, and the X server may need
 to be configured to use them. They might be under the X11
 `fonts` directory or elsewhere, for example,
 
- 
-``` 
+```r
 /usr/share/fonts/default/Type1
 /usr/share/fonts/ja/TrueType
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [macOS](#macOS), Previous: [X11 issues](#X11-issues), Up:
-[Platform notes](#Platform-notes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### C.2 Linux 
+### C.2 Linux
 
 Linux is the main development platform for R, so compilation from the
 sources is normally straightforward with the most common compilers and
@@ -5411,8 +4731,7 @@ add the developer package. (On most systems you will also need
 dependencies of the '`readline`' package(s).) You should expect
 to see in the `configure` summary
 
- 
-``` 
+```r
   Interfaces supported:      X11, tcltk
   External libraries:        readline, curl
   Additional capabilities:   PNG, JPEG, TIFF, NLS, cairo, ICU
@@ -5441,8 +4760,7 @@ the compilers this has caused problems in at least one CRAN package.
 
 For platforms with both 64- and 32-bit support, it is likely that
 
- 
-``` 
+```r
 LDFLAGS="-L/usr/local/lib64 -L/usr/local/lib"
 ```
 
@@ -5450,12 +4768,11 @@ is appropriate since most (but not all) software installs its 64-bit
 libraries in `/usr/local/lib64`. To build a 32-bit version of R
 on '`x86_64`' with Fedora 28 we used
 
- 
-``` 
+```r
 CC="gcc -m32"
 CXX="g++ -m32"
 FC="gfortran -m32"
-OBJC=$
+OBJC=${CC}
 LDFLAGS="-L/usr/local/lib"
 LIBnn=lib
 ```
@@ -5467,8 +4784,7 @@ for example the 32-bit Tcl/Tk configure scripts are in
 `/usr/lib`. It may also be necessary to set the `pkg-config`
 path, e.g. by
 
- 
-``` 
+```r
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/lib/pkgconfig
 ```
 
@@ -5486,8 +4802,7 @@ flag `--with-internal-tzcode`.
 To build a 64-bit version of R on '`ppc64`' (also known as
 '`powerpc64`') with `gcc` 4.1.1, Ei-ji Nakama used
 
- 
-``` 
+```r
 CC="gcc -m64"
 CXX="gxx -m64"
 FC="gfortran -m64"
@@ -5504,22 +4819,20 @@ should not need additional flags on platforms other than
 For the latter, if the Fortran compiler is GNU (`gfortran` or possibly
 `g77`) the flags
 
- 
-``` 
+```r
 -msse2 -mfpmath=sse
 ```
 
 are added: earlier versions of R added `-ffloat-store` and this
 might still be needed if a '`ix86`' CPU is encountered without
-SSE2 support. Note that it is a *replacement* for '`FFLAGS`',
+SSE2 support. Note that it is a _replacement_ for '`FFLAGS`',
 so should include all the flags in that macro (except perhaps the
 optimization level).
 
 Additional compilation flags can be specified for added safety/security
 checks. For example Fedora 30 adds
 
- 
-``` 
+```r
 -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS
 -Fexceptions -fstack-protector-strong -fasynchronous-unwind-tables
 -fstack-clash-protection -fcf-protection
@@ -5531,19 +4844,16 @@ none of these are documented for `gfortran`). Use of
 `_GLIBCXX_ASSERTIONS` will link `abort` and `printf` into almost all C++
 code, and `R CMD check --as-cran` will warn.
 
-  --------------------------------------- ---- --
-  • [Clang](#Clang)                            
-  • [Intel compilers](#Intel-compilers)        
-  --------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Clang](#Clang)     
+ • [Intel compilers](#Intel-compilers)
 
- 
-Next: [Intel compilers](#Intel-compilers), Previous: [Linux](#Linux),
-Up: [Linux](#Linux)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### C.2.1 Clang 
+---
+
+#### C.2.1 Clang
 
 R has been built with Linux '`ix86`' and '`x86_64`' C
 and C++ compilers (<http://clang.llvm.org>) based on the Clang
@@ -5556,7 +4866,7 @@ needed for some versions of `gfortran`.
 
 The current out-of-the-box default for `clang++` is to use the C++
 runtime from the installed `g++`. Using the runtime from the `libc++`
-project (<http://libcxx.llvm.org/>, Fedora RPM `libcxx-devel`) *via*
+project (<http://libcxx.llvm.org/>, Fedora RPM `libcxx-devel`) _via_
 `-stdlib=libc++` has also been tested.
 
 Recent versions have (optional when built) OpenMP
@@ -5567,8 +4877,7 @@ There is a project called `flang`
 compiler similar to clang but based on the Portland Group's front end.
 This needs something like
 
- 
-``` 
+```r
 FC=/usr/local/flang/bin/flang
 LDFLAGS="-L/usr/local/flang/lib -L/usr/local/lib64"
 ```
@@ -5588,20 +4897,15 @@ experiments were done on '`x86_64`'. At the time of writing
 binary 'releases' were available for that platform (called by them
 '`x86`') and '`ppc64le`'.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Clang](#Clang), Up: [Linux](#Linux)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### C.2.2 Intel compilers 
+#### C.2.2 Intel compilers
 
 Intel compilers have been used under '`ix86`' and
 '`x86_64`' Linux. Brian Ripley used version 9.0 of the
 compilers for '`x86_64`' on Fedora Core 5 with
 
- 
-``` 
+```r
 CC=icc
 CFLAGS="-g -O3 -wd188 -ip -mp"
 FC=ifort
@@ -5629,8 +4933,7 @@ Others have reported success with versions 10.x and 11.x. Bjørn-Helge
 Mevik reported success with version 2015.3 of the compilers, using (for
 a SandyBridge CPU on Centos 6.x)
 
- 
-``` 
+```r
 fast="-fp-model precise -ip -O3 -opt-mem-layout-trans=3 -xHost -mavx"
 CC=icc
 CFLAGS="$fast -wd188"
@@ -5643,19 +4946,13 @@ CXXFLAGS="$fast"
 It is possible that 32-builds need to force the use of SSE2 instructions
 in `SAFE_FFLAGS`, e.g. by
 
- 
-``` 
+```r
 SAFE_FFLAGS=-axsse2
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Solaris](#Solaris), Previous: [Linux](#Linux), Up: [Platform
-notes](#Platform-notes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### C.3 macOS 
+### C.3 macOS
 
 ('macOS' was known as 'OS X' from 2012--2016.)
 
@@ -5664,125 +4961,115 @@ The instructions here are for 64-bit ('`x86_64`') builds on
 later, although this is little tested and it may be necessary to install
 later versions of software such as `libcurl`.
 
-  --------------------------------------------------------------------------- ---- --
-  • [Prerequisites](#Prerequisites)                                                
-  • [Recommended C/C++ compilers](#Recommended-C_002fC_002b_002b-compilers)        
-  • [Other libraries](#Other-libraries)                                            
-  • [Tcl/Tk headers and libraries](#Tcl_002fTk-headers-and-libraries)              
-  • [Java (macOS)](#Java-_0028macOS_0029)                                          
-  • [Frameworks](#Frameworks)                                                      
-  • [Building R.app](#Building-R_002eapp)                                          
-  --------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Prerequisites](#Prerequisites)     
+ • [Recommended C/C++ compilers](#Recommended-C_002fC_002b_002b-compilers)     
+ • [Other libraries](#Other-libraries)     
+ • [Tcl/Tk headers and libraries](#Tcl_002fTk-headers-and-libraries)     
+ • [Java (macOS)](#Java-_0028macOS_0029)     
+ • [Frameworks](#Frameworks)     
+ • [Building R.app](#Building-R_002eapp)
 
- 
-Next: [Recommended C/C++
-compilers](#Recommended-C_002fC_002b_002b-compilers), Previous:
-[macOS](#macOS), Up: [macOS](#macOS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### C.3.1 Prerequisites 
+---
+
+#### C.3.1 Prerequisites
 
 The following are essential to build R
 
--   Apple's 'Command Line Tools': these can be (re-)installed by
-    `xcode-select --install`. (If you have a fresh OS installation,
-    running e.g. `make` in a terminal will offer the installation of the
-    command-line tools. If you have installed Xcode, this provides the
-    command-line tools. The tools may need to be reinstalled when macOS
-    is upgraded, as upgrading partially removes them.)
+- Apple's 'Command Line Tools': these can be (re-)installed by
+  `xcode-select --install`. (If you have a fresh OS installation,
+  running e.g. `make` in a terminal will offer the installation of the
+  command-line tools. If you have installed Xcode, this provides the
+  command-line tools. The tools may need to be reinstalled when macOS
+  is upgraded, as upgrading partially removes them.)
 
-    The Command Line Tools provide C and C++ compilers.
+  The Command Line Tools provide C and C++ compilers.
 
--   A Fortran compiler. Installers[^78^](#FOOT78) are available
-    at
+- A Fortran compiler. Installers[^78^](#FOOT78) are available
+  at
 
-    -   El Capitan and later\
-        <https://cran.r-project.org/bin/macosx/tools/gfortran-6.1.pkg>,\
-        which is a re-packaged (signed) version of\
-        <https://github.com/fxcoudert/gfortran-for-macOS/releases/download/6.1/gfortran-6.1-ElCapitan.dmg>
-    -   Sierra and High Sierra\
-        <https://github.com/fxcoudert/gfortran-for-macOS/releases/download/6.3/gfortran-6.3-Sierra.dmg>
-    -   Mojave and later\
-        <https://github.com/fxcoudert/gfortran-for-macOS/releases/download/8.2/gfortran-8.2-Mojave.dmg>.
+  - El Capitan and later\
+    <https://cran.r-project.org/bin/macosx/tools/gfortran-6.1.pkg>,\
+    which is a re-packaged (signed) version of\
+    <https://github.com/fxcoudert/gfortran-for-macOS/releases/download/6.1/gfortran-6.1-ElCapitan.dmg>
+  - Sierra and High Sierra\
+    <https://github.com/fxcoudert/gfortran-for-macOS/releases/download/6.3/gfortran-6.3-Sierra.dmg>
+  - Mojave and later\
+    <https://github.com/fxcoudert/gfortran-for-macOS/releases/download/8.2/gfortran-8.2-Mojave.dmg>.
 
-    These all install into `/usr/local/gfortran`. Its
-    `bin` directory does not need to be on the path as a full
-    path can be used for `FC`: see below.
+  These all install into `/usr/local/gfortran`. Its
+  `bin` directory does not need to be on the path as a full
+  path can be used for `FC`: see below.
 
--   Binary components `pcre` and `xz` (for `libzma`) from
-    <https://mac.R-project.org/libs>, as recent macOS versions provide
-    libraries but not headers for these (and the system `pcre` is too
-    old at 8.02 for versions up to Sierra, although High Sierra had
-    8.40). For example
-     
-    ``` 
-    curl -OL https://mac.r-project.org/libs/pcre-8.40-darwin.15-x86_64.tar.gz
-    sudo tar -fvxz pcre-8.40-darwin.15-x86_64.tar.gz -C /
-    curl -OL https://mac.r-project.org/libs/xz-5.2.3-darwin.15-x86_64.tar.gz
-    sudo tar -fvxz xz-5.2.3-darwin.15-x86_64.tar.gz -C /
-    ```
-    
+- Binary components `pcre` and `xz` (for `libzma`) from
+  <https://mac.R-project.org/libs>, as recent macOS versions provide
+  libraries but not headers for these (and the system `pcre` is too
+  old at 8.02 for versions up to Sierra, although High Sierra had
+  8.40). For example
+
+  ```r
+  curl -OL https://mac.r-project.org/libs/pcre-8.40-darwin.15-x86_64.tar.gz
+  sudo tar -fvxz pcre-8.40-darwin.15-x86_64.tar.gz -C /
+  curl -OL https://mac.r-project.org/libs/xz-5.2.3-darwin.15-x86_64.tar.gz
+  sudo tar -fvxz xz-5.2.3-darwin.15-x86_64.tar.gz -C /
+  ```
 
 and desirable
 
--   GNU `readline` from <https://mac.R-project.org/libs>, or configure
-    with `--without-readline`.
+- GNU `readline` from <https://mac.R-project.org/libs>, or configure
+  with `--without-readline`.
 
--   Components `jpeg`, `libpng`, `pkgconfig`, `pkgconfig-system-stubs`
-    and `tiff` from <https://mac.R-project.org/libs>, for the full range
-    of bitmapped graphics devices.
+- Components `jpeg`, `libpng`, `pkgconfig`, `pkgconfig-system-stubs`
+  and `tiff` from <https://mac.R-project.org/libs>, for the full range
+  of bitmapped graphics devices.
 
--   An X sub-system unless configuring using `--without-x`: see
-    <https://xquartz.macosforge.org/>. R's `configure` script can be
-    told to look for `X11` in `XQuartz`'s main location of
-    `/opt/X11`, e.g. by
+- An X sub-system unless configuring using `--without-x`: see
+  <https://xquartz.macosforge.org/>. R's `configure` script can be
+  told to look for `X11` in `XQuartz`'s main location of
+  `/opt/X11`, e.g. by
 
-     
-    ``` 
-    --x-includes=/opt/X11/include --x-libraries=/opt/X11/lib
-    ```
-    
+```r
+--x-includes=/opt/X11/include --x-libraries=/opt/X11/lib
+```
 
-    although linked versions under `/usr/X11` will be found.
+although linked versions under `/usr/X11` will be found.
 
--   An Objective-C compiler, as provided by `clang` in the Command Line
-    Tools: this is needed for the `quartz()` graphics device.
+- An Objective-C compiler, as provided by `clang` in the Command Line
+  Tools: this is needed for the `quartz()` graphics device.
 
-    Use `--without-aqua` if you want a standard Unix-alike
-    build: apart from disabling `quartz()` and the ability to use the
-    build with [R.APP], it also changes the default location of
-    the personal library (see `?.libPaths`).
+  Use `--without-aqua` if you want a standard Unix-alike
+  build: apart from disabling `quartz()` and the ability to use the
+  build with [R.APP]{.small}, it also changes the default location of
+  the personal library (see `?.libPaths`).
 
--   Support for `cairo` (without `Pango`) can be enabled if `pkg-config`
-    and XQuartz are available. Make sure the XQuartz's `pkg-config`
-    files are found first on the configuration path: for example by
-    setting
+- Support for `cairo` (without `Pango`) can be enabled if `pkg-config`
+  and XQuartz are available. Make sure the XQuartz's `pkg-config`
+  files are found first on the configuration path: for example by
+  setting
 
-     
-    ``` 
-    export PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/lib/pkgconfig
-    ```
-    
+```r
+export PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/lib/pkgconfig
+```
 
-    or appending that variable to the `configure` command.
+or appending that variable to the `configure` command.
 
--   A TeX installation. See [Other libraries](#Other-libraries).
+- A TeX installation. See [Other libraries](#Other-libraries).
 
--   `texi2any` from a '`texinfo`' distribution, which requires
-    `perl` (currently part of macOS but it has been announced that it
-    will not be from macOS 10.16). (An old version of `texi2any` has
-    been included in the binary distribution of R.)
+- `texi2any` from a '`texinfo`' distribution, which requires
+  `perl` (currently part of macOS but it has been announced that it
+  will not be from macOS 10.16). (An old version of `texi2any` has
+  been included in the binary distribution of R.)
 
--   Compilers supporting OpenMP: see the next subsection.
+- Compilers supporting OpenMP: see the next subsection.
 
 To build R itself from the sources with the compilers in the Command
 Line Tools (or Xcode) and one of the `gfortran` installers, use a file
 `config.site` containing
 
- 
-``` 
+```r
 CC=clang
 OBJC=$CC
 FC=/usr/local/gfortran/bin/gfortran
@@ -5791,8 +5078,7 @@ CXX=clang++
 
 and configure by something like
 
- 
-``` 
+```r
 ./configure -C \
 --enable-R-shlib --enable-memory-profiling \
 --x-includes=/opt/X11/include --x-libraries=/opt/X11/lib \
@@ -5804,18 +5090,15 @@ and appropriate compilers, e.g. Fortran and the C/C++ compilers from
 those tools. Some packages have further requirements such as
 `pkg-config`.
 
-  ------------------------------------------------------- ---- --
-  • [Note for Catalina users](#Note-for-Catalina-users)        
-  ------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Note for Catalina users](#Note-for-Catalina-users)
 
- 
-Previous: [Prerequisites](#Prerequisites), Up:
-[Prerequisites](#Prerequisites)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### C.3.1.1 Note for Catalina users 
+---
+
+#### C.3.1.1 Note for Catalina users
 
 The default security settings for Catalina can make it difficult to
 install Apple packages built after 2019-06-01 which have not been
@@ -5832,14 +5115,9 @@ warning message.
 This applies also to some R distributions, including R 3.6.2 and
 'nightly builds' from <https://mac.r-project.org/>.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Other libraries](#Other-libraries), Previous:
-[Prerequisites](#Prerequisites), Up: [macOS](#macOS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### C.3.2 Recommended C/C++ compilers 
+#### C.3.2 Recommended C/C++ compilers
 
 CRAN binary distributions of R 3.6.x use the build of `clang` 7.0.0
 contained in
@@ -5853,8 +5131,7 @@ Suppose one of these distributions is installed under
 `/usr/local/clang7`. Use a file `config.site`
 containing
 
- 
-``` 
+```r
 CC=/usr/local/clang7/bin/clang
 OBJC=$CC
 FC=/usr/local/gfortran/bin/gfortran
@@ -5867,8 +5144,7 @@ The care to specify library paths is to ensure that the OpenMP runtime
 library, here `/usr/local/clang7/lib/libomp.dylib`, is found
 when needed. If this works, you should see the line
 
- 
-``` 
+```r
 checking whether OpenMP SIMD reduction is supported... yes
 ```
 
@@ -5880,8 +5156,7 @@ For macOS 10.14 ('Mojave') and versions 10.x of the Command Line Tools,
 an additional step is needed to install the headers to
 `/usr/include`: from a Terminal run
 
- 
-``` 
+```r
 sudo installer -pkg \
 /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg \
 -target /
@@ -5890,10 +5165,9 @@ sudo installer -pkg \
 (This will need to be re-run if the OS decides to update the Command
 Line Tools.)
 
-Alternatively, change the system paths *via*
+Alternatively, change the system paths _via_
 
- 
-``` 
+```r
 CC="/usr/local/clang7/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
 CXX="/usr/local/clang7/bin/clang++ -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
 ```
@@ -5904,34 +5178,23 @@ CXX="/usr/local/clang7/bin/clang++ -isysroot /Library/Developer/CommandLineTools
 This alternative approach is needed for versions 11.x of the Command
 Line Tools/Xcode.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Tcl/Tk headers and libraries](#Tcl_002fTk-headers-and-libraries),
-Previous: [Recommended C/C++
-compilers](#Recommended-C_002fC_002b_002b-compilers), Up:
-[macOS](#macOS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+#### C.3.3 Other libraries
 
-#### C.3.3 Other libraries 
-
-Pre-compiled versions of many of the [Useful libraries and
-programs](#Useful-libraries-and-programs) are available from
+Pre-compiled versions of many of the [Useful libraries and programs](#Useful-libraries-and-programs) are available from
 <https://mac.R-project.org/libs/>.
 
- 
-
-The `Accelerate` library[^80^](#FOOT80) can be used *via* the
+The `Accelerate` library[^80^](#FOOT80) can be used _via_ the
 configuration options
 
- 
-``` 
+```r
 --with-blas="-framework Accelerate"
 ```
 
 to provide potentially higher-performance versions of the BLAS and
 LAPACK routines.[^81^](#FOOT81) This also includes a full
-LAPACK which can be used *via* `--with-lapack`: however, the
+LAPACK which can be used _via_ `--with-lapack`: however, the
 version of LAPACK it contains is often seriously old.
 
 In recent versions of macOS, threading in Accelerate is controlled by
@@ -5942,8 +5205,7 @@ Looking at the top of
 show the compilers and configuration options used for the CRAN binary
 package for R: at the time of writing the non-default options
 
- 
-``` 
+```r
 --enable-memory-profiling --enable-R-framework --x-libraries=/opt/X11/lib
 ```
 
@@ -5963,7 +5225,7 @@ add some packages, e.g. for the 2019 version we needed to
 add[^82^](#FOOT82) **cm-super**, **helvetic**, **inconsolata**
 and **texinfo** which brought this to about 310MB. (After updates in Dec
 2019 it was also necessary to add **letltxmacro** to make
-`NEWS.pdf`.) '`TeX Live Utility`' (available *via* the
+`NEWS.pdf`.) '`TeX Live Utility`' (available _via_ the
 MacTeX front page) provides a graphical means to manage TeX packages.
 This is documented to require Sierra or later: for earlier versions see
 the instructions on the MacTeX front page.
@@ -5981,39 +5243,32 @@ This means that if you install tools from the sources they will by
 default be installed under `/usr/local` and not supersede the
 system versions.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Java (macOS)](#Java-_0028macOS_0029), Previous: [Other
-libraries](#Other-libraries), Up: [macOS](#macOS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### C.3.4 Tcl/Tk headers and libraries 
+#### C.3.4 Tcl/Tk headers and libraries
 
 If you plan to use the `tcltk` package for R, you need to install a
 distribution of Tcl/Tk. There are two alternatives. If you use
-[R.APP] you will want to use X11-based Tcl/Tk (as used on other
+[R.APP]{.small} you will want to use X11-based Tcl/Tk (as used on other
 Unix-alikes), which is installed as part of the CRAN binary for R and
 available as separate `tcl` and `tk` components from
 <https://mac.R-project.org/libs/>. This may need `configure` options
 
- 
-``` 
+```r
 -with-tcltk=/usr/local/lib
 ```
 
 or
 
- 
-``` 
---with-tcl-config=/usr/local/lib/tclConfig.sh 
+```r
+--with-tcl-config=/usr/local/lib/tclConfig.sh
 --with-tk-config=/usr/local/lib/tkConfig.sh
 ```
 
 Note that this requires a matching XQuartz installation.
 
 There is also a native ('Aqua') version of Tcl/Tk which produces widgets
-in the native macOS style: this will not work with [R.APP]
+in the native macOS style: this will not work with [R.APP]{.small}
 because of conflicts over the macOS menu, but for those only using
 command-line R this provides a much more intuitive interface to Tk for
 experienced Mac users. Most versions of macOS come with Aqua Tcl/Tk
@@ -6023,29 +5278,22 @@ is better to install Tcl/Tk 8.6.x from the sources or a binary
 distribution from <https://www.activestate.com/activetcl/downloads>.
 Configure R with
 
- 
-``` 
---with-tcl-config=/Library/Frameworks/Tcl.framework/tclConfig.sh 
+```r
+--with-tcl-config=/Library/Frameworks/Tcl.framework/tclConfig.sh
 --with-tk-config=/Library/Frameworks/Tk.framework/tkConfig.sh
 ```
 
 If you need to find out which distribution of Tk is in use at run time,
 use
 
- 
-``` 
+```r
 library(tcltk)
 tclvalue(.Tcl("tk windowingsystem"))  # "x11" or "aqua"
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Frameworks](#Frameworks), Previous: [Tcl/Tk headers and
-libraries](#Tcl_002fTk-headers-and-libraries), Up: [macOS](#macOS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### C.3.5 Java 
+#### C.3.5 Java
 
 The situation with Java support on macOS is
 messy,[^83^](#FOOT83) and distribution of Java for all
@@ -6082,22 +5330,20 @@ The build process tries to fathom out what JRE/JDK to use, but it may
 need some help, e.g. by setting `JAVA_HOME`. A JDK can be specified
 explicitly by something like
 
- 
-``` 
+```r
 JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home
-JAVA_CPPFLAGS="-I/$/include -I/$/include/darwin"
-JAVA_LD_LIBRARY_PATH="$/lib/server"
-JAVA_LIBS="-L/$/lib/server -ljvm" 
+JAVA_CPPFLAGS="-I/${JAVA_HOME}/include -I/${JAVA_HOME}/include/darwin"
+JAVA_LD_LIBRARY_PATH="${JAVA_HOME}/lib/server"
+JAVA_LIBS="-L/${JAVA_HOME}/lib/server -ljvm"
 ```
 
 or
 
- 
-``` 
+```r
 JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home
-JAVA_CPPFLAGS="-I/$/include -I/$/include/darwin"
-JAVA_LD_LIBRARY_PATH="$/jre/lib/server"
-JAVA_LIBS="-L/$/jre/lib/server -ljvm" 
+JAVA_CPPFLAGS="-I/${JAVA_HOME}/include -I/${JAVA_HOME}/include/darwin"
+JAVA_LD_LIBRARY_PATH="${JAVA_HOME}/jre/lib/server"
+JAVA_LIBS="-L/${JAVA_HOME}/jre/lib/server -ljvm"
 ```
 
 in `config.site`.
@@ -6105,8 +5351,7 @@ in `config.site`.
 To use the builds of OpenJDK (tarballs) from <http://jdk.java.net/>, set
 `JAVA_HOME`:
 
- 
-``` 
+```r
 JAVA_HOME=/path/to/JDK/jdk-11.jdk/Contents/Home
 ```
 
@@ -6116,20 +5361,14 @@ unpacked.
 Note that it is necessary to set the environment variable `NOAWT` to `1`
 to install many of the Java-using packages.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Building R.app](#Building-R_002eapp), Previous: [Java
-(macOS)](#Java-_0028macOS_0029), Up: [macOS](#macOS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### C.3.6 Frameworks 
+#### C.3.6 Frameworks
 
 The CRAN build of R is installed as a framework, which is selected by
 the option
 
- 
-``` 
+```r
 ./configure --enable-R-framework
 ```
 
@@ -6137,16 +5376,15 @@ the option
 support frameworks correctly but those from `llvm.org` do.)
 
 It is only needed if you want to build R for use with the
-[R.APP] console, and implies `--enable-R-shlib` to
+[R.APP]{.small} console, and implies `--enable-R-shlib` to
 build R as a dynamic library. This option configures R to be built and
 installed as a framework called `R.framework`. The default
 installation path for `R.framework` is
 `/Library/Frameworks` but this can be changed at configure time
 by specifying the flag `--enable-R-framework[=DIR]` (or
-`--prefix`) or at install time *via*
+`--prefix`) or at install time _via_
 
- 
-``` 
+```r
 make prefix=/where/you/want/R.framework/to/go install
 ```
 
@@ -6155,56 +5393,47 @@ non-standard location) and Unix utilities may not support it (e.g. the
 `pkg-config` file `libR.pc` will be put somewhere unknown to
 `pkg-config`).
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Frameworks](#Frameworks), Up: [macOS](#macOS)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+#### C.3.7 Building R.app
 
-#### C.3.7 Building R.app 
-
-Note that building the [R.APP] GUI console is a separate
-project, using Xcode. Before compiling [R.APP] make sure the
+Note that building the [R.APP]{.small} GUI console is a separate
+project, using Xcode. Before compiling [R.APP]{.small} make sure the
 current version of R is installed in
 `/Library/Frameworks/R.framework` and working at the
 command-line (this can be a binary install).
 
 The current sources can be checked out by
 
- 
-``` 
+```r
 svn co https://svn.r-project.org/R-packages/trunk/Mac-GUI
 ```
 
 and built by loading the `R.xcodeproj` project (select the `R` target
 and a suitable configuration), or from the command-line by e.g.
 
- 
-``` 
+```r
 xcodebuild -target R -configuration Release
 ```
 
 See also the `INSTALL` file in the checkout or directly at
 <https://svn.r-project.org/R-packages/trunk/Mac-GUI/INSTALL>.
 
-[R.APP] does not need to be installed in any specific way.
-Building [R.APP] results in the [R.APP] bundle which
+[R.APP]{.small} does not need to be installed in any specific way.
+Building [R.APP]{.small} results in the [R.APP]{.small} bundle which
 appears as one R icon. This application bundle can be run anywhere and
 it is customary to place it in the `/Applications` folder.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [FreeBSD](#FreeBSD), Previous: [macOS](#macOS), Up: [Platform
-notes](#Platform-notes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### C.4 Solaris
 
-### C.4 Solaris 
+---
 
-  ------------------------------------------ ---- --
-  • [64-bit builds](#g_t64_002dbit-builds)        
-  • [Using gcc](#Using-gcc)                       
-  ------------------------------------------ ---- --
+• [64-bit builds](#g_t64_002dbit-builds)     
+ • [Using gcc](#Using-gcc)
+
+---
 
 R has been built successfully on Solaris 10 using the (zero cost) Oracle
 Developer Studio[^86^](#FOOT86) compilers: there has also been
@@ -6265,14 +5494,13 @@ reporting in the non-existent DST variant. Using `configure` option
 find time-zone abbreviations being given odd values (as has been seen on
 64-bit builds without it).
 
-When using the Oracle compilers do *not* specify `-fast`, as
+When using the Oracle compilers do _not_ specify `-fast`, as
 this disables IEEE arithmetic and `make check` will fail.
 
 A little juggling of paths was needed to ensure GNU `libiconv` (in
 `/usr/local`) was used rather than the Solaris `iconv`:
 
- 
-``` 
+```r
 CC="cc -xc99"
 CFLAGS="-O -xlibmieee"
 FC=f95
@@ -6293,8 +5521,7 @@ A peculiarity of some versions of the Fortran compiler has been that
 when asked to link a shared object they did not link against all the
 Fortran 9x runtime libraries, hence
 
- 
-``` 
+```r
 FCLIBS_XTRA="-lfsu /opt/developerstudio12.6/lib/libfui.so.2"
 ```
 
@@ -6303,10 +5530,9 @@ has been needed.
 Using `-xlibmil` in `CFLAGS` or `-xlibmil` in `FFLAGS` allows more
 system mathematical functions to be inlined.
 
-On '`x86`' you will get marginally higher performance *via*
+On '`x86`' you will get marginally higher performance _via_
 
- 
-``` 
+```r
 CFLAGS="-xO5 -xlibmieee -xlibmil -nofstore -xtarget=native"
 FFLAGS="-xO5 -libmil -nofstore -xtarget=native"
 CXXFLAGS="-xO5 -xlibmil -nofstore -xtarget=native"
@@ -6325,14 +5551,11 @@ which the choice given above is the only possibility. Although version
 12.5 accepted the flag `-std=c++14`, it did not pass
 `configure`'s conformance tests: version 12.6 does.
 
- 
-
 The performance library `sunperf` is available for use with the Oracle
 compilers. If selected as a BLAS, it must also be selected as LAPACK
-*via*
+_via_
 
- 
-``` 
+```r
 ./configure --with-blas='-library=sunperf' --with-lapack
 ```
 
@@ -6352,22 +5575,16 @@ automatically detected `libintl` from OpenCSW or selected the included
 
 It has been reported that some Solaris installations need
 
- 
-``` 
+```r
 INTERNET_LIBS="-lsocket -lnsl"
 ```
 
 on the `configure` command line or in file `config.site`;
 however, there have been many successful installs without this.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using gcc](#Using-gcc), Previous: [Solaris](#Solaris), Up:
-[Solaris](#Solaris)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### C.4.1 64-bit builds 
+#### C.4.1 64-bit builds
 
 On both '`x86`' and '`Sparc`' platforms the compilers
 default to 32-bit code.
@@ -6379,29 +5596,22 @@ library directories if used, e.g. `-L/opt/csw/lib/amd64`). It will also
 be necessary to point `pkg-config` at the 64-bit directories, e.g. by
 something like
 
- 
-``` 
+```r
 PKG_CONFIG_PATH= /usr/local/lib/amd64/pkgconfig:/opt/csw/lib/64/pkgconfig:/usr/lib/64/pkgconfig
 ```
 
 and to specify a 64-bit Java VM by e.g.
 
- 
-``` 
-JAVA_CPPFLAGS="-I$/../include -I$/../include/solaris"
-JAVA_LD_LIBRARY_PATH=$/lib/amd64/server
-JAVA_LIBS="-L$/lib/amd64/server \
-  -R$/lib/amd64/server -ljvm"
+```r
+JAVA_CPPFLAGS="-I${JAVA_HOME}/../include -I${JAVA_HOME}/../include/solaris"
+JAVA_LD_LIBRARY_PATH=${JAVA_HOME}/lib/amd64/server
+JAVA_LIBS="-L${JAVA_HOME}/lib/amd64/server \
+  -R${JAVA_HOME}/lib/amd64/server -ljvm"
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [64-bit builds](#g_t64_002dbit-builds), Up:
-[Solaris](#Solaris)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### C.4.2 Using gcc 
+#### C.4.2 Using gcc
 
 If using `gcc`, ensure that the compiler was compiled for the version of
 Solaris in use. (This can be ascertained from `gcc -v`.) `gcc` makes
@@ -6422,8 +5632,7 @@ be omitted, but it is not easy to find out which. (For OpenCSW it is
 
 Compilation for an '`x86`' target with `gcc` 5.2.0 needed
 
- 
-``` 
+```r
 CC="gcc -m32"
 CPPFLAGS="-I/opt/csw/include -I/usr/local/include"
 FC="gfortran -m32"
@@ -6433,8 +5642,7 @@ LDFLAGS="-L/opt/csw/lib -L/usr/local/lib"
 
 For an '`amd64`' target we used
 
- 
-``` 
+```r
 CC="gcc -m64"
 CPPFLAGS="-I/opt/csw/include -I/usr/local/include"
 FC="gfortran -m64"
@@ -6444,17 +5652,12 @@ LDFLAGS="-L/opt/csw/lib/amd64 -L/usr/local/lib/amd64"
 
 Note that paths such as `/opt/csw/lib`,
 `/usr/local/lib/amd64` and `/opt/csw/lib/amd64` may
-need to be in the  `LD_LIBRARY_PATH`
+need to be in the `LD_LIBRARY_PATH`
 during configuration.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [OpenBSD](#OpenBSD), Previous: [Solaris](#Solaris), Up: [Platform
-notes](#Platform-notes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### C.5 FreeBSD 
+### C.5 FreeBSD
 
 There have been few recent reports on FreeBSD: there is a 'port' at
 <https://www.freebsd.org/ports/math.html>. Recent versions of FreeBSD
@@ -6464,14 +5667,9 @@ configured to use GCC.
 Use of ICU for collation and the `configure` option
 `--with-internal-tzcode` are desirable workarounds.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Cygwin](#Cygwin), Previous: [FreeBSD](#FreeBSD), Up: [Platform
-notes](#Platform-notes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### C.6 OpenBSD 
+### C.6 OpenBSD
 
 Ingo Feinerer installed R version 3.2.2 on OpenBSD 5.8 arch
 '`amd64`' (their name for '`x86_64`'). Details of the
@@ -6480,27 +5678,18 @@ build (and patches applied) are at
 the `zlib` requirement to 1.2.3 is against the advice of the R
 developers.)
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [New platforms](#New-platforms), Previous: [OpenBSD](#OpenBSD),
-Up: [Platform notes](#Platform-notes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### C.7 Cygwin 
+### C.7 Cygwin
 
 The 32-bit version never worked well enough to pass R's `make check`,
 and residual support from earlier experiments was removed in R 3.3.0.
 
 The 64-bit version was never supported.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Cygwin](#Cygwin), Up: [Platform notes](#Platform-notes)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### C.8 New platforms 
+### C.8 New platforms
 
 There are a number of sources of problems when installing R on a new
 hardware/OS platform. These include
@@ -6552,24 +5741,17 @@ platform.
 If you are having trouble getting R to work on your platform please feel
 free to use the '`R-devel`' mailing list to ask questions. We
 have had a fair amount of practice at porting R to new platforms
-[\...]
+[\...]{.small}
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Function and variable index](#Function-and-variable-index),
-Previous: [Platform notes](#Platform-notes), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-Appendix D The Windows toolset 
-------------------------------
+## Appendix D The Windows toolset
 
 If you want to build R or add-on packages from source in Windows, you
 will need to collect, install and test an extensive set of tools. See
 <https://CRAN.R-project.org/bin/windows/Rtools/> for the current
 locations and other updates to these instructions. (Most Windows users
-will not need to build add-on packages from source; see [Add-on
-packages](#Add_002don-packages) for details.)
+will not need to build add-on packages from source; see [Add-on packages](#Add_002don-packages) for details.)
 
 We have found that the build process for R is quite sensitive to the
 choice of tools: please follow our instructions **exactly**, even to the
@@ -6578,9 +5760,9 @@ build process for add-on packages is somewhat more forgiving, but we
 recommend using the exact toolset at first, and only substituting other
 tools once you are familiar with the process.
 
-*This appendix contains a lot of prescriptive comments. They are here as
+_This appendix contains a lot of prescriptive comments. They are here as
 a result of bitter experience. Please do not report problems to the R
-mailing lists unless you have followed all the prescriptions.*
+mailing lists unless you have followed all the prescriptions._
 
 We have collected most of the necessary tools (unfortunately not all,
 due to license or size limitations) into an executable installer named
@@ -6593,8 +5775,8 @@ R.
 You will need the following items to build R and packages. See the
 subsections below for detailed descriptions.
 
--   The command line tools (in `Rtools*.exe`)
--   The MinGW-w64 32/64-bit toolchain to compile C, Fortran and C++.
+- The command line tools (in `Rtools*.exe`)
+- The MinGW-w64 32/64-bit toolchain to compile C, Fortran and C++.
 
 For installing simple source packages containing data or R source but no
 compiled code, none of these are needed.
@@ -6602,9 +5784,9 @@ compiled code, none of these are needed.
 A complete build of R including PDF manuals, and producing the installer
 will also need the following:
 
--   LaTeX
--   The Inno Setup installer
--   (optional) `qpdf`
+- LaTeX
+- The Inno Setup installer
+- (optional) `qpdf`
 
 It is important to set your `PATH` properly. The installer
 `Rtools*.exe` optionally sets the path to components that it
@@ -6618,8 +5800,7 @@ supported.
 
 For example for a 32-bit build, all on one line,
 
- 
-``` 
+```r
 PATH=c:\Rtools\bin;c:\MiKTeX\miktex\bin;
      c:\R\R-3.2\bin\i386;c:\windows;c:\windows\system32
 ```
@@ -6637,23 +5818,19 @@ found our tools did not work with a newer version of the Cygwin DLLs, so
 it may be safest not to have any other version of the Cygwin DLLs in
 your path.
 
-  ------------------------------------------------------------- ---- --
-  • [LaTeX](#LaTeX)                                                  
-  • [The Inno Setup installer](#The-Inno-Setup-installer)            
-  • [The command line tools](#The-command-line-tools)                
-  • [The MinGW-w64 toolchain](#The-MinGW_002dw64-toolchain)          
-  • [Useful additional programs](#Useful-additional-programs)        
-  ------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [LaTeX](#LaTeX)     
+ • [The Inno Setup installer](#The-Inno-Setup-installer)     
+ • [The command line tools](#The-command-line-tools)     
+ • [The MinGW-w64 toolchain](#The-MinGW_002dw64-toolchain)     
+ • [Useful additional programs](#Useful-additional-programs)
 
- 
-Next: [The Inno Setup installer](#The-Inno-Setup-installer), Previous:
-[The Windows toolset](#The-Windows-toolset), Up: [The Windows
-toolset](#The-Windows-toolset)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### D.1 LaTeX 
+---
+
+### D.1 LaTeX
 
 The '`MiKTeX`' (<http://www.miktex.org/>) distribution of LaTeX
 includes a suitable port of `pdftex`. This can be set up to install
@@ -6661,17 +5838,16 @@ extra packages 'on the fly', which is the simplest way to use it (and
 the default). The 'basic' version of '`MiKTeX`' almost
 suffices: when last checked packages
 
- 
-``` 
+```r
 epsf inconsolata mptopdf url
 ```
 
-needed to be added (on the fly or *via* the '`MiKTeX`' Package
+needed to be added (on the fly or _via_ the '`MiKTeX`' Package
 Manager) to install R. In any case ensure that the **inconsolata**
 package is installed---you can check with the '`MiKTeX`'
 Package Manager.
 
-The `Rtools*.exe` installer does *not* include any version of
+The `Rtools*.exe` installer does _not_ include any version of
 LaTeX.
 
 It is also possible to use the TeX Live distribution from
@@ -6682,34 +5858,23 @@ Please read [Making the manuals](#Making-the-manuals) about how to make
 suitably; ensure you have the required fonts installed or that
 '`MiKTeX`' is set up to install LaTeX packages on first use.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [The command line tools](#The-command-line-tools), Previous:
-[LaTeX](#LaTeX), Up: [The Windows toolset](#The-Windows-toolset)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### D.2 The Inno Setup installer 
+### D.2 The Inno Setup installer
 
 To make the installer package (`R-3.6.3-win.exe`) we currently
 require the Unicode version of Inno Setup 5.3.7 or later from
 <http://jrsoftware.org/> (starting from 6.0, Inno Setup provides only
-one version, which supports Unicode). This is *not* included in
+one version, which supports Unicode). This is _not_ included in
 `Rtools*.exe`.
 
 Copy file `src/gnuwin32/MkRules.dist` to
 `src/gnuwin32/MkRules.local` and edit it to set `ISDIR` to the
 location where Inno Setup was installed.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [The MinGW-w64 toolchain](#The-MinGW_002dw64-toolchain), Previous:
-[The Inno Setup installer](#The-Inno-Setup-installer), Up: [The Windows
-toolset](#The-Windows-toolset)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### D.3 The command line tools 
+### D.3 The command line tools
 
 This item is installed by the `Rtools*.exe` installer.
 
@@ -6735,23 +5900,17 @@ You may need to set the environment variable `CYGWIN` to a value
 including '`nodosfilewarning`' to suppress messages about
 Windows-style paths.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Useful additional programs](#Useful-additional-programs),
-Previous: [The command line tools](#The-command-line-tools), Up: [The
-Windows toolset](#The-Windows-toolset)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### D.4 The MinGW-w64 toolchain 
+### D.4 The MinGW-w64 toolchain
 
 Technically you need more than just a compiler so the set of tools is
 referred to as a 'toolchain'.
 
 The preferred toolchain is part of `Rtools*.exe`: this uses a version of
-`gcc 4.9.3` and version rt\_v3 of the MinGW-w64 project's runtime.
+`gcc 4.9.3` and version rt_v3 of the MinGW-w64 project's runtime.
 
-This toolchain does not use *multilib*: separate front-ends are used for
+This toolchain does not use _multilib_: separate front-ends are used for
 32-bit and 64-bit compilation. These compilers need to be specified in
 `BINPREF` and `BINPREF64` make variables as described previously at the
 end of [Windows packages](#Windows-packages).
@@ -6774,14 +5933,9 @@ There is support for OpenMP and pthreads in this toolchain. As the
 performance of OpenMP on Windows is poor for small tasks, it is not used
 for R itself.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [The MinGW-w64 toolchain](#The-MinGW_002dw64-toolchain), Up:
-[The Windows toolset](#The-Windows-toolset)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### D.5 Useful additional programs 
+### D.5 Useful additional programs
 
 The process of making the installer will make use of `qpdf` to compact
 some of the package vignettes, if it is available. Windows binaries of
@@ -6799,844 +5953,611 @@ is included in `Rtools*.exe`.
 The file `xzutils.zip` contains the program `xz` which can be
 used to (de)compress files with that form of compression.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Concept index](#Concept-index), Previous: [The Windows
-toolset](#The-Windows-toolset), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## Function and variable index
 
-Function and variable index 
----------------------------
+---
 
-  ------------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Jump to:     [**C**](#Function-and-variable-index_vr_letter-C)   [**I**](#Function-and-variable-index_vr_letter-I)   [**M**](#Function-and-variable-index_vr_letter-M)   [**R**](#Function-and-variable-index_vr_letter-R)   [**U**](#Function-and-variable-index_vr_letter-U)  
-  ------------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Jump to:   [**C**](#Function-and-variable-index_vr_letter-C){.summary-letter}   [**I**](#Function-and-variable-index_vr_letter-I){.summary-letter}   [**M**](#Function-and-variable-index_vr_letter-M){.summary-letter}   [**R**](#Function-and-variable-index_vr_letter-R){.summary-letter}   [**U**](#Function-and-variable-index_vr_letter-U){.summary-letter}
+
+---
 
 Index Entry
 
- 
-
 Section
 
-------------------------------------------------------------------------
+---
 
 C
 
 [`configure`](#index-configure):
 
- 
-
 [Simple compilation](#Simple-compilation)
 
 [`configure`](#index-configure-1):
-
- 
 
 [Simple compilation](#Simple-compilation)
 
 [`configure`](#index-configure-2):
 
- 
-
 [Installation](#Installation)
 
 [`configure`](#index-configure-3):
-
- 
 
 [Installation](#Installation)
 
 [`configure`](#index-configure-4):
 
- 
-
 [Configuration variables](#Configuration-variables)
 
 [`configure`](#index-configure-5):
 
- 
-
 [Using make](#Using-make)
 
-------------------------------------------------------------------------
+---
 
 I
 
 [`install.packages`](#index-install_002epackages):
 
- 
-
 [Installing packages](#Installing-packages)
 
-------------------------------------------------------------------------
+---
 
 M
 
 [`make`](#index-make):
 
- 
-
 [Using make](#Using-make)
 
-------------------------------------------------------------------------
+---
 
 R
 
 [`remove.packages`](#index-remove_002epackages):
 
- 
-
 [Removing packages](#Removing-packages)
 
 [`R_HOME`](#index-R_005fHOME):
 
- 
-
 [Simple compilation](#Simple-compilation)
 
-------------------------------------------------------------------------
+---
 
 U
 
 [`update.packages`](#index-update_002epackages):
 
- 
-
 [Updating packages](#Updating-packages)
 
-------------------------------------------------------------------------
+---
 
-  ------------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Jump to:     [**C**](#Function-and-variable-index_vr_letter-C)   [**I**](#Function-and-variable-index_vr_letter-I)   [**M**](#Function-and-variable-index_vr_letter-M)   [**R**](#Function-and-variable-index_vr_letter-R)   [**U**](#Function-and-variable-index_vr_letter-U)  
-  ------------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
-------------------------------------------------------------------------
+Jump to:   [**C**](#Function-and-variable-index_vr_letter-C){.summary-letter}   [**I**](#Function-and-variable-index_vr_letter-I){.summary-letter}   [**M**](#Function-and-variable-index_vr_letter-M){.summary-letter}   [**R**](#Function-and-variable-index_vr_letter-R){.summary-letter}   [**U**](#Function-and-variable-index_vr_letter-U){.summary-letter}
 
- 
-Next: [Environment variable index](#Environment-variable-index),
-Previous: [Function and variable index](#Function-and-variable-index),
-Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-Concept index 
--------------
+---
 
-  ------------ -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Jump to:     [**B**](#Concept-index_cp_letter-B)   [**F**](#Concept-index_cp_letter-F)   [**I**](#Concept-index_cp_letter-I)   [**L**](#Concept-index_cp_letter-L)   [**M**](#Concept-index_cp_letter-M)   [**O**](#Concept-index_cp_letter-O)   [**P**](#Concept-index_cp_letter-P)   [**R**](#Concept-index_cp_letter-R)   [**S**](#Concept-index_cp_letter-S)   [**U**](#Concept-index_cp_letter-U)   [**V**](#Concept-index_cp_letter-V)   [**W**](#Concept-index_cp_letter-W)  
-  ------------ -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Concept index
+
+---
+
+Jump to:   [**B**](#Concept-index_cp_letter-B){.summary-letter}   [**F**](#Concept-index_cp_letter-F){.summary-letter}   [**I**](#Concept-index_cp_letter-I){.summary-letter}   [**L**](#Concept-index_cp_letter-L){.summary-letter}   [**M**](#Concept-index_cp_letter-M){.summary-letter}   [**O**](#Concept-index_cp_letter-O){.summary-letter}   [**P**](#Concept-index_cp_letter-P){.summary-letter}   [**R**](#Concept-index_cp_letter-R){.summary-letter}   [**S**](#Concept-index_cp_letter-S){.summary-letter}   [**U**](#Concept-index_cp_letter-U){.summary-letter}   [**V**](#Concept-index_cp_letter-V){.summary-letter}   [**W**](#Concept-index_cp_letter-W){.summary-letter}
+
+---
 
 Index Entry
 
- 
-
 Section
 
-------------------------------------------------------------------------
+---
 
 B
 
 [BLAS library](#index-BLAS-library):
 
- 
-
 [Linear algebra](#Linear-algebra)
 
 [BLAS library](#index-BLAS-library-1):
-
- 
 
 [Other libraries](#Other-libraries)
 
 [BLAS library](#index-BLAS-library-2):
 
- 
-
 [Solaris](#Solaris)
 
-------------------------------------------------------------------------
+---
 
 F
 
 [Fortran](#index-Fortran):
 
- 
-
 [Using Fortran](#Using-Fortran)
 
 [FreeBSD](#index-FreeBSD):
 
- 
-
 [FreeBSD](#FreeBSD)
 
-------------------------------------------------------------------------
+---
 
 I
 
 [Installation](#index-Installation):
 
- 
-
 [Installation](#Installation)
 
 [Installing under Unix-alikes](#index-Installing-under-Unix_002dalikes):
-
- 
 
 [Installing R under Unix-alikes](#Installing-R-under-Unix_002dalikes)
 
 [Installing under Windows](#index-Installing-under-Windows):
 
- 
-
 [Installing R under Windows](#Installing-R-under-Windows)
 
 [Internationalization](#index-Internationalization):
 
- 
-
 [Internationalization](#Internationalization)
 
-------------------------------------------------------------------------
+---
 
 L
 
 [LAPACK library](#index-LAPACK-library):
 
- 
-
 [LAPACK](#LAPACK)
 
 [LAPACK library](#index-LAPACK-library-1):
-
- 
 
 [Other libraries](#Other-libraries)
 
 [LAPACK library](#index-LAPACK-library-2):
 
- 
-
 [Solaris](#Solaris)
 
 [Libraries](#index-Libraries):
-
- 
 
 [Add-on packages](#Add_002don-packages)
 
 [Libraries, managing](#index-Libraries_002c-managing):
 
- 
-
 [Managing libraries](#Managing-libraries)
 
 [Libraries, site](#index-Libraries_002c-site):
-
- 
 
 [Managing libraries](#Managing-libraries)
 
 [Libraries, user](#index-Libraries_002c-user):
 
- 
-
 [Managing libraries](#Managing-libraries)
 
 [Linux](#index-Linux):
-
- 
 
 [Installing R under Unix-alikes](#Installing-R-under-Unix_002dalikes)
 
 [Linux](#index-Linux-1):
 
- 
-
 [Linux](#Linux)
 
 [Locale](#index-Locale):
-
- 
 
 [Internationalization](#Internationalization)
 
 [Locale](#index-Locale-1):
 
- 
-
 [Locales](#Locales)
 
 [Localization](#index-Localization):
 
- 
-
 [Internationalization](#Internationalization)
 
-------------------------------------------------------------------------
+---
 
 M
 
 [macOS](#index-macOS):
 
- 
-
 [Installing R under Unix-alikes](#Installing-R-under-Unix_002dalikes)
 
 [macOS](#index-macOS-1):
-
- 
 
 [Installing R under macOS](#Installing-R-under-macOS)
 
 [macOS](#index-macOS-2):
 
- 
-
 [macOS](#macOS)
 
 [Manuals](#index-Manuals):
-
- 
 
 [Making the manuals](#Making-the-manuals)
 
 [Manuals, installing](#index-Manuals_002c-installing):
 
- 
-
 [Installation](#Installation)
 
-------------------------------------------------------------------------
+---
 
 O
 
 [Obtaining R](#index-Obtaining-R):
 
- 
-
 [Obtaining R](#Obtaining-R)
 
 [OpenBSD](#index-OpenBSD):
 
- 
-
 [OpenBSD](#OpenBSD)
 
-------------------------------------------------------------------------
+---
 
 P
 
 [Packages](#index-Packages):
 
- 
-
 [Add-on packages](#Add_002don-packages)
 
 [Packages, default](#index-Packages_002c-default):
-
- 
 
 [Default packages](#Default-packages)
 
 [Packages, installing](#index-Packages_002c-installing):
 
- 
-
 [Installing packages](#Installing-packages)
 
 [Packages, removing](#index-Packages_002c-removing):
-
- 
 
 [Removing packages](#Removing-packages)
 
 [Packages, updating](#index-Packages_002c-updating):
 
- 
-
 [Updating packages](#Updating-packages)
 
-------------------------------------------------------------------------
+---
 
 R
 
 [Repositories](#index-Repositories):
 
- 
-
 [Setting up a package repository](#Setting-up-a-package-repository)
 
-------------------------------------------------------------------------
+---
 
 S
 
 [Site libraries](#index-Site-libraries):
 
- 
-
 [Managing libraries](#Managing-libraries)
 
 [Solaris](#index-Solaris):
-
- 
 
 [Solaris](#Solaris)
 
 [Sources for R](#index-Sources-for-R):
 
- 
-
 [Getting and unpacking the sources](#Getting-and-unpacking-the-sources)
 
 [Subversion](#index-Subversion):
-
- 
 
 [Using Subversion and rsync](#Using-Subversion-and-rsync)
 
 [Subversion](#index-Subversion-1):
 
- 
-
 [Essential programs and libraries](#Essential-programs-and-libraries)
 
-------------------------------------------------------------------------
+---
 
 U
 
 [User libraries](#index-User-libraries):
 
- 
-
 [Managing libraries](#Managing-libraries)
 
-------------------------------------------------------------------------
+---
 
 V
 
 [Vignettes](#index-Vignettes):
 
- 
-
 [Essential programs and libraries](#Essential-programs-and-libraries)
 
-------------------------------------------------------------------------
+---
 
 W
 
 [winCairo.dll](#index-winCairo_002edll):
 
- 
-
 [Building the cairo devices files](#Building-the-cairo-devices-files)
 
-------------------------------------------------------------------------
+---
 
-  ------------ -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Jump to:     [**B**](#Concept-index_cp_letter-B)   [**F**](#Concept-index_cp_letter-F)   [**I**](#Concept-index_cp_letter-I)   [**L**](#Concept-index_cp_letter-L)   [**M**](#Concept-index_cp_letter-M)   [**O**](#Concept-index_cp_letter-O)   [**P**](#Concept-index_cp_letter-P)   [**R**](#Concept-index_cp_letter-R)   [**S**](#Concept-index_cp_letter-S)   [**U**](#Concept-index_cp_letter-U)   [**V**](#Concept-index_cp_letter-V)   [**W**](#Concept-index_cp_letter-W)  
-  ------------ -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
-------------------------------------------------------------------------
+Jump to:   [**B**](#Concept-index_cp_letter-B){.summary-letter}   [**F**](#Concept-index_cp_letter-F){.summary-letter}   [**I**](#Concept-index_cp_letter-I){.summary-letter}   [**L**](#Concept-index_cp_letter-L){.summary-letter}   [**M**](#Concept-index_cp_letter-M){.summary-letter}   [**O**](#Concept-index_cp_letter-O){.summary-letter}   [**P**](#Concept-index_cp_letter-P){.summary-letter}   [**R**](#Concept-index_cp_letter-R){.summary-letter}   [**S**](#Concept-index_cp_letter-S){.summary-letter}   [**U**](#Concept-index_cp_letter-U){.summary-letter}   [**V**](#Concept-index_cp_letter-V){.summary-letter}   [**W**](#Concept-index_cp_letter-W){.summary-letter}
 
- 
-Previous: [Concept index](#Concept-index), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-Environment variable index 
---------------------------
+---
 
-  ------------ -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Jump to:     [**B**](#Environment-variable-index_en_letter-B)   [**C**](#Environment-variable-index_en_letter-C)   [**D**](#Environment-variable-index_en_letter-D)   [**J**](#Environment-variable-index_en_letter-J)   [**L**](#Environment-variable-index_en_letter-L)   [**P**](#Environment-variable-index_en_letter-P)   [**R**](#Environment-variable-index_en_letter-R)   [**T**](#Environment-variable-index_en_letter-T)  
-  ------------ -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Environment variable index
+
+---
+
+Jump to:   [**B**](#Environment-variable-index_en_letter-B){.summary-letter}   [**C**](#Environment-variable-index_en_letter-C){.summary-letter}   [**D**](#Environment-variable-index_en_letter-D){.summary-letter}   [**J**](#Environment-variable-index_en_letter-J){.summary-letter}   [**L**](#Environment-variable-index_en_letter-L){.summary-letter}   [**P**](#Environment-variable-index_en_letter-P){.summary-letter}   [**R**](#Environment-variable-index_en_letter-R){.summary-letter}   [**T**](#Environment-variable-index_en_letter-T){.summary-letter}
+
+---
 
 Index Entry
 
- 
-
 Section
 
-------------------------------------------------------------------------
+---
 
 B
 
 [`BINPREF`](#index-BINPREF):
 
- 
-
 [Windows packages](#Windows-packages)
 
 [`BINPREF64`](#index-BINPREF64):
-
- 
 
 [Windows packages](#Windows-packages)
 
 [`BLAS_LIBS`](#index-BLAS_005fLIBS):
 
- 
-
 [BLAS](#BLAS)
 
-------------------------------------------------------------------------
+---
 
 C
 
 [`CONFIG_SITE`](#index-CONFIG_005fSITE):
 
- 
-
 [Configuration variables](#Configuration-variables)
 
 [`CYGWIN`](#index-CYGWIN):
 
- 
-
 [The command line tools](#The-command-line-tools)
 
-------------------------------------------------------------------------
+---
 
 D
 
 [`DESTDIR`](#index-DESTDIR):
 
- 
-
 [Installation](#Installation)
 
 [`DESTDIR`](#index-DESTDIR-1):
 
- 
-
 [Unix-alike standalone](#Unix_002dalike-standalone)
 
-------------------------------------------------------------------------
+---
 
 J
 
 [`JAVA_HOME`](#index-JAVA_005fHOME):
 
- 
-
 [Java support](#Java-support)
 
-------------------------------------------------------------------------
+---
 
 L
 
 [`LANG`](#index-LANG):
 
- 
-
 [Localization of messages](#Localization-of-messages)
 
 [`LANGUAGE`](#index-LANGUAGE):
-
- 
 
 [Localization of messages](#Localization-of-messages)
 
 [`LANGUAGE`](#index-LANGUAGE-1):
 
- 
-
 [Localization of messages](#Localization-of-messages)
 
 [`LAPACK_LIBS`](#index-LAPACK_005fLIBS):
-
- 
 
 [LAPACK](#LAPACK)
 
 [`LC_ALL`](#index-LC_005fALL):
 
- 
-
 [Localization of messages](#Localization-of-messages)
 
 [`LC_COLLATE`](#index-LC_005fCOLLATE):
 
- 
-
-[Testing a Unix-alike
-Installation](#Testing-a-Unix_002dalike-Installation)
+[Testing a Unix-alike Installation](#Testing-a-Unix_002dalike-Installation)
 
 [`LC_MESSAGES`](#index-LC_005fMESSAGES):
-
- 
 
 [Localization of messages](#Localization-of-messages)
 
 [`LD_LIBRARY_PATH`](#index-LD_005fLIBRARY_005fPATH):
 
- 
-
 [Unix-alike standalone](#Unix_002dalike-standalone)
 
 [`LD_LIBRARY_PATH`](#index-LD_005fLIBRARY_005fPATH-1):
-
- 
 
 [Using Fortran](#Using-Fortran)
 
 [`LD_LIBRARY_PATH`](#index-LD_005fLIBRARY_005fPATH-2):
 
- 
-
 [Compile and load flags](#Compile-and-load-flags)
 
 [`LD_LIBRARY_PATH`](#index-LD_005fLIBRARY_005fPATH-3):
-
- 
 
 [Using gcc](#Using-gcc)
 
 [`LOCAL_SOFT`](#index-LOCAL_005fSOFT):
 
- 
-
 [Windows packages](#Windows-packages)
 
-------------------------------------------------------------------------
+---
 
 P
 
 [`PAPERSIZE`](#index-PAPERSIZE):
 
- 
-
 [Setting paper size](#Setting-paper-size)
 
 [`PATH`](#index-PATH):
-
- 
 
 [Essential programs and libraries](#Essential-programs-and-libraries)
 
 [`PATH`](#index-PATH-1):
 
- 
-
 [Using Fortran](#Using-Fortran)
 
 [`PATH`](#index-PATH-2):
 
- 
-
 [The Windows toolset](#The-Windows-toolset)
 
-------------------------------------------------------------------------
+---
 
 R
 
 [`R_ARCH`](#index-R_005fARCH):
 
- 
-
 [Sub-architectures](#Sub_002darchitectures)
 
 [`R_ARCH`](#index-R_005fARCH-1):
-
- 
 
 [Sub-architectures](#Sub_002darchitectures)
 
 [`R_BROWSER`](#index-R_005fBROWSER):
 
- 
-
 [Setting the browsers](#Setting-the-browsers)
 
 [`R_DEFAULT_PACKAGES`](#index-R_005fDEFAULT_005fPACKAGES):
-
- 
 
 [Default packages](#Default-packages)
 
 [`R_DISABLE_HTTPD`](#index-R_005fDISABLE_005fHTTPD):
 
- 
-
 [Help options](#Help-options)
 
 [`R_GSCMD`](#index-R_005fGSCMD):
-
- 
 
 [Useful libraries and programs](#Useful-libraries-and-programs)
 
 [`R_INSTALL_TAR`](#index-R_005fINSTALL_005fTAR):
 
- 
-
 [Windows packages](#Windows-packages)
 
 [`R_JAVA_LD_LIBRARY_PATH`](#index-R_005fJAVA_005fLD_005fLIBRARY_005fPATH):
-
- 
 
 [Java support](#Java-support)
 
 [`R_JAVA_LD_LIBRARY_PATH`](#index-R_005fJAVA_005fLD_005fLIBRARY_005fPATH-1):
 
- 
-
 [Java support](#Java-support)
 
 [`R_LIBS`](#index-R_005fLIBS):
-
- 
 
 [Add-on packages](#Add_002don-packages)
 
 [`R_LIBS_SITE`](#index-R_005fLIBS_005fSITE):
 
- 
-
 [Managing libraries](#Managing-libraries)
 
 [`R_LIBS_USER`](#index-R_005fLIBS_005fUSER):
-
- 
 
 [Managing libraries](#Managing-libraries)
 
 [`R_PAPERSIZE`](#index-R_005fPAPERSIZE):
 
- 
-
 [Making the manuals](#Making-the-manuals)
 
 [`R_PAPERSIZE`](#index-R_005fPAPERSIZE-1):
-
- 
 
 [Running R](#Running-R)
 
 [`R_PAPERSIZE`](#index-R_005fPAPERSIZE-2):
 
- 
-
 [Setting paper size](#Setting-paper-size)
 
 [`R_PAPERSIZE`](#index-R_005fPAPERSIZE-3):
-
- 
 
 [Making manuals](#Making-manuals)
 
 [`R_PDFVIEWER`](#index-R_005fPDFVIEWER):
 
- 
-
 [Setting the browsers](#Setting-the-browsers)
 
 [`R_RD4PDF`](#index-R_005fRD4PDF):
-
- 
 
 [Making the manuals](#Making-the-manuals)
 
 [`R_RD4PDF`](#index-R_005fRD4PDF-1):
 
- 
-
 [Making manuals](#Making-manuals)
 
 [`R_RD4PDF`](#index-R_005fRD4PDF-2):
-
- 
 
 [LaTeX](#LaTeX)
 
 [`R_SCRIPT_DEFAULT_PACKAGES`](#index-R_005fSCRIPT_005fDEFAULT_005fPACKAGES):
 
- 
-
 [Default packages](#Default-packages)
 
 [`R_USER`](#index-R_005fUSER):
 
- 
-
 [Running R](#Running-R)
 
-------------------------------------------------------------------------
+---
 
 T
 
 [`TAR`](#index-TAR):
 
- 
-
 [Essential programs and libraries](#Essential-programs-and-libraries)
 
 [`TAR_OPTIONS`](#index-TAR_005fOPTIONS):
-
- 
 
 [Getting and unpacking the sources](#Getting-and-unpacking-the-sources)
 
 [`TAR_OPTIONS`](#index-TAR_005fOPTIONS-1):
 
- 
-
 [Getting the source files](#Getting-the-source-files)
 
 [`TEMP`](#index-TEMP):
-
- 
 
 [Running R](#Running-R)
 
 [`TMP`](#index-TMP):
 
- 
-
 [Running R](#Running-R)
 
 [`TMPDIR`](#index-TMPDIR):
-
- 
 
 [Simple compilation](#Simple-compilation)
 
 [`TMPDIR`](#index-TMPDIR-1):
 
- 
-
 [Building the core files](#Building-the-core-files)
 
 [`TMPDIR`](#index-TMPDIR-2):
-
- 
 
 [Running R](#Running-R)
 
 [`TMPDIR`](#index-TMPDIR-3):
 
- 
-
 [Running R](#Running-R)
 
 [`TMPDIR`](#index-TMPDIR-4):
 
- 
-
 [Installing packages](#Installing-packages)
 
-------------------------------------------------------------------------
+---
 
-  ------------ -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Jump to:     [**B**](#Environment-variable-index_en_letter-B)   [**C**](#Environment-variable-index_en_letter-C)   [**D**](#Environment-variable-index_en_letter-D)   [**J**](#Environment-variable-index_en_letter-J)   [**L**](#Environment-variable-index_en_letter-L)   [**P**](#Environment-variable-index_en_letter-P)   [**R**](#Environment-variable-index_en_letter-R)   [**T**](#Environment-variable-index_en_letter-T)  
-  ------------ -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
- 
+Jump to:   [**B**](#Environment-variable-index_en_letter-B){.summary-letter}   [**C**](#Environment-variable-index_en_letter-C){.summary-letter}   [**D**](#Environment-variable-index_en_letter-D){.summary-letter}   [**J**](#Environment-variable-index_en_letter-J){.summary-letter}   [**L**](#Environment-variable-index_en_letter-L){.summary-letter}   [**P**](#Environment-variable-index_en_letter-P){.summary-letter}   [**R**](#Environment-variable-index_en_letter-R){.summary-letter}   [**T**](#Environment-variable-index_en_letter-T){.summary-letter}
 
-------------------------------------------------------------------------
+---
 
-#### Footnotes 
+---
+
+#### Footnotes
 
 [(1)](#DOCF1)
 
@@ -7696,7 +6617,7 @@ compilers.
 
 [(12)](#DOCF12)
 
-This does not necessarily disable *use* of OpenMP -- the `configure`
+This does not necessarily disable _use_ of OpenMP -- the `configure`
 code allows for platforms where OpenMP is used without a flag. For the
 `flang` compiler in late 2017, the Fortran runtime always used OpenMP.
 
@@ -7775,7 +6696,7 @@ If a proxy needs to be set, see `?download.file`.
 
 for a small number of CRAN packages where this is known to be safe and
 is needed by the autobuilder this is the default. Look at the source of
-`tools.install_packages` for the list. It can also be
+`tools:::.install_packages` for the list. It can also be
 specified in the package's `DESCRIPTION` file.
 
 [(28)](#DOCF28)
@@ -8055,7 +6976,7 @@ contain `-D__ACCELERATE__`: not needed for `clang` from
 
 [(82)](#DOCF82)
 
-E.g. *via* `tlmgr install cm-super helvetic inconsolata texinfo` .
+E.g. _via_ `tlmgr install cm-super helvetic inconsolata texinfo` .
 
 [(83)](#DOCF83)
 
@@ -8093,4 +7014,4 @@ For example, the Cygwin version of `make 3.81` fails to work correctly.
 
 such as `sort`, `find` and perhaps `make`.
 
-------------------------------------------------------------------------
+---

@@ -7,90 +7,82 @@ resource-type: document
 title: R Data Import/Export
 ---
 
-R Data Import/Export 
-====================
+# R Data Import/Export
 
-Table of Contents 
------------------
+## Table of Contents
 
- 
--   [Acknowledgements](#Acknowledgements)
--   [1 Introduction](#Introduction)
-    -   [1.1 Imports](#Imports)
-        -   [1.1.1 Encodings](#Encodings)
-    -   [1.2 Export to text
-        files](#Export-to-text-files)
-    -   [1.3 XML](#XML)
--   [2 Spreadsheet-like
-    data](#Spreadsheet_002dlike-data)
-    -   [2.1 Variations on
-        `read.table`](#Variations-on-read_002etable)
-    -   [2.2 Fixed-width-format
-        files](#Fixed_002dwidth_002dformat-files)
-    -   [2.3 Data Interchange Format
-        (DIF)](#Data-Interchange-Format-_0028DIF_0029)
-    -   [2.4 Using `scan`
-        directly](#Using-scan-directly)
-    -   [2.5 Re-shaping
-        data](#Re_002dshaping-data)
-    -   [2.6 Flat contingency
-        tables](#Flat-contingency-tables)
--   [3 Importing from other statistical
-    systems](#Importing-from-other-statistical-systems)
-    -   [3.1 EpiInfo, Minitab, S-PLUS, SAS, SPSS, Stata,
-        Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
-    -   [3.2 Octave](#Octave)
--   [4 Relational
-    databases](#Relational-databases)
-    -   [4.1 Why use a
-        database?](#Why-use-a-database_003f)
-    -   [4.2 Overview of
-        RDBMSs](#Overview-of-RDBMSs)
-        -   [4.2.1 SQL queries](#SQL-queries)
-        -   [4.2.2 Data types](#Data-types)
-    -   [4.3 R interface
-        packages](#R-interface-packages)
-        -   [4.3.1 Packages using DBI](#DBI)
-        -   [4.3.2 Package RODBC](#RODBC)
--   [5 Binary files](#Binary-files)
-    -   [5.1 Binary data
-        formats](#Binary-data-formats)
-    -   [5.2 dBase files
-        (DBF)](#dBase-files-_0028DBF_0029)
--   [6 Image files](#Image-files)
--   [7 Connections](#Connections)
-    -   [7.1 Types of
-        connections](#Types-of-connections)
-    -   [7.2 Output to
-        connections](#Output-to-connections)
-    -   [7.3 Input from
-        connections](#Input-from-connections)
-        -   [7.3.1 Pushback](#Pushback)
-    -   [7.4 Listing and manipulating
-        connections](#Listing-and-manipulating-connections)
-    -   [7.5 Binary
-        connections](#Binary-connections)
-        -   [7.5.1 Special
-            values](#Special-values)
--   [8 Network
-    interfaces](#Network-interfaces)
-    -   [8.1 Reading from
-        sockets](#Reading-from-sockets)
-    -   [8.2 Using
-        `download.file`](#Using-download_002efile)
--   [9 Reading Excel
-    spreadsheets](#Reading-Excel-spreadsheets)
--   [Appendix A References](#References)
--   [Function and variable
-    index](#Function-and-variable-index)
--   [Concept index](#Concept-index)
+- [Acknowledgements](#Acknowledgements)
+- [1 Introduction](#Introduction)
+  - [1.1 Imports](#Imports)
+    - [1.1.1 Encodings](#Encodings)
+  - [1.2 Export to text
+    files](#Export-to-text-files)
+  - [1.3 XML](#XML)
+- [2 Spreadsheet-like
+  data](#Spreadsheet_002dlike-data)
+  - [2.1 Variations on
+    `read.table`](#Variations-on-read_002etable)
+  - [2.2 Fixed-width-format
+    files](#Fixed_002dwidth_002dformat-files)
+  - [2.3 Data Interchange Format
+    (DIF)](#Data-Interchange-Format-_0028DIF_0029)
+  - [2.4 Using `scan`
+    directly](#Using-scan-directly)
+  - [2.5 Re-shaping
+    data](#Re_002dshaping-data)
+  - [2.6 Flat contingency
+    tables](#Flat-contingency-tables)
+- [3 Importing from other statistical
+  systems](#Importing-from-other-statistical-systems)
+  - [3.1 EpiInfo, Minitab, S-PLUS, SAS, SPSS, Stata,
+    Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+  - [3.2 Octave](#Octave)
+- [4 Relational
+  databases](#Relational-databases)
+  - [4.1 Why use a
+    database?](#Why-use-a-database_003f)
+  - [4.2 Overview of
+    RDBMSs](#Overview-of-RDBMSs)
+    - [4.2.1 SQL queries](#SQL-queries)
+    - [4.2.2 Data types](#Data-types)
+  - [4.3 R interface
+    packages](#R-interface-packages)
+    - [4.3.1 Packages using DBI](#DBI)
+    - [4.3.2 Package RODBC](#RODBC)
+- [5 Binary files](#Binary-files)
+  - [5.1 Binary data
+    formats](#Binary-data-formats)
+  - [5.2 dBase files
+    (DBF)](#dBase-files-_0028DBF_0029)
+- [6 Image files](#Image-files)
+- [7 Connections](#Connections)
+  - [7.1 Types of
+    connections](#Types-of-connections)
+  - [7.2 Output to
+    connections](#Output-to-connections)
+  - [7.3 Input from
+    connections](#Input-from-connections)
+    - [7.3.1 Pushback](#Pushback)
+  - [7.4 Listing and manipulating
+    connections](#Listing-and-manipulating-connections)
+  - [7.5 Binary
+    connections](#Binary-connections)
+    - [7.5.1 Special
+      values](#Special-values)
+- [8 Network
+  interfaces](#Network-interfaces)
+  - [8.1 Reading from
+    sockets](#Reading-from-sockets)
+  - [8.2 Using
+    `download.file`](#Using-download_002efile)
+- [9 Reading Excel
+  spreadsheets](#Reading-Excel-spreadsheets)
+- [Appendix A References](#References)
+- [Function and variable
+  index](#Function-and-variable-index)
+- [Concept index](#Concept-index)
 
- 
-Next: [Acknowledgements](#Acknowledgements)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-R Data Import/Export 
-====================
+# R Data Import/Export
 
 This is a guide to importing and exporting data to and from R.
 
@@ -112,31 +104,27 @@ Copyright © 2000--2018 R Core Team
 > versions, except that this permission notice may be stated in a
 > translation approved by the R Core Team.
 
-  ----------------------------------------------------------------------------------------- ---- --
-  • [Acknowledgements](#Acknowledgements)                                                        
-  • [Introduction](#Introduction)                                                                
-  • [Spreadsheet-like data](#Spreadsheet_002dlike-data)                                          
-  • [Importing from other statistical systems](#Importing-from-other-statistical-systems)        
-  • [Relational databases](#Relational-databases)                                                
-  • [Binary files](#Binary-files)                                                                
-  • [Image files](#Image-files)                                                                  
-  • [Connections](#Connections)                                                                  
-  • [Network interfaces](#Network-interfaces)                                                    
-  • [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)                                    
-  • [References](#References)                                                                    
-  • [Function and variable index](#Function-and-variable-index)                                  
-  • [Concept index](#Concept-index)                                                              
-  ----------------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Acknowledgements](#Acknowledgements)     
+ • [Introduction](#Introduction)     
+ • [Spreadsheet-like data](#Spreadsheet_002dlike-data)     
+ • [Importing from other statistical systems](#Importing-from-other-statistical-systems)     
+ • [Relational databases](#Relational-databases)     
+ • [Binary files](#Binary-files)     
+ • [Image files](#Image-files)     
+ • [Connections](#Connections)     
+ • [Network interfaces](#Network-interfaces)     
+ • [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)     
+ • [References](#References)     
+ • [Function and variable index](#Function-and-variable-index)     
+ • [Concept index](#Concept-index)
 
- 
-Next: [Introduction](#Introduction), Previous: [Top](#Top), Up:
-[Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-Acknowledgements 
-----------------
+---
+
+## Acknowledgements
 
 The relational databases part of this manual is based in part on an
 earlier manual by Douglas Bates and Saikat DebRoy. The principal author
@@ -145,39 +133,35 @@ of this manual was Brian Ripley.
 Many volunteers have contributed to the packages used here. The
 principal authors of the packages mentioned are
 
->   ------------------------------------------------------------------------- ------------------------------------------------------------------------------
->   [**DBI**](https://CRAN.R-project.org/package=DBI)                         David A. James
->   [**dataframes2xls**](https://CRAN.R-project.org/package=dataframes2xls)   Guido van Steen
->   [**foreign**](https://CRAN.R-project.org/package=foreign)                 Thomas Lumley, Saikat DebRoy, Douglas Bates, Duncan Murdoch and Roger Bivand
->   [**gdata**](https://CRAN.R-project.org/package=gdata)                     Gregory R. Warnes
->   [**ncdf4**](https://CRAN.R-project.org/package=ncdf4)                     David Pierce
->   [**rJava**](https://CRAN.R-project.org/package=rJava)                     Simon Urbanek
->   [**RJDBC**](https://CRAN.R-project.org/package=RJDBC)                     Simon Urbanek
->   [**RMySQL**](https://CRAN.R-project.org/package=RMySQL)                   David James and Saikat DebRoy
->   [**RNetCDF**](https://CRAN.R-project.org/package=RNetCDF)                 Pavel Michna
->   [**RODBC**](https://CRAN.R-project.org/package=RODBC)                     Michael Lapsley and Brian Ripley
->   [**ROracle**](https://CRAN.R-project.org/package=ROracle)                 David A, James
->   [**RPostgreSQL**](https://CRAN.R-project.org/package=RPostgreSQL)         Sameer Kumar Prayaga and Tomoaki Nishiyama
->   **RSPerl**                                                                Duncan Temple Lang
->   **RSPython**                                                              Duncan Temple Lang
->   [**RSQLite**](https://CRAN.R-project.org/package=RSQLite)                 David A, James
->   **SJava**                                                                 John Chambers and Duncan Temple Lang
->   [**WriteXLS**](https://CRAN.R-project.org/package=WriteXLS)               Marc Schwartz
->   [**XLConnect**](https://CRAN.R-project.org/package=XLConnect)             Mirai Solutions GmbH
->   [**XML**](https://CRAN.R-project.org/package=XML)                         Duncan Temple Lang
->   ------------------------------------------------------------------------- ------------------------------------------------------------------------------
+> ---
+>
+> [**DBI**](https://CRAN.R-project.org/package=DBI) David A. James
+> [**dataframes2xls**](https://CRAN.R-project.org/package=dataframes2xls) Guido van Steen
+> [**foreign**](https://CRAN.R-project.org/package=foreign) Thomas Lumley, Saikat DebRoy, Douglas Bates, Duncan Murdoch and Roger Bivand
+> [**gdata**](https://CRAN.R-project.org/package=gdata) Gregory R. Warnes
+> [**ncdf4**](https://CRAN.R-project.org/package=ncdf4) David Pierce
+> [**rJava**](https://CRAN.R-project.org/package=rJava) Simon Urbanek
+> [**RJDBC**](https://CRAN.R-project.org/package=RJDBC) Simon Urbanek
+> [**RMySQL**](https://CRAN.R-project.org/package=RMySQL) David James and Saikat DebRoy
+> [**RNetCDF**](https://CRAN.R-project.org/package=RNetCDF) Pavel Michna
+> [**RODBC**](https://CRAN.R-project.org/package=RODBC) Michael Lapsley and Brian Ripley
+> [**ROracle**](https://CRAN.R-project.org/package=ROracle) David A, James
+> [**RPostgreSQL**](https://CRAN.R-project.org/package=RPostgreSQL) Sameer Kumar Prayaga and Tomoaki Nishiyama
+> **RSPerl** Duncan Temple Lang
+> **RSPython** Duncan Temple Lang
+> [**RSQLite**](https://CRAN.R-project.org/package=RSQLite) David A, James
+> **SJava** John Chambers and Duncan Temple Lang
+> [**WriteXLS**](https://CRAN.R-project.org/package=WriteXLS) Marc Schwartz
+> [**XLConnect**](https://CRAN.R-project.org/package=XLConnect) Mirai Solutions GmbH
+> [**XML**](https://CRAN.R-project.org/package=XML) Duncan Temple Lang
+>
+> ---
 
 Brian Ripley is the author of the support for connections.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Spreadsheet-like data](#Spreadsheet_002dlike-data), Previous:
-[Acknowledgements](#Acknowledgements), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-1 Introduction 
---------------
+## 1 Introduction
 
 Reading data into a statistical system for analysis and exporting the
 results to some other system for report writing can be frustrating tasks
@@ -208,8 +192,6 @@ making the use of facilities in these languages even more appropriate.
 from CRAN and the **SJava**, **RSPerl** and **RSPython** packages from
 the Omegahat project, <http://www.omegahat.net>.)
 
-  
-
 It is also worth remembering that R like S comes from the Unix tradition
 of small re-usable tools, and it can be rewarding to use tools such as
 `awk` and `perl` to manipulate data before import or after export. The
@@ -222,20 +204,17 @@ This manual was first written in 2000, and the number of scope of R
 packages has increased a hundredfold since. For specialist data formats
 it is worth searching to see if a suitable package already exists.
 
-  ------------------------------------------------- ---- --
-  • [Imports](#Imports)                                  
-  • [Export to text files](#Export-to-text-files)        
-  • [XML](#XML)                                          
-  ------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Imports](#Imports)     
+ • [Export to text files](#Export-to-text-files)     
+ • [XML](#XML)
 
- 
-Next: [Export to text files](#Export-to-text-files), Previous:
-[Introduction](#Introduction), Up: [Introduction](#Introduction)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 1.1 Imports 
+---
+
+### 1.1 Imports
 
 The easiest form of data to import into R is a simple text file, and
 this will often be acceptable for problems of small or medium scale. The
@@ -250,46 +229,39 @@ spreadsheet' or 'an SPSS file'. Often the simplest thing to do is to use
 the originating application to export the data as a text file (and
 statistical consultants will have copies of the most common applications
 on their computers for that purpose). However, this is not always
-possible, and [Importing from other statistical
-systems](#Importing-from-other-statistical-systems) discusses what
+possible, and [Importing from other statistical systems](#Importing-from-other-statistical-systems) discusses what
 facilities are available to access such files directly from R. For Excel
-spreadsheets, the available methods are summarized in [Reading Excel
-spreadsheets](#Reading-Excel-spreadsheets).
+spreadsheets, the available methods are summarized in [Reading Excel spreadsheets](#Reading-Excel-spreadsheets).
 
 In a few cases, data have been stored in a binary form for compactness
 and speed of access. One application of this that we have seen several
 times is imaging data, which is normally stored as a stream of bytes as
 represented in memory, possibly preceded by a header. Such data formats
-are discussed in [Binary files](#Binary-files) and [Binary
-connections](#Binary-connections).
+are discussed in [Binary files](#Binary-files) and [Binary connections](#Binary-connections).
 
 For much larger databases it is common to handle the data using a
 database management system (DBMS). There is once again the option of
 using the DBMS to extract a plain file, but for many such DBMSs the
 extraction operation can be done directly from an R package: See
 [Relational databases](#Relational-databases). Importing data via
-network connections is discussed in [Network
-interfaces](#Network-interfaces).
+network connections is discussed in [Network interfaces](#Network-interfaces).
 
-  --------------------------- ---- --
-  • [Encodings](#Encodings)        
-  --------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Encodings](#Encodings)
 
- 
-Previous: [Imports](#Imports), Up: [Imports](#Imports)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 1.1.1 Encodings 
+---
+
+#### 1.1.1 Encodings
 
 Unless the file to be imported from is entirely in ASCII, it is usually
 necessary to know how it was encoded. For text files, a good way to find
 out something about its structure is the `file` command-line tool (for
 Windows, included in `Rtools`). This reports something like
 
- 
-``` 
+```r
 text.Rd: UTF-8 Unicode English text
 text2.dat: ISO-8859 English text
 text3.dat: Little-endian UTF-16 Unicode English character data,
@@ -322,28 +294,20 @@ Note that `utf8` is not a valid encoding name (`UTF-8` is), and
 `macintosh` is the most portable name for what is sometimes called 'Mac
 Roman' encoding.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [XML](#XML), Previous: [Imports](#Imports), Up:
-[Introduction](#Introduction)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.2 Export to text files 
+### 1.2 Export to text files
 
 Exporting results from R is usually a less contentious task, but there
 are still a number of pitfalls. There will be a target application in
 mind, and often a text file will be the most convenient interchange
-vehicle. (If a binary file is required, see [Binary
-files](#Binary-files).)
+vehicle. (If a binary file is required, see [Binary files](#Binary-files).)
 
 Function `cat` underlies the functions for exporting data. It takes a
 `file` argument, and the `append` argument allows a text file to be
 written via successive calls to `cat`. Better, especially if this is to
 be done many times, is to open a `file` connection for writing or
 appending, and `cat` to that connection, then `close` it.
-
- 
 
 The most common task is to write a matrix or data frame to file as a
 rectangular grid of numbers, possibly with row and column labels. This
@@ -356,7 +320,8 @@ frame) with row and column labels.
 There are a number of issues that need to be considered in writing out a
 data frame to a text file.
 
-1.   **Precision**
+1.  **Precision**
+
 
     Most of the conversions of real/complex numbers done by these
     functions is to full precision, but those by `write` are governed by
@@ -368,20 +333,20 @@ data frame to a text file.
     R prefers the header line to have no entry for the row names, so the
     file looks like
 
-     
-    ``` 
+
+    ```r
                     dist    climb   time
     Greenmantle     2.5     650     16.083
        ...
     ```
-    
+
 
     Some other systems require a (possibly empty) entry for the row
     names, which is what `write.table` will provide if argument
     `col.names = NA` is specified. Excel is one such system.
 
-3.  **Separator**  
-     
+3.  **Separator**
+
 
     A common field separator to use in the file is a comma, as that is
     unlikely to appear in any of the fields in English-speaking
@@ -400,13 +365,13 @@ data frame to a text file.
     Using a semicolon or tab (`sep = "\t"`) are probably the safest
     options.
 
-4.  **Missing values** 
+4.  **Missing values**
 
     By default missing values are output as `NA`, but this may be
     changed by argument `na`. Note that `NaN`s are treated as `NA` by
     `write.table`, but not by `cat` nor `write`.
 
-5.  **Quoting strings** 
+5.  **Quoting strings**
 
     By default strings are quoted (including the row and column names).
     Argument `quote` controls if character and factor variables are
@@ -417,8 +382,8 @@ data frame to a text file.
     Some care is needed if the strings contain embedded quotes. Three
     useful forms are
 
-     
-    ``` 
+
+    ```r
     > df <- data.frame(a = I("a \" quote"))
     > write.table(df)
     "a"
@@ -430,16 +395,16 @@ data frame to a text file.
     a
     1,a " quote
     ```
-    
+
 
     The second is the form of escape commonly used by spreadsheets.
 
-6.  **Encodings** 
+6.  **Encodings**
 
     Text files do not contain metadata on their encodings, so for
     non-ASCII data the file needs to be targetted to the application
     intended to read it. All of these functions can write to a
-    *connection* which allows an encoding to be specified for the file,
+    _connection_ which allows an encoding to be specified for the file,
     and `write.table` has a `fileEncoding` argument to make this easier.
 
     The hard part is to know what file encoding to use. For use on
@@ -468,14 +433,9 @@ Function `write.foreign` in package
 will read this text file into another statistical package. There is
 currently support for export to `SAS`, `SPSS` and `Stata`.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Export to text files](#Export-to-text-files), Up:
-[Introduction](#Introduction)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 1.3 XML 
+### 1.3 XML
 
 When reading data from text files, it is the responsibility of the user
 to know and to specify the conventions used to create that file, e.g.
@@ -495,8 +455,7 @@ such as maps, graphical displays, mathematics and so on.
 
 XML provides a way to specify the file's encoding, e.g.
 
- 
-``` 
+```r
 <?xml version="1.0" encoding="UTF-8"?>
 ```
 
@@ -514,40 +473,29 @@ yaml is another system for structuring text data, with emphasis on
 human-readability: it is supported by package
 [**yaml**](https://CRAN.R-project.org/package=yaml).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Importing from other statistical
-systems](#Importing-from-other-statistical-systems), Previous:
-[Introduction](#Introduction), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 2 Spreadsheet-like data
 
-2 Spreadsheet-like data 
------------------------
+---
 
-  --------------------------------------------------------------------------- ---- --
-  • [Variations on read.table](#Variations-on-read_002etable)                      
-  • [Fixed-width-format files](#Fixed_002dwidth_002dformat-files)                  
-  • [Data Interchange Format (DIF)](#Data-Interchange-Format-_0028DIF_0029)        
-  • [Using scan directly](#Using-scan-directly)                                    
-  • [Re-shaping data](#Re_002dshaping-data)                                        
-  • [Flat contingency tables](#Flat-contingency-tables)                            
-  --------------------------------------------------------------------------- ---- --
+• [Variations on read.table](#Variations-on-read_002etable)     
+ • [Fixed-width-format files](#Fixed_002dwidth_002dformat-files)     
+ • [Data Interchange Format (DIF)](#Data-Interchange-Format-_0028DIF_0029)     
+ • [Using scan directly](#Using-scan-directly)     
+ • [Re-shaping data](#Re_002dshaping-data)     
+ • [Flat contingency tables](#Flat-contingency-tables)
+
+---
 
 In [Export to text files](#Export-to-text-files) we saw a number of
 variations on the format of a spreadsheet-like text file, in which the
 data are presented in a rectangular grid, possibly with row and column
 labels. In this section we consider importing such files into R.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Fixed-width-format files](#Fixed_002dwidth_002dformat-files),
-Previous: [Spreadsheet-like data](#Spreadsheet_002dlike-data), Up:
-[Spreadsheet-like data](#Spreadsheet_002dlike-data)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.1 Variations on `read.table` 
+### 2.1 Variations on `read.table`
 
 The function `read.table` is the most convenient way to read in a
 rectangular grid of data. Because of the many possibilities, there are
@@ -565,11 +513,11 @@ Some of the issues to consider are:
     read in the correct encoding. This is mainly an issue for reading
     Latin-1 files in a UTF-8 locale, which can be done by something like
 
-     
-    ``` 
+
+    ```r
     read.table("file.dat", fileEncoding="latin1")
     ```
-    
+
 
     Note that this will work in any locale which can represent Latin-1
     strings, but not many Greek/Russian/Chinese/Japanese ... locales.
@@ -583,11 +531,11 @@ Some of the issues to consider are:
     a file that has a (possibly empty) header field for the row labels,
     read it in by something like
 
-     
-    ``` 
+
+    ```r
     read.table("file.dat", header = TRUE, row.names = 1)
     ```
-    
+
 
     Column names can be given explicitly via the `col.names`; explicit
     names override the header line (if present).
@@ -603,7 +551,7 @@ Some of the issues to consider are:
     If you have a tab-delimited file containing empty fields be sure to
     use `sep = "\t"`.
 
-4.  **Quoting** 
+4.  **Quoting**
 
     By default character strings can be quoted by either '`"`'
     or '`'`', and in each case all the characters up to a
@@ -620,23 +568,24 @@ Some of the issues to consider are:
     quoted strings by doubling them as is conventional in spreadsheets.
     For example
 
-     
-    ``` 
+
+    ```r
     'One string isn''t two',"one more"
     ```
-    
+
 
     can be read by
 
-     
-    ``` 
+
+
+    ```r
     read.table("testfile", sep = ",")
     ```
-    
+
 
     This does not work with the default separator.
 
-5.  **Missing values** 
+5.  **Missing values**
 
     By default the file is assumed to contain the character string `NA`
     to represent missing values, but this can be changed by the argument
@@ -681,8 +630,8 @@ Some of the issues to consider are:
     set for each column in the input: it will be faster and use less
     memory.
 
-    Note that `colClasses` and `as.is` are specified *per* column, not
-    *per* variable, and so include the column of row names (if any).
+    Note that `colClasses` and `as.is` are specified _per_ column, not
+    _per_ variable, and so include the column of row names (if any).
 
 10. **Comments**
 
@@ -714,12 +663,12 @@ Some of the issues to consider are:
 
     This can be specified by the `fileEncoding` argument, for example
 
-     
-    ``` 
+
+    ```r
     fileEncoding = "UCS-2LE"    # Windows ‘Unicode’ files
     fileEncoding = "UTF-8"
     ```
-    
+
 
     If you know (correctly) the file's encoding this will almost always
     work. However, we know of one exception, UTF-8 files with a BOM.
@@ -728,34 +677,33 @@ Some of the issues to consider are:
     Unix-alike OSes do not accept them. So faced with a file which
     `file` reports as
 
-     
-    ``` 
+
+
+    ```r
     intro.dat: UTF-8 Unicode (with BOM) text
     ```
-    
+
 
     it can be read on Windows by
 
-     
-    ``` 
+
+
+    ```r
     read.table("intro.dat", fileEncoding = "UTF-8")
     ```
-    
+
 
     but on a Unix-alike might need
 
-     
-    ``` 
+
+
+    ```r
     read.table("intro.dat", fileEncoding = "UTF-8-BOM")
     ```
-    
+
 
     (This would most likely work without specifying an encoding in a
     UTF-8 locale.)
-
- 
- 
-  
 
 Convenience functions `read.csv` and `read.delim` provide arguments to
 `read.table` appropriate for CSV and tab-delimited files exported from
@@ -767,17 +715,15 @@ which use semicolons to separate fields.
 If the options to `read.table` are specified incorrectly, the error
 message will usually be of the form
 
- 
-``` 
-Error in scan(file = file, what = what, sep = sep, : 
+```r
+Error in scan(file = file, what = what, sep = sep, :
         line 1 did not have 5 elements
 ```
 
 or
 
- 
-``` 
-Error in read.table("files.dat", header = TRUE) : 
+```r
+Error in read.table("files.dat", header = TRUE) :
         more columns than column names
 ```
 
@@ -791,16 +737,9 @@ each column, and to give `nrows`, the number of rows to be read (and a
 mild over-estimate is better than not specifying this at all). See the
 examples in later sections.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Data Interchange Format
-(DIF)](#Data-Interchange-Format-_0028DIF_0029), Previous: [Variations on
-read.table](#Variations-on-read_002etable), Up: [Spreadsheet-like
-data](#Spreadsheet_002dlike-data)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.2 Fixed-width-format files 
+### 2.2 Fixed-width-format files
 
 Sometimes data files have no field delimiters but have fields in
 pre-specified columns. This was very common in the days of punched
@@ -816,15 +755,9 @@ using the facilities of a language like `perl` to pre-process the file.
 Function `read.fortran` is a similar function for fixed-format files,
 using Fortran-style column specifications.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using scan directly](#Using-scan-directly), Previous:
-[Fixed-width-format files](#Fixed_002dwidth_002dformat-files), Up:
-[Spreadsheet-like data](#Spreadsheet_002dlike-data)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.3 Data Interchange Format (DIF) 
+### 2.3 Data Interchange Format (DIF)
 
 An old format sometimes used for spreadsheet-like data is DIF, or Data
 Interchange format.
@@ -838,15 +771,9 @@ the clipboard in this format; `read.DIF("clipboard")` can read it from
 there directly. It is slightly more robust than
 `read.table("clipboard")` in handling spreadsheets with empty cells.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Re-shaping data](#Re_002dshaping-data), Previous: [Data
-Interchange Format (DIF)](#Data-Interchange-Format-_0028DIF_0029), Up:
-[Spreadsheet-like data](#Spreadsheet_002dlike-data)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.4 Using `scan` directly 
+### 2.4 Using `scan` directly
 
 Both `read.table` and `read.fwf` use `scan` to read the file, and then
 process the results of `scan`. They are very convenient, but sometimes
@@ -859,8 +786,7 @@ list is named, the names are used for the components of the returned
 list. Modes can be numeric, character or complex, and are usually
 specified by an example, e.g. `0`, `""` or `0i`. For example
 
- 
-``` 
+```r
 cat("2 3 5 7", "11 13 17 19", file="ex.dat", sep="\n")
 scan(file="ex.dat", what=list(x=0, y="", z=0), flush=TRUE)
 ```
@@ -875,23 +801,20 @@ One common use of `scan` is to read in a large matrix. Suppose file
 `matrix.dat` just contains the numbers for a 200 x 2000 matrix.
 Then we can use
 
- 
-``` 
+```r
 A <- matrix(scan("matrix.dat", n = 200*2000), 200, 2000, byrow = TRUE)
 ```
 
 On one test this took 1 second (under Linux, 3 seconds under Windows on
 the same machine) whereas
 
- 
-``` 
+```r
 A <- as.matrix(read.table("matrix.dat"))
 ```
 
 took 10 seconds (and more memory), and
 
- 
-``` 
+```r
 A <- as.matrix(read.table("matrix.dat", header = FALSE, nrows = 200,
                           comment.char = "", colClasses = "numeric"))
 ```
@@ -904,8 +827,7 @@ particular, specifying `colClasses`) and 125 if used naively.
 Note that timings can depend on the type read and the data. Consider
 reading a million distinct integers:
 
- 
-``` 
+```r
 writeLines(as.character((1+1e6):2e6), "ints.dat")
 xi <- scan("ints.dat", what=integer(0), n=1e6)   # 0.77s
 xn <- scan("ints.dat", what=numeric(0), n=1e6)   # 0.93s
@@ -916,8 +838,7 @@ DF <- read.table("ints.dat")                     # 4.5s
 
 and a million examples of a small set of codes:
 
- 
-``` 
+```r
 code <- c("LMH", "SJC", "CHCH", "SPC", "SOM")
 writeLines(sample(code, 1e6, replace=TRUE), "code.dat")
 y <- scan("code.dat", what=character(0), n=1e6)  # 0.44s
@@ -930,15 +851,9 @@ Note that these timings depend heavily on the operating system (the
 basic reads in Windows take at least as twice as long as these Linux
 times) and on the precise state of the garbage collector.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Flat contingency tables](#Flat-contingency-tables), Previous:
-[Using scan directly](#Using-scan-directly), Up: [Spreadsheet-like
-data](#Spreadsheet_002dlike-data)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.5 Re-shaping data 
+### 2.5 Re-shaping data
 
 Sometimes spreadsheet data is in a compact format that gives the
 covariates for each subject followed by all the observations on that
@@ -946,8 +861,7 @@ subject. R's modelling functions need observations in a single column.
 Consider the following sample of data from repeated MRI brain
 measurements
 
- 
-``` 
+```r
  Status   Age    V1     V2     V3    V4
       P 23646 45190  50333  55166 56271
      CC 26174 35535  38227  37911 41184
@@ -964,16 +878,14 @@ The data were exported from Excel as a file `mr.csv`.
 We can use `stack` to help manipulate these data to give a single
 response.
 
- 
-``` 
+```r
 zz <- read.csv("mr.csv", strip.white = TRUE)
 zzz <- cbind(zz[gl(nrow(zz), 1, 4*nrow(zz)), 1:2], stack(zz[, 3:6]))
 ```
 
 with result
 
- 
-``` 
+```r
       Status   Age values ind
 X1         P 23646  45190  V1
 X2        CC 26174  35535  V1
@@ -991,8 +903,7 @@ exporting data.
 
 Another way to do this is to use the function `reshape`, by
 
- 
-``` 
+```r
 > reshape(zz, idvar="id",timevar="var",
   varying=list(c("V1","V2","V3","V4")),direction="long")
     Status   Age var    V1 id
@@ -1018,14 +929,9 @@ Some people prefer the tools in packages
 [**reshape2**](https://CRAN.R-project.org/package=reshape2) and
 [**plyr**](https://CRAN.R-project.org/package=plyr).
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Re-shaping data](#Re_002dshaping-data), Up: [Spreadsheet-like
-data](#Spreadsheet_002dlike-data)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 2.6 Flat contingency tables 
+### 2.6 Flat contingency tables
 
 Displaying higher-dimensional contingency tables in array form typically
 is rather inconvenient. In categorical data analysis, such information
@@ -1035,7 +941,7 @@ corresponding to the cell counts. These rows and columns are typically
 "ragged" in the sense that labels are only displayed when they change,
 with the obvious convention that rows are read from top to bottom and
 columns are read from left to right. In R, such "flat" contingency
-tables can be created using `ftable`,  which creates
+tables can be created using `ftable`, which creates
 objects of class `"ftable"` with an appropriate print method.
 
 As a simple example, consider the R standard data set `UCBAdmissions`
@@ -1043,12 +949,11 @@ which is a 3-dimensional contingency table resulting from classifying
 applicants to graduate school at UC Berkeley for the six largest
 departments in 1973 classified by admission and sex.
 
- 
-``` 
+```r
 > data(UCBAdmissions)
 > ftable(UCBAdmissions)
                 Dept   A   B   C   D   E   F
-Admit    Gender                             
+Admit    Gender
 Admitted Male        512 353 120 138  53  22
          Female       89  17 202 131  94  24
 Rejected Male        313 207 205 279 138 351
@@ -1059,7 +964,7 @@ The printed representation is clearly more useful than displaying the
 data as a 3-dimensional array.
 
 There is also a function `read.ftable` for reading in flat-like
-contingency tables from files.  This has
+contingency tables from files. This has
 additional arguments for dealing with variants on how exactly the
 information on row and column variables names and levels is represented.
 The help page for `read.ftable` has some useful examples. The flat
@@ -1071,15 +976,9 @@ Note that flat tables are characterized by their "ragged" display of row
 variables is given, one should instead use `read.table` to read in the
 data, and create the contingency table from this using `xtabs`.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Relational databases](#Relational-databases), Previous:
-[Spreadsheet-like data](#Spreadsheet_002dlike-data), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-3 Importing from other statistical systems 
-------------------------------------------
+## 3 Importing from other statistical systems
 
 In this chapter we consider the problem of reading a binary data file
 written by another statistical system. This is often best avoided, but
@@ -1090,20 +989,16 @@ specific versions of the other system (often in the early 2000s), and
 have not necessarily been updated for the most recent versions of the
 other system.
 
-  ----------------------------------------------------------------------------------------------------- ---- --
-  • [EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)        
-  • [Octave](#Octave)                                                                                        
-  ----------------------------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)     
+ • [Octave](#Octave)
 
- 
-Next: [Octave](#Octave), Previous: [Importing from other statistical
-systems](#Importing-from-other-statistical-systems), Up: [Importing from
-other statistical systems](#Importing-from-other-statistical-systems)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 3.1 EpiInfo, Minitab, S-PLUS, SAS, SPSS, Stata, Systat 
+---
+
+### 3.1 EpiInfo, Minitab, S-PLUS, SAS, SPSS, Stata, Systat
 
 The recommended package
 [**foreign**](https://CRAN.R-project.org/package=foreign) provides
@@ -1113,18 +1008,12 @@ substantially less memory than `read.table` would. `write.foreign` (See
 [Export to text files](#Export-to-text-files)) provides an export
 mechanism with support currently for `SAS`, `SPSS` and `Stata`.
 
-  
-
 EpiInfo versions 5 and 6 stored data in a self-describing fixed-width
 text format. `read.epiinfo` will read these `.REC` files into
 an R data frame. EpiData also produces data in this format.
 
- 
-
 Function `read.mtp` imports a 'Minitab Portable Worksheet'. This returns
 the components of the worksheet as an R list.
-
- 
 
 Function `read.xport` reads a file in SAS Transport (XPORT) format and
 return a list of data frames. If SAS is available on your system,
@@ -1136,8 +1025,6 @@ a similar function `sas.get`, also running SAS.) For those without
 access to SAS but running on Windows, the SAS System Viewer (a zero-cost
 download) can be used to open SAS datasets and export them to e.g.
 `.csv` format.
-
-  
 
 Function `read.S` which can read binary objects produced by S-PLUS 3.x,
 4.x or 2000 on (32-bit) Unix or Windows (and can read them on a
@@ -1156,8 +1043,6 @@ later you may need to use `dump(..., oldStyle=T)`, and to read in very
 large objects it may be preferable to use the dump file as a batch
 script rather than use the `source` function.
 
-  
-
 Function `read.spss` can read files created by the 'save' and 'export'
 commands in SPSS. It returns a list with one component for each variable
 in the saved data set. SPSS variables with value labels are optionally
@@ -1172,8 +1057,6 @@ Some third-party applications claim to produce data 'in SPSS format' but
 with differences in the formats: `read.spss` may or may not be able to
 handle these.
 
-  
-
 Stata `.dta` files are a binary file format. Files from
 versions 5 up to 12 of Stata can be read and written by functions
 `read.dta` and `write.dta`. Stata variables with value labels are
@@ -1182,25 +1065,14 @@ later see CRAN packages
 [**readstata13**](https://CRAN.R-project.org/package=readstata13) and
 [**haven**](https://CRAN.R-project.org/package=haven).
 
- 
-
 `read.systat` reads those Systat `SAVE` files that are rectangular data
 files (`mtype = 1`) written on little-endian machines (such as from
 Windows). These have extension `.sys` or (more recently)
 `.syd`.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat), Up:
-[Importing from other statistical
-systems](#Importing-from-other-statistical-systems)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 3.2 Octave 
-
- 
+### 3.2 Octave
 
 Octave is a numerical linear algebra system (<http://www.octave.org>),
 and function `read.octave` in package
@@ -1208,37 +1080,24 @@ and function `read.octave` in package
 files in Octave text data format created using the Octave command
 `save -ascii`, with support for most of the common types of variables,
 including the standard atomic (real and complex scalars, matrices, and
-*N*-d arrays, strings, ranges, and boolean scalars and matrices) and
+_N_-d arrays, strings, ranges, and boolean scalars and matrices) and
 recursive (structs, cells, and lists) ones.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Binary files](#Binary-files), Previous: [Importing from other
-statistical systems](#Importing-from-other-statistical-systems), Up:
-[Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 4 Relational databases
 
-4 Relational databases 
-----------------------
+---
 
- 
+• [Why use a database?](#Why-use-a-database_003f)     
+ • [Overview of RDBMSs](#Overview-of-RDBMSs)     
+ • [R interface packages](#R-interface-packages)
 
-  --------------------------------------------------- ---- --
-  • [Why use a database?](#Why-use-a-database_003f)        
-  • [Overview of RDBMSs](#Overview-of-RDBMSs)              
-  • [R interface packages](#R-interface-packages)          
-  --------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Overview of RDBMSs](#Overview-of-RDBMSs), Previous: [Relational
-databases](#Relational-databases), Up: [Relational
-databases](#Relational-databases)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 4.1 Why use a database? 
+### 4.1 Why use a database?
 
 There are limitations on the types of data that R handles well. Since
 all data being manipulated by R are resident in memory, and several
@@ -1257,7 +1116,7 @@ session, but the format of the stored data is specific to R and not
 easily manipulated by other systems.
 
 Database management systems (DBMSs) and, in particular, relational DBMSs
-(RDBMSs) *are* designed to do all of these things well. Their strengths
+(RDBMSs) _are_ designed to do all of these things well. Their strengths
 are
 
 1.  To provide fast access to selected parts of large databases.
@@ -1279,15 +1138,9 @@ so it is nowadays likely that one will be already installed on your
 used by KDE4 to store personal information. Several macOS applications,
 including Mail and Address Book, use SQLite.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [R interface packages](#R-interface-packages), Previous: [Why use
-a database?](#Why-use-a-database_003f), Up: [Relational
-databases](#Relational-databases)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 4.2 Overview of RDBMSs 
+### 4.2 Overview of RDBMSs
 
 Traditionally there had been large (and expensive) commercial RDBMSs
 ([Informix](http://www.informix.com); [Oracle](https://www.oracle.com);
@@ -1299,8 +1152,6 @@ former marked out by much greater emphasis on data security features.
 The line is blurring, with MySQL and PostgreSQL having more and more
 high-end features, and free 'express' versions being made available for
 the commercial DBMSs.
-
- 
 
 There are other commonly used data sources, including spreadsheets,
 non-relational databases and even text files (possibly compressed). Open
@@ -1314,23 +1165,19 @@ client/server databases. The database can reside on the same machine or
 (more often) remotely. There is an ISO standard (in fact several: SQL92
 is ISO/IEC 9075, also known as ANSI X3.135-1992, and SQL99 is coming
 into use) for an interface language called SQL (Structured Query
-Language, sometimes pronounced 'sequel': see Bowman *et al.* 1996 and
+Language, sometimes pronounced 'sequel': see Bowman _et al._ 1996 and
 Kline and Kline 2001) which these DBMSs support to varying degrees.
 
-  ------------------------------- ---- --
-  • [SQL queries](#SQL-queries)        
-  • [Data types](#Data-types)          
-  ------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [SQL queries](#SQL-queries)     
+ • [Data types](#Data-types)
 
- 
-Next: [Data types](#Data-types), Previous: [Overview of
-RDBMSs](#Overview-of-RDBMSs), Up: [Overview of
-RDBMSs](#Overview-of-RDBMSs)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 4.2.1 SQL queries 
+---
+
+#### 4.2.1 SQL queries
 
 The more comprehensive R interfaces generate SQL behind the scenes for
 common operations, but direct use of SQL is needed for complex
@@ -1338,16 +1185,15 @@ operations in all. Conventionally SQL is written in upper case, but many
 users will find it more convenient to use lower case in the R interface
 functions.
 
-A relational DBMS stores data as a database of *tables* (or *relations*)
+A relational DBMS stores data as a database of _tables_ (or _relations_)
 which are rather similar to R data frames, in that they are made up of
-*columns* or *fields* of one type (numeric, character, date, currency,
-...) and *rows* or *records* containing the observations for one entity.
+_columns_ or _fields_ of one type (numeric, character, date, currency,
+...) and _rows_ or _records_ containing the observations for one entity.
 
 SQL 'queries' are quite general operations on a relational database. The
 classical query is a SELECT statement of the type
 
- 
-``` 
+```r
 SELECT State, Murder FROM USArrests WHERE Rape > 30 ORDER BY Murder
 
 SELECT t.sch, c.meanses, t.sex, t.achieve
@@ -1361,7 +1207,7 @@ SELECT sch, AVG(sestat) FROM student GROUP BY sch LIMIT 10
 The first of these selects two columns from the R data frame `USArrests`
 that has been copied across to a database table, subsets on a third
 column and asks the results be sorted. The second performs a database
-*join* on two tables `student` and `school` and returns four columns.
+_join_ on two tables `student` and `school` and returns four columns.
 The third and fourth queries do some cross-tabulation and return counts
 or averages. (The five aggregation functions are COUNT(\*) and SUM, MAX,
 MIN and AVG, each applied to a single column.)
@@ -1397,14 +1243,9 @@ DELETE or UPDATE data. A table is destroyed by a DROP TABLE 'query'.
 Kline and Kline (2001) discuss the details of the implementation of SQL
 in Microsoft SQL Server 2000, Oracle, MySQL and PostgreSQL.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [SQL queries](#SQL-queries), Up: [Overview of
-RDBMSs](#Overview-of-RDBMSs)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 4.2.2 Data types 
+#### 4.2.2 Data types
 
 Data can be stored in a database in various data types. The range of
 data types is DBMS-specific, but the SQL standard defines many types,
@@ -1413,41 +1254,41 @@ SQL name).
 
 `float(p)`
 
-:   Real number, with optional precision. Often called `real` or
-    `double` or `double precision`.
+: Real number, with optional precision. Often called `real` or
+`double` or `double precision`.
 
 `integer`
 
-:   32-bit integer. Often called `int`.
+: 32-bit integer. Often called `int`.
 
 `smallint`
 
-:   16-bit integer
+: 16-bit integer
 
 `character(n)`
 
-:   fixed-length character string. Often called `char`.
+: fixed-length character string. Often called `char`.
 
 `character varying(n)`
 
-:   variable-length character string. Often called `varchar`. Almost
-    always has a limit of 255 chars.
+: variable-length character string. Often called `varchar`. Almost
+always has a limit of 255 chars.
 
 `boolean`
 
-:   true or false. Sometimes called `bool` or `bit`.
+: true or false. Sometimes called `bool` or `bit`.
 
 `date`
 
-:   calendar date
+: calendar date
 
 `time`
 
-:   time of day
+: time of day
 
 `timestamp`
 
-:   date and time
+: date and time
 
 There are variants on `time` and `timestamp`, `with timezone`. Other
 types widely implemented are `text` and `blob`, for large blocks of text
@@ -1456,14 +1297,9 @@ and binary data, respectively.
 The more comprehensive of the R interface packages hide the type
 conversion issues from the user.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Overview of RDBMSs](#Overview-of-RDBMSs), Up: [Relational
-databases](#Relational-databases)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 4.3 R interface packages 
+### 4.3 R interface packages
 
 There are several packages available on CRAN to help R communicate with
 DBMSs. They provide different levels of abstraction. Some provide means
@@ -1497,20 +1333,16 @@ using JavaScript rather than SQL. Package
 [**mongolite**](https://CRAN.R-project.org/package=mongolite) is another
 client using **mongodb**'s C driver.
 
-  ------------------- ---- --
-  • [DBI](#DBI)            
-  • [RODBC](#RODBC)        
-  ------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [DBI](#DBI)     
+ • [RODBC](#RODBC)
 
- 
-Next: [RODBC](#RODBC), Previous: [R interface
-packages](#R-interface-packages), Up: [R interface
-packages](#R-interface-packages)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 4.3.1 Packages using DBI 
+---
+
+#### 4.3.1 Packages using DBI
 
 Package [**RMySQL**](https://CRAN.R-project.org/package=RMySQL) on CRAN
 provides an interface to the MySQL database system (see
@@ -1528,8 +1360,6 @@ MySQL was originally a 'light and lean' database. (It preserves the case
 of names where the operating file system is case-sensitive, so not on
 Windows.)
 
-  
-
 The call `dbDriver("MySQL")` returns a database connection manager
 object, and then a call to `dbConnect` opens a database connection which
 can subsequently be closed by a call to the generic function
@@ -1538,8 +1368,6 @@ can subsequently be closed by a call to the generic function
 [**ROracle**](https://CRAN.R-project.org/package=ROracle),
 [**RPostgreSQL**](https://CRAN.R-project.org/package=RPostgreSQL) or
 [**RSQLite**](https://CRAN.R-project.org/package=RSQLite) respectively.
-
-  
 
 SQL queries can be sent by either `dbSendQuery` or `dbGetQuery`.
 `dbGetquery` sends the query and retrieves the results as a data frame.
@@ -1552,15 +1380,12 @@ query result, as a list. The function `dbHasCompleted` indicates if all
 the rows have been fetched, and `dbGetRowCount` returns the number of
 rows in the result.
 
-  
-
 These are convenient interfaces to read/write/test/delete tables in the
 database. `dbReadTable` and `dbWriteTable` copy to and from an R data
 frame, mapping the row names of the data frame to the field `row_names`
 in the `MySQL` table.
 
- 
-``` 
+```r
 > library(RMySQL) # will load DBI as well
 ## open a connection to a MySQL database
 > con <- dbConnect(dbDriver("MySQL"), dbname = "test")
@@ -1596,16 +1421,9 @@ Arkansas          8.8     190       50 19.5
 > dbDisconnect(con)
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [DBI](#DBI), Up: [R interface packages](#R-interface-packages)
- 
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-#### 4.3.2 Package RODBC 
-
- 
+#### 4.3.2 Package RODBC
 
 Package [**RODBC**](https://CRAN.R-project.org/package=RODBC) on CRAN
 provides an interface to database sources supporting an ODBC interface.
@@ -1618,18 +1436,16 @@ PostgreSQL, Oracle and IBM DB2 on Windows and MySQL, MariaDB, Oracle,
 PostgreSQL and SQLite on Linux.
 
 ODBC is a client-server system, and we have happily connected to a DBMS
-running on a Unix server from a Windows client, and *vice versa*.
+running on a Unix server from a Windows client, and _vice versa_.
 
 On Windows ODBC support is part of the OS. On Unix/Linux you will need
 an ODBC Driver Manager such as unixODBC (<http://www.unixODBC.org>) or
 iOBDC (<http://www.iODBC.org>: this is pre-installed in macOS) and an
 installed driver for your database system.
 
-  
-
 Windows provides drivers not just for DBMSs but also for Excel
 (`.xls`) spreadsheets, DBase (`.dbf`) files and even
-text files. (The named applications do *not* need to be installed. Which
+text files. (The named applications do _not_ need to be installed. Which
 file formats are supported depends on the versions of the drivers.)
 There are versions for Excel and Access 2007/2010 (go to
 <https://www.microsoft.com/en-us/download/default.aspx>, and search for
@@ -1642,8 +1458,6 @@ On macOS the Actual Technologies
 interfaces to Access databases and to Excel spreadsheets (not including
 Excel 2007/2010).
 
- 
-
 Many simultaneous connections are possible. A connection is opened by a
 call to `odbcConnect` or `odbcDriverConnect` (which on the Windows GUI
 allows a database to be selected via dialog boxes) which returns a
@@ -1651,21 +1465,14 @@ handle used for subsequent access to the database. Printing a connection
 will provide some details of the ODBC connection, and calling
 `odbcGetInfo` will give details on the client and server.
 
- 
-
 A connection is closed by a call to `close` or `odbcClose`, and also
 (with a warning) when not R object refers to it and at the end of an R
 session.
 
 Details of the tables on a connection can be found using `sqlTables`.
 
- 
-
 Function `sqlSave` copies an R data frame to a table in the database,
 and `sqlFetch` copies a table in the database to an R data frame.
-
-  
- 
 
 An SQL query can be sent to the database by a call to `sqlQuery`. This
 returns the result in an R data frame. (`sqlCopy` sends a query to the
@@ -1682,10 +1489,9 @@ created earlier, and had the DSN (data source name) set up in
 using MyODBC to access a MySQL database under Linux or Windows (where
 MySQL also maps names to lowercase). Under Windows, DSNs are set up in
 the ODBC applet in the Control Panel ('Data Sources (ODBC)' in the
-'Administrative Tools' section). 
+'Administrative Tools' section).
 
- 
-``` 
+```r
 > library(RODBC)
 ## tell it to map names to l/case
 > channel <- odbcConnect("testdb", uid="ripley", case="tolower")
@@ -1696,7 +1502,7 @@ the ODBC applet in the Control Panel ('Data Sources (ODBC)' in the
 ## list the tables in the database
 > sqlTables(channel)
   TABLE_QUALIFIER TABLE_OWNER TABLE_NAME TABLE_TYPE REMARKS
-1                              usarrests      TABLE        
+1                              usarrests      TABLE
 ## list it
 > sqlFetch(channel, "USArrests", rownames = "state")
                murder assault urbanpop rape
@@ -1721,13 +1527,10 @@ Alaska           10.0     263       48 44.5
 > odbcClose(channel)
 ```
 
-  
-
 As a simple example of using ODBC under Windows with a Excel
 spreadsheet, we can read from a spreadsheet by
 
- 
-``` 
+```r
 > library(RODBC)
 > channel <- odbcConnectExcel("bdr.xls")
 ## list the spreadsheets
@@ -1745,34 +1548,23 @@ spreadsheet, we can read from a spreadsheet by
 Notice that the specification of the table is different from the name
 returned by `sqlTables`: `sqlFetch` is able to map the differences.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Image files](#Image-files), Previous: [Relational
-databases](#Relational-databases), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 5 Binary files
 
-5 Binary files 
---------------
+---
 
-  --------------------------------------------------- ---- --
-  • [Binary data formats](#Binary-data-formats)            
-  • [dBase files (DBF)](#dBase-files-_0028DBF_0029)        
-  --------------------------------------------------- ---- --
+• [Binary data formats](#Binary-data-formats)     
+ • [dBase files (DBF)](#dBase-files-_0028DBF_0029)
+
+---
 
 Binary connections ([Connections](#Connections)) are now the preferred
 way to handle binary files.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [dBase files (DBF)](#dBase-files-_0028DBF_0029), Previous: [Binary
-files](#Binary-files), Up: [Binary files](#Binary-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.1 Binary data formats 
-
-  
+### 5.1 Binary data formats
 
 Packages [**h5**](https://CRAN.R-project.org/package=h5), Bioconductor's
 **rhdf5**, [**RNetCDF**](https://CRAN.R-project.org/package=RNetCDF) and
@@ -1784,7 +1576,7 @@ interfaces to NASA's HDF5 (Hierarchical Data Format, see
 
 Both of these are systems to store scientific data in array-oriented
 ways, including descriptions, labels, formats, units, .... HDF5 also
-allows *groups* of arrays, and the R interface maps lists to HDF5
+allows _groups_ of arrays, and the R interface maps lists to HDF5
 groups, and can write numeric and character vectors and matrices.
 
 NetCDF's version 4 format (confusingly, implemented in netCDF 4.1.1 and
@@ -1797,16 +1589,9 @@ version 3 files.
 The availability of software to support these formats is somewhat
 limited by platform, especially on Windows.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Binary data formats](#Binary-data-formats), Up: [Binary
-files](#Binary-files)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 5.2 dBase files (DBF) 
-
- 
+### 5.2 dBase files (DBF)
 
 `dBase` was a DOS program written by Ashton-Tate and later owned by
 Borland which has a binary flat-file format that became popular, with
@@ -1821,24 +1606,16 @@ character, logical and numeric fields, and other types in later versions
 <http://www.digitalpreservation.gov/formats/fdd/fdd000325.shtml> and
 <http://www.clicketyclick.dk/databases/xbase/format/index.html>).
 
- 
-
 Functions `read.dbf` and `write.dbf` provide ways to read and write
 basic DBF files on all R platforms. For Windows users `odbcConnectDbase`
 in package [**RODBC**](https://CRAN.R-project.org/package=RODBC)
-provides more comprehensive facilities to read DBF files *via*
+provides more comprehensive facilities to read DBF files _via_
 Microsoft's dBase ODBC driver (and the Visual FoxPro driver can also be
-used via `odbcDriverConnect`). 
+used via `odbcDriverConnect`).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Connections](#Connections), Previous: [Binary
-files](#Binary-files), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-6 Image files 
--------------
+## 6 Image files
 
 A particular class of binary files are those representing images, and a
 not uncommon request is to read such a file into R as a matrix.
@@ -1883,38 +1660,27 @@ such as JPEG 2000 (which is a different format from JPEG, and not
 currently supported in the macOS nor Windows binary versions of
 [**rgdal**](https://CRAN.R-project.org/package=rgdal)).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Network interfaces](#Network-interfaces), Previous: [Image
-files](#Image-files), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 7 Connections
 
-7 Connections 
--------------
-
-*Connections* are used in R in the sense of Chambers (1998) and Ripley
+_Connections_ are used in R in the sense of Chambers (1998) and Ripley
 (2001), a set of functions to replace the use of file names by a
 flexible interface to file-like objects.
 
-  --------------------------------------------------------------------------------- ---- --
-  • [Types of connections](#Types-of-connections)                                        
-  • [Output to connections](#Output-to-connections)                                      
-  • [Input from connections](#Input-from-connections)                                    
-  • [Listing and manipulating connections](#Listing-and-manipulating-connections)        
-  • [Binary connections](#Binary-connections)                                            
-  --------------------------------------------------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Types of connections](#Types-of-connections)     
+ • [Output to connections](#Output-to-connections)     
+ • [Input from connections](#Input-from-connections)     
+ • [Listing and manipulating connections](#Listing-and-manipulating-connections)     
+ • [Binary connections](#Binary-connections)
 
- 
-Next: [Output to connections](#Output-to-connections), Previous:
-[Connections](#Connections), Up: [Connections](#Connections)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-### 7.1 Types of connections 
+---
 
-  
+### 7.1 Types of connections
 
 The most familiar type of connection will be a file, and file
 connections are created by function `file`. File connections can (if the
@@ -1923,8 +1689,6 @@ writing or appending, in text or binary mode. In fact, files can be
 opened for both reading and writing, and R keeps a separate file
 position for reading and writing.
 
- 
-
 Note that by default a connection is not opened when it is created. The
 rule is that a function using a connection should open a connection
 (needed) if the connection is not already open, and close a connection
@@ -1932,16 +1696,12 @@ after use if it opened it. In brief, leave the connection in the state
 you found it in. There are generic functions `open` and `close` with
 methods to explicitly open and close connections.
 
-  
-
 Files compressed via the algorithm used by `gzip` can be used as
 connections created by the function `gzfile`, whereas files compressed
 by `bzip2` can be used via `bzfile`.
 
-  
-
 Unix programmers are used to dealing with special files `stdin`,
-`stdout` and `stderr`. These exist as *terminal connections* in R. They
+`stdout` and `stderr`. These exist as _terminal connections_ in R. They
 may be normal files, but they might also refer to input from and output
 to a GUI console. (Even with the standard Unix R interface, `stdin`
 refers to the lines submitted from `readline` rather than a file.)
@@ -1955,9 +1715,7 @@ output is sent to `stderr` unless re-directed by
 connections cannot be re-directed, but output can be sent to other
 connections.
 
- 
-
-*Text connections* are another source of input. They allow R character
+_Text connections_ are another source of input. They allow R character
 vectors to be read as if the lines were being read from a text file. A
 text connection is created and opened by a call to `textConnection`,
 which copies the current contents of the character vector to an internal
@@ -1971,9 +1729,7 @@ the complete lines output to the connection are available in the R
 object. Closing the connection writes any remaining output to a final
 element of the character vector.
 
- 
-
-*Pipes* are a special form of file that connects to another process, and
+_Pipes_ are a special form of file that connects to another process, and
 pipe connections are created by the function `pipe`. Opening a pipe
 connection for writing (it makes no sense to append to a pipe) runs an
 OS command, and connects its standard input to whatever R then writes to
@@ -1981,32 +1737,19 @@ that connection. Conversely, opening a pipe connection for input runs an
 OS command and makes its standard output available for R input from that
 connection.
 
- 
-
 URLs of types '`http://`', '`https://`',
 '`ftp://`' and '`file://`' can be read from using the
 function `url`. For convenience, `file` will also accept these as the
 file specification and call `url`.
-
- 
 
 Sockets can also be used as connections via function `socketConnection`
 on platforms which support Berkeley-like sockets (most Unix systems,
 Linux and Windows). Sockets can be written to or read from, and both
 client and server sockets can be used.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Input from connections](#Input-from-connections), Previous:
-[Types of connections](#Types-of-connections), Up:
-[Connections](#Connections)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 7.2 Output to connections 
-
-  
- 
+### 7.2 Output to connections
 
 We have described functions `cat`, `write`, `write.table` and `sink` as
 writing to a file, possibly appending to a file if argument
@@ -2026,10 +1769,9 @@ connection.
 
 Some simple examples are
 
- 
-``` 
+```r
 zz <- file("ex.data", "w")  # open an output file connection
-cat("TITLE extra line", "2 3 5 7", "", "11 13 17", 
+cat("TITLE extra line", "2 3 5 7", "", "11 13 17",
     file = zz, sep = "\n")
 cat("One more line\n", file = zz)
 close(zz)
@@ -2053,18 +1795,9 @@ close(zz)
 cat(ex.lm.out, sep = "\n")
 ```
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Listing and manipulating
-connections](#Listing-and-manipulating-connections), Previous: [Output
-to connections](#Output-to-connections), Up: [Connections](#Connections)
- 
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 7.3 Input from connections 
-
-  
+### 7.3 Input from connections
 
 The basic functions to read from connections are `scan` and `readLines`.
 These take a character string argument and open a file connection for
@@ -2076,8 +1809,7 @@ particular `read.table`.
 
 Some simple examples are
 
- 
-``` 
+```r
 ## read in file created in last examples
 readLines("ex.data")
 unlink("ex.data")
@@ -2098,20 +1830,15 @@ For convenience, if the `file` argument specifies a FTP, HTTP or HTTPS
 URL, the URL is opened for reading via `url`. Specifying files via
 '`file://foo.bar`' is also allowed.
 
-  ------------------------- ---- --
-  • [Pushback](#Pushback)        
-  ------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Pushback](#Pushback)
 
- 
-Previous: [Input from connections](#Input-from-connections), Up: [Input
-from connections](#Input-from-connections)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 7.3.1 Pushback 
+---
 
- 
+#### 7.3.1 Pushback
 
 C programmers may be familiar with the `ungetc` function to push back a
 character onto a text input stream. R connections have the same idea in
@@ -2126,8 +1853,7 @@ lines pushed back can be found via a call to `pushBackLength`.
 
 A simple example will show the idea.
 
- 
-``` 
+```r
 > zz <- textConnection(LETTERS)
 > readLines(zz, 2)
 [1] "A" "B"
@@ -2137,30 +1863,21 @@ Read 4 items
 > pushBack(c("aa", "bb"), zz)
 > scan(zz, "", 4)
 Read 4 items
-[1] "aa" "bb" "G"  "H" 
+[1] "aa" "bb" "G"  "H"
 > close(zz)
 ```
 
 Pushback is only available for connections opened for input in text
 mode.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Binary connections](#Binary-connections), Previous: [Input from
-connections](#Input-from-connections), Up: [Connections](#Connections)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 7.4 Listing and manipulating connections 
-
- 
+### 7.4 Listing and manipulating connections
 
 A summary of all the connections currently opened by the user can be
 found by `showConnections()`, and a summary of all connections,
 including closed and terminal connections, by
 `showConnections(all = TRUE)`
-
- 
 
 The generic function `seek` can be used to read and (on some
 connections) reset the current position for reading or writing.
@@ -2172,17 +1889,9 @@ The function `truncate` can be used to truncate a file opened for
 writing at its current position. It works only for `file` connections,
 and is not implemented on all platforms.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Listing and manipulating
-connections](#Listing-and-manipulating-connections), Up:
-[Connections](#Connections)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 7.5 Binary connections 
-
-  
+### 7.5 Binary connections
 
 Functions `readBin` and `writeBin` read to and write from binary
 connections. A connection is opened in binary mode by appending `"b"` to
@@ -2190,10 +1899,9 @@ the mode specification, that is using mode `"rb"` for reading, and mode
 `"wb"` or `"ab"` (where appropriate) for writing. The functions have
 arguments
 
- 
-``` 
-readBin(con, what, n = 1, size = NA, endian = .Platform$endian) 
-writeBin(object, con, size = NA, endian = .Platform$endian) 
+```r
+readBin(con, what, n = 1, size = NA, endian = .Platform$endian)
+writeBin(object, con, size = NA, endian = .Platform$endian)
 ```
 
 In each case `con` is a connection which will be opened if necessary for
@@ -2217,13 +1925,13 @@ shorter vector will be returned. Argument `signed` allows 1-byte and
 
 The remaining two arguments are used to write or read data for
 interchange with another program or another platform. By default binary
-data is transferred directly from memory to the connection or *vice
-versa*. This will not suffice if the data are to be transferred to a
+data is transferred directly from memory to the connection or _vice
+versa_. This will not suffice if the data are to be transferred to a
 machine with a different architecture, but between almost all R
 platforms the only change needed is that of byte-order. Common PCs
 ('`ix86`'-based and '`x86_64`'-based machines), Compaq
-Alpha and Vaxen are *little-endian*, whereas Sun Sparc, mc680x0 series,
-IBM R6000, SGI and most others are *big-endian*. (Network byte-order (as
+Alpha and Vaxen are _little-endian_, whereas Sun Sparc, mc680x0 series,
+IBM R6000, SGI and most others are _big-endian_. (Network byte-order (as
 used by XDR, eXternal Data Representation) is big-endian.) To transfer
 to or from other programs we may need to do more, for example to read
 16-bit integers or write single-precision real numbers. This can be done
@@ -2232,24 +1940,19 @@ integers and logicals, and sizes 4, 8 and perhaps 12 or 16 for reals.
 Transferring at different sizes can lose precision, and should not be
 attempted for vectors containing `NA`'s.
 
- 
-
 Character strings are read and written in C format, that is as a string
 of bytes terminated by a zero byte. Functions `readChar` and `writeChar`
 provide greater flexibility.
 
-  ------------------------------------- ---- --
-  • [Special values](#Special-values)        
-  ------------------------------------- ---- --
+---
 
-------------------------------------------------------------------------
+• [Special values](#Special-values)
 
- 
-Previous: [Binary connections](#Binary-connections), Up: [Binary
-connections](#Binary-connections)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-#### 7.5.1 Special values 
+---
+
+#### 7.5.1 Special values
 
 Functions `readBin` and `writeBin` will pass missing and special values,
 although this should not be attempted if a size change is involved.
@@ -2267,43 +1970,34 @@ standalone `Rmath` library which exports double constants `NA_REAL`,
 which defines the macros `ISNAN` and `R_FINITE`.
 
 If that is not possible, on all current platforms IEC 60559 (aka IEEE
-754) arithmetic is used, so standard C facilities can be used to test
-for or set `Inf`, `-Inf` and `NaN` values. On such platforms `NA` is
-represented by the `NaN` value with low-word `0x7a2` (1954 in decimal).
+
+754. arithmetic is used, so standard C facilities can be used to test
+     for or set `Inf`, `-Inf` and `NaN` values. On such platforms `NA` is
+     represented by the `NaN` value with low-word `0x7a2` (1954 in decimal).
 
 Character missing values are written as `NA`, and there are no provision
 to recognize character values as missing (as this can be done by
 re-assigning them once read).
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Reading Excel spreadsheets](#Reading-Excel-spreadsheets),
-Previous: [Connections](#Connections), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## 8 Network interfaces
 
-8 Network interfaces 
---------------------
+---
 
-  --------------------------------------------------- ---- --
-  • [Reading from sockets](#Reading-from-sockets)          
-  • [Using download.file](#Using-download_002efile)        
-  --------------------------------------------------- ---- --
+• [Reading from sockets](#Reading-from-sockets)     
+ • [Using download.file](#Using-download_002efile)
+
+---
 
 Some limited facilities are available to exchange data at a lower level
 across network connections.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Using download.file](#Using-download_002efile), Previous:
-[Network interfaces](#Network-interfaces), Up: [Network
-interfaces](#Network-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+### 8.1 Reading from sockets
 
-### 8.1 Reading from sockets 
-
-Base R comes with some facilities to communicate *via* BSD sockets on
+Base R comes with some facilities to communicate _via_ BSD sockets on
 systems that support them (including the common Linux, Unix and Windows
 ports of R). One potential problem with using sockets is that these
 facilities are often blocked for security reasons or to force the use of
@@ -2311,20 +2005,12 @@ Web caches, so these functions may be more useful on an intranet than
 externally. For new projects it is suggested that socket connections are
 used instead.
 
- 
- 
-
 The earlier low-level interface is given by functions `make.socket`,
 `read.socket`, `write.socket` and `close.socket`.
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Reading from sockets](#Reading-from-sockets), Up: [Network
-interfaces](#Network-interfaces)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-### 8.2 Using `download.file` 
+### 8.2 Using `download.file`
 
 Function `download.file` is provided to read a file from a Web resource
 via FTP or HTTP (including HTTPS) and write it to a file. Often this can
@@ -2333,25 +2019,14 @@ directly from a URL, either by explicitly using `url` to open a
 connection, or implicitly using it by giving a URL as the `file`
 argument.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [References](#References), Previous: [Network
-interfaces](#Network-interfaces), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
-
-9 Reading Excel spreadsheets 
-----------------------------
-
- 
+## 9 Reading Excel spreadsheets
 
 The most common R data import/export question seems to be 'how do I read
 an Excel spreadsheet'. This chapter collects together advice and options
 given earlier. Note that most of the advice is for pre-Excel 2007
 spreadsheets and not the later `.xlsx` format.
-
- 
- 
 
 The first piece of advice is to avoid doing so if possible! If you have
 access to Excel, export the data you want from Excel in tab-delimited or
@@ -2374,8 +2049,6 @@ files can contain many sheets, and the sheets can contain formulae,
 macros and so on. Not all readers can read other than the first sheet,
 and may be confused by other contents of the file.
 
- 
-
 Windows users (of 32-bit R) can use `odbcConnectExcel` in package
 [**RODBC**](https://CRAN.R-project.org/package=RODBC). This can select
 rows and columns from any of the sheets in an Excel spreadsheet file (at
@@ -2394,12 +2067,10 @@ provides a basic wrapper in its `read.xls` function. With suitable
 `Perl` modules installed this function can also read Excel 2007
 spreadsheets.
 
- 
-
 Packages
 [**dataframes2xls**](https://CRAN.R-project.org/package=dataframes2xls)
 and [**WriteXLS**](https://CRAN.R-project.org/package=WriteXLS) each
-contain a function to *write* one or more data frames to an
+contain a function to _write_ one or more data frames to an
 `.xls` file, using Python and Perl respectively.
 
 Packages [**xlsx**](https://CRAN.R-project.org/package=xlsx) can read
@@ -2413,1423 +2084,1011 @@ Package [**readxl**](https://CRAN.R-project.org/package=readxl) can read
 both Excel 97--2003 and Excel 2007/10 spreadsheets, using an included C
 library.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Function and variable index](#Function-and-variable-index),
-Previous: [Reading Excel spreadsheets](#Reading-Excel-spreadsheets), Up:
-[Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## Appendix A References
 
-Appendix A References 
----------------------
-
-R. A. Becker, J. M. Chambers and A. R. Wilks (1988) *The New S Language.
-A Programming Environment for Data Analysis and Graphics.* Wadsworth &
+R. A. Becker, J. M. Chambers and A. R. Wilks (1988) _The New S Language.
+A Programming Environment for Data Analysis and Graphics._ Wadsworth &
 Brooks/Cole.
 
-J. Bowman, S. Emberson and M. Darnovsky (1996) *The Practical SQL
-Handbook. Using Structured Query Language.* Addison-Wesley.
+J. Bowman, S. Emberson and M. Darnovsky (1996) _The Practical SQL
+Handbook. Using Structured Query Language._ Addison-Wesley.
 
-J. M. Chambers (1998) *Programming with Data. A Guide to the S
-Language.* Springer-Verlag.
+J. M. Chambers (1998) _Programming with Data. A Guide to the S
+Language._ Springer-Verlag.
 
-P. Dubois (2000) *MySQL.* New Riders.
+P. Dubois (2000) _MySQL._ New Riders.
 
-M. Henning and S. Vinoski (1999) *Advanced CORBA Programming with C++.*
+M. Henning and S. Vinoski (1999) _Advanced CORBA Programming with C++._
 Addison-Wesley.
 
-K. Kline and D. Kline (2001) *SQL in a Nutshell.* O'Reilly.
+K. Kline and D. Kline (2001) _SQL in a Nutshell._ O'Reilly.
 
-B. Momjian (2000) *PostgreSQL: Introduction and Concepts.*
+B. Momjian (2000) _PostgreSQL: Introduction and Concepts._
 Addison-Wesley. Also available at
 <http://momjian.us/main/writings/pgsql/aw_pgsql_book/>.
 
-B. D. Ripley (2001) Connections. *R News*, **1/1**, 16--7.
+B. D. Ripley (2001) Connections. _R News_, **1/1**, 16--7.
 <https://www.r-project.org/doc/Rnews/Rnews_2001-1.pdf>
 
-T. M. Therneau and P. M. Grambsch (2000) *Modeling Survival Data.
-Extending the Cox Model.* Springer-Verlag.
+T. M. Therneau and P. M. Grambsch (2000) _Modeling Survival Data.
+Extending the Cox Model._ Springer-Verlag.
 
-E. J. Yarger, G. Reese and T. King (1999) *MySQL & mSQL*. O'Reilly.
+E. J. Yarger, G. Reese and T. King (1999) _MySQL & mSQL_. O'Reilly.
 
-------------------------------------------------------------------------
+---
 
- 
-Next: [Concept index](#Concept-index), Previous:
-[References](#References), Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+## Function and variable index
 
-Function and variable index 
----------------------------
+---
 
-  ----------------------------------- --------------------------------------------------------------------
-  Jump to:                            [**.**](#Function-and-variable-index_vr_symbol-1)
-                                       \
-                                      [**B**](#Function-and-variable-index_vr_letter-B)  
-                                      [**C**](#Function-and-variable-index_vr_letter-C)  
-                                      [**D**](#Function-and-variable-index_vr_letter-D)  
-                                      [**F**](#Function-and-variable-index_vr_letter-F)  
-                                      [**G**](#Function-and-variable-index_vr_letter-G)  
-                                      [**H**](#Function-and-variable-index_vr_letter-H)  
-                                      [**I**](#Function-and-variable-index_vr_letter-I)  
-                                      [**M**](#Function-and-variable-index_vr_letter-M)  
-                                      [**N**](#Function-and-variable-index_vr_letter-N)  
-                                      [**O**](#Function-and-variable-index_vr_letter-O)  
-                                      [**P**](#Function-and-variable-index_vr_letter-P)  
-                                      [**R**](#Function-and-variable-index_vr_letter-R)  
-                                      [**S**](#Function-and-variable-index_vr_letter-S)  
-                                      [**T**](#Function-and-variable-index_vr_letter-T)  
-                                      [**U**](#Function-and-variable-index_vr_letter-U)  
-                                      [**W**](#Function-and-variable-index_vr_letter-W)  
-                                      [**X**](#Function-and-variable-index_vr_letter-X)  
+Jump to:   [**.**](#Function-and-variable-index_vr_symbol-1){.summary-letter}
+ \
+ [**B**](#Function-and-variable-index_vr_letter-B){.summary-letter}  
+[**C**](#Function-and-variable-index_vr_letter-C){.summary-letter}  
+[**D**](#Function-and-variable-index_vr_letter-D){.summary-letter}  
+[**F**](#Function-and-variable-index_vr_letter-F){.summary-letter}  
+[**G**](#Function-and-variable-index_vr_letter-G){.summary-letter}  
+[**H**](#Function-and-variable-index_vr_letter-H){.summary-letter}  
+[**I**](#Function-and-variable-index_vr_letter-I){.summary-letter}  
+[**M**](#Function-and-variable-index_vr_letter-M){.summary-letter}  
+[**N**](#Function-and-variable-index_vr_letter-N){.summary-letter}  
+[**O**](#Function-and-variable-index_vr_letter-O){.summary-letter}  
+[**P**](#Function-and-variable-index_vr_letter-P){.summary-letter}  
+[**R**](#Function-and-variable-index_vr_letter-R){.summary-letter}  
+[**S**](#Function-and-variable-index_vr_letter-S){.summary-letter}  
+[**T**](#Function-and-variable-index_vr_letter-T){.summary-letter}  
+[**U**](#Function-and-variable-index_vr_letter-U){.summary-letter}  
+[**W**](#Function-and-variable-index_vr_letter-W){.summary-letter}  
+[**X**](#Function-and-variable-index_vr_letter-X){.summary-letter}
 
-  ----------------------------------- --------------------------------------------------------------------
+---
 
 Index Entry
 
- 
-
 Section
 
-------------------------------------------------------------------------
+---
 
 .
 
 [`.dbf`](#index-_002edbf):
 
- 
-
 [RODBC](#RODBC)
 
 [`.xls`](#index-_002exls):
-
- 
 
 [RODBC](#RODBC)
 
 [`.xls`](#index-_002exls-1):
 
- 
-
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`.xlsx`](#index-_002exlsx):
 
- 
-
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
-------------------------------------------------------------------------
+---
 
 B
 
 [`bzfile`](#index-bzfile):
 
- 
-
 [Types of connections](#Types-of-connections)
 
-------------------------------------------------------------------------
+---
 
 C
 
 [`cat`](#index-cat):
 
- 
-
 [Export to text files](#Export-to-text-files)
 
 [`cat`](#index-cat-1):
-
- 
 
 [Output to connections](#Output-to-connections)
 
 [`close`](#index-close):
 
- 
-
 [RODBC](#RODBC)
 
 [`close`](#index-close-1):
-
- 
 
 [Types of connections](#Types-of-connections)
 
 [`close.socket`](#index-close_002esocket):
 
- 
-
 [Reading from sockets](#Reading-from-sockets)
 
 [`count.fields`](#index-count_002efields):
 
- 
-
 [Variations on read.table](#Variations-on-read_002etable)
 
-------------------------------------------------------------------------
+---
 
 D
 
 [`data.restore`](#index-data_002erestore):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [`dataframes2xls`](#index-dataframes2xls):
-
- 
 
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`dbClearResult`](#index-dbClearResult):
 
- 
-
 [DBI](#DBI)
 
 [`dbConnect`](#index-dbConnect):
-
- 
 
 [DBI](#DBI)
 
 [`dbDisconnect`](#index-dbDisconnect):
 
- 
-
 [DBI](#DBI)
 
 [`dbDriver`](#index-dbDriver):
-
- 
 
 [DBI](#DBI)
 
 [`dbExistsTable`](#index-dbExistsTable):
 
- 
-
 [DBI](#DBI)
 
 [`dbGetQuery`](#index-dbGetQuery):
-
- 
 
 [DBI](#DBI)
 
 [`dbReadTable`](#index-dbReadTable):
 
- 
-
 [DBI](#DBI)
 
 [`dbRemoveTable`](#index-dbRemoveTable):
-
- 
 
 [DBI](#DBI)
 
 [`dbSendQuery`](#index-dbSendQuery):
 
- 
-
 [DBI](#DBI)
 
 [`dbWriteTable`](#index-dbWriteTable):
 
- 
-
 [DBI](#DBI)
 
-------------------------------------------------------------------------
+---
 
 F
 
 [`fetch`](#index-fetch):
 
- 
-
 [DBI](#DBI)
 
 [`file`](#index-file):
-
- 
 
 [Types of connections](#Types-of-connections)
 
 [`format`](#index-format):
 
- 
-
 [Export to text files](#Export-to-text-files)
 
 [`ftable`](#index-ftable):
 
- 
-
 [Flat contingency tables](#Flat-contingency-tables)
 
-------------------------------------------------------------------------
+---
 
 G
 
 [`gzfile`](#index-gzfile):
 
- 
-
 [Types of connections](#Types-of-connections)
 
-------------------------------------------------------------------------
+---
 
 H
 
 [`hdf5`](#index-hdf5):
 
- 
-
 [Binary data formats](#Binary-data-formats)
 
-------------------------------------------------------------------------
+---
 
 I
 
 [`isSeekable`](#index-isSeekable):
 
- 
+[Listing and manipulating connections](#Listing-and-manipulating-connections)
 
-[Listing and manipulating
-connections](#Listing-and-manipulating-connections)
-
-------------------------------------------------------------------------
+---
 
 M
 
 [`make.socket`](#index-make_002esocket):
 
- 
-
 [Reading from sockets](#Reading-from-sockets)
 
-------------------------------------------------------------------------
+---
 
 N
 
 [`netCDF`](#index-netCDF):
 
- 
-
 [Binary data formats](#Binary-data-formats)
 
-------------------------------------------------------------------------
+---
 
 O
 
 [`odbcClose`](#index-odbcClose):
 
- 
-
 [RODBC](#RODBC)
 
 [`odbcConnect`](#index-odbcConnect):
-
- 
 
 [RODBC](#RODBC)
 
 [`odbcConnectDbase`](#index-odbcConnectDbase):
 
- 
-
 [dBase files (DBF)](#dBase-files-_0028DBF_0029)
 
 [`odbcConnectExcel`](#index-odbcConnectExcel):
-
- 
 
 [RODBC](#RODBC)
 
 [`odbcConnectExcel`](#index-odbcConnectExcel-1):
 
- 
-
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`odbcConnectExcel2007`](#index-odbcConnectExcel2007):
-
- 
 
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`odbcDriverConnect`](#index-odbcDriverConnect):
 
- 
-
 [RODBC](#RODBC)
 
 [`odbcGetInfo`](#index-odbcGetInfo):
-
- 
 
 [RODBC](#RODBC)
 
 [`odbcQuery`](#index-odbcQuery):
 
- 
-
 [RODBC](#RODBC)
 
 [`open`](#index-open):
 
- 
-
 [Types of connections](#Types-of-connections)
 
-------------------------------------------------------------------------
+---
 
 P
 
 [`pipe`](#index-pipe):
 
- 
-
 [Types of connections](#Types-of-connections)
 
 [`pushBack.`](#index-pushBack_002e):
-
- 
 
 [Pushback](#Pushback)
 
 [`pushBackLength`](#index-pushBackLength):
 
- 
-
 [Pushback](#Pushback)
 
-------------------------------------------------------------------------
+---
 
 R
 
 [`read.csv`](#index-read_002ecsv):
 
- 
-
 [Variations on read.table](#Variations-on-read_002etable)
 
 [`read.csv`](#index-read_002ecsv-1):
-
- 
 
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`read.csv2`](#index-read_002ecsv2):
 
- 
-
 [Variations on read.table](#Variations-on-read_002etable)
 
 [`read.dbf`](#index-read_002edbf):
-
- 
 
 [dBase files (DBF)](#dBase-files-_0028DBF_0029)
 
 [`read.delim`](#index-read_002edelim):
 
- 
-
 [Variations on read.table](#Variations-on-read_002etable)
 
 [`read.delim`](#index-read_002edelim-1):
-
- 
 
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`read.delim2`](#index-read_002edelim2):
 
- 
-
 [Variations on read.table](#Variations-on-read_002etable)
 
 [`read.DIF`](#index-read_002eDIF):
-
- 
 
 [Data Interchange Format (DIF)](#Data-Interchange-Format-_0028DIF_0029)
 
 [`read.DIF`](#index-read_002eDIF-1):
 
- 
-
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`read.dta`](#index-read_002edta):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [`read.epiinfo`](#index-read_002eepiinfo):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [`read.fortran`](#index-read_002efortran):
-
- 
 
 [Fixed-width-format files](#Fixed_002dwidth_002dformat-files)
 
 [`read.ftable`](#index-read_002eftable):
 
- 
-
 [Flat contingency tables](#Flat-contingency-tables)
 
 [`read.fwf`](#index-read_002efwf):
-
- 
 
 [Fixed-width-format files](#Fixed_002dwidth_002dformat-files)
 
 [`read.mtp`](#index-read_002emtp):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [`read.octave`](#index-read_002eoctave):
-
- 
 
 [Octave](#Octave)
 
 [`read.S`](#index-read_002eS):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [`read.socket`](#index-read_002esocket):
-
- 
 
 [Reading from sockets](#Reading-from-sockets)
 
 [`read.spss`](#index-read_002espss):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [`read.systat`](#index-read_002esystat):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [`read.table`](#index-read_002etable):
-
- 
 
 [Variations on read.table](#Variations-on-read_002etable)
 
 [`read.table`](#index-read_002etable-1):
 
- 
-
 [Input from connections](#Input-from-connections)
 
 [`read.table`](#index-read_002etable-2):
-
- 
 
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`read.xls`](#index-read_002exls):
 
- 
-
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`read.xport`](#index-read_002export):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [`readBin`](#index-readBin):
-
- 
 
 [Binary connections](#Binary-connections)
 
 [`readChar`](#index-readChar):
 
- 
-
 [Binary connections](#Binary-connections)
 
 [`readClipboard`](#index-readClipboard):
-
- 
 
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`readLines`](#index-readLines):
 
- 
-
 [Using scan directly](#Using-scan-directly)
 
 [`readLines`](#index-readLines-1):
-
- 
 
 [Input from connections](#Input-from-connections)
 
 [`readxl`](#index-readxl):
 
- 
-
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`reshape`](#index-reshape):
 
- 
-
 [Re-shaping data](#Re_002dshaping-data)
 
-------------------------------------------------------------------------
+---
 
 S
 
 [`scan`](#index-scan):
 
- 
-
 [Imports](#Imports)
 
 [`scan`](#index-scan-1):
-
- 
 
 [Using scan directly](#Using-scan-directly)
 
 [`scan`](#index-scan-2):
 
- 
-
 [Input from connections](#Input-from-connections)
 
 [`seek`](#index-seek):
 
- 
-
-[Listing and manipulating
-connections](#Listing-and-manipulating-connections)
+[Listing and manipulating connections](#Listing-and-manipulating-connections)
 
 [`showConnections`](#index-showConnections):
 
- 
-
-[Listing and manipulating
-connections](#Listing-and-manipulating-connections)
+[Listing and manipulating connections](#Listing-and-manipulating-connections)
 
 [`sink`](#index-sink):
-
- 
 
 [Export to text files](#Export-to-text-files)
 
 [`sink`](#index-sink-1):
 
- 
-
 [Output to connections](#Output-to-connections)
 
 [`socketConnection`](#index-socketConnection):
-
- 
 
 [Types of connections](#Types-of-connections)
 
 [`sqlCopy`](#index-sqlCopy):
 
- 
-
 [RODBC](#RODBC)
 
 [`sqlFetch`](#index-sqlFetch):
-
- 
 
 [RODBC](#RODBC)
 
 [`sqlFetchMore`](#index-sqlFetchMore):
 
- 
-
 [RODBC](#RODBC)
 
 [`sqlGetResults`](#index-sqlGetResults):
-
- 
 
 [RODBC](#RODBC)
 
 [`sqlQuery`](#index-sqlQuery):
 
- 
-
 [RODBC](#RODBC)
 
 [`sqlSave`](#index-sqlSave):
-
- 
 
 [RODBC](#RODBC)
 
 [`sqlTables`](#index-sqlTables):
 
- 
-
 [RODBC](#RODBC)
 
 [`stack`](#index-stack):
-
- 
 
 [Re-shaping data](#Re_002dshaping-data)
 
 [`stderr`](#index-stderr):
 
- 
-
 [Types of connections](#Types-of-connections)
 
 [`stdin`](#index-stdin):
-
- 
 
 [Types of connections](#Types-of-connections)
 
 [`stdout`](#index-stdout):
 
- 
-
 [Types of connections](#Types-of-connections)
 
 [`Sys.localeconv`](#index-Sys_002elocaleconv):
 
- 
-
 [Variations on read.table](#Variations-on-read_002etable)
 
-------------------------------------------------------------------------
+---
 
 T
 
 [`textConnection`](#index-textConnection):
 
- 
-
 [Types of connections](#Types-of-connections)
 
 [`truncate`](#index-truncate):
 
- 
+[Listing and manipulating connections](#Listing-and-manipulating-connections)
 
-[Listing and manipulating
-connections](#Listing-and-manipulating-connections)
-
-------------------------------------------------------------------------
+---
 
 U
 
 [`unstack.`](#index-unstack_002e):
 
- 
-
 [Re-shaping data](#Re_002dshaping-data)
 
 [`url`](#index-url):
 
- 
-
 [Types of connections](#Types-of-connections)
 
-------------------------------------------------------------------------
+---
 
 W
 
 [`write`](#index-write):
 
- 
-
 [Export to text files](#Export-to-text-files)
 
 [`write`](#index-write-1):
-
- 
 
 [Output to connections](#Output-to-connections)
 
 [`write.csv`](#index-write_002ecsv):
 
- 
-
 [Export to text files](#Export-to-text-files)
 
 [`write.csv2`](#index-write_002ecsv2):
-
- 
 
 [Export to text files](#Export-to-text-files)
 
 [`write.dbf`](#index-write_002edbf):
 
- 
-
 [dBase files (DBF)](#dBase-files-_0028DBF_0029)
 
 [`write.dta`](#index-write_002edta):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [`write.foreign`](#index-write_002eforeign):
-
- 
 
 [Export to text files](#Export-to-text-files)
 
 [`write.matrix`](#index-write_002ematrix):
 
- 
-
 [Export to text files](#Export-to-text-files)
 
 [`write.socket`](#index-write_002esocket):
-
- 
 
 [Reading from sockets](#Reading-from-sockets)
 
 [`write.table`](#index-write_002etable):
 
- 
-
 [Export to text files](#Export-to-text-files)
 
 [`write.table`](#index-write_002etable-1):
-
- 
 
 [Output to connections](#Output-to-connections)
 
 [`writeBin`](#index-writeBin):
 
- 
-
 [Binary connections](#Binary-connections)
 
 [`writeChar`](#index-writeChar):
-
- 
 
 [Binary connections](#Binary-connections)
 
 [`writeLines`](#index-writeLines):
 
- 
-
 [Output to connections](#Output-to-connections)
 
 [`WriteXLS`](#index-WriteXLS):
 
- 
-
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
-------------------------------------------------------------------------
+---
 
 X
 
 [`XLConnect`](#index-XLConnect):
 
- 
-
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
 [`xlsx`](#index-xlsx):
 
- 
-
 [Reading Excel spreadsheets](#Reading-Excel-spreadsheets)
 
-------------------------------------------------------------------------
+---
 
-  ----------------------------------- --------------------------------------------------------------------
-  Jump to:                            [**.**](#Function-and-variable-index_vr_symbol-1)
-                                       \
-                                      [**B**](#Function-and-variable-index_vr_letter-B)  
-                                      [**C**](#Function-and-variable-index_vr_letter-C)  
-                                      [**D**](#Function-and-variable-index_vr_letter-D)  
-                                      [**F**](#Function-and-variable-index_vr_letter-F)  
-                                      [**G**](#Function-and-variable-index_vr_letter-G)  
-                                      [**H**](#Function-and-variable-index_vr_letter-H)  
-                                      [**I**](#Function-and-variable-index_vr_letter-I)  
-                                      [**M**](#Function-and-variable-index_vr_letter-M)  
-                                      [**N**](#Function-and-variable-index_vr_letter-N)  
-                                      [**O**](#Function-and-variable-index_vr_letter-O)  
-                                      [**P**](#Function-and-variable-index_vr_letter-P)  
-                                      [**R**](#Function-and-variable-index_vr_letter-R)  
-                                      [**S**](#Function-and-variable-index_vr_letter-S)  
-                                      [**T**](#Function-and-variable-index_vr_letter-T)  
-                                      [**U**](#Function-and-variable-index_vr_letter-U)  
-                                      [**W**](#Function-and-variable-index_vr_letter-W)  
-                                      [**X**](#Function-and-variable-index_vr_letter-X)  
+---
 
-  ----------------------------------- --------------------------------------------------------------------
+Jump to:   [**.**](#Function-and-variable-index_vr_symbol-1){.summary-letter}
+ \
+ [**B**](#Function-and-variable-index_vr_letter-B){.summary-letter}  
+[**C**](#Function-and-variable-index_vr_letter-C){.summary-letter}  
+[**D**](#Function-and-variable-index_vr_letter-D){.summary-letter}  
+[**F**](#Function-and-variable-index_vr_letter-F){.summary-letter}  
+[**G**](#Function-and-variable-index_vr_letter-G){.summary-letter}  
+[**H**](#Function-and-variable-index_vr_letter-H){.summary-letter}  
+[**I**](#Function-and-variable-index_vr_letter-I){.summary-letter}  
+[**M**](#Function-and-variable-index_vr_letter-M){.summary-letter}  
+[**N**](#Function-and-variable-index_vr_letter-N){.summary-letter}  
+[**O**](#Function-and-variable-index_vr_letter-O){.summary-letter}  
+[**P**](#Function-and-variable-index_vr_letter-P){.summary-letter}  
+[**R**](#Function-and-variable-index_vr_letter-R){.summary-letter}  
+[**S**](#Function-and-variable-index_vr_letter-S){.summary-letter}  
+[**T**](#Function-and-variable-index_vr_letter-T){.summary-letter}  
+[**U**](#Function-and-variable-index_vr_letter-U){.summary-letter}  
+[**W**](#Function-and-variable-index_vr_letter-W){.summary-letter}  
+[**X**](#Function-and-variable-index_vr_letter-X){.summary-letter}
 
-------------------------------------------------------------------------
+---
 
- 
-Previous: [Function and variable index](#Function-and-variable-index),
-Up: [Top](#Top)  
-\[[Contents](#SEC_Contents "Table of contents")\]\[[Index](#Function-and-variable-index "Index")\]
+---
 
-Concept index 
--------------
+## Concept index
 
-  ------------ ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Jump to:     [**A**](#Concept-index_cp_letter-A)   [**B**](#Concept-index_cp_letter-B)   [**C**](#Concept-index_cp_letter-C)   [**D**](#Concept-index_cp_letter-D)   [**E**](#Concept-index_cp_letter-E)   [**F**](#Concept-index_cp_letter-F)   [**H**](#Concept-index_cp_letter-H)   [**I**](#Concept-index_cp_letter-I)   [**L**](#Concept-index_cp_letter-L)   [**M**](#Concept-index_cp_letter-M)   [**N**](#Concept-index_cp_letter-N)   [**O**](#Concept-index_cp_letter-O)   [**P**](#Concept-index_cp_letter-P)   [**Q**](#Concept-index_cp_letter-Q)   [**R**](#Concept-index_cp_letter-R)   [**S**](#Concept-index_cp_letter-S)   [**T**](#Concept-index_cp_letter-T)   [**U**](#Concept-index_cp_letter-U)   [**X**](#Concept-index_cp_letter-X)   [**Y**](#Concept-index_cp_letter-Y)  
-  ------------ ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
+
+Jump to:   [**A**](#Concept-index_cp_letter-A){.summary-letter}   [**B**](#Concept-index_cp_letter-B){.summary-letter}   [**C**](#Concept-index_cp_letter-C){.summary-letter}   [**D**](#Concept-index_cp_letter-D){.summary-letter}   [**E**](#Concept-index_cp_letter-E){.summary-letter}   [**F**](#Concept-index_cp_letter-F){.summary-letter}   [**H**](#Concept-index_cp_letter-H){.summary-letter}   [**I**](#Concept-index_cp_letter-I){.summary-letter}   [**L**](#Concept-index_cp_letter-L){.summary-letter}   [**M**](#Concept-index_cp_letter-M){.summary-letter}   [**N**](#Concept-index_cp_letter-N){.summary-letter}   [**O**](#Concept-index_cp_letter-O){.summary-letter}   [**P**](#Concept-index_cp_letter-P){.summary-letter}   [**Q**](#Concept-index_cp_letter-Q){.summary-letter}   [**R**](#Concept-index_cp_letter-R){.summary-letter}   [**S**](#Concept-index_cp_letter-S){.summary-letter}   [**T**](#Concept-index_cp_letter-T){.summary-letter}   [**U**](#Concept-index_cp_letter-U){.summary-letter}   [**X**](#Concept-index_cp_letter-X){.summary-letter}   [**Y**](#Concept-index_cp_letter-Y){.summary-letter}
+
+---
 
 Index Entry
 
- 
-
 Section
 
-------------------------------------------------------------------------
+---
 
 A
 
 [awk](#index-awk):
 
- 
-
 [Introduction](#Introduction)
 
-------------------------------------------------------------------------
+---
 
 B
 
 [Binary files](#index-Binary-files):
 
- 
-
 [Binary files](#Binary-files)
 
 [Binary files](#index-Binary-files-1):
 
- 
-
 [Binary connections](#Binary-connections)
 
-------------------------------------------------------------------------
+---
 
 C
 
 [comma separated values](#index-comma-separated-values):
 
- 
-
 [Export to text files](#Export-to-text-files)
 
 [Compressed files](#index-Compressed-files):
-
- 
 
 [Types of connections](#Types-of-connections)
 
 [Connections](#index-Connections):
 
- 
-
 [Connections](#Connections)
 
 [Connections](#index-Connections-1):
-
- 
 
 [Types of connections](#Types-of-connections)
 
 [Connections](#index-Connections-2):
 
- 
-
 [Output to connections](#Output-to-connections)
 
 [Connections](#index-Connections-3):
 
- 
-
-[Listing and manipulating
-connections](#Listing-and-manipulating-connections)
+[Listing and manipulating connections](#Listing-and-manipulating-connections)
 
 [CSV files](#index-CSV-files):
-
- 
 
 [Export to text files](#Export-to-text-files)
 
 [CSV files](#index-CSV-files-1):
 
- 
-
 [Variations on read.table](#Variations-on-read_002etable)
 
-------------------------------------------------------------------------
+---
 
 D
 
 [Data Interchange Format
 (DIF)](#index-Data-Interchange-Format-_0028DIF_0029):
 
- 
-
 [Data Interchange Format (DIF)](#Data-Interchange-Format-_0028DIF_0029)
 
 [Dbase](#index-Dbase):
-
- 
 
 [RODBC](#RODBC)
 
 [dBase](#index-dBase):
 
- 
-
 [dBase files (DBF)](#dBase-files-_0028DBF_0029)
 
 [DBF files](#index-DBF-files):
-
- 
 
 [dBase files (DBF)](#dBase-files-_0028DBF_0029)
 
 [DBMS](#index-DBMS):
 
- 
-
 [Relational databases](#Relational-databases)
 
-------------------------------------------------------------------------
+---
 
 E
 
 [Encodings](#index-Encodings):
 
- 
-
 [Encodings](#Encodings)
 
 [Encodings](#index-Encodings-1):
-
- 
 
 [Export to text files](#Export-to-text-files)
 
 [EpiData](#index-EpiData):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [EpiInfo](#index-EpiInfo):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [Excel](#index-Excel):
-
- 
 
 [RODBC](#RODBC)
 
 [Excel](#index-Excel-1):
 
- 
-
 [RODBC](#RODBC)
 
 [Exporting to a text file](#index-Exporting-to-a-text-file):
 
- 
-
 [Export to text files](#Export-to-text-files)
 
-------------------------------------------------------------------------
+---
 
 F
 
 [File connections](#index-File-connections):
 
- 
-
 [Types of connections](#Types-of-connections)
 
 [Fixed-width-format files](#index-Fixed_002dwidth_002dformat-files):
-
- 
 
 [Fixed-width-format files](#Fixed_002dwidth_002dformat-files)
 
 [Flat contingency tables](#index-Flat-contingency-tables):
 
- 
-
 [Flat contingency tables](#Flat-contingency-tables)
 
-------------------------------------------------------------------------
+---
 
 H
 
 [Hierarchical Data Format](#index-Hierarchical-Data-Format):
 
- 
-
 [Binary data formats](#Binary-data-formats)
 
-------------------------------------------------------------------------
+---
 
 I
 
-[Importing from other statistical
-systems](#index-Importing-from-other-statistical-systems):
+[Importing from other statistical systems](#index-Importing-from-other-statistical-systems):
 
- 
+[Importing from other statistical systems](#Importing-from-other-statistical-systems)
 
-[Importing from other statistical
-systems](#Importing-from-other-statistical-systems)
-
-------------------------------------------------------------------------
+---
 
 L
 
 [locales](#index-locales):
 
- 
-
 [Variations on read.table](#Variations-on-read_002etable)
 
-------------------------------------------------------------------------
+---
 
 M
 
 [Minitab](#index-Minitab):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [Missing values](#index-Missing-values):
-
- 
 
 [Export to text files](#Export-to-text-files)
 
 [Missing values](#index-Missing-values-1):
 
- 
-
 [Variations on read.table](#Variations-on-read_002etable)
 
 [MySQL database system](#index-MySQL-database-system):
-
- 
 
 [DBI](#DBI)
 
 [MySQL database system](#index-MySQL-database-system-1):
 
- 
-
 [RODBC](#RODBC)
 
-------------------------------------------------------------------------
+---
 
 N
 
 [network Common Data Form](#index-network-Common-Data-Form):
 
- 
-
 [Binary data formats](#Binary-data-formats)
 
-------------------------------------------------------------------------
+---
 
 O
 
 [Octave](#index-Octave):
 
- 
-
 [Octave](#Octave)
 
 [ODBC](#index-ODBC):
-
- 
 
 [Overview of RDBMSs](#Overview-of-RDBMSs)
 
 [ODBC](#index-ODBC-1):
 
- 
-
 [RODBC](#RODBC)
 
 [Open Database Connectivity](#index-Open-Database-Connectivity):
-
- 
 
 [Overview of RDBMSs](#Overview-of-RDBMSs)
 
 [Open Database Connectivity](#index-Open-Database-Connectivity-1):
 
- 
-
 [RODBC](#RODBC)
 
-------------------------------------------------------------------------
+---
 
 P
 
 [perl](#index-perl):
 
- 
-
 [Introduction](#Introduction)
 
 [perl](#index-perl-1):
-
- 
 
 [Fixed-width-format files](#Fixed_002dwidth_002dformat-files)
 
 [Pipe connections](#index-Pipe-connections):
 
- 
-
 [Types of connections](#Types-of-connections)
 
 [PostgreSQL database system](#index-PostgreSQL-database-system):
-
- 
 
 [RODBC](#RODBC)
 
 [Pushback on a connection](#index-Pushback-on-a-connection):
 
- 
-
 [Pushback](#Pushback)
 
-------------------------------------------------------------------------
+---
 
 Q
 
 [Quoting strings](#index-Quoting-strings):
 
- 
-
 [Export to text files](#Export-to-text-files)
 
 [Quoting strings](#index-Quoting-strings-1):
 
- 
-
 [Variations on read.table](#Variations-on-read_002etable)
 
-------------------------------------------------------------------------
+---
 
 R
 
 [Re-shaping data](#index-Re_002dshaping-data):
 
- 
-
 [Re-shaping data](#Re_002dshaping-data)
 
 [Relational databases](#index-Relational-databases):
 
- 
-
 [Relational databases](#Relational-databases)
 
-------------------------------------------------------------------------
+---
 
 S
 
 [S-PLUS](#index-S_002dPLUS):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [SAS](#index-SAS):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [Sockets](#index-Sockets):
-
- 
 
 [Types of connections](#Types-of-connections)
 
 [Sockets](#index-Sockets-1):
 
- 
-
 [Reading from sockets](#Reading-from-sockets)
 
 [Spreadsheet-like data](#index-Spreadsheet_002dlike-data):
-
- 
 
 [Spreadsheet-like data](#Spreadsheet_002dlike-data)
 
 [SPSS](#index-SPSS):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [SPSS Data Entry](#index-SPSS-Data-Entry):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [SQL queries](#index-SQL-queries):
-
- 
 
 [SQL queries](#SQL-queries)
 
 [Stata](#index-Stata):
 
- 
-
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
 [Systat](#index-Systat):
 
- 
+[EpiInfo Minitab SAS S-PLUS SPSS Stata Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
 
-[EpiInfo Minitab SAS S-PLUS SPSS Stata
-Systat](#EpiInfo-Minitab-SAS-S_002dPLUS-SPSS-Stata-Systat)
-
-------------------------------------------------------------------------
+---
 
 T
 
 [Terminal connections](#index-Terminal-connections):
 
- 
-
 [Types of connections](#Types-of-connections)
 
 [Text connections](#index-Text-connections):
 
- 
-
 [Types of connections](#Types-of-connections)
 
-------------------------------------------------------------------------
+---
 
 U
 
 [Unix tools](#index-Unix-tools):
 
- 
-
 [Introduction](#Introduction)
 
 [URL connections](#index-URL-connections):
-
- 
 
 [Types of connections](#Types-of-connections)
 
 [URL connections](#index-URL-connections-1):
 
- 
-
 [Input from connections](#Input-from-connections)
 
-------------------------------------------------------------------------
+---
 
 X
 
 [XML](#index-XML):
 
- 
-
 [XML](#XML)
 
-------------------------------------------------------------------------
+---
 
 Y
 
 [yaml](#index-yaml):
 
- 
-
 [XML](#XML)
 
-------------------------------------------------------------------------
+---
 
-  ------------ ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Jump to:     [**A**](#Concept-index_cp_letter-A)   [**B**](#Concept-index_cp_letter-B)   [**C**](#Concept-index_cp_letter-C)   [**D**](#Concept-index_cp_letter-D)   [**E**](#Concept-index_cp_letter-E)   [**F**](#Concept-index_cp_letter-F)   [**H**](#Concept-index_cp_letter-H)   [**I**](#Concept-index_cp_letter-I)   [**L**](#Concept-index_cp_letter-L)   [**M**](#Concept-index_cp_letter-M)   [**N**](#Concept-index_cp_letter-N)   [**O**](#Concept-index_cp_letter-O)   [**P**](#Concept-index_cp_letter-P)   [**Q**](#Concept-index_cp_letter-Q)   [**R**](#Concept-index_cp_letter-R)   [**S**](#Concept-index_cp_letter-S)   [**T**](#Concept-index_cp_letter-T)   [**U**](#Concept-index_cp_letter-U)   [**X**](#Concept-index_cp_letter-X)   [**Y**](#Concept-index_cp_letter-Y)  
-  ------------ ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
- 
+Jump to:   [**A**](#Concept-index_cp_letter-A){.summary-letter}   [**B**](#Concept-index_cp_letter-B){.summary-letter}   [**C**](#Concept-index_cp_letter-C){.summary-letter}   [**D**](#Concept-index_cp_letter-D){.summary-letter}   [**E**](#Concept-index_cp_letter-E){.summary-letter}   [**F**](#Concept-index_cp_letter-F){.summary-letter}   [**H**](#Concept-index_cp_letter-H){.summary-letter}   [**I**](#Concept-index_cp_letter-I){.summary-letter}   [**L**](#Concept-index_cp_letter-L){.summary-letter}   [**M**](#Concept-index_cp_letter-M){.summary-letter}   [**N**](#Concept-index_cp_letter-N){.summary-letter}   [**O**](#Concept-index_cp_letter-O){.summary-letter}   [**P**](#Concept-index_cp_letter-P){.summary-letter}   [**Q**](#Concept-index_cp_letter-Q){.summary-letter}   [**R**](#Concept-index_cp_letter-R){.summary-letter}   [**S**](#Concept-index_cp_letter-S){.summary-letter}   [**T**](#Concept-index_cp_letter-T){.summary-letter}   [**U**](#Concept-index_cp_letter-U){.summary-letter}   [**X**](#Concept-index_cp_letter-X){.summary-letter}   [**Y**](#Concept-index_cp_letter-Y){.summary-letter}
 
-------------------------------------------------------------------------
+---
 
-#### Footnotes 
+---
+
+#### Footnotes
 
 [(1)](#DOCF1)
 
@@ -3851,4 +3110,4 @@ the possibilities.
 
 and forks, notably MariaDB.
 
-------------------------------------------------------------------------
+---

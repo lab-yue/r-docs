@@ -1,15 +1,15 @@
 # R language
 
-[R-intro](/R-intro)
-
-[R-lang](/R-lang)
+[R-admin](/R-admin)
 
 [R-data](/R-data)
 
-[R-admin](/R-admin)
-
 [R-exts](/R-exts)
+
+[R-FAQ](/R-FAQ)
+
+[R-intro](/R-intro)
 
 [R-ints](/R-ints)
 
-[R-FAQ](/R-FAQ)
+[R-lang](/R-lang)
