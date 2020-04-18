@@ -1,7 +1,7 @@
 import os
 import re
 import json
-from gen import chapter_re
+
 sidebar = []
 for _dir in os.listdir('./pages'):
     if not _dir.startswith('R-'):
@@ -20,7 +20,7 @@ for _dir in os.listdir('./pages'):
     with open(f'./pages/{_dir}/README.md', 'r') as r:
         c = r.read()
     with open(f'./pages/{_dir}/README.md', 'w') as r:
-        r.write(chapter_re.split(c)[0])
+        r.write(c.split("\n## 1")[0])
 
 
 # with open('pages/.vuepress/sidebar.json', 'w') as f:
