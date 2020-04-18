@@ -1,4 +1,4 @@
-2 Simple manipulations; numbers and vectors
+# 2 Simple manipulations; numbers and vectors
 
 ---
 

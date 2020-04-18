@@ -1,4 +1,4 @@
-7 Internationalization and Localization
+# 7 Internationalization and Localization
 
 ---
 

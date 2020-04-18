@@ -1,4 +1,4 @@
-5 Arrays and matrices
+# 5 Arrays and matrices
 
 ---
 
@@ -399,7 +399,7 @@ The meaning of `diag()` depends on its argument. `diag(v)`, where `v` is
 a vector, gives a diagonal matrix with elements of the vector as the
 diagonal entries. On the other hand `diag(M)`, where `M` is a matrix,
 gives the vector of main diagonal entries of `M`. This is the same
-convention as that used for `diag()` in [MATLAB]{.small}. Also, somewhat
+convention as that used for `diag()` in [MATLAB]. Also, somewhat
 confusingly, if `k` is a single numeric value then `diag(k)` is the `k`
 by `k` identity matrix!
 
@@ -544,7 +544,7 @@ following assignments
 These compute the orthogonal projection of `y` onto the range of `X` in
 `fit`, the projection onto the orthogonal complement in `res` and the
 coefficient vector for the projection in `b`, that is, `b` is
-essentially the result of the [MATLAB]{.small} 'backslash' operator.
+essentially the result of the [MATLAB] 'backslash' operator.
 
 It is not assumed that `X` has full column rank. Redundancies will be
 discovered and removed as they are found.
@@ -571,8 +571,8 @@ In the assignment
 
 the arguments to `cbind()` must be either vectors of any length, or
 matrices with the same column size, that is the same number of rows. The
-result is a matrix with the concatenated arguments `arg_1`{.variable},
-`arg_2`{.variable}, ... forming the columns.
+result is a matrix with the concatenated arguments `arg_1`,
+`arg_2`, ... forming the columns.
 
 If some of the arguments to `cbind()` are vectors they may be shorter
 than the column size of any matrices present, in which case they are

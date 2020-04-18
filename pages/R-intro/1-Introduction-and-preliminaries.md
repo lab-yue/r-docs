@@ -1,4 +1,4 @@
-1 Introduction and preliminaries
+# 1 Introduction and preliminaries
 
 ---
 
@@ -52,7 +52,7 @@ essentially ephemeral, written for a single piece of data analysis.
 
 R can be regarded as an implementation of the S language which was
 developed at Bell Laboratories by Rick Becker, John Chambers and Allan
-Wilks, and also forms the basis of the [S-PLUS]{.small} systems.
+Wilks, and also forms the basis of the [S-PLUS] systems.
 
 The evolution of the S language is characterized by four books by John
 Chambers and coauthors. For R, the basic reference is _The New S
@@ -65,7 +65,7 @@ with Data_ by John M. Chambers. See [References](#References), for
 precise references.
 
 There are now a number of books which describe how to use R for data
-analysis and statistics, and documentation for S/[S-PLUS]{.small} can
+analysis and statistics, and documentation for S/[S-PLUS] can
 typically be used with R, keeping the differences between the S
 implementations in mind. See [What documentation exists for
 R?](R-FAQ.html#What-documentation-exists-for-R_003f) in The R
@@ -158,7 +158,7 @@ as follows:
     At this point you will be asked whether you want to save the data
     from your R session. On some systems this will bring up a dialog
     box, and on others you will receive a text prompt to which you can
-    respond [yes]{.kbd}, [no]{.kbd} or [cancel]{.kbd} (a single letter
+    respond [yes], [no] or [cancel] (a single letter
     abbreviation will do) to save the data before quitting, quit without
     saving, or return to the R session. Data which is saved will be
     available in future R sessions.
@@ -307,7 +307,7 @@ recalling and re-executing previous commands. The vertical arrow keys on
 the keyboard can be used to scroll forward and backward through a
 _command history_. Once a command is located in this way, the cursor can
 be moved within the command using the horizontal arrow keys, and
-characters can be removed with the `DEL`{.key} key or added with the
+characters can be removed with the `DEL` key or added with the
 other keys. More details are provided later: see [The command-line editor](#The-command_002dline-editor).
 
 The recall and editing capabilities under UNIX are highly customizable.

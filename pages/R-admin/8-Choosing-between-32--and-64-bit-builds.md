@@ -1,4 +1,4 @@
-8 Choosing between 32- and 64-bit builds
+# 8 Choosing between 32- and 64-bit builds
 
 ---
 

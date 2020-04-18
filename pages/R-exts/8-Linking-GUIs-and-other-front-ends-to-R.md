@@ -1,4 +1,4 @@
-8 Linking GUIs and other front-ends to R
+# 8 Linking GUIs and other front-ends to R
 
 ---
 
@@ -284,20 +284,20 @@ which allow standard R callbacks to be redirected to your GUI. What
 these do is generally documented in the file
 `src/unix/system.txt`.
 
-Function: _void_ **R_ShowMessage** _(char \*`message`{.variable})_
+Function: _void_ **R_ShowMessage** _(char \*`message`)_
 
 : This should display the message, which may have multiple lines: it
 should be brought to the user's attention immediately.
 
-Function: _void_ **R_Busy** _(int `which`{.variable})_
+Function: _void_ **R_Busy** _(int `which`)_
 
 : This function invokes actions (such as change of cursor) when R
 embarks on an extended computation (`which=1`) and when such a state
 terminates (`which=0`).
 
-Function: _int_ **R_ReadConsole** _(const char \*`prompt`{.variable}, unsigned char \*`buf`{.variable}, int `buflen`{.variable}, int `hist`{.variable})_\
-Function: _void_ **R_WriteConsole** _(const char \*`buf`{.variable}, int `buflen`{.variable})_\
-Function: _void_ **R_WriteConsoleEx** _(const char \*`buf`{.variable}, int `buflen`{.variable}, int `otype`{.variable})_\
+Function: _int_ **R_ReadConsole** _(const char \*`prompt`, unsigned char \*`buf`, int `buflen`, int `hist`)_\
+Function: _void_ **R_WriteConsole** _(const char \*`buf`, int `buflen`)_\
+Function: _void_ **R_WriteConsoleEx** _(const char \*`buf`, int `buflen`, int `otype`)_\
 Function: _void_ **R_ResetConsole** _()_\
 Function: _void_ **R_FlushConsole** _()_\
 Function: _void_ **R_ClearErrConsole** _()_
@@ -305,15 +305,15 @@ Function: _void_ **R_ClearErrConsole** _()_
 : These functions interact with a console.
 
     `R_ReadConsole` prints the given prompt at the console and then does
-    a `fgets(3)`--like operation, transferring up to `buflen`{.variable}
-    characters into the buffer `buf`{.variable}. The last two bytes
+    a `fgets(3)`--like operation, transferring up to `buflen`
+    characters into the buffer `buf`. The last two bytes
     should be set to '`"\n\0"`' to preserve sanity. If
-    `hist`{.variable} is non-zero, then the line should be added to any
+    `hist` is non-zero, then the line should be added to any
     command history which is being maintained. The return value is 0 is
     no input is available and \>0 otherwise.
 
     `R_WriteConsoleEx` writes the given buffer to the console,
-    `otype`{.variable} specifies the output type (regular output or
+    `otype` specifies the output type (regular output or
     warning/error). Call to `R_WriteConsole(buf, buflen)` is equivalent
     to `R_WriteConsoleEx(buf, buflen, 0)`. To ensure backward
     compatibility of the callbacks, `ptr_R_WriteConsoleEx` is used only
@@ -332,22 +332,22 @@ Function: _void_ **R_ClearErrConsole** _()_
     console. `R_ClearerrConsole` clears any errors associated with
     reading from the console.
 
-Function: _int_ **R_ShowFiles** _(int `nfile`{.variable}, const char \*\*`file`{.variable}, const char \*\*`headers`{.variable}, const char \*`wtitle`{.variable}, Rboolean `del`{.variable}, const char \*`pager`{.variable})_
+Function: _int_ **R_ShowFiles** _(int `nfile`, const char \*\*`file`, const char \*\*`headers`, const char \*`wtitle`, Rboolean `del`, const char \*`pager`)_
 
 : This function is used to display the contents of files.
 
-Function: _int_ **R_ChooseFile** _(int `new`{.variable}, char \*`buf`{.variable}, int `len`{.variable})_
+Function: _int_ **R_ChooseFile** _(int `new`, char \*`buf`, int `len`)_
 
-: Choose a file and return its name in `buf`{.variable} of length
-`len`{.variable}. Return value is 0 for success, \> 0 otherwise.
+: Choose a file and return its name in `buf` of length
+`len`. Return value is 0 for success, \> 0 otherwise.
 
-Function: _int_ **R_EditFile** _(const char \*`buf`{.variable})_
+Function: _int_ **R_EditFile** _(const char \*`buf`)_
 
 : Send a file to an editor window.
 
-Function: _int_ **R_EditFiles** _(int `nfile`{.variable}, const char \*\*`file`{.variable}, const char \*\*`title`{.variable}, const char \*`editor`{.variable})_
+Function: _int_ **R_EditFiles** _(int `nfile`, const char \*\*`file`, const char \*\*`title`, const char \*`editor`)_
 
-: Send `nfile`{.variable} files to an editor, with titles possibly to
+: Send `nfile` files to an editor, with titles possibly to
 be used for the editor window(s).
 
 Function: _SEXP_ **R_loadhistory** _(SEXP, SEXP, SEXP, SEXP);_\
@@ -381,7 +381,7 @@ Function: _SEXP_ **R_addhistory** _(SEXP, SEXP, SEXP, SEXP);_
     mechanism is present, as a user may be calling `timestamp` purely to
     write the time stamp to the console.
 
-Function: _void_ **R_Suicide** _(const char \*`message`{.variable})_
+Function: _void_ **R_Suicide** _(const char \*`message`)_
 
 : This should abort R as rapidly as possible, displaying the message.
 A possible implementation is
@@ -396,7 +396,7 @@ A possible implementation is
     }
     ```
 
-Function: _void_ **R_CleanUp** _(SA_TYPE `saveact`{.variable}, int `status`{.variable}, int `RunLast`{.variable})_
+Function: _void_ **R_CleanUp** _(SA_TYPE `saveact`, int `status`, int `RunLast`)_
 
 : This function invokes any actions which occur at system termination.
 It needs to be quite complex:

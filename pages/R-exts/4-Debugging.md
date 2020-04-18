@@ -1,4 +1,4 @@
-4 Debugging
+# 4 Debugging
 
 ---
 
@@ -452,7 +452,7 @@ On platforms where `valgrind` is installed you can build a version of R
 with extra instrumentation to help `valgrind` detect errors in the use
 of memory allocated from the R heap. The `configure` option is
 `--with-valgrind-instrumentation=level`, where
-`level`{.variable} is 0, 1 or 2. Level 0 is the default and does not add
+`level` is 0, 1 or 2. Level 0 is the default and does not add
 anything. Level 1 will detect some uses[^114^](#FOOT114) of
 uninitialised memory and has little impact on speed (compared to level
 0). Level 2 will detect many other memory-use
@@ -986,14 +986,14 @@ a symbolic debugger on such dynamically loaded code under Unix-alikes
 use
 
 - Call the debugger on the R executable, for example by [R -d
-  gdb]{.kbd}.
+  gdb].
 - Start R.
 - At the R prompt, use `dyn.load` or `library` to load your shared
   object.
 - Send an interrupt signal. This will put you back to the debugger
   prompt.
 - Set the breakpoints in your code.
-- Continue execution of R by typing [signal 0[RET]{.key}]{.kbd}.
+- Continue execution of R by typing [signal 0[RET]].
 
 Under Windows signals may not be able to be used, and if so the
 procedure is more complicated. See the rw-FAQ.
@@ -1004,7 +1004,7 @@ procedure is more complicated. See the rw-FAQ.
 
 The key to inspecting R objects from compiled code is the function
 `PrintValue(SEXP s)` which uses the normal R printing mechanisms to
-print the R object pointed to by `s`{.variable}, or the safer version
+print the R object pointed to by `s`, or the safer version
 `R_PV(SEXP s)` which will only print 'objects'.
 
 One way to make use of `PrintValue` is to insert suitable calls into the
@@ -1027,7 +1027,7 @@ example, let
 R> DF <- data.frame(a = 1:3, b = 4:6)
 ```
 
-By setting a breakpoint at `do_get` and typing [get(\"DF\")]{.kbd} at
+By setting a breakpoint at `do_get` and typing [get(\"DF\")] at
 the R prompt, one can find out the address in memory of `DF`, for
 example
 

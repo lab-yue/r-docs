@@ -1,4 +1,4 @@
-9 Grouping, loops and conditional execution
+# 9 Grouping, loops and conditional execution
 
 ---
 
@@ -46,7 +46,7 @@ The language has available a conditional construction of the form
 > if (expr_1) expr_2 else expr_3
 ```
 
-where `expr_1`{.variable} must evaluate to a single logical value and
+where `expr_1` must evaluate to a single logical value and
 the result of the entire expression is then evident.
 
 The "short-circuit" operators `&&` and `||` are often used as part of
@@ -70,12 +70,12 @@ There is also a `for` loop construction which has the form
 > for (name in expr_1) expr_2
 ```
 
-where `name` is the loop variable. `expr_1`{.variable} is a vector
-expression, (often a sequence like `1:20`), and `expr_2`{.variable} is
+where `name` is the loop variable. `expr_1` is a vector
+expression, (often a sequence like `1:20`), and `expr_2` is
 often a grouped expression with its sub-expressions written in terms of
-the dummy _name_. `expr_2`{.variable} is repeatedly evaluated as
-`name`{.variable} ranges through the values in the vector result of
-`expr_1`{.variable}.
+the dummy _name_. `expr_2` is repeatedly evaluated as
+`name` ranges through the values in the vector result of
+`expr_1`.
 
 As an example, suppose `ind` is a vector of class indicators and we wish
 to produce separate plots of `y` versus `x` within classes. One

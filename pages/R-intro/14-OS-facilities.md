@@ -1,4 +1,4 @@
-14 OS facilities
+# 14 OS facilities
 
 ---
 
@@ -456,7 +456,7 @@ When working at a command line on UNIX or Windows, the command
 '`R`' can be used both for starting the main R program in the
 form
 
-```{.display}
+```
 R [options] [<infile] [>outfile],
 ```
 
@@ -544,7 +544,7 @@ into this directory.
 : Control whether data sets should be saved or not at the end of the R
 session. If neither is given in an interactive session, the user is
 asked for the desired behavior when ending the session with
-[q()]{.kbd}; in non-interactive use one of these must be specified
+[q()]; in non-interactive use one of these must be specified
 or implied by some other option (see below).
 
 `--no-environ`
@@ -590,14 +590,14 @@ startup.
 `-f file`\
 `--file=file`
 
-: (not `Rgui.exe`) Take input from `file`{.variable}: '`-`'
+: (not `Rgui.exe`) Take input from `file`: '`-`'
 means `stdin`. Implies `--no-save` unless `--save`
 has been set. On a Unix-alike, shell metacharacters should be
-avoided in `file`{.variable} (but spaces are allowed).
+avoided in `file` (but spaces are allowed).
 
 `-e expression`
 
-: (not `Rgui.exe`) Use `expression`{.variable} as an input line. One
+: (not `Rgui.exe`) Use `expression` as an input line. One
 or more `-e` options can be used, but not together with
 `-f` or `--file`. Implies `--no-save`
 unless `--save` has been set. (There is a limit of 10,000
@@ -627,7 +627,7 @@ and can also be set by environment variables `R_NSIZE` and
 `--max-ppsize=N`
 
 : Specify the maximum size of the pointer protection stack as
-`N`{.variable} locations. This defaults to 10000, but can be
+`N` locations. This defaults to 10000, but can be
 increased to allow large and complicated calculations to be done.
 Currently the maximum value accepted is 100000.
 
@@ -678,7 +678,7 @@ printing of diagnostic messages.
 `--debugger=name`\
 `-d name`
 
-: (UNIX only) Run R through debugger `name`{.variable}. For most
+: (UNIX only) Run R through debugger `name`. For most
 debuggers (the exceptions are `valgrind` and recent versions of
 `gdb`), further command line options are disregarded, and should
 instead be given when starting the R executable from inside the
@@ -687,9 +687,9 @@ debugger.
 `--gui=type`\
 `-g type`
 
-: (UNIX only) Use `type`{.variable} as graphical user interface (note
+: (UNIX only) Use `type` as graphical user interface (note
 that this also includes interactive graphics). Currently, possible
-values for `type`{.variable} are '`X11`' (the default) and,
+values for `type` are '`X11`' (the default) and,
 provided that '`Tcl/Tk`' support is available,
 '`Tk`'. (For back-compatibility, '`x11`' and
 '`tk`' are accepted.)
@@ -717,7 +717,7 @@ The general form is
 R CMD command args
 ```
 
-where `command`{.variable} is the name of the tool and `args`{.variable}
+where `command` is the name of the tool and `args`
 the arguments passed on to it.
 
 Currently, the following tools are available.
@@ -832,7 +832,7 @@ R CMD cmd args
 for any other executable `cmd` on the path or given by an absolute
 filepath: this is useful to have the same environment as R or the
 specific commands run under, for example to run `ldd` or `pdflatex`.
-Under Windows `cmd`{.variable} can be an executable or a batch file, or
+Under Windows `cmd` can be an executable or a batch file, or
 if it has extension `.sh` or `.pl` the appropriate interpreter (if
 available) is called to run it.
 
@@ -993,14 +993,14 @@ the functions described below are available, as well as others
 system.
 
 Many of these use either Control or Meta characters. Control characters,
-such as [Control-m]{.kbd}, are obtained by holding the `CTRL`{.key} down
-while you press the `m`{.key} key, and are written as [C-m]{.kbd} below.
-Meta characters, such as [Meta-b]{.kbd}, are typed by holding down
-`META`{.key}[^29^](#FOOT29) and pressing `b`{.key}, and written
-as [M-b]{.kbd} in the following. If your terminal does not have a
-`META`{.key} key enabled, you can still type Meta characters using
-two-character sequences starting with [ESC]{.kbd}. Thus, to enter
-[M-b]{.kbd}, you could type `ESC`{.key}`b`{.key}. The [ESC]{.kbd}
+such as [Control-m], are obtained by holding the `CTRL` down
+while you press the `m` key, and are written as [C-m] below.
+Meta characters, such as [Meta-b], are typed by holding down
+`META`[^29^](#FOOT29) and pressing `b`, and written
+as [M-b] in the following. If your terminal does not have a
+`META` key enabled, you can still type Meta characters using
+two-character sequences starting with [ESC]. Thus, to enter
+[M-b], you could type ` ESC``b `. The [ESC]
 character sequences are also allowed on terminals with real Meta keys.
 Note that case is significant for Meta characters.
 
@@ -1015,12 +1015,12 @@ changed if necessary, and re-submitted as new commands. In Emacs-style
 command-line editing any straight typing you do while in this editing
 phase causes the characters to be inserted in the command you are
 editing, displacing any characters to the right of the cursor. In _vi_
-mode character insertion mode is started by [M-i]{.kbd} or [M-a]{.kbd},
+mode character insertion mode is started by [M-i] or [M-a],
 characters are typed and insertion mode is finished by typing a further
-`ESC`{.key}. (The default is Emacs-style, and only that is described
+`ESC`. (The default is Emacs-style, and only that is described
 here: for _vi_ mode see the **readline** documentation.)
 
-Pressing the `RET`{.key} command at any time causes the command to be
+Pressing the `RET` command at any time causes the command to be
 re-submitted.
 
 Other editing actions are summarized in the following table.
@@ -1029,98 +1029,98 @@ Other editing actions are summarized in the following table.
 
 #### Command recall and vertical motion
 
-[C-p]{.kbd}
+[C-p]
 
 : Go to the previous command (backwards in the history).
 
-[C-n]{.kbd}
+[C-n]
 
 : Go to the next command (forwards in the history).
 
-[C-r `text`{.variable}]{.kbd}
+[C-r `text`]
 
-: Find the last command with the `text`{.variable} string in it. This
+: Find the last command with the `text` string in it. This
 can be cancelled by `C-g` (and on some versions of R by `C-c`).
 
 On most terminals, you can also use the up and down arrow keys instead
-of [C-p]{.kbd} and [C-n]{.kbd}, respectively.
+of [C-p] and [C-n], respectively.
 
 #### Horizontal motion of the cursor
 
-[C-a]{.kbd}
+[C-a]
 
 : Go to the beginning of the command.
 
-[C-e]{.kbd}
+[C-e]
 
 : Go to the end of the line.
 
-[M-b]{.kbd}
+[M-b]
 
 : Go back one word.
 
-[M-f]{.kbd}
+[M-f]
 
 : Go forward one word.
 
-[C-b]{.kbd}
+[C-b]
 
 : Go back one character.
 
-[C-f]{.kbd}
+[C-f]
 
 : Go forward one character.
 
 On most terminals, you can also use the left and right arrow keys
-instead of [C-b]{.kbd} and [C-f]{.kbd}, respectively.
+instead of [C-b] and [C-f], respectively.
 
 #### Editing and re-submission
 
-[`text`{.variable}]{.kbd}
+[`text`]
 
-: Insert `text`{.variable} at the cursor.
+: Insert `text` at the cursor.
 
-[C-f `text`{.variable}]{.kbd}
+[C-f `text`]
 
-: Append `text`{.variable} after the cursor.
+: Append `text` after the cursor.
 
-[[DEL]{.key}]{.kbd}
+[[DEL]]
 
 : Delete the previous character (left of the cursor).
 
-[C-d]{.kbd}
+[C-d]
 
 : Delete the character under the cursor.
 
-[M-d]{.kbd}
+[M-d]
 
 : Delete the rest of the word under the cursor, and "save" it.
 
-[C-k]{.kbd}
+[C-k]
 
 : Delete from cursor to end of command, and "save" it.
 
-[C-y]{.kbd}
+[C-y]
 
 : Insert (yank) the last "saved" text here.
 
-[C-t]{.kbd}
+[C-t]
 
 : Transpose the character under the cursor with the next.
 
-[M-l]{.kbd}
+[M-l]
 
 : Change the rest of the word to lower case.
 
-[M-c]{.kbd}
+[M-c]
 
 : Change the rest of the word to upper case.
 
-[[RET]{.key}]{.kbd}
+[[RET]]
 
 : Re-submit the command to R.
 
-The final `RET`{.key} terminates the command line editing sequence.
+The final `RET` terminates the command line editing sequence.
 
 The **readline** key bindings can be customized in the usual way _via_ a
 `~/.inputrc` file. These customizations can be conditioned on
@@ -2782,7 +2782,7 @@ statements are executed.
 [(9)](#DOCF9)
 
 `paste(..., collapse=ss)` joins the arguments into a single character
-string putting `ss`{.variable} in between, e.g., `ss <- "|"`. There are
+string putting `ss` in between, e.g., `ss <- "|"`. There are
 more tools for character manipulation, see the help for `sub` and
 `substring`.
 
@@ -2861,8 +2861,8 @@ See also the methods described in [Statistical models in R](#Statistical-models-
 
 [(23)](#DOCF23)
 
-In some sense this mimics the behavior in [S-PLUS]{.small} since in
-[S-PLUS]{.small} this operator always creates or assigns to a global
+In some sense this mimics the behavior in [S-PLUS] since in
+[S-PLUS] this operator always creates or assigns to a global
 variable.
 
 [(24)](#DOCF24)

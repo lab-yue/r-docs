@@ -340,7 +340,7 @@ Copyright © 1999--2018 R Core Team
 ## Preface
 
 This introduction to R is derived from an original set of notes
-describing the S and [S-PLUS]{.small} environments written in 1990--2 by
+describing the S and [S-PLUS] environments written in 1990--2 by
 Bill Venables and David M. Smith when at the University of Adelaide. We
 have made a number of small changes to reflect differences between the R
 and S programs, and expanded some of the material.
@@ -422,7 +422,7 @@ essentially ephemeral, written for a single piece of data analysis.
 
 R can be regarded as an implementation of the S language which was
 developed at Bell Laboratories by Rick Becker, John Chambers and Allan
-Wilks, and also forms the basis of the [S-PLUS]{.small} systems.
+Wilks, and also forms the basis of the [S-PLUS] systems.
 
 The evolution of the S language is characterized by four books by John
 Chambers and coauthors. For R, the basic reference is _The New S
@@ -435,7 +435,7 @@ with Data_ by John M. Chambers. See [References](#References), for
 precise references.
 
 There are now a number of books which describe how to use R for data
-analysis and statistics, and documentation for S/[S-PLUS]{.small} can
+analysis and statistics, and documentation for S/[S-PLUS] can
 typically be used with R, keeping the differences between the S
 implementations in mind. See [What documentation exists for
 R?](R-FAQ.html#What-documentation-exists-for-R_003f) in The R
@@ -532,7 +532,7 @@ as follows:
     At this point you will be asked whether you want to save the data
     from your R session. On some systems this will bring up a dialog
     box, and on others you will receive a text prompt to which you can
-    respond [yes]{.kbd}, [no]{.kbd} or [cancel]{.kbd} (a single letter
+    respond [yes], [no] or [cancel] (a single letter
     abbreviation will do) to save the data before quitting, quit without
     saving, or return to the R session. Data which is saved will be
     available in future R sessions.
@@ -681,7 +681,7 @@ recalling and re-executing previous commands. The vertical arrow keys on
 the keyboard can be used to scroll forward and backward through a
 _command history_. Once a command is located in this way, the cursor can
 be moved within the command using the horizontal arrow keys, and
-characters can be removed with the `DEL`{.key} key or added with the
+characters can be removed with the `DEL` key or added with the
 other keys. More details are provided later: see [The command-line editor](#The-command_002dline-editor).
 
 The recall and editing capabilities under UNIX are highly customizable.
@@ -2015,7 +2015,7 @@ The meaning of `diag()` depends on its argument. `diag(v)`, where `v` is
 a vector, gives a diagonal matrix with elements of the vector as the
 diagonal entries. On the other hand `diag(M)`, where `M` is a matrix,
 gives the vector of main diagonal entries of `M`. This is the same
-convention as that used for `diag()` in [MATLAB]{.small}. Also, somewhat
+convention as that used for `diag()` in [MATLAB]. Also, somewhat
 confusingly, if `k` is a single numeric value then `diag(k)` is the `k`
 by `k` identity matrix!
 
@@ -2160,7 +2160,7 @@ following assignments
 These compute the orthogonal projection of `y` onto the range of `X` in
 `fit`, the projection onto the orthogonal complement in `res` and the
 coefficient vector for the projection in `b`, that is, `b` is
-essentially the result of the [MATLAB]{.small} 'backslash' operator.
+essentially the result of the [MATLAB] 'backslash' operator.
 
 It is not assumed that `X` has full column rank. Redundancies will be
 discovered and removed as they are found.
@@ -2187,8 +2187,8 @@ In the assignment
 
 the arguments to `cbind()` must be either vectors of any length, or
 matrices with the same column size, that is the same number of rows. The
-result is a matrix with the concatenated arguments `arg_1`{.variable},
-`arg_2`{.variable}, ... forming the columns.
+result is a matrix with the concatenated arguments `arg_1`,
+`arg_2`, ... forming the columns.
 
 If some of the arguments to `cbind()` are vectors they may be shorter
 than the column size of any matrices present, in which case they are
@@ -2382,8 +2382,8 @@ An assignment of the form
 > Lst <- list(name_1=object_1, …, name_m=object_m)
 ```
 
-sets up a list `Lst` of _m_ components using `object_1`{.variable}, ...,
-`object_m`{.variable} for the components and giving them names as
+sets up a list `Lst` of _m_ components using `object_1`, ...,
+`object_m` for the components and giving them names as
 specified by the argument names, (which can be freely chosen). If these
 names are omitted, the components are numbered only. The components used
 to form the list are _copied_ when forming the new list and the
@@ -3083,7 +3083,7 @@ mean of x mean of y
 
 which does indicate a significant difference, assuming normality. By
 default the R function does not assume equality of variances in the two
-samples (in contrast to the similar [S-PLUS]{.small} `t.test` function).
+samples (in contrast to the similar [S-PLUS] `t.test` function).
 We can use the F test to test for equality in the variances, provided
 that the two samples are from normal populations.
 
@@ -3215,7 +3215,7 @@ The language has available a conditional construction of the form
 > if (expr_1) expr_2 else expr_3
 ```
 
-where `expr_1`{.variable} must evaluate to a single logical value and
+where `expr_1` must evaluate to a single logical value and
 the result of the entire expression is then evident.
 
 The "short-circuit" operators `&&` and `||` are often used as part of
@@ -3239,12 +3239,12 @@ There is also a `for` loop construction which has the form
 > for (name in expr_1) expr_2
 ```
 
-where `name` is the loop variable. `expr_1`{.variable} is a vector
-expression, (often a sequence like `1:20`), and `expr_2`{.variable} is
+where `name` is the loop variable. `expr_1` is a vector
+expression, (often a sequence like `1:20`), and `expr_2` is
 often a grouped expression with its sub-expressions written in terms of
-the dummy _name_. `expr_2`{.variable} is repeatedly evaluated as
-`name`{.variable} ranges through the values in the vector result of
-`expr_1`{.variable}.
+the dummy _name_. `expr_2` is repeatedly evaluated as
+`name` ranges through the values in the vector result of
+`expr_1`.
 
 As an example, suppose `ind` is a vector of class indicators and we wish
 to produce separate plots of `y` versus `x` within classes. One
@@ -3318,8 +3318,8 @@ A function is defined by an assignment of the form
 > name <- function(arg_1, arg_2, …) expression
 ```
 
-The `expression`{.variable} is an R expression, (usually a grouped
-expression), that uses the arguments, `arg_i`{.variable}, to calculate a
+The `expression` is an R expression, (usually a grouped
+expression), that uses the arguments, `arg_i`, to calculate a
 value. The value of the expression is the value returned for the
 function.
 
@@ -3371,7 +3371,7 @@ a call such as
 ```
 
 As a second example, consider a function to emulate directly the
-[MATLAB]{.small} backslash command, which returns the coefficients of
+[MATLAB] backslash command, which returns the coefficients of
 the orthogonal projection of the vector _y_ onto the column space of the
 matrix, _X_. (This is ordinarily called the least squares estimate of
 the regression coefficients.) This would ordinarily be done with the
@@ -3531,7 +3531,7 @@ is not covered further here.
 
 If global and permanent assignments are intended within a function, then
 either the "superassignment" operator, `<<-` or the function `assign()`
-can be used. See the `help` document for details. [S-PLUS]{.small} users
+can be used. See the `help` document for details. [S-PLUS] users
 should be aware that `<<-` has different semantics in R. These are
 discussed further in [Scope](#Scope).
 
@@ -3688,7 +3688,7 @@ area <- function(f, a, b, eps = 1.0e-06, lim = 10) {
 
 The discussion in this section is somewhat more technical than in other
 parts of this document. However, it details one of the major differences
-between [S-PLUS]{.small} and R.
+between [S-PLUS] and R.
 
 The symbols which occur in the body of a function can be divided into
 three classes; formal parameters, local variables and free variables.
@@ -3727,12 +3727,12 @@ cube <- function(n) {
 The variable `n` in the function `sq` is not an argument to that
 function. Therefore it is a free variable and the scoping rules must be
 used to ascertain the value that is to be associated with it. Under
-static scope ([S-PLUS]{.small}) the value is that associated with a
+static scope ([S-PLUS]) the value is that associated with a
 global variable named `n`. Under lexical scope (R) it is the parameter
 to the function `cube` since that is the active binding for the variable
 `n` at the time the function `sq` was defined. The difference between
-evaluation in R and evaluation in [S-PLUS]{.small} is that
-[S-PLUS]{.small} looks for a global variable called `n` while R first
+evaluation in R and evaluation in [S-PLUS] is that
+[S-PLUS] looks for a global variable called `n` while R first
 looks for a variable called `n` in the environment created when `cube`
 was invoked.
 
@@ -3995,14 +3995,14 @@ extractor functions.
 The template for a statistical model is a linear regression model with
 independent, homoscedastic errors
 
-```{.display}
+```
 y_i = sum_{j=0}^p beta_j x_{ij} + e_i,     i = 1, …, n,
 ```
 
 where the e_i are NID(0, sigma\^2). In matrix terms this would be
 written
 
-```{.display}
+```
 y = X  beta + e
 ```
 
@@ -4102,17 +4102,17 @@ response ~ op_1 term_1 op_2 term_2 op_3 term_3 …
 
 where
 
-`response`{.variable}
+`response`
 
 : is a vector or matrix, (or expression evaluating to a vector or
 matrix) defining the response variable(s).
 
-`op_i`{.variable}
+`op_i`
 
 : is an operator, either `+` or `-`, implying the inclusion or
 exclusion of a term in the model, (the first is optional).
 
-`term_i`{.variable}
+`term_i`
 
 : is either
 
@@ -4136,19 +4136,19 @@ p.29):
 
 `Y ~ M`
 
-: `Y`{.variable} is modeled as `M`{.variable}.
+: `Y` is modeled as `M`.
 
 `M_1 + M_2`
 
-: Include `M_1`{.variable} and `M_2`{.variable}.
+: Include `M_1` and `M_2`.
 
 `M_1 - M_2`
 
-: Include `M_1`{.variable} leaving out terms of `M_2`{.variable}.
+: Include `M_1` leaving out terms of `M_2`.
 
 `M_1 : M_2`
 
-: The tensor product of `M_1`{.variable} and `M_2`{.variable}. If both
+: The tensor product of `M_1` and `M_2`. If both
 terms are factors, then the "subclasses" factor.
 
 `M_1 %in% M_2`
@@ -4165,12 +4165,12 @@ terms are factors, then the "subclasses" factor.
 
 `M^n`
 
-: All terms in `M`{.variable} together with "interactions" up to order
-`n`{.variable}
+: All terms in `M` together with "interactions" up to order
+`n`
 
 `I(M)`
 
-: Insulate `M`{.variable}. Inside `M`{.variable} all operators have
+: Insulate `M`. Inside `M` all operators have
 their normal arithmetic meaning, and that term appears in the model
 matrix.
 
@@ -4219,7 +4219,7 @@ options(contrasts = c("contr.treatment", "contr.poly"))
 The main reason for mentioning this is that R and S have different
 defaults for unordered factors, S using Helmert contrasts. So if you
 need to compare your results to those of a textbook or paper which used
-[S-PLUS]{.small}, you will need to set
+[S-PLUS], you will need to set
 
 ```r
 options(contrasts = c("contr.helmert", "contr.poly"))
@@ -4313,7 +4313,7 @@ diagnostics.
 The data frame supplied must have variables specified with the same
 labels as the original. The value is a vector or matrix of predicted
 values corresponding to the determining variable values in
-`data.frame`{.variable}.
+`data.frame`.
 
 `print(object)`
 
@@ -4359,8 +4359,8 @@ response ~ mean.formula + Error(strata.formula)
 ```
 
 specifies a multi-stratum experiment with error strata defined by the
-`strata.formula`{.variable}. In the simplest case,
-`strata.formula`{.variable} is simply a factor, when it defines a two
+`strata.formula`. In the simplest case,
+`strata.formula` is simply a factor, when it defines a two
 strata experiment, namely between and within the levels of the factor.
 
 For example, with all determining variables factors, a model formula
@@ -4420,7 +4420,7 @@ just a few additional or removed terms. Its form is
 > new.model <- update(old.model, new.formula)
 ```
 
-In the `new.formula`{.variable} the special name consisting of a period,
+In the `new.formula` the special name consisting of a period,
 '`.`', only, can be used to stand for "the
 corresponding part of the old model formula". For example,
 
@@ -4471,7 +4471,7 @@ assumptions:
   single linear function, only_. This linear function is called the
   _linear predictor_, and is usually written
 
-```{.display}
+```
 eta = beta_1 x_1 + beta_2 x_2 + … + beta_p x_p,
 ```
 
@@ -4480,7 +4480,7 @@ if beta_i is zero.
 
 - The distribution of _y_ is of the form
 
-```{.display}
+```
 f_Y(y; mu, phi)
   = exp((A/phi) * (y lambda(mu) - gamma(lambda(mu))) + tau(y, phi))
 ```
@@ -4494,7 +4494,7 @@ by its mean and possibly a scale parameter as well.
 - The mean, mu, is a smooth invertible function of the linear
   predictor:
 
-```{.display}
+```
 mu = m(eta),    eta = m^{-1}(mu) = ell(mu)
 ```
 
@@ -4556,7 +4556,7 @@ the form
 > fitted.model <- glm(formula, family=family.generator, data=data.frame)
 ```
 
-The only new feature is the `family.generator`{.variable}, which is the
+The only new feature is the `family.generator`, which is the
 instrument by which the family is described. It is the name of a
 function that generates a list of functions and expressions that
 together define and control the model and estimation process. Although
@@ -4731,7 +4731,7 @@ Models (`glm()`). But in the majority of cases we have to approach the
 nonlinear curve fitting problem as one of nonlinear optimization. R's
 nonlinear optimization routines are `optim()`, `nlm()` and `nlminb()`,
 which provide the
-functionality (and more) of [S-PLUS]{.small}'s `ms()` and `nlminb()`. We
+functionality (and more) of [S-PLUS]'s `ms()` and `nlminb()`. We
 seek the parameter values that minimize some index of lack-of-fit, and
 they do this by trying out various parameter values iteratively. Unlike
 linear regression for example, there is no guarantee that the procedure
@@ -5027,38 +5027,38 @@ dependent on the type or _class_ of the first argument.
 `plot(x, y)`\
 `plot(xy)`
 
-: If `x`{.variable} and `y`{.variable} are vectors, `plot(x, y)`
-produces a scatterplot of `y`{.variable} against `x`{.variable}. The
+: If `x` and `y` are vectors, `plot(x, y)`
+produces a scatterplot of `y` against `x`. The
 same effect can be produced by supplying one argument (second form)
-as either a list containing two elements `x`{.variable} and
-`y`{.variable} or a two-column matrix.
+as either a list containing two elements `x` and
+`y` or a two-column matrix.
 
 `plot(x)`
 
-: If `x`{.variable} is a time series, this produces a time-series
-plot. If `x`{.variable} is a numeric vector, it produces a plot of
+: If `x` is a time series, this produces a time-series
+plot. If `x` is a numeric vector, it produces a plot of
 the values in the vector against their index in the vector. If
-`x`{.variable} is a complex vector, it produces a plot of imaginary
+`x` is a complex vector, it produces a plot of imaginary
 versus real parts of the vector elements.
 
 `plot(f)`\
 `plot(f, y)`
 
-: `f`{.variable} is a factor object, `y`{.variable} is a numeric
-vector. The first form generates a bar plot of `f`{.variable}; the
-second form produces boxplots of `y`{.variable} for each level of
-`f`{.variable}.
+: `f` is a factor object, `y` is a numeric
+vector. The first form generates a bar plot of `f`; the
+second form produces boxplots of `y` for each level of
+`f`.
 
 `plot(df)`\
 `plot(~ expr)`\
 `plot(y ~ expr)`
 
-: `df`{.variable} is a data frame, `y`{.variable} is any object,
-`expr`{.variable} is a list of object names separated by '`+`'
+: `df` is a data frame, `y` is any object,
+`expr` is a list of object names separated by '`+`'
 (e.g., `a + b + c`). The first two forms produce distributional
 plots of the variables in a data frame (first form) or of a number
-of named objects (second form). The third form plots `y`{.variable}
-against every object named in `expr`{.variable}.
+of named objects (second form). The third form plots `y`
+against every object named in `expr`.
 
 ---
 
@@ -5287,7 +5287,7 @@ Some of the more useful low-level plotting functions are:
     Adds a line of slope `b` and intercept `a` to the current plot.
     `h=y` may be used to specify *y*-coordinates for the heights of
     horizontal lines to go across a plot, and `v=x` similarly for the
-    *x*-coordinates for vertical lines. Also `lm.obj`{.variable} may be
+    *x*-coordinates for vertical lines. Also `lm.obj` may be
     list with a `coefficients` component of length 2 (such as the result
     of model-fitting functions,) which are taken as an intercept and
     slope, in that order.
@@ -5307,7 +5307,7 @@ Some of the more useful low-level plotting functions are:
     Adds a legend to the current plot at the specified position.
     Plotting characters, line styles, colors etc., are identified with
     the labels in the character vector `legend`. At least one other
-    argument `v`{.variable} (a vector the same length as `legend`) with
+    argument `v` (a vector the same length as `legend`) with
     the corresponding values of the plotting unit must also be given, as
     follows:
 
@@ -5594,9 +5594,9 @@ Graphics parameters will be presented in the following form:
 
 `name=value`
 
-: A description of the parameter's effect. `name`{.variable} is the
+: A description of the parameter's effect. `name` is the
 name of the parameter, that is, the argument name to use in calls to
-`par()` or a graphics function. `value`{.variable} is a typical
+`par()` or a graphics function. `value` is a typical
 value you might use when setting the parameter.
 
 Note that `axes` is **not** a graphics parameter but an argument to a
@@ -6042,14 +6042,14 @@ the current device, to which graphics output will be sent.
 :
 
     Can be used to change the current graphics device to the one at
-    position `k`{.variable} of the device list. Returns the number and
+    position `k` of the device list. Returns the number and
     label of the device.
 
 `dev.off(k)`
 
 :
 
-    Terminate the graphics device at point `k`{.variable} of the device
+    Terminate the graphics device at point `k` of the device
     list. For some devices, such as `postscript` devices, this will
     either print the file immediately or correctly complete the file for
     later printing, depending on how the device was initiated.
@@ -6057,7 +6057,7 @@ the current device, to which graphics output will be sent.
 `dev.copy(device, …, which=k)`\
 `dev.print(device, …, which=k)`
 
-: Make a copy of the device `k`{.variable}. Here `device` is a device
+: Make a copy of the device `k`. Here `device` is a device
 function, such as `postscript`, with extra arguments, if needed,
 specified by '`…`'. `dev.print` is similar, but the copied
 device is immediately closed, so that end actions, such as printing
@@ -6664,7 +6664,7 @@ When working at a command line on UNIX or Windows, the command
 '`R`' can be used both for starting the main R program in the
 form
 
-```{.display}
+```
 R [options] [<infile] [>outfile],
 ```
 
@@ -6752,7 +6752,7 @@ into this directory.
 : Control whether data sets should be saved or not at the end of the R
 session. If neither is given in an interactive session, the user is
 asked for the desired behavior when ending the session with
-[q()]{.kbd}; in non-interactive use one of these must be specified
+[q()]; in non-interactive use one of these must be specified
 or implied by some other option (see below).
 
 `--no-environ`
@@ -6798,14 +6798,14 @@ startup.
 `-f file`\
 `--file=file`
 
-: (not `Rgui.exe`) Take input from `file`{.variable}: '`-`'
+: (not `Rgui.exe`) Take input from `file`: '`-`'
 means `stdin`. Implies `--no-save` unless `--save`
 has been set. On a Unix-alike, shell metacharacters should be
-avoided in `file`{.variable} (but spaces are allowed).
+avoided in `file` (but spaces are allowed).
 
 `-e expression`
 
-: (not `Rgui.exe`) Use `expression`{.variable} as an input line. One
+: (not `Rgui.exe`) Use `expression` as an input line. One
 or more `-e` options can be used, but not together with
 `-f` or `--file`. Implies `--no-save`
 unless `--save` has been set. (There is a limit of 10,000
@@ -6835,7 +6835,7 @@ and can also be set by environment variables `R_NSIZE` and
 `--max-ppsize=N`
 
 : Specify the maximum size of the pointer protection stack as
-`N`{.variable} locations. This defaults to 10000, but can be
+`N` locations. This defaults to 10000, but can be
 increased to allow large and complicated calculations to be done.
 Currently the maximum value accepted is 100000.
 
@@ -6886,7 +6886,7 @@ printing of diagnostic messages.
 `--debugger=name`\
 `-d name`
 
-: (UNIX only) Run R through debugger `name`{.variable}. For most
+: (UNIX only) Run R through debugger `name`. For most
 debuggers (the exceptions are `valgrind` and recent versions of
 `gdb`), further command line options are disregarded, and should
 instead be given when starting the R executable from inside the
@@ -6895,9 +6895,9 @@ debugger.
 `--gui=type`\
 `-g type`
 
-: (UNIX only) Use `type`{.variable} as graphical user interface (note
+: (UNIX only) Use `type` as graphical user interface (note
 that this also includes interactive graphics). Currently, possible
-values for `type`{.variable} are '`X11`' (the default) and,
+values for `type` are '`X11`' (the default) and,
 provided that '`Tcl/Tk`' support is available,
 '`Tk`'. (For back-compatibility, '`x11`' and
 '`tk`' are accepted.)
@@ -6925,7 +6925,7 @@ The general form is
 R CMD command args
 ```
 
-where `command`{.variable} is the name of the tool and `args`{.variable}
+where `command` is the name of the tool and `args`
 the arguments passed on to it.
 
 Currently, the following tools are available.
@@ -7040,7 +7040,7 @@ R CMD cmd args
 for any other executable `cmd` on the path or given by an absolute
 filepath: this is useful to have the same environment as R or the
 specific commands run under, for example to run `ldd` or `pdflatex`.
-Under Windows `cmd`{.variable} can be an executable or a batch file, or
+Under Windows `cmd` can be an executable or a batch file, or
 if it has extension `.sh` or `.pl` the appropriate interpreter (if
 available) is called to run it.
 
@@ -7201,14 +7201,14 @@ the functions described below are available, as well as others
 system.
 
 Many of these use either Control or Meta characters. Control characters,
-such as [Control-m]{.kbd}, are obtained by holding the `CTRL`{.key} down
-while you press the `m`{.key} key, and are written as [C-m]{.kbd} below.
-Meta characters, such as [Meta-b]{.kbd}, are typed by holding down
-`META`{.key}[^29^](#FOOT29) and pressing `b`{.key}, and written
-as [M-b]{.kbd} in the following. If your terminal does not have a
-`META`{.key} key enabled, you can still type Meta characters using
-two-character sequences starting with [ESC]{.kbd}. Thus, to enter
-[M-b]{.kbd}, you could type `ESC`{.key}`b`{.key}. The [ESC]{.kbd}
+such as [Control-m], are obtained by holding the `CTRL` down
+while you press the `m` key, and are written as [C-m] below.
+Meta characters, such as [Meta-b], are typed by holding down
+`META`[^29^](#FOOT29) and pressing `b`, and written
+as [M-b] in the following. If your terminal does not have a
+`META` key enabled, you can still type Meta characters using
+two-character sequences starting with [ESC]. Thus, to enter
+[M-b], you could type ` ESC``b `. The [ESC]
 character sequences are also allowed on terminals with real Meta keys.
 Note that case is significant for Meta characters.
 
@@ -7223,12 +7223,12 @@ changed if necessary, and re-submitted as new commands. In Emacs-style
 command-line editing any straight typing you do while in this editing
 phase causes the characters to be inserted in the command you are
 editing, displacing any characters to the right of the cursor. In _vi_
-mode character insertion mode is started by [M-i]{.kbd} or [M-a]{.kbd},
+mode character insertion mode is started by [M-i] or [M-a],
 characters are typed and insertion mode is finished by typing a further
-`ESC`{.key}. (The default is Emacs-style, and only that is described
+`ESC`. (The default is Emacs-style, and only that is described
 here: for _vi_ mode see the **readline** documentation.)
 
-Pressing the `RET`{.key} command at any time causes the command to be
+Pressing the `RET` command at any time causes the command to be
 re-submitted.
 
 Other editing actions are summarized in the following table.
@@ -7237,98 +7237,98 @@ Other editing actions are summarized in the following table.
 
 #### Command recall and vertical motion
 
-[C-p]{.kbd}
+[C-p]
 
 : Go to the previous command (backwards in the history).
 
-[C-n]{.kbd}
+[C-n]
 
 : Go to the next command (forwards in the history).
 
-[C-r `text`{.variable}]{.kbd}
+[C-r `text`]
 
-: Find the last command with the `text`{.variable} string in it. This
+: Find the last command with the `text` string in it. This
 can be cancelled by `C-g` (and on some versions of R by `C-c`).
 
 On most terminals, you can also use the up and down arrow keys instead
-of [C-p]{.kbd} and [C-n]{.kbd}, respectively.
+of [C-p] and [C-n], respectively.
 
 #### Horizontal motion of the cursor
 
-[C-a]{.kbd}
+[C-a]
 
 : Go to the beginning of the command.
 
-[C-e]{.kbd}
+[C-e]
 
 : Go to the end of the line.
 
-[M-b]{.kbd}
+[M-b]
 
 : Go back one word.
 
-[M-f]{.kbd}
+[M-f]
 
 : Go forward one word.
 
-[C-b]{.kbd}
+[C-b]
 
 : Go back one character.
 
-[C-f]{.kbd}
+[C-f]
 
 : Go forward one character.
 
 On most terminals, you can also use the left and right arrow keys
-instead of [C-b]{.kbd} and [C-f]{.kbd}, respectively.
+instead of [C-b] and [C-f], respectively.
 
 #### Editing and re-submission
 
-[`text`{.variable}]{.kbd}
+[`text`]
 
-: Insert `text`{.variable} at the cursor.
+: Insert `text` at the cursor.
 
-[C-f `text`{.variable}]{.kbd}
+[C-f `text`]
 
-: Append `text`{.variable} after the cursor.
+: Append `text` after the cursor.
 
-[[DEL]{.key}]{.kbd}
+[[DEL]]
 
 : Delete the previous character (left of the cursor).
 
-[C-d]{.kbd}
+[C-d]
 
 : Delete the character under the cursor.
 
-[M-d]{.kbd}
+[M-d]
 
 : Delete the rest of the word under the cursor, and "save" it.
 
-[C-k]{.kbd}
+[C-k]
 
 : Delete from cursor to end of command, and "save" it.
 
-[C-y]{.kbd}
+[C-y]
 
 : Insert (yank) the last "saved" text here.
 
-[C-t]{.kbd}
+[C-t]
 
 : Transpose the character under the cursor with the next.
 
-[M-l]{.kbd}
+[M-l]
 
 : Change the rest of the word to lower case.
 
-[M-c]{.kbd}
+[M-c]
 
 : Change the rest of the word to upper case.
 
-[[RET]{.key}]{.kbd}
+[[RET]]
 
 : Re-submit the command to R.
 
-The final `RET`{.key} terminates the command line editing sequence.
+The final `RET` terminates the command line editing sequence.
 
 The **readline** key bindings can be customized in the usual way _via_ a
 `~/.inputrc` file. These customizations can be conditioned on
@@ -8990,7 +8990,7 @@ statements are executed.
 [(9)](#DOCF9)
 
 `paste(..., collapse=ss)` joins the arguments into a single character
-string putting `ss`{.variable} in between, e.g., `ss <- "|"`. There are
+string putting `ss` in between, e.g., `ss <- "|"`. There are
 more tools for character manipulation, see the help for `sub` and
 `substring`.
 
@@ -9069,8 +9069,8 @@ See also the methods described in [Statistical models in R](#Statistical-models-
 
 [(23)](#DOCF23)
 
-In some sense this mimics the behavior in [S-PLUS]{.small} since in
-[S-PLUS]{.small} this operator always creates or assigns to a global
+In some sense this mimics the behavior in [S-PLUS] since in
+[S-PLUS] this operator always creates or assigns to a global
 variable.
 
 [(24)](#DOCF24)

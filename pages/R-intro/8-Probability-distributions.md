@@ -1,4 +1,4 @@
-8 Probability distributions
+# 8 Probability distributions
 
 ---
 
@@ -274,7 +274,7 @@ mean of x mean of y
 
 which does indicate a significant difference, assuming normality. By
 default the R function does not assume equality of variances in the two
-samples (in contrast to the similar [S-PLUS]{.small} `t.test` function).
+samples (in contrast to the similar [S-PLUS] `t.test` function).
 We can use the F test to test for equality in the variances, provided
 that the two samples are from normal populations.
 

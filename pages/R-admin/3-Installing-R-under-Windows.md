@@ -1,4 +1,4 @@
-3 Installing R under Windows
+# 3 Installing R under Windows
 
 ---
 
@@ -101,13 +101,13 @@ You need to collect the following sets of files:
 
 - Get the R source code tarball `R-3.6.3.tar.gz` from CRAN.
   Open a command window (or another shell) at directory
-  `R_HOME`{.variable}, and run
+  `R_HOME`, and run
 
 ```r
 tar -xf R-3.6.3.tar.gz
 ```
 
-to create the source tree in `R_HOME`{.variable}. **Beware**: do use
+to create the source tree in `R_HOME`. **Beware**: do use
 `tar` to extract the sources rather than tools such as WinZip. If
 you are using an account with administrative privileges you may get
 a lot of messages which can be suppressed by

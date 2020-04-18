@@ -1,4 +1,4 @@
-7 Generic functions and methods
+# 7 Generic functions and methods
 
 ---
 

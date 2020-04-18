@@ -1295,7 +1295,7 @@ default) or `.rd`. Further, the names must be valid in
 be entirely ASCII and not contain '`%`'. See [Writing R
 documentation files](#Writing-R-documentation-files), for more
 information. Note that all user-level objects in a package should be
-documented; if a package `pkg`{.variable} contains user-level objects
+documented; if a package `pkg` contains user-level objects
 which are for "internal" use only, it should provide a file
 `pkg-internal.Rd` which documents all such objects, and clearly
 states that these are not meant to be called by the user. See e.g. the
@@ -1805,7 +1805,7 @@ that an R installation is not required to have a C++ compiler so
 
 You can use `R CMD config` to get the value of the basic configuration
 variables, and also the header and library flags necessary for linking a
-front-end executable program against R, see [R CMD config \--help]{.kbd}
+front-end executable program against R, see [R CMD config \--help]
 for details. If you do, it is essential that you use both the command
 and the appropriate flags, so that for example '`CC`' must
 always be used with '`CFLAGS`' and (for code to be linked into
@@ -3140,7 +3140,7 @@ All these tests are run with collation set to the `C` locale, and for
 the examples and tests with environment variable `LANGUAGE=en`: this is
 to minimize differences between platforms.
 
-Use [R CMD check \--help]{.kbd} to obtain more information about the
+Use [R CMD check \--help] to obtain more information about the
 usage of the R package checker. A subset of the checking steps can be
 selected by adding command-line options. It also allows customization by
 setting environment variables `_R_CHECK_*_` as described in
@@ -3252,10 +3252,10 @@ by default. In addition, those files in the `R`,
 `demo` and `man` directories which are flagged by
 `R CMD check` as having invalid names will be excluded.
 
-Use [R CMD build \--help]{.kbd} to obtain more information about the
+Use [R CMD build \--help] to obtain more information about the
 usage of the R package builder.
 
-Unless [R CMD build]{.kbd} is invoked with the
+Unless [R CMD build] is invoked with the
 `--no-build-vignettes` option (or the package's
 `DESCRIPTION` contains '`BuildVignettes: no`' or
 similar), it will attempt to (re)build the vignettes (see [Writing
@@ -5771,7 +5771,7 @@ in the **tools** package called by the script `Rdconv` in
 
 The R distribution contains more than 1300 such files which can be found
 in the `src/library/pkg/man` directories of the R source tree,
-where `pkg`{.variable} stands for one of the standard packages which are
+where `pkg` stands for one of the standard packages which are
 included in the R distribution.
 
 As an example, let us look at a simplified version of
@@ -5860,7 +5860,7 @@ functions) are given in this subsection.
 
 :
 
-    `name`{.variable} typically[^102^](#FOOT102) is the
+    `name` typically[^102^](#FOOT102) is the
     basename of the `Rd` file containing the documentation. It
     is the "name" of the `Rd` object represented by the file
     and has to be unique in a package. To avoid problems with indexing
@@ -5879,7 +5879,7 @@ functions) are given in this subsection.
 
     The `\alias` sections specify all "topics" the file documents. This
     information is collected into index data bases for lookup by the
-    on-line (plain text and HTML) help systems. The `topic`{.variable}
+    on-line (plain text and HTML) help systems. The `topic`
     can contain spaces, but (for historical reasons) leading and
     trailing spaces will be stripped. Percent and left brace need to be
     escaped by a backslash.
@@ -5959,9 +5959,9 @@ functions) are given in this subsection.
 
 
     Use `\method{generic}{class}` to indicate the name of an S3 method
-    for the generic function `generic`{.variable} for objects inheriting
+    for the generic function `generic` for objects inheriting
     from class `"class"`. In the printed versions, this will come out as
-    `generic`{.variable} (reflecting the understanding that methods
+    `generic` (reflecting the understanding that methods
     should not be invoked directly but *via* method dispatch), but
     `codoc()` and other QC tools always have access to the full name.
 
@@ -6257,7 +6257,7 @@ methods and classes uses '`methods`' (from
     URLs](#Specifying-URLs)). In addition, section `\references` could
     give secondary sources and usages.
 
-Note also that when documenting data set `bar`{.variable},
+Note also that when documenting data set `bar`,
 
 - The `\usage` entry is always `bar` or (for packages which do not use
   lazy-loading of data) `data(bar)`. (In particular, only document a
@@ -6282,7 +6282,7 @@ class-class
 generic,signature_list-method
 ```
 
-where `signature_list`{.variable} contains the names of the classes in
+where `signature_list` contains the names of the classes in
 the signature of the method (without quotes) separated by '`,`'
 (without whitespace), with '`ANY`' used for arguments without
 an explicit specification. E.g., '`genericFunction-class`' is
@@ -6394,14 +6394,14 @@ quoting text.
 
 :
 
-    Emphasize `text`{.variable} using *italic* and **bold** font if
+    Emphasize `text` using *italic* and **bold** font if
     possible; `\strong` is regarded as stronger (more emphatic).
 
 `\bold{text}`
 
 :
 
-    Set `text`{.variable} in **bold** font where possible.
+    Set `text` in **bold** font where possible.
 
 `\sQuote{text}`
 :
@@ -6410,11 +6410,11 @@ quoting text.
 
 :
 
-    Portably single or double quote `text`{.variable} (without
+    Portably single or double quote `text` (without
     hard-wiring the characters used for quotation marks).
 
 Each of the above commands takes LaTeX-like input, so other macros may
-be used within `text`{.variable}.
+be used within `text`.
 
 The following logical markup commands are available for indicating
 specific kinds of text. Except as noted, these take 'verbatim' text
@@ -6429,7 +6429,7 @@ will need to be escaped (see [Insertions](#Insertions)).
     e.g., a fragment of R code or the name of an R object. Text is
     entered in R-like syntax, and displayed using `typewriter` font
     where possible. Macros `\var` and `\link` are interpreted within
-    `text`{.variable}.
+    `text`.
 
 `\preformatted{text}`
 
@@ -6449,7 +6449,7 @@ will need to be escaped (see [Insertions](#Insertions)).
 
 :
 
-    Indicate keyboard input, using [slanted typewriter]{.kbd} font if
+    Indicate keyboard input, using [slanted typewriter] font if
     possible, so users can distinguish the characters they are supposed
     to type from computer output. Text is entered 'verbatim'.
 
@@ -6628,8 +6628,8 @@ first argument, nor between the two arguments.)
 ### 2.5 Cross-references
 
 The markup `\link{foo}` (usually in the combination `\code{\link{foo}}`)
-produces a hyperlink to the help for `foo`{.variable}. Here
-`foo`{.variable} is a _topic_, that is the argument of `\alias` markup
+produces a hyperlink to the help for `foo`. Here
+`foo` is a _topic_, that is the argument of `\alias` markup
 in another `Rd` file (possibly in another package). Hyperlinks
 are supported in some of the formats to which `Rd` files are
 converted, for example HTML and PDF, but ignored in others, e.g. the
@@ -6643,8 +6643,8 @@ extracting a topic from a `\alias`, they are not stripped when looking
 up the topic of a `\link`.
 
 You can specify a link to a different topic than its name by
-`\link[=dest]{name}` which links to topic `dest`{.variable} with name
-`name`{.variable}. This can be used to refer to the documentation for
+`\link[=dest]{name}` which links to topic `dest` with name
+`name`. This can be used to refer to the documentation for
 S3/4 classes, for example `\code{"\link[=abc-class]{abc}"}` would be a
 way to refer to the documentation of an S4 class `"abc"` defined in your
 package, and `\code{"\link[=terms.object]{terms}"}` to the S3 `"terms"`
@@ -6653,7 +6653,7 @@ file, `\code{"\linkS4class{abc}"}` expands to the form given above.
 
 There are two other forms of optional argument specified as
 `\link[pkg]{foo}` and `\link[pkg:bar]{foo}` to link to the package
-**`pkg`{.variable}**, to _files_ `foo.html` and
+**`pkg`**, to _files_ `foo.html` and
 `bar.html` respectively. These are rarely needed, perhaps to
 refer to not-yet-installed packages (but there the HTML help system will
 resolve the link at run time) or in the normally undesirable event that
@@ -6666,7 +6666,7 @@ which topics are in which files in an uninstalled package). The **only**
 reason to use these forms for base and recommended packages is to force
 a reference to a package that might be further down the search path.
 Because they have been frequently misused, the HTML help system looks
-for topic `foo` in package **`pkg`{.variable}** if it does not find file
+for topic `foo` in package **`pkg`** if it does not find file
 `foo.html`.
 
 ---
@@ -6682,8 +6682,8 @@ equations" (as in LaTeX's `displaymath` environment, or TeX's `$$…$$`).
 Both arguments are treated as 'verbatim' text.
 
 Both commands can also be used as `\eqn{latexascii}` (only _one_
-argument) which then is used for both `latex`{.variable} and
-`ascii`{.variable}. No whitespace is allowed between command and the
+argument) which then is used for both `latex` and
+`ascii`. No whitespace is allowed between command and the
 first argument, nor between the first and second arguments.
 
 The following example is from `Poisson.Rd`:
@@ -6726,7 +6726,7 @@ are significant in HTML or LaTeX.
 
 The expert form is `\figure{filename}{options: string}`. (The word
 '`options:`' must be typed exactly as shown and followed by at
-least one space.) In this form, the `string`{.variable} is copied into
+least one space.) In this form, the `string` is copied into
 the HTML `img` tag as attributes following the `src` attribute, or into
 the second argument of the `\Figure` macro in LaTeX, which by default is
 used as options to an `\includegraphics` call. As it is unlikely that
@@ -6806,7 +6806,7 @@ In addition, it is possible to provide "concept index entries" using
 \concept{Spearman correlation coefficient}
 ```
 
-so that e.g. [??Spearman]{.kbd} will succeed in finding the help page
+so that e.g. [??Spearman] will succeed in finding the help page
 for the test for association between paired samples using Spearman's
 rho.
 
@@ -6859,10 +6859,10 @@ documented are only relevant to one platform, platform-specific
 Occasionally the best content for one output format is different from
 the best content for another. For this situation, the
 `\if{format}{text}` or `\ifelse{format}{text}{alternate}` markup is
-used. Here `format`{.variable} is a comma separated list of formats in
-which the `text`{.variable} should be rendered. The
-`alternate`{.variable} will be rendered if the format does not match.
-Both `text`{.variable} and `alternate`{.variable} may be any sequence of
+used. Here `format` is a comma separated list of formats in
+which the `text` should be rendered. The
+`alternate` will be rendered if the format does not match.
+Both `text` and `alternate` may be any sequence of
 text and markup.
 
 Currently the following formats are recognized: `example`, `html`,
@@ -6873,7 +6873,7 @@ displayed example in some other format.) Also accepted are `TRUE`
 the output of the `\Sexpr` macro (see [Dynamic pages](#Dynamic-pages)).
 
 The `\out{literal}` macro would usually be used within the
-`text`{.variable} part of `\if{format}{text}`. It causes the renderer to
+`text` part of `\if{format}{text}`. It causes the renderer to
 output the literal text exactly, with no attempt to escape special
 characters. For example, use the following to output the markup
 necessary to display the Greek letter in LaTeX or HTML, and the text
@@ -7124,8 +7124,8 @@ used to extract the R code fragments.
 
 The exact usage and a detailed list of available options for all of
 these commands can be obtained by running `R CMD command --help`, e.g.,
-[R CMD Rdconv \--help]{.kbd}. All available commands can be listed using
-[R \--help]{.kbd} (or [Rcmd \--help]{.kbd} under Windows).
+[R CMD Rdconv \--help]. All available commands can be listed using
+[R \--help] (or [Rcmd \--help] under Windows).
 
 All of these work under Windows. You may need to have installed the the
 tools to build packages from source as described in the "R Installation
@@ -7215,7 +7215,7 @@ dump(ls(all = TRUE), file = "new.myfuns.R")
 ```
 
 and run R with this as the source file, for example by [R \--vanilla \<
-tidy.R]{.kbd} or by pasting into an R session. Then the file
+tidy.R] or by pasting into an R session. Then the file
 `new.myfuns.R` will contain the functions in alphabetical order
 in the standard layout. Warning: comments in your functions will be
 lost.
@@ -8195,7 +8195,7 @@ On platforms where `valgrind` is installed you can build a version of R
 with extra instrumentation to help `valgrind` detect errors in the use
 of memory allocated from the R heap. The `configure` option is
 `--with-valgrind-instrumentation=level`, where
-`level`{.variable} is 0, 1 or 2. Level 0 is the default and does not add
+`level` is 0, 1 or 2. Level 0 is the default and does not add
 anything. Level 1 will detect some uses[^114^](#FOOT114) of
 uninitialised memory and has little impact on speed (compared to level
 0). Level 2 will detect many other memory-use
@@ -8729,14 +8729,14 @@ a symbolic debugger on such dynamically loaded code under Unix-alikes
 use
 
 - Call the debugger on the R executable, for example by [R -d
-  gdb]{.kbd}.
+  gdb].
 - Start R.
 - At the R prompt, use `dyn.load` or `library` to load your shared
   object.
 - Send an interrupt signal. This will put you back to the debugger
   prompt.
 - Set the breakpoints in your code.
-- Continue execution of R by typing [signal 0[RET]{.key}]{.kbd}.
+- Continue execution of R by typing [signal 0[RET]].
 
 Under Windows signals may not be able to be used, and if so the
 procedure is more complicated. See the rw-FAQ.
@@ -8747,7 +8747,7 @@ procedure is more complicated. See the rw-FAQ.
 
 The key to inspecting R objects from compiled code is the function
 `PrintValue(SEXP s)` which uses the normal R printing mechanisms to
-print the R object pointed to by `s`{.variable}, or the safer version
+print the R object pointed to by `s`, or the safer version
 `R_PV(SEXP s)` which will only print 'objects'.
 
 One way to make use of `PrintValue` is to insert suitable calls into the
@@ -8770,7 +8770,7 @@ example, let
 R> DF <- data.frame(a = 1:3, b = 4:6)
 ```
 
-By setting a breakpoint at `do_get` and typing [get(\"DF\")]{.kbd} at
+By setting a breakpoint at `do_get` and typing [get(\"DF\")] at
 the R prompt, one can find out the address in memory of `DF`, for
 example
 
@@ -9183,7 +9183,7 @@ is either loaded or unloaded. This can be used, for example, to register
 native routines with R's dynamic symbol mechanism, initialize some data
 in the native code, or initialize a third party library. On loading a
 DLL, R will look for a routine within that DLL named `R_init_lib` where
-`lib`{.variable} is the name of the DLL file with the extension removed.
+`lib` is the name of the DLL file with the extension removed.
 For example, in the command
 
 ```r
@@ -9786,7 +9786,7 @@ C or Objective C++ (with extensions `.c`, `.cc` or
 `.cpp`, `.f` (fixed-form Fortran), `.f90` or
 `.f95` (free-form), `.m`, and `.mm` or
 `.M`, respectively), or commands to be passed to the linker.
-See [R CMD SHLIB \--help]{.kbd} (or the R help for `SHLIB`) for usage
+See [R CMD SHLIB \--help] (or the R help for `SHLIB`) for usage
 information. Note that files intended for the Fortran pre-processor with
 extension `.F` are not accepted.
 
@@ -10337,9 +10337,9 @@ using the object by using the `PROTECT` macro on a pointer to the
 object. This tells R that the object is in use so it is not destroyed
 during garbage collection. Notice that it is the object which is
 protected, not the pointer variable. It is a common mistake to believe
-that if you invoked `PROTECT(p)` at some point then `p`{.variable} is
+that if you invoked `PROTECT(p)` at some point then `p` is
 protected from then on, but that is not true once a new object is
-assigned to `p`{.variable}.
+assigned to `p`.
 
 Protecting an R object automatically protects all the R objects pointed
 to in the corresponding `SEXPREC`, for example all elements of a
@@ -10349,7 +10349,7 @@ The programmer is solely responsible for housekeeping the calls to
 `PROTECT`. There is a corresponding macro `UNPROTECT` that takes as
 argument an `int` giving the number of objects to unprotect when they
 are no longer needed. The protection mechanism is stack-based, so
-`UNPROTECT(n)` unprotects the last `n`{.variable} objects which were
+`UNPROTECT(n)` unprotects the last `n` objects which were
 protected. The calls to `PROTECT` and `UNPROTECT` must balance when the
 user's code returns. R will warn about `"stack imbalance in .Call"` (or
 `.External`) if the housekeeping is wrong.
@@ -10390,7 +10390,7 @@ Protection is not needed for objects which R already knows are in use.
 In particular, this applies to function arguments.
 
 There is a less-used macro `UNPROTECT_PTR(s)` that unprotects the object
-pointed to by the `SEXP` `s`{.variable}, even if it is not the top item
+pointed to by the `SEXP` `s`, even if it is not the top item
 on the pointer protection stack. This macro was introduced for use in
 the parser, where the code interfacing with the R heap is generated and
 the generator cannot be configured to insert proper calls to `PROTECT`
@@ -10487,8 +10487,8 @@ data types of objects created by evaluating an R expression in the C
 code. You can use functions like `isReal`, `isInteger` and `isString` to
 do type checking. See the header file `Rinternals.h` for
 definitions of other such functions. All of these take a `SEXP` as
-argument and return 1 or 0 to indicate `TRUE`{.variable} or
-`FALSE`{.variable}.
+argument and return 1 or 0 to indicate `TRUE` or
+`FALSE`.
 
 What happens if the `SEXP` is not of the correct type? Sometimes you
 have no other option except to generate an error. You can use the
@@ -10853,9 +10853,9 @@ constructs a pairlist from `u` followed by `v` (which is a pairlist or
 Functions `list1` to `list6` construct a pairlist from one to six items,
 and `lang1` to `lang6` do the same for a language object (a function to
 call plus zero to five arguments). Functions `elt` and `lastElt` find
-the `i`{.variable}th element and the last element of a pairlist, and
-`nthcdr` returns a pointer to the `n`{.variable}th position in the
-pairlist (whose `CAR` is the `n`{.variable}th item).
+the `i`th element and the last element of a pairlist, and
+`nthcdr` returns a pointer to the `n`th position in the
+pairlist (whose `CAR` is the `n`th item).
 
 Functions `str2type` and `type2str` map R length-one character strings
 to and from `SEXPTYPE` numbers, and `type2char` maps numbers to C
@@ -12102,7 +12102,7 @@ or `.External`. Use
 char *R_alloc(size_t n, int size)
 ```
 
-which allocates `n`{.variable} units of `size`{.variable} bytes each. A
+which allocates `n` units of `size` bytes each. A
 typical usage (from package **stats**) is
 
 ```r
@@ -12125,8 +12125,8 @@ and
 char *S_realloc(char *p, long new, long old, int size)
 ```
 
-which changes the allocation size from `old`{.variable} to
-`new`{.variable} units, and zeroes the additional units.
+which changes the allocation size from `old` to
+`new` units, and zeroes the additional units.
 
 For compatibility with current versions of S, header `S.h`
 (only) defines wrapper macros equivalent to
@@ -12185,7 +12185,7 @@ void Free(any *p)
 providing analogues of `calloc`, `realloc` and `free`. If there is an
 error during allocation it is handled by R, so if these routines return
 the memory has been successfully allocated or freed. `Free` will set the
-pointer `p`{.variable} to `NULL`. (Some but not all versions of S do
+pointer `p` to `NULL`. (Some but not all versions of S do
 so.)
 
 Users should arrange to `Free` this memory when no longer needed,
@@ -12374,16 +12374,16 @@ subroutine realpr(label, nchar, data, ndata)
 subroutine intpr (label, nchar, data, ndata)
 ```
 
-Here `label`{.variable} is a character label of up to 255 characters,
-`nchar`{.variable} is its length (which can be `-1` if the whole label
-is to be used), and `data`{.variable} is an array of length at least
-`ndata`{.variable} of the appropriate type (`double precision`, `real`
+Here `label` is a character label of up to 255 characters,
+`nchar` is its length (which can be `-1` if the whole label
+is to be used), and `data` is an array of length at least
+`ndata` of the appropriate type (`double precision`, `real`
 and `integer` respectively). These routines print the label on one line
-and then print `data`{.variable} as if it were an R vector on subsequent
-line(s). They work with zero `ndata`{.variable}, and so can be used to
+and then print `data` as if it were an R vector on subsequent
+line(s). They work with zero `ndata`, and so can be used to
 print a label alone. Note though that some compilers will give an error
-or warning unless `data`{.variable} is an array: others will accept a
-scalar when `ndata`{.variable} has value one or zero.
+or warning unless `data` is an array: others will accept a
+scalar when `ndata` has value one or zero.
 
 ---
 
@@ -12704,13 +12704,13 @@ double rnorm(double mu, double sigma);
 
 That is, the first argument gives the position for the density and CDF
 and probability for the quantile function, followed by the
-distribution's parameters. Argument `lower_tail`{.variable} should be
+distribution's parameters. Argument `lower_tail` should be
 `TRUE` (or `1`) for normal use, but can be `FALSE` (or `0`) if the
 probability of the upper tail is desired or specified.
 
-Finally, `give_log`{.variable} should be non-zero if the result is
-required on log scale, and `log_p`{.variable} should be non-zero if
-`p`{.variable} has been specified on log scale.
+Finally, `give_log` should be non-zero if the result is
+required on log scale, and `log_p` should be non-zero if
+`p` has been specified on log scale.
 
 Note that you directly get the cumulative (or "integrated") _hazard_
 function, H(t) = - log(1 - F(t)), by using
@@ -12726,7 +12726,7 @@ variate. See [Random numbers](#Random-numbers), for the protocol in
 using the random-variate routines.
 
 Note that these argument sequences are (apart from the names and that
-`rnorm` has no `n`{.variable}) mainly the same as the corresponding R
+`rnorm` has no `n`) mainly the same as the corresponding R
 functions of the same name, so the documentation of the R functions can
 be used. Note that the exponential and gamma distributions are
 parametrized by `scale` rather than `rate`.
@@ -12777,7 +12777,7 @@ and similarly for the signed rank functions.
 For the negative binomial distribution ('`nbinom`'), in
 addition to the `(size, prob)` parametrization, the alternative
 `(size, mu)` parametrization is provided as well by functions
-'`[dpqr]nbinom_mu()`', see [?NegBinomial]{.kbd} in R.
+'`[dpqr]nbinom_mu()`', see [?NegBinomial] in R.
 
 Functions `dpois_raw(x, *)` and `dbinom_raw(x, *)` are versions of the
 Poisson and binomial probability mass functions which work continuously
@@ -12796,13 +12796,13 @@ advantageous when one of them is close to 1.
 
 #### 6.7.2 Mathematical functions
 
-Function: _double_ **gammafn** _(double `x`{.variable})_\
-Function: _double_ **lgammafn** _(double `x`{.variable})_\
-Function: _double_ **digamma** _(double `x`{.variable})_\
-Function: _double_ **trigamma** _(double `x`{.variable})_\
-Function: _double_ **tetragamma** _(double `x`{.variable})_\
-Function: _double_ **pentagamma** _(double `x`{.variable})_\
-Function: _double_ **psigamma** _(double `x`{.variable}, double `deriv`{.variable})_
+Function: _double_ **gammafn** _(double `x`)_\
+Function: _double_ **lgammafn** _(double `x`)_\
+Function: _double_ **digamma** _(double `x`)_\
+Function: _double_ **trigamma** _(double `x`)_\
+Function: _double_ **tetragamma** _(double `x`)_\
+Function: _double_ **pentagamma** _(double `x`)_\
+Function: _double_ **psigamma** _(double `x`, double `deriv`)_
 
 : The Gamma function, the natural logarithm of its absolute value and
 first four derivatives and the n-th derivative of Psi, the digamma
@@ -12810,29 +12810,29 @@ function, which is the derivative of `lgammafn`. In other words,
 `digamma(x)` is the same as `psigamma(x,0)`,
 `trigamma(x) == psigamma(x,1)`, etc.
 
-Function: _double_ **beta** _(double `a`{.variable}, double `b`{.variable})_\
-Function: _double_ **lbeta** _(double `a`{.variable}, double `b`{.variable})_
+Function: _double_ **beta** _(double `a`, double `b`)_\
+Function: _double_ **lbeta** _(double `a`, double `b`)_
 
 : The (complete) Beta function and its natural logarithm.
 
-Function: _double_ **choose** _(double `n`{.variable}, double `k`{.variable})_\
-Function: _double_ **lchoose** _(double `n`{.variable}, double `k`{.variable})_
+Function: _double_ **choose** _(double `n`, double `k`)_\
+Function: _double_ **lchoose** _(double `n`, double `k`)_
 
-: The number of combinations of `k`{.variable} items chosen from from
-`n`{.variable} and the natural logarithm of its absolute value,
-generalized to arbitrary real `n`{.variable}. `k`{.variable} is
+: The number of combinations of `k` items chosen from from
+`n` and the natural logarithm of its absolute value,
+generalized to arbitrary real `n`. `k` is
 rounded to the nearest integer (with a warning if needed).
 
-Function: _double_ **bessel_i** _(double `x`{.variable}, double `nu`{.variable}, double `expo`{.variable})_\
-Function: _double_ **bessel_j** _(double `x`{.variable}, double `nu`{.variable})_\
-Function: _double_ **bessel_k** _(double `x`{.variable}, double `nu`{.variable}, double `expo`{.variable})_\
-Function: _double_ **bessel_y** _(double `x`{.variable}, double `nu`{.variable})_
+Function: _double_ **bessel_i** _(double `x`, double `nu`, double `expo`)_\
+Function: _double_ **bessel_j** _(double `x`, double `nu`)_\
+Function: _double_ **bessel_k** _(double `x`, double `nu`, double `expo`)_\
+Function: _double_ **bessel_y** _(double `x`, double `nu`)_
 
-: Bessel functions of types I, J, K and Y with index `nu`{.variable}.
+: Bessel functions of types I, J, K and Y with index `nu`.
 For `bessel_i` and `bessel_k` there is the option to return
-[exp(-]{.nolinebreak}`x`{.variable}) I(`x`{.variable}; `nu`{.variable})
-or exp(`x`{.variable}) K(`x`{.variable}; `nu`{.variable}) if
-`expo`{.variable} is 2. (Use `expo == 1` for unscaled values.)
+[exp(-]`x`) I(`x`; `nu`)
+or exp(`x`) K(`x`; `nu`) if
+`expo` is 2. (Use `expo == 1` for unscaled values.)
 
 ---
 
@@ -12841,53 +12841,53 @@ or exp(`x`{.variable}) K(`x`{.variable}; `nu`{.variable}) if
 There are a few other numerical utility functions available as entry
 points.
 
-Function: _double_ **R_pow** _(double `x`{.variable}, double `y`{.variable})_\
-Function: _double_ **R_pow_di** _(double `x`{.variable}, int `i`{.variable})_
+Function: _double_ **R_pow** _(double `x`, double `y`)_\
+Function: _double_ **R_pow_di** _(double `x`, int `i`)_
 
 : `R_pow(x, y)` and `R_pow_di(x, i)` compute `x^y` and `x^i`,
 respectively using `R_FINITE` checks and returning the proper result
-(the same as R) for the cases where `x`{.variable}, `y`{.variable}
-or `i`{.variable} are 0 or missing or infinite or `NaN`.
+(the same as R) for the cases where `x`, `y`
+or `i` are 0 or missing or infinite or `NaN`.
 
-Function: _double_ **log1p** _(double `x`{.variable})_
+Function: _double_ **log1p** _(double `x`)_
 
 : Computes `log(1 + x)` (_log 1 **p**lus x_), accurately even for
-small `x`{.variable}, i.e., \|x\| \<\< 1.
+small `x`, i.e., \|x\| \<\< 1.
 
     This should be provided by your platform, in which case it is not
     included in `Rmath.h`, but is (probably) in
     `math.h` which `Rmath.h` includes (except under
     C++, so it may not be declared for C++98).
 
-Function: _double_ **log1pmx** _(double `x`{.variable})_
+Function: _double_ **log1pmx** _(double `x`)_
 
 : Computes `log(1 + x) - x` (\*log 1 **p**lus x **m**inus **x\***),
-accurately even for small `x`{.variable}, i.e., \|x\| \<\< 1.
+accurately even for small `x`, i.e., \|x\| \<\< 1.
 
-Function: _double_ **log1pexp** _(double `x`{.variable})_
+Function: _double_ **log1pexp** _(double `x`)_
 
 : Computes `log(1 + exp(x))` (\*log 1 **p**lus **exp\***), accurately,
-notably for large `x`{.variable}, e.g., x \> 720.
+notably for large `x`, e.g., x \> 720.
 
-Function: _double_ **expm1** _(double `x`{.variable})_
+Function: _double_ **expm1** _(double `x`)_
 
 : Computes `exp(x) - 1` (_exp x **m**inus 1_), accurately even for
-small `x`{.variable}, i.e., \|x\| \<\< 1.
+small `x`, i.e., \|x\| \<\< 1.
 
     This should be provided by your platform, in which case it is not
     included in `Rmath.h`, but is (probably) in
     `math.h` which `Rmath.h` includes (except under
     C++, so it may not be declared for C++98).
 
-Function: _double_ **lgamma1p** _(double `x`{.variable})_
+Function: _double_ **lgamma1p** _(double `x`)_
 
 : Computes `log(gamma(x + 1))` (_log(gamma(1 **p**lus x))_),
-accurately even for small `x`{.variable}, i.e., 0 \< x \< 0.5.
+accurately even for small `x`, i.e., 0 \< x \< 0.5.
 
-Function: _double_ **cospi** _(double `x`{.variable})_
+Function: _double_ **cospi** _(double `x`)_
 
 : Computes `cos(pi * x)` (where `pi` is 3.14159\...), accurately,
-notably for half integer `x`{.variable}.
+notably for half integer `x`.
 
     This might be provided by your platform[^150^](#FOOT150),
     in which case it is not included in `Rmath.h`, but is in
@@ -12902,71 +12902,71 @@ notably for half integer `x`{.variable}.
 
     before the first inclusion.)
 
-Function: _double_ **sinpi** _(double `x`{.variable})_
+Function: _double_ **sinpi** _(double `x`)_
 
 : Computes `sin(pi * x)` accurately, notably for (half) integer
-`x`{.variable}.
+`x`.
 
     This might be provided by your platform, in which case it is not
     included in `Rmath.h`, but is in `math.h` which
     `Rmath.h` includes (but see the comments for `cospi`).
 
-Function: _double_ **tanpi** _(double `x`{.variable})_
+Function: _double_ **tanpi** _(double `x`)_
 
 : Computes `tan(pi * x)` accurately, notably for (half) integer
-`x`{.variable}.
+`x`.
 
     This might be provided by your platform, in which case it is not
     included in `Rmath.h`, but is in `math.h` which
     `Rmath.h` includes (but see the comments for `cospi`).
 
-Function: _double_ **logspace_add** _(double `logx`{.variable}, double `logy`{.variable})_\
-Function: _double_ **logspace_sub** _(double `logx`{.variable}, double `logy`{.variable})_\
-Function: _double_ **logspace_sum** _(const double\* `logx`{.variable}, int `n`{.variable})_
+Function: _double_ **logspace_add** _(double `logx`, double `logy`)_\
+Function: _double_ **logspace_sub** _(double `logx`, double `logy`)_\
+Function: _double_ **logspace_sum** _(const double\* `logx`, int `n`)_
 
 : Compute the log of a sum or difference from logs of terms, i.e., "x + y" as `log (exp(logx) + exp(logy))` and "x - y" as
 `log (exp(logx) - exp(logy))`, and "sum_i x\[i\]" as
 `log (sum[i = 1:n exp(logx[i])] )` without causing unnecessary
 overflows or throwing away too much accuracy.
 
-Function: _int_ **imax2** _(int `x`{.variable}, int `y`{.variable})_\
-Function: _int_ **imin2** _(int `x`{.variable}, int `y`{.variable})_\
-Function: _double_ **fmax2** _(double `x`{.variable}, double `y`{.variable})_\
-Function: _double_ **fmin2** _(double `x`{.variable}, double `y`{.variable})_
+Function: _int_ **imax2** _(int `x`, int `y`)_\
+Function: _int_ **imin2** _(int `x`, int `y`)_\
+Function: _double_ **fmax2** _(double `x`, double `y`)_\
+Function: _double_ **fmin2** _(double `x`, double `y`)_
 
 : Return the larger (`max`) or smaller (`min`) of two integer or
 double numbers, respectively. Note that `fmax2` and `fmin2` differ
 from C99/C++11's `fmax` and `fmin` when one of the arguments is a
 `NaN`: these versions return `NaN`.
 
-Function: _double_ **sign** _(double `x`{.variable})_
+Function: _double_ **sign** _(double `x`)_
 
-: Compute the _signum_ function, where sign(`x`{.variable}) is 1, 0,
-or _-1_, when `x`{.variable} is positive, 0, or negative,
+: Compute the _signum_ function, where sign(`x`) is 1, 0,
+or _-1_, when `x` is positive, 0, or negative,
 respectively, and `NaN` if `x` is a `NaN`.
 
-Function: _double_ **fsign** _(double `x`{.variable}, double `y`{.variable})_
+Function: _double_ **fsign** _(double `x`, double `y`)_
 
 : Performs "transfer of sign" and is defined as \|x\| \* sign(y).
 
-Function: _double_ **fprec** _(double `x`{.variable}, double `digits`{.variable})_
+Function: _double_ **fprec** _(double `x`, double `digits`)_
 
-: Returns the value of `x`{.variable} rounded to `digits`{.variable}
+: Returns the value of `x` rounded to `digits`
 decimal digits (after the decimal point).
 
     This is the function used by R's `signif()`.
 
-Function: _double_ **fround** _(double `x`{.variable}, double `digits`{.variable})_
+Function: _double_ **fround** _(double `x`, double `digits`)_
 
-: Returns the value of `x`{.variable} rounded to `digits`{.variable}
+: Returns the value of `x` rounded to `digits`
 _significant_ decimal digits.
 
     This is the function used by R's `round()`. (Note that C99/C++11
     provide a `round` function but C++98 need not.)
 
-Function: _double_ **ftrunc** _(double `x`{.variable})_
+Function: _double_ **ftrunc** _(double `x`)_
 
-: Returns the value of `x`{.variable} truncated (to an integer value)
+: Returns the value of `x` truncated (to an integer value)
 towards zero.
 
 ---
@@ -13188,14 +13188,14 @@ R has a fairly comprehensive set of sort routines which are made
 available to users' C code. The following is declared in header file
 `Rinternals.h`.
 
-Function: _void_ **R_orderVector** _(int\* `indx`{.variable}, int `n`{.variable}, SEXP `arglist`{.variable}, Rboolean `nalast`{.variable}, Rboolean `decreasing`{.variable})_\
-Function: _void_ **R_orderVector1** _(int\* `indx`{.variable}, int `n`{.variable}, SEXP `x`{.variable}, Rboolean `nalast`{.variable}, Rboolean `decreasing`{.variable})_
+Function: _void_ **R_orderVector** _(int\* `indx`, int `n`, SEXP `arglist`, Rboolean `nalast`, Rboolean `decreasing`)_\
+Function: _void_ **R_orderVector1** _(int\* `indx`, int `n`, SEXP `x`, Rboolean `nalast`, Rboolean `decreasing`)_
 
 : `R_orderVector()` corresponds to R's
 `order(..., na.last, decreasing)`. More specifically,
 `indx <- order(x, y, na.last, decreasing)` corresponds to
 `R_orderVector(indx, n, Rf_lang2(x, y), nalast, decreasing)` and for
-three vectors, `Rf_lang3(x,y,z)` is used as `arglist`{.variable}.
+three vectors, `Rf_lang3(x,y,z)` is used as `arglist`.
 
     Both `R_orderVector` and `R_orderVector1` assume the vector `indx`
     to be allocated to length \>= n. On return, `indx[]` contains a
@@ -13210,35 +13210,35 @@ All other sort routines are declared in header file
 `R_ext/Utils.h` (included by `R.h`) and include the
 following.
 
-Function: _void_ **R_isort** _(int\* `x`{.variable}, int `n`{.variable})_\
-Function: _void_ **R_rsort** _(double\* `x`{.variable}, int `n`{.variable})_\
-Function: _void_ **R_csort** _(Rcomplex\* `x`{.variable}, int `n`{.variable})_\
-Function: _void_ **rsort_with_index** _(double\* `x`{.variable}, int\* `index`{.variable}, int `n`{.variable})_
+Function: _void_ **R_isort** _(int\* `x`, int `n`)_\
+Function: _void_ **R_rsort** _(double\* `x`, int `n`)_\
+Function: _void_ **R_csort** _(Rcomplex\* `x`, int `n`)_\
+Function: _void_ **rsort_with_index** _(double\* `x`, int\* `index`, int `n`)_
 
 : The first three sort integer, real (double) and complex data
 respectively. (Complex numbers are sorted by the real part first
 then the imaginary part.) `NA`s are sorted last.
 
-    `rsort_with_index` sorts on `x`{.variable}, and applies the same
-    permutation to `index`{.variable}. `NA`s are sorted last.
+    `rsort_with_index` sorts on `x`, and applies the same
+    permutation to `index`. `NA`s are sorted last.
 
-Function: _void_ **revsort** _(double\* `x`{.variable}, int\* `index`{.variable}, int `n`{.variable})_
+Function: _void_ **revsort** _(double\* `x`, int\* `index`, int `n`)_
 
 : Is similar to `rsort_with_index` but sorts into decreasing order,
 and `NA`s are not handled.
 
-Function: _void_ **iPsort** _(int\* `x`{.variable}, int `n`{.variable}, int `k`{.variable})_\
-Function: _void_ **rPsort** _(double\* `x`{.variable}, int `n`{.variable}, int `k`{.variable})_\
-Function: _void_ **cPsort** _(Rcomplex\* `x`{.variable}, int `n`{.variable}, int `k`{.variable})_
+Function: _void_ **iPsort** _(int\* `x`, int `n`, int `k`)_\
+Function: _void_ **rPsort** _(double\* `x`, int `n`, int `k`)_\
+Function: _void_ **cPsort** _(Rcomplex\* `x`, int `n`, int `k`)_
 
 : These all provide (very) partial sorting: they permute
-`x`{.variable} so that `x[k]` is in the correct place with smaller
+`x` so that `x[k]` is in the correct place with smaller
 values to the left, larger ones to the right.
 
-Function: _void_ **R_qsort** _(double \*`v`{.variable}, size_t `i`{.variable}, size_t `j`{.variable})_\
-Function: _void_ **R_qsort_I** _(double \*`v`{.variable}, int \*`I`{.variable}, int `i`{.variable}, int `j`{.variable})_\
-Function: _void_ **R_qsort_int** _(int \*`iv`{.variable}, size_t `i`{.variable}, size_t `j`{.variable})_\
-Function: _void_ **R_qsort_int_I** _(int \*`iv`{.variable}, int \*`I`{.variable}, int `i`{.variable}, int `j`{.variable})_
+Function: _void_ **R_qsort** _(double \*`v`, size_t `i`, size_t `j`)_\
+Function: _void_ **R_qsort_I** _(double \*`v`, int \*`I`, int `i`, int `j`)_\
+Function: _void_ **R_qsort_int** _(int \*`iv`, size_t `i`, size_t `j`)_\
+Function: _void_ **R_qsort_int_I** _(int \*`iv`, int \*`I`, int `i`, int `j`)_
 
 : These routines sort `v[i:j]` or `iv[i:j]` (using 1-indexing, i.e.,
 `v[1]` is the first element) calling the quicksort algorithm as used
@@ -13250,45 +13250,45 @@ stable, so tied values may be permuted.
     Note that `NA`s are not handled (explicitly) and you should use
     different sorting functions if `NA`s can be present.
 
-Function: _subroutine_ **qsort4** _(double precision `v`{.variable}, integer `indx`{.variable}, integer `ii`{.variable}, integer `jj`{.variable})_\
-Function: _subroutine_ **qsort3** _(double precision `v`{.variable}, integer `ii`{.variable}, integer `jj`{.variable})_
+Function: _subroutine_ **qsort4** _(double precision `v`, integer `indx`, integer `ii`, integer `jj`)_\
+Function: _subroutine_ **qsort3** _(double precision `v`, integer `ii`, integer `jj`)_
 
 : The Fortran interface routines for sorting double precision vectors
 are `qsort3` and `qsort4`, equivalent to `R_qsort` and `R_qsort_I`,
 respectively.
 
-Function: _void_ **R_max_col** _(double\* `matrix`{.variable}, int\* `nr`{.variable}, int\* `nc`{.variable}, int\* `maxes`{.variable}, int\* `ties_meth`{.variable})_
+Function: _void_ **R_max_col** _(double\* `matrix`, int\* `nr`, int\* `nc`, int\* `maxes`, int\* `ties_meth`)_
 
-: Given the `nr`{.variable} by `nc`{.variable} matrix `matrix` in
+: Given the `nr` by `nc` matrix `matrix` in
 column-major ("Fortran") order, `R_max_col()` returns in
 `maxes[i-1]` the column number of the maximal element in the
-`i`{.variable}-th row (the same as R's `max.col()` function). In the
+`i`-th row (the same as R's `max.col()` function). In the
 case of ties (multiple maxima), `*ties_meth` is an integer code in
 `1:3` determining the method: 1 = "random", 2 = "first" and 3 =
 "last". See R's help page `?max.col`.
 
-Function: _int_ **findInterval** _(double\* `xt`{.variable}, int `n`{.variable}, double `x`{.variable}, Rboolean `rightmost_closed`{.variable}, Rboolean `all_inside`{.variable}, int `ilo`{.variable}, int\* `mflag`{.variable})_\
-Function: _int_ **findInterval2(double\*** _`xt`{.variable}, int `n`{.variable}, double `x`{.variable}, Rboolean `rightmost_closed`{.variable}, Rboolean `all_inside`{.variable}, Rboolean `left_open`{.variable}, int `ilo`{.variable}, int\* `mflag`{.variable})_
+Function: _int_ **findInterval** _(double\* `xt`, int `n`, double `x`, Rboolean `rightmost_closed`, Rboolean `all_inside`, int `ilo`, int\* `mflag`)_\
+Function: _int_ **findInterval2(double\*** _`xt`, int `n`, double `x`, Rboolean `rightmost_closed`, Rboolean `all_inside`, Rboolean `left_open`, int `ilo`, int\* `mflag`)_
 
-: Given the ordered vector `xt`{.variable} of length `n`{.variable},
-return the interval or index of `x`{.variable} in `xt[]`, typically
-max(_i_; 1 \<= i \<= `n`{.variable} & _`xt`{.variable}\[i\]_ \<=
-`x`{.variable}) where we use 1-indexing as in R and Fortran (but not
-C). If `rightmost_closed`{.variable} is true, also returns
-_`n`{.variable}-1_ if `x`{.variable} equals
-_`xt`{.variable}\[`n`{.variable}\]_. If `all_inside`{.variable} is
+: Given the ordered vector `xt` of length `n`,
+return the interval or index of `x` in `xt[]`, typically
+max(_i_; 1 \<= i \<= `n` & _`xt`\[i\]_ \<=
+`x`) where we use 1-indexing as in R and Fortran (but not
+C). If `rightmost_closed` is true, also returns
+_`n`-1_ if `x` equals
+_`xt`\[`n`\]_. If `all_inside` is
 not 0, the result is coerced to lie in `1:(n-1)` even when
-`x`{.variable} is outside the `xt`{.variable}\[\] range. On return,
-`*mflag` equals _-1_ if `x`{.variable} \< `xt`{.variable}\[1\], _+1_
-if `x`{.variable} \>= `xt`{.variable}\[`n`{.variable}\], and 0
+`x` is outside the `xt`\[\] range. On return,
+`*mflag` equals _-1_ if `x` \< `xt`\[1\], _+1_
+if `x` \>= `xt`\[`n`\], and 0
 otherwise.
 
-    The algorithm is particularly fast when `ilo`{.variable} is set to
-    the last result of `findInterval()` and `x`{.variable} is a value of
+    The algorithm is particularly fast when `ilo` is set to
+    the last result of `findInterval()` and `x` is a value of
     a sequence which is increasing or decreasing for subsequent calls.
 
     `findInterval2()` is a generalization of `findInterval()`, with an
-    extra `Rboolean` argument `left_open`{.variable}. Setting
+    extra `Rboolean` argument `left_open`. Setting
     `left_open = TRUE` basically replaces all left-closed right-open
     intervals t) by left-open ones t\], see the help page of R function
     `findInterval` for details.
@@ -13299,12 +13299,12 @@ otherwise.
 A system-independent interface to produce the name of a temporary file
 is provided as
 
-Function: \*char \*_ **R_tmpnam** _(const char \*`prefix`{.variable}, const char \*`tmpdir`{.variable})*\
-Function: *char \*_ **R_tmpnam2** _(const char \*`prefix`{.variable}, const char \*`tmpdir`{.variable}, const char \*`fileext`{.variable})\*
+Function: \*char \*_ **R_tmpnam** _(const char \*`prefix`, const char \*`tmpdir`)*\
+Function: *char \*_ **R_tmpnam2** _(const char \*`prefix`, const char \*`tmpdir`, const char \*`fileext`)\*
 
 : Return a pathname for a temporary file with name beginning with
-`prefix`{.variable} and ending with `fileext`{.variable} in
-directory `tmpdir`{.variable}. A `NULL` prefix or extension is
+`prefix` and ending with `fileext` in
+directory `tmpdir`. A `NULL` prefix or extension is
 replaced by `""`. Note that the return value is dynamically
 allocated and should be freed using `R_free_tmpnam` when no longer
 needed (unlike the system call `tmpnam`). Freeing the result using
@@ -13313,9 +13313,9 @@ needed (unlike the system call `tmpnam`). Freeing the result using
 There is also the internal function used to expand file names in several
 R functions, and called directly by `path.expand`.
 
-Function: \*const char \*_ **R_ExpandFileName** _(const char \*`fn`{.variable})\*
+Function: \*const char \*_ **R_ExpandFileName** _(const char \*`fn`)\*
 
-: Expand a path name `fn`{.variable} by replacing a leading tilde by
+: Expand a path name `fn` by replacing a leading tilde by
 the user's home directory (if defined). The precise meaning is
 platform-specific; it will usually be taken from the environment
 variable `HOME` if this is defined.
@@ -13337,15 +13337,15 @@ declarations in different implementations of `iconv`.
 
 These are declared in header file `R_ext/Riconv.h`.
 
-Function: \*void \*_ **Riconv_open** _(const char \*`to`{.variable},
-const char \*`from`{.variable})\*
+Function: \*void \*_ **Riconv_open** _(const char \*`to`,
+const char \*`from`)\*
 
 Set up a pointer to an encoding object to be used to convert between two
 encodings: `""` indicates the current locale.
 
-Function: _size_t_ **Riconv** _(void \*`cd`{.variable}, const char
-\*\*`inbuf`{.variable}, size_t \*`inbytesleft`{.variable}, char
-\*\*`outbuf`{.variable}, size_t \*`outbytesleft`{.variable})_
+Function: _size_t_ **Riconv** _(void \*`cd`, const char
+\*\*`inbuf`, size_t \*`inbytesleft`, char
+\*\*`outbuf`, size_t \*`outbytesleft`)_
 
 Convert as much as possible of `inbuf` to `outbuf`. Initially the `int`
 variables indicate the number of bytes available in the buffers, and
@@ -14137,20 +14137,20 @@ which allow standard R callbacks to be redirected to your GUI. What
 these do is generally documented in the file
 `src/unix/system.txt`.
 
-Function: _void_ **R_ShowMessage** _(char \*`message`{.variable})_
+Function: _void_ **R_ShowMessage** _(char \*`message`)_
 
 : This should display the message, which may have multiple lines: it
 should be brought to the user's attention immediately.
 
-Function: _void_ **R_Busy** _(int `which`{.variable})_
+Function: _void_ **R_Busy** _(int `which`)_
 
 : This function invokes actions (such as change of cursor) when R
 embarks on an extended computation (`which=1`) and when such a state
 terminates (`which=0`).
 
-Function: _int_ **R_ReadConsole** _(const char \*`prompt`{.variable}, unsigned char \*`buf`{.variable}, int `buflen`{.variable}, int `hist`{.variable})_\
-Function: _void_ **R_WriteConsole** _(const char \*`buf`{.variable}, int `buflen`{.variable})_\
-Function: _void_ **R_WriteConsoleEx** _(const char \*`buf`{.variable}, int `buflen`{.variable}, int `otype`{.variable})_\
+Function: _int_ **R_ReadConsole** _(const char \*`prompt`, unsigned char \*`buf`, int `buflen`, int `hist`)_\
+Function: _void_ **R_WriteConsole** _(const char \*`buf`, int `buflen`)_\
+Function: _void_ **R_WriteConsoleEx** _(const char \*`buf`, int `buflen`, int `otype`)_\
 Function: _void_ **R_ResetConsole** _()_\
 Function: _void_ **R_FlushConsole** _()_\
 Function: _void_ **R_ClearErrConsole** _()_
@@ -14158,15 +14158,15 @@ Function: _void_ **R_ClearErrConsole** _()_
 : These functions interact with a console.
 
     `R_ReadConsole` prints the given prompt at the console and then does
-    a `fgets(3)`--like operation, transferring up to `buflen`{.variable}
-    characters into the buffer `buf`{.variable}. The last two bytes
+    a `fgets(3)`--like operation, transferring up to `buflen`
+    characters into the buffer `buf`. The last two bytes
     should be set to '`"\n\0"`' to preserve sanity. If
-    `hist`{.variable} is non-zero, then the line should be added to any
+    `hist` is non-zero, then the line should be added to any
     command history which is being maintained. The return value is 0 is
     no input is available and \>0 otherwise.
 
     `R_WriteConsoleEx` writes the given buffer to the console,
-    `otype`{.variable} specifies the output type (regular output or
+    `otype` specifies the output type (regular output or
     warning/error). Call to `R_WriteConsole(buf, buflen)` is equivalent
     to `R_WriteConsoleEx(buf, buflen, 0)`. To ensure backward
     compatibility of the callbacks, `ptr_R_WriteConsoleEx` is used only
@@ -14185,22 +14185,22 @@ Function: _void_ **R_ClearErrConsole** _()_
     console. `R_ClearerrConsole` clears any errors associated with
     reading from the console.
 
-Function: _int_ **R_ShowFiles** _(int `nfile`{.variable}, const char \*\*`file`{.variable}, const char \*\*`headers`{.variable}, const char \*`wtitle`{.variable}, Rboolean `del`{.variable}, const char \*`pager`{.variable})_
+Function: _int_ **R_ShowFiles** _(int `nfile`, const char \*\*`file`, const char \*\*`headers`, const char \*`wtitle`, Rboolean `del`, const char \*`pager`)_
 
 : This function is used to display the contents of files.
 
-Function: _int_ **R_ChooseFile** _(int `new`{.variable}, char \*`buf`{.variable}, int `len`{.variable})_
+Function: _int_ **R_ChooseFile** _(int `new`, char \*`buf`, int `len`)_
 
-: Choose a file and return its name in `buf`{.variable} of length
-`len`{.variable}. Return value is 0 for success, \> 0 otherwise.
+: Choose a file and return its name in `buf` of length
+`len`. Return value is 0 for success, \> 0 otherwise.
 
-Function: _int_ **R_EditFile** _(const char \*`buf`{.variable})_
+Function: _int_ **R_EditFile** _(const char \*`buf`)_
 
 : Send a file to an editor window.
 
-Function: _int_ **R_EditFiles** _(int `nfile`{.variable}, const char \*\*`file`{.variable}, const char \*\*`title`{.variable}, const char \*`editor`{.variable})_
+Function: _int_ **R_EditFiles** _(int `nfile`, const char \*\*`file`, const char \*\*`title`, const char \*`editor`)_
 
-: Send `nfile`{.variable} files to an editor, with titles possibly to
+: Send `nfile` files to an editor, with titles possibly to
 be used for the editor window(s).
 
 Function: _SEXP_ **R_loadhistory** _(SEXP, SEXP, SEXP, SEXP);_\
@@ -14234,7 +14234,7 @@ Function: _SEXP_ **R_addhistory** _(SEXP, SEXP, SEXP, SEXP);_
     mechanism is present, as a user may be calling `timestamp` purely to
     write the time stamp to the console.
 
-Function: _void_ **R_Suicide** _(const char \*`message`{.variable})_
+Function: _void_ **R_Suicide** _(const char \*`message`)_
 
 : This should abort R as rapidly as possible, displaying the message.
 A possible implementation is
@@ -14249,7 +14249,7 @@ A possible implementation is
     }
     ```
 
-Function: _void_ **R_CleanUp** _(SA_TYPE `saveact`{.variable}, int `status`{.variable}, int `RunLast`{.variable})_
+Function: _void_ **R_CleanUp** _(SA_TYPE `saveact`, int `status`, int `RunLast`)_
 
 : This function invokes any actions which occur at system termination.
 It needs to be quite complex:

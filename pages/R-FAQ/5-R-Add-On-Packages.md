@@ -1,4 +1,4 @@
-5 R Add-On Packages
+# 5 R Add-On Packages
 
 ---
 
@@ -242,7 +242,7 @@ obtained from the mailing list archive.
 
 (Unix-like only.) The add-on packages on CRAN come as gzipped tar files
 named `pkg_version.tar.gz`, which may in fact be "bundles" containing
-more than one package. Let `path`{.variable} be the path to such a
+more than one package. Let `path` be the path to such a
 package file. Provided that `tar` and `gzip` are available on your
 system, type
 
@@ -260,7 +260,7 @@ To install to another tree (e.g., your private one), use
 $ R CMD INSTALL -l lib path/pkg_version.tar.gz
 ```
 
-where `lib`{.variable} gives the path to the library tree to install to.
+where `lib` gives the path to the library tree to install to.
 
 Even more conveniently, you can install and automatically update
 packages from within R if you have access to repositories such as CRAN.
@@ -286,7 +286,7 @@ This produces something like
 > | ::: |
 > +-----------------------------------------------------------------------+
 
-You can "load" the installed package `pkg`{.variable} by
+You can "load" the installed package `pkg` by
 
 ```r
 library(pkg)
@@ -299,7 +299,7 @@ library(help = pkg)
 help(package = pkg)
 ```
 
-You can unload the loaded package `pkg`{.variable} by
+You can unload the loaded package `pkg` by
 
 ```r
 detach("package:pkg", unload = TRUE)
@@ -318,12 +318,12 @@ Use
 $ R CMD REMOVE pkg_1 … pkg_n
 ```
 
-to remove the packages `pkg_1`{.variable}, ..., `pkg_n`{.variable} from
+to remove the packages `pkg_1`, ..., `pkg_n` from
 the library tree rooted at the first directory given in `R_LIBS` if this
 is set and non-null, and from the default library otherwise. (Versions
 of R prior to 1.3.0 removed from the default library by default.)
 
-To remove from library `lib`{.variable}, do
+To remove from library `lib`, do
 
 ```r
 $ R CMD REMOVE -l lib pkg_1 … pkg_n

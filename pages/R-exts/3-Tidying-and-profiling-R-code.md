@@ -1,4 +1,4 @@
-3 Tidying and profiling R code
+# 3 Tidying and profiling R code
 
 ---
 
@@ -58,7 +58,7 @@ dump(ls(all = TRUE), file = "new.myfuns.R")
 ```
 
 and run R with this as the source file, for example by [R \--vanilla \<
-tidy.R]{.kbd} or by pasting into an R session. Then the file
+tidy.R] or by pasting into an R session. Then the file
 `new.myfuns.R` will contain the functions in alphabetical order
 in the standard layout. Warning: comments in your functions will be
 lost.

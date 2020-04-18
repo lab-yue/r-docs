@@ -1,4 +1,4 @@
-1 Creating R packages
+# 1 Creating R packages
 
 ---
 
@@ -898,7 +898,7 @@ default) or `.rd`. Further, the names must be valid in
 be entirely ASCII and not contain '`%`'. See [Writing R
 documentation files](#Writing-R-documentation-files), for more
 information. Note that all user-level objects in a package should be
-documented; if a package `pkg`{.variable} contains user-level objects
+documented; if a package `pkg` contains user-level objects
 which are for "internal" use only, it should provide a file
 `pkg-internal.Rd` which documents all such objects, and clearly
 states that these are not meant to be called by the user. See e.g. the
@@ -1408,7 +1408,7 @@ that an R installation is not required to have a C++ compiler so
 
 You can use `R CMD config` to get the value of the basic configuration
 variables, and also the header and library flags necessary for linking a
-front-end executable program against R, see [R CMD config \--help]{.kbd}
+front-end executable program against R, see [R CMD config \--help]
 for details. If you do, it is essential that you use both the command
 and the appropriate flags, so that for example '`CC`' must
 always be used with '`CFLAGS`' and (for code to be linked into
@@ -2743,7 +2743,7 @@ All these tests are run with collation set to the `C` locale, and for
 the examples and tests with environment variable `LANGUAGE=en`: this is
 to minimize differences between platforms.
 
-Use [R CMD check \--help]{.kbd} to obtain more information about the
+Use [R CMD check \--help] to obtain more information about the
 usage of the R package checker. A subset of the checking steps can be
 selected by adding command-line options. It also allows customization by
 setting environment variables `_R_CHECK_*_` as described in
@@ -2855,10 +2855,10 @@ by default. In addition, those files in the `R`,
 `demo` and `man` directories which are flagged by
 `R CMD check` as having invalid names will be excluded.
 
-Use [R CMD build \--help]{.kbd} to obtain more information about the
+Use [R CMD build \--help] to obtain more information about the
 usage of the R package builder.
 
-Unless [R CMD build]{.kbd} is invoked with the
+Unless [R CMD build] is invoked with the
 `--no-build-vignettes` option (or the package's
 `DESCRIPTION` contains '`BuildVignettes: no`' or
 similar), it will attempt to (re)build the vignettes (see [Writing

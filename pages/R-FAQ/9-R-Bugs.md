@@ -1,4 +1,4 @@
-9 R Bugs
+# 9 R Bugs
 
 ---
 
@@ -66,7 +66,7 @@ When you decide that there is a bug, it is important to report it and to
 report it in a way which is useful. What is most useful is an exact
 description of what commands you type, starting with the shell command
 to run R, until the problem happens. Always include the version of R,
-machine, and operating system that you are using; type [version]{.kbd}
+machine, and operating system that you are using; type [version]
 in R to print this.
 
 The most important principle in reporting a bug is to report _facts_,

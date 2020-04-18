@@ -1,4 +1,4 @@
-6 Add-on packages
+# 6 Add-on packages
 
 ---
 
@@ -258,7 +258,7 @@ R from source: `mac.binary.el-capitan` for an 'El Capitan and later'
 build with `"default"` a synonym for the appropriate variant) which can
 be passed to `install.packages` in order to download and install binary
 packages from a suitable repository. These binary package files for
-macOS have the extension '`.tgz`'. The [R.APP]{.small} GUI
+macOS have the extension '`.tgz`'. The [R.APP] GUI
 provides menus for installation of either binary or source packages,
 from CRAN or local files.
 
@@ -597,11 +597,11 @@ trees for one or more of the following types of package distributions:
   `src/contrib` area with a possibly empty
   `PACKAGES` file.
 - `"win.binary"`: located at `bin/windows/contrib/x.y` for R
-  versions `x.y.z`{.variable} and containing `.zip` files for
+  versions `x.y.z` and containing `.zip` files for
   Windows.
 - `"mac.binary.el-capitan"`: located at
   `bin/macosx/el-capitan/contrib/3.y` for the CRAN builds for
-  'El Capitan (and later) for R versions `3.y.z`{.variable},
+  'El Capitan (and later) for R versions `3.y.z`,
   containing `.tgz` files.
 
 Each terminal directory must also contain a `PACKAGES` file.

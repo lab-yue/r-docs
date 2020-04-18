@@ -1,4 +1,4 @@
-12 Graphical procedures
+# 12 Graphical procedures
 
 ---
 
@@ -82,38 +82,38 @@ dependent on the type or _class_ of the first argument.
 `plot(x, y)`\
 `plot(xy)`
 
-: If `x`{.variable} and `y`{.variable} are vectors, `plot(x, y)`
-produces a scatterplot of `y`{.variable} against `x`{.variable}. The
+: If `x` and `y` are vectors, `plot(x, y)`
+produces a scatterplot of `y` against `x`. The
 same effect can be produced by supplying one argument (second form)
-as either a list containing two elements `x`{.variable} and
-`y`{.variable} or a two-column matrix.
+as either a list containing two elements `x` and
+`y` or a two-column matrix.
 
 `plot(x)`
 
-: If `x`{.variable} is a time series, this produces a time-series
-plot. If `x`{.variable} is a numeric vector, it produces a plot of
+: If `x` is a time series, this produces a time-series
+plot. If `x` is a numeric vector, it produces a plot of
 the values in the vector against their index in the vector. If
-`x`{.variable} is a complex vector, it produces a plot of imaginary
+`x` is a complex vector, it produces a plot of imaginary
 versus real parts of the vector elements.
 
 `plot(f)`\
 `plot(f, y)`
 
-: `f`{.variable} is a factor object, `y`{.variable} is a numeric
-vector. The first form generates a bar plot of `f`{.variable}; the
-second form produces boxplots of `y`{.variable} for each level of
-`f`{.variable}.
+: `f` is a factor object, `y` is a numeric
+vector. The first form generates a bar plot of `f`; the
+second form produces boxplots of `y` for each level of
+`f`.
 
 `plot(df)`\
 `plot(~ expr)`\
 `plot(y ~ expr)`
 
-: `df`{.variable} is a data frame, `y`{.variable} is any object,
-`expr`{.variable} is a list of object names separated by '`+`'
+: `df` is a data frame, `y` is any object,
+`expr` is a list of object names separated by '`+`'
 (e.g., `a + b + c`). The first two forms produce distributional
 plots of the variables in a data frame (first form) or of a number
-of named objects (second form). The third form plots `y`{.variable}
-against every object named in `expr`{.variable}.
+of named objects (second form). The third form plots `y`
+against every object named in `expr`.
 
 ---
 
@@ -342,7 +342,7 @@ Some of the more useful low-level plotting functions are:
     Adds a line of slope `b` and intercept `a` to the current plot.
     `h=y` may be used to specify *y*-coordinates for the heights of
     horizontal lines to go across a plot, and `v=x` similarly for the
-    *x*-coordinates for vertical lines. Also `lm.obj`{.variable} may be
+    *x*-coordinates for vertical lines. Also `lm.obj` may be
     list with a `coefficients` component of length 2 (such as the result
     of model-fitting functions,) which are taken as an intercept and
     slope, in that order.
@@ -362,7 +362,7 @@ Some of the more useful low-level plotting functions are:
     Adds a legend to the current plot at the specified position.
     Plotting characters, line styles, colors etc., are identified with
     the labels in the character vector `legend`. At least one other
-    argument `v`{.variable} (a vector the same length as `legend`) with
+    argument `v` (a vector the same length as `legend`) with
     the corresponding values of the plotting unit must also be given, as
     follows:
 
@@ -649,9 +649,9 @@ Graphics parameters will be presented in the following form:
 
 `name=value`
 
-: A description of the parameter's effect. `name`{.variable} is the
+: A description of the parameter's effect. `name` is the
 name of the parameter, that is, the argument name to use in calls to
-`par()` or a graphics function. `value`{.variable} is a typical
+`par()` or a graphics function. `value` is a typical
 value you might use when setting the parameter.
 
 Note that `axes` is **not** a graphics parameter but an argument to a
@@ -1097,14 +1097,14 @@ the current device, to which graphics output will be sent.
 :
 
     Can be used to change the current graphics device to the one at
-    position `k`{.variable} of the device list. Returns the number and
+    position `k` of the device list. Returns the number and
     label of the device.
 
 `dev.off(k)`
 
 :
 
-    Terminate the graphics device at point `k`{.variable} of the device
+    Terminate the graphics device at point `k` of the device
     list. For some devices, such as `postscript` devices, this will
     either print the file immediately or correctly complete the file for
     later printing, depending on how the device was initiated.
@@ -1112,7 +1112,7 @@ the current device, to which graphics output will be sent.
 `dev.copy(device, …, which=k)`\
 `dev.print(device, …, which=k)`
 
-: Make a copy of the device `k`{.variable}. Here `device` is a device
+: Make a copy of the device `k`. Here `device` is a device
 function, such as `postscript`, with extra arguments, if needed,
 specified by '`…`'. `dev.print` is similar, but the copied
 device is immediately closed, so that end actions, such as printing

@@ -1,4 +1,4 @@
-10 Writing your own functions
+# 10 Writing your own functions
 
 ---
 
@@ -21,8 +21,8 @@ A function is defined by an assignment of the form
 > name <- function(arg_1, arg_2, …) expression
 ```
 
-The `expression`{.variable} is an R expression, (usually a grouped
-expression), that uses the arguments, `arg_i`{.variable}, to calculate a
+The `expression` is an R expression, (usually a grouped
+expression), that uses the arguments, `arg_i`, to calculate a
 value. The value of the expression is the value returned for the
 function.
 
@@ -74,7 +74,7 @@ a call such as
 ```
 
 As a second example, consider a function to emulate directly the
-[MATLAB]{.small} backslash command, which returns the coefficients of
+[MATLAB] backslash command, which returns the coefficients of
 the orthogonal projection of the vector _y_ onto the column space of the
 matrix, _X_. (This is ordinarily called the least squares estimate of
 the regression coefficients.) This would ordinarily be done with the
@@ -234,7 +234,7 @@ is not covered further here.
 
 If global and permanent assignments are intended within a function, then
 either the "superassignment" operator, `<<-` or the function `assign()`
-can be used. See the `help` document for details. [S-PLUS]{.small} users
+can be used. See the `help` document for details. [S-PLUS] users
 should be aware that `<<-` has different semantics in R. These are
 discussed further in [Scope](#Scope).
 
@@ -391,7 +391,7 @@ area <- function(f, a, b, eps = 1.0e-06, lim = 10) {
 
 The discussion in this section is somewhat more technical than in other
 parts of this document. However, it details one of the major differences
-between [S-PLUS]{.small} and R.
+between [S-PLUS] and R.
 
 The symbols which occur in the body of a function can be divided into
 three classes; formal parameters, local variables and free variables.
@@ -430,12 +430,12 @@ cube <- function(n) {
 The variable `n` in the function `sq` is not an argument to that
 function. Therefore it is a free variable and the scoping rules must be
 used to ascertain the value that is to be associated with it. Under
-static scope ([S-PLUS]{.small}) the value is that associated with a
+static scope ([S-PLUS]) the value is that associated with a
 global variable named `n`. Under lexical scope (R) it is the parameter
 to the function `cube` since that is the active binding for the variable
 `n` at the time the function `sq` was defined. The difference between
-evaluation in R and evaluation in [S-PLUS]{.small} is that
-[S-PLUS]{.small} looks for a global variable called `n` while R first
+evaluation in R and evaluation in [S-PLUS] is that
+[S-PLUS] looks for a global variable called `n` while R first
 looks for a variable called `n` in the environment created when `cube`
 was invoked.
 

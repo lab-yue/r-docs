@@ -1,4 +1,4 @@
-2 Writing R documentation files
+# 2 Writing R documentation files
 
 ---
 
@@ -36,7 +36,7 @@ in the **tools** package called by the script `Rdconv` in
 
 The R distribution contains more than 1300 such files which can be found
 in the `src/library/pkg/man` directories of the R source tree,
-where `pkg`{.variable} stands for one of the standard packages which are
+where `pkg` stands for one of the standard packages which are
 included in the R distribution.
 
 As an example, let us look at a simplified version of
@@ -125,7 +125,7 @@ functions) are given in this subsection.
 
 :
 
-    `name`{.variable} typically[^102^](#FOOT102) is the
+    `name` typically[^102^](#FOOT102) is the
     basename of the `Rd` file containing the documentation. It
     is the "name" of the `Rd` object represented by the file
     and has to be unique in a package. To avoid problems with indexing
@@ -144,7 +144,7 @@ functions) are given in this subsection.
 
     The `\alias` sections specify all "topics" the file documents. This
     information is collected into index data bases for lookup by the
-    on-line (plain text and HTML) help systems. The `topic`{.variable}
+    on-line (plain text and HTML) help systems. The `topic`
     can contain spaces, but (for historical reasons) leading and
     trailing spaces will be stripped. Percent and left brace need to be
     escaped by a backslash.
@@ -224,9 +224,9 @@ functions) are given in this subsection.
 
 
     Use `\method{generic}{class}` to indicate the name of an S3 method
-    for the generic function `generic`{.variable} for objects inheriting
+    for the generic function `generic` for objects inheriting
     from class `"class"`. In the printed versions, this will come out as
-    `generic`{.variable} (reflecting the understanding that methods
+    `generic` (reflecting the understanding that methods
     should not be invoked directly but *via* method dispatch), but
     `codoc()` and other QC tools always have access to the full name.
 
@@ -522,7 +522,7 @@ methods and classes uses '`methods`' (from
     URLs](#Specifying-URLs)). In addition, section `\references` could
     give secondary sources and usages.
 
-Note also that when documenting data set `bar`{.variable},
+Note also that when documenting data set `bar`,
 
 - The `\usage` entry is always `bar` or (for packages which do not use
   lazy-loading of data) `data(bar)`. (In particular, only document a
@@ -547,7 +547,7 @@ class-class
 generic,signature_list-method
 ```
 
-where `signature_list`{.variable} contains the names of the classes in
+where `signature_list` contains the names of the classes in
 the signature of the method (without quotes) separated by '`,`'
 (without whitespace), with '`ANY`' used for arguments without
 an explicit specification. E.g., '`genericFunction-class`' is
@@ -659,14 +659,14 @@ quoting text.
 
 :
 
-    Emphasize `text`{.variable} using *italic* and **bold** font if
+    Emphasize `text` using *italic* and **bold** font if
     possible; `\strong` is regarded as stronger (more emphatic).
 
 `\bold{text}`
 
 :
 
-    Set `text`{.variable} in **bold** font where possible.
+    Set `text` in **bold** font where possible.
 
 `\sQuote{text}`
 :
@@ -675,11 +675,11 @@ quoting text.
 
 :
 
-    Portably single or double quote `text`{.variable} (without
+    Portably single or double quote `text` (without
     hard-wiring the characters used for quotation marks).
 
 Each of the above commands takes LaTeX-like input, so other macros may
-be used within `text`{.variable}.
+be used within `text`.
 
 The following logical markup commands are available for indicating
 specific kinds of text. Except as noted, these take 'verbatim' text
@@ -694,7 +694,7 @@ will need to be escaped (see [Insertions](#Insertions)).
     e.g., a fragment of R code or the name of an R object. Text is
     entered in R-like syntax, and displayed using `typewriter` font
     where possible. Macros `\var` and `\link` are interpreted within
-    `text`{.variable}.
+    `text`.
 
 `\preformatted{text}`
 
@@ -714,7 +714,7 @@ will need to be escaped (see [Insertions](#Insertions)).
 
 :
 
-    Indicate keyboard input, using [slanted typewriter]{.kbd} font if
+    Indicate keyboard input, using [slanted typewriter] font if
     possible, so users can distinguish the characters they are supposed
     to type from computer output. Text is entered 'verbatim'.
 
@@ -893,8 +893,8 @@ first argument, nor between the two arguments.)
 ### 2.5 Cross-references
 
 The markup `\link{foo}` (usually in the combination `\code{\link{foo}}`)
-produces a hyperlink to the help for `foo`{.variable}. Here
-`foo`{.variable} is a _topic_, that is the argument of `\alias` markup
+produces a hyperlink to the help for `foo`. Here
+`foo` is a _topic_, that is the argument of `\alias` markup
 in another `Rd` file (possibly in another package). Hyperlinks
 are supported in some of the formats to which `Rd` files are
 converted, for example HTML and PDF, but ignored in others, e.g. the
@@ -908,8 +908,8 @@ extracting a topic from a `\alias`, they are not stripped when looking
 up the topic of a `\link`.
 
 You can specify a link to a different topic than its name by
-`\link[=dest]{name}` which links to topic `dest`{.variable} with name
-`name`{.variable}. This can be used to refer to the documentation for
+`\link[=dest]{name}` which links to topic `dest` with name
+`name`. This can be used to refer to the documentation for
 S3/4 classes, for example `\code{"\link[=abc-class]{abc}"}` would be a
 way to refer to the documentation of an S4 class `"abc"` defined in your
 package, and `\code{"\link[=terms.object]{terms}"}` to the S3 `"terms"`
@@ -918,7 +918,7 @@ file, `\code{"\linkS4class{abc}"}` expands to the form given above.
 
 There are two other forms of optional argument specified as
 `\link[pkg]{foo}` and `\link[pkg:bar]{foo}` to link to the package
-**`pkg`{.variable}**, to _files_ `foo.html` and
+**`pkg`**, to _files_ `foo.html` and
 `bar.html` respectively. These are rarely needed, perhaps to
 refer to not-yet-installed packages (but there the HTML help system will
 resolve the link at run time) or in the normally undesirable event that
@@ -931,7 +931,7 @@ which topics are in which files in an uninstalled package). The **only**
 reason to use these forms for base and recommended packages is to force
 a reference to a package that might be further down the search path.
 Because they have been frequently misused, the HTML help system looks
-for topic `foo` in package **`pkg`{.variable}** if it does not find file
+for topic `foo` in package **`pkg`** if it does not find file
 `foo.html`.
 
 ---
@@ -947,8 +947,8 @@ equations" (as in LaTeX's `displaymath` environment, or TeX's `$$…$$`).
 Both arguments are treated as 'verbatim' text.
 
 Both commands can also be used as `\eqn{latexascii}` (only _one_
-argument) which then is used for both `latex`{.variable} and
-`ascii`{.variable}. No whitespace is allowed between command and the
+argument) which then is used for both `latex` and
+`ascii`. No whitespace is allowed between command and the
 first argument, nor between the first and second arguments.
 
 The following example is from `Poisson.Rd`:
@@ -991,7 +991,7 @@ are significant in HTML or LaTeX.
 
 The expert form is `\figure{filename}{options: string}`. (The word
 '`options:`' must be typed exactly as shown and followed by at
-least one space.) In this form, the `string`{.variable} is copied into
+least one space.) In this form, the `string` is copied into
 the HTML `img` tag as attributes following the `src` attribute, or into
 the second argument of the `\Figure` macro in LaTeX, which by default is
 used as options to an `\includegraphics` call. As it is unlikely that
@@ -1071,7 +1071,7 @@ In addition, it is possible to provide "concept index entries" using
 \concept{Spearman correlation coefficient}
 ```
 
-so that e.g. [??Spearman]{.kbd} will succeed in finding the help page
+so that e.g. [??Spearman] will succeed in finding the help page
 for the test for association between paired samples using Spearman's
 rho.
 
@@ -1124,10 +1124,10 @@ documented are only relevant to one platform, platform-specific
 Occasionally the best content for one output format is different from
 the best content for another. For this situation, the
 `\if{format}{text}` or `\ifelse{format}{text}{alternate}` markup is
-used. Here `format`{.variable} is a comma separated list of formats in
-which the `text`{.variable} should be rendered. The
-`alternate`{.variable} will be rendered if the format does not match.
-Both `text`{.variable} and `alternate`{.variable} may be any sequence of
+used. Here `format` is a comma separated list of formats in
+which the `text` should be rendered. The
+`alternate` will be rendered if the format does not match.
+Both `text` and `alternate` may be any sequence of
 text and markup.
 
 Currently the following formats are recognized: `example`, `html`,
@@ -1138,7 +1138,7 @@ displayed example in some other format.) Also accepted are `TRUE`
 the output of the `\Sexpr` macro (see [Dynamic pages](#Dynamic-pages)).
 
 The `\out{literal}` macro would usually be used within the
-`text`{.variable} part of `\if{format}{text}`. It causes the renderer to
+`text` part of `\if{format}{text}`. It causes the renderer to
 output the literal text exactly, with no attempt to escape special
 characters. For example, use the following to output the markup
 necessary to display the Greek letter in LaTeX or HTML, and the text
@@ -1389,8 +1389,8 @@ used to extract the R code fragments.
 
 The exact usage and a detailed list of available options for all of
 these commands can be obtained by running `R CMD command --help`, e.g.,
-[R CMD Rdconv \--help]{.kbd}. All available commands can be listed using
-[R \--help]{.kbd} (or [Rcmd \--help]{.kbd} under Windows).
+[R CMD Rdconv \--help]. All available commands can be listed using
+[R \--help] (or [Rcmd \--help] under Windows).
 
 All of these work under Windows. You may need to have installed the the
 tools to build packages from source as described in the "R Installation

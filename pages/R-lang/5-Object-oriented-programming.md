@@ -1,4 +1,4 @@
-5 Object-oriented programming
+# 5 Object-oriented programming
 
 ---
 
@@ -224,8 +224,8 @@ examined.
 
 `UseMethod` is a special function and it behaves differently from other
 function calls. The syntax of a call to it is
-`UseMethod(generic, object)`, where `generic`{.variable} is the name of
-the generic function, `object`{.variable} is the object used to
+`UseMethod(generic, object)`, where `generic` is the name of
+the generic function, `object` is the object used to
 determine which method should be chosen. `UseMethod` can only be called
 from the body of a function.
 

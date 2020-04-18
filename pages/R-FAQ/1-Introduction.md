@@ -1,4 +1,4 @@
-1 Introduction
+# 1 Introduction
 
 ---
 
@@ -33,7 +33,7 @@ Public License for more details.
 
 Copies of the GNU General Public License versions are available at
 
-```{.display}
+```
 https://www.R-project.org/Licenses/
 ```
 
@@ -43,7 +43,7 @@ https://www.R-project.org/Licenses/
 
 The latest version of this document is always available from
 
-```{.display}
+```
 https://CRAN.R-project.org/doc/FAQ/
 ```
 

@@ -63,14 +63,14 @@ title: R FAQ
 - [3 R and S](#R-and-S)
   - [3.1 What is S?](#What-is-S_003f)
   - [3.2 What is
-    [S-PLUS]{.small}?](#What-is-S_002dPLUS_003f)
+    [S-PLUS]?](#What-is-S_002dPLUS_003f)
   - [3.3 What are the differences between R and
     S?](#What-are-the-differences-between-R-and-S_003f)
     - [3.3.1 Lexical
       scoping](#Lexical-scoping)
     - [3.3.2 Models](#Models)
     - [3.3.3 Others](#Others)
-  - [3.4 Is there anything R can do that [S-PLUS]{.small}
+  - [3.4 Is there anything R can do that [S-PLUS]
     cannot?](#Is-there-anything-R-can-do-that-S_002dPLUS-cannot_003f)
   - [3.5 What is
     R-plus?](#What-is-R_002dplus_003f)
@@ -270,7 +270,7 @@ Public License for more details.
 
 Copies of the GNU General Public License versions are available at
 
-```{.display}
+```
 https://www.R-project.org/Licenses/
 ```
 
@@ -280,7 +280,7 @@ https://www.R-project.org/Licenses/
 
 The latest version of this document is always available from
 
-```{.display}
+```
 https://CRAN.R-project.org/doc/FAQ/
 ```
 
@@ -414,10 +414,10 @@ operating systems. Support for Mac OS Classic ended with R 1.7.1.
 
 The current version of R will configure and build under a number of
 common Unix-like (e.g., <https://en.wikipedia.org/wiki/Unix-like>)
-platforms including `cpu`{.variable}-linux-gnu for the i386,
+platforms including `cpu`-linux-gnu for the i386,
 amd64/x86_64, alpha, arm, arm64, hppa, mips/mipsel, powerpc, s390x and
 sparc CPUs (e.g., <https://buildd.debian.org/build.php?&pkg=r-base>),
-i386-hurd-gnu, `cpu`{.variable}-kfreebsd-gnu for i386 and amd64,
+i386-hurd-gnu, `cpu`-kfreebsd-gnu for i386 and amd64,
 i386-pc-solaris, rs6000-ibm-aix, sparc-sun-solaris,
 x86_64-apple-darwin, x86_64-unknown-freebsd and
 x86_64-unknown-openbsd.
@@ -468,7 +468,7 @@ versions of R can be found at <https://stat.ethz.ch/R/daily>.
 
 #### 2.5.1 How can R be installed (Unix-like)
 
-If R is already installed, it can be started by typing [R]{.kbd} at the
+If R is already installed, it can be started by typing [R] at the
 shell prompt (of course, provided that the executable is in your path).
 
 If binaries are available for your platform (see [Are there Unix-like
@@ -501,22 +501,22 @@ can invoke it, for example to `/usr/local/bin`. In addition,
 plain text help pages as well as HTML and LaTeX versions of the
 documentation are built.
 
-Use [make dvi]{.kbd} to create DVI versions of the R manuals, such as
+Use [make dvi] to create DVI versions of the R manuals, such as
 `refman.dvi` (an R object reference index) and
 `R-exts.dvi`, the "R Extension Writers Guide", in the
 `doc/manual` subdirectory. These files can be previewed and
 printed using standard programs such as `xdvi` and `dvips`. You can also
-use [make pdf]{.kbd} to build PDF (Portable Document Format) version of
+use [make pdf] to build PDF (Portable Document Format) version of
 the manuals, and view these using e.g. Acrobat. Manuals written in the
 GNU Texinfo system can also be converted to info files suitable for
-reading online with Emacs or stand-alone GNU Info; use [make info]{.kbd}
+reading online with Emacs or stand-alone GNU Info; use [make info]
 to create these versions (note that this requires Makeinfo version 4.5).
 
-Finally, use [make check]{.kbd} to find out whether your R system works
+Finally, use [make check] to find out whether your R system works
 correctly.
 
 You can also perform a "system-wide" installation using [make
-install]{.kbd}. By default, this will install to the following
+install]. By default, this will install to the following
 directories:
 
 `${prefix}/bin`
@@ -544,8 +544,8 @@ $ ./configure --prefix=/where/you/want/R/to/go
 `/where/you/want/R/to/go/bin`.)
 
 To install DVI, info and PDF versions of the manuals, use [make
-install-dvi]{.kbd}, [make install-info]{.kbd} and [make
-install-pdf]{.kbd}, respectively.
+install-dvi], [make install-info] and [make
+install-pdf], respectively.
 
 ---
 
@@ -634,8 +634,8 @@ CRAN.
 
 Online documentation for most of the functions and variables in R
 exists, and can be printed on-screen by typing
-[help(`name`{.variable})]{.kbd} (or [?`name`{.variable}]{.kbd}) at the R
-prompt, where `name`{.variable} is the name of the topic help is sought
+[help(`name`)] (or [?`name`]) at the R
+prompt, where `name` is the name of the topic help is sought
 for. (In the case of unary and binary operators and control-flow special
 forms, the name may need to be be quoted.)
 
@@ -655,7 +655,7 @@ The R distribution also comes with the following manuals.
 
 - "An Introduction to R" (`R-intro`) includes information on
   data types, programming elements, statistical modeling and graphics.
-  This document is based on the "Notes on [S-PLUS]{.small}" by Bill
+  This document is based on the "Notes on [S-PLUS]" by Bill
   Venables and David Smith.
 - "Writing R Extensions" (`R-exts`) currently describes the
   process of creating R add-on packages, writing R documentation, R's
@@ -672,7 +672,7 @@ The R distribution also comes with the following manuals.
 An annotated bibliography (BibTeX format) of R-related publications can
 be found at
 
-```{.display}
+```
 https://www.R-project.org/doc/bib/R.bib
 ```
 
@@ -736,7 +736,7 @@ To cite R in publications, use
 }
 ```
 
-where `YEAR`{.variable} is the release year of the version of R used and
+where `YEAR` is the release year of the version of R used and
 can determined as `R.version$year`.
 
 Citation strings (or BibTeX entries) for R and R packages can also be
@@ -983,9 +983,9 @@ information on the "Evolution of the S Language".
 
 ---
 
-### 3.2 What is [S-PLUS]{.small}?
+### 3.2 What is [S-PLUS]?
 
-[S-PLUS]{.small} is a value-added version of S currently sold by [TIBCO
+[S-PLUS] is a value-added version of S currently sold by [TIBCO
 Software Inc](http://www.tibco.com/) as 'TIBCO Spotfire S+'. See
 <https://en.wikipedia.org/wiki/S-PLUS> for more information.
 
@@ -994,8 +994,8 @@ Software Inc](http://www.tibco.com/) as 'TIBCO Spotfire S+'. See
 ### 3.3 What are the differences between R and S?
 
 We can regard S as a language with three current implementations or
-"engines", the "old S engine" (S version 3; [S-PLUS]{.small} 3.x and
-4.x), the "new S engine" (S version 4; [S-PLUS]{.small} 5.x and above),
+"engines", the "old S engine" (S version 3; [S-PLUS] 3.x and
+4.x), the "new S engine" (S version 4; [S-PLUS] 5.x and above),
 and R. Given this understanding, asking for "the differences between R
 and S" really amounts to asking for the specifics of the R
 implementation of the S language, i.e., the difference between the R and
@@ -1064,7 +1064,7 @@ For simplicity, we shall use both the cdf and pdf of the distribution as
 explicit arguments. (Example compiled from various postings by Luke
 Tierney.)
 
-The [S-PLUS]{.small} documentation for `call()` basically suggests the
+The [S-PLUS] documentation for `call()` basically suggests the
 following:
 
 ```r
@@ -1174,7 +1174,7 @@ work if the optimizer supports this.
 
 Nested lexically scoped functions allow using function closures and
 maintaining local state. A simple example (taken from Abelson and
-Sussman) is obtained by typing [demo(\"scoping\")]{.kbd} at the R
+Sussman) is obtained by typing [demo(\"scoping\")] at the R
 prompt. Further information is provided in the standard R reference "R:
 A Language for Data Analysis and Graphics" (see [What documentation
 exists for R?](#What-documentation-exists-for-R_003f)) and in Robert
@@ -1282,7 +1282,7 @@ Some known differences are the following.
   should always use `TRUE` and `FALSE`.
 
 - In R, `dyn.load()` can only load _shared objects_, as created for
-  example by [R CMD SHLIB]{.kbd}.
+  example by [R CMD SHLIB].
 
 - In R, `attach()` currently only works for lists and data frames, but
   not for directories. (In fact, `attach()` also works for R data
@@ -1357,7 +1357,7 @@ the global environment) in S.
 - In S, `tapply(simplify=TRUE)` returns a vector where R returns a
   one-dimensional array (which can have named dimnames).
 
-- In S(-[PLUS]{.small}) the C locale is used, whereas in R the current
+- In S(-[PLUS]) the C locale is used, whereas in R the current
   operating system locale is used for determining which characters are
   alphanumeric and how they are sorted. This affects the set of valid
   names for R objects (for example accented chars may be allowed in R)
@@ -1365,7 +1365,7 @@ the global environment) in S.
   is true or false). From version 1.2.0 the locale can be (re-)set in
   R by the `Sys.setlocale()` function.
 
-- In S, `missing(arg)` remains `TRUE` if `arg`{.variable} is
+- In S, `missing(arg)` remains `TRUE` if `arg` is
   subsequently modified; in R it doesn't.
 
 - From R version 1.3.0, `data.frame` strips `I()` when creating
@@ -1397,7 +1397,7 @@ the global environment) in S.
   withdrawn to avoid further confusion.)
 
 - Numeric constants with no fractional and exponent (i.e., only
-  integer) part are taken as integer in [S-PLUS]{.small} 6.x or later,
+  integer) part are taken as integer in [S-PLUS] 6.x or later,
   but as double in R.
 
 There are also differences which are not intentional, and result from
@@ -1408,15 +1408,15 @@ if you were to implement the change yourself and make sure it works.
 
 ---
 
-### 3.4 Is there anything R can do that [S-PLUS]{.small} cannot?
+### 3.4 Is there anything R can do that [S-PLUS] cannot?
 
 Since almost anything you can do in R has source code that you could
-port to [S-PLUS]{.small} with little effort there will never be much you
-can do in R that you couldn't do in [S-PLUS]{.small} if you wanted to.
+port to [S-PLUS] with little effort there will never be much you
+can do in R that you couldn't do in [S-PLUS] if you wanted to.
 (Note that using lexical scoping may simplify matters considerably,
 though.)
 
-R offers several graphics features that [S-PLUS]{.small} does not, such
+R offers several graphics features that [S-PLUS] does not, such
 as finer handling of line types, more convenient color handling (via
 palettes), gamma correction for color, and, most importantly,
 mathematical annotation in plot texts, via input expressions reminiscent
@@ -1706,7 +1706,7 @@ obtained from the mailing list archive.
 
 (Unix-like only.) The add-on packages on CRAN come as gzipped tar files
 named `pkg_version.tar.gz`, which may in fact be "bundles" containing
-more than one package. Let `path`{.variable} be the path to such a
+more than one package. Let `path` be the path to such a
 package file. Provided that `tar` and `gzip` are available on your
 system, type
 
@@ -1724,7 +1724,7 @@ To install to another tree (e.g., your private one), use
 $ R CMD INSTALL -l lib path/pkg_version.tar.gz
 ```
 
-where `lib`{.variable} gives the path to the library tree to install to.
+where `lib` gives the path to the library tree to install to.
 
 Even more conveniently, you can install and automatically update
 packages from within R if you have access to repositories such as CRAN.
@@ -1750,7 +1750,7 @@ This produces something like
 > | ::: |
 > +-----------------------------------------------------------------------+
 
-You can "load" the installed package `pkg`{.variable} by
+You can "load" the installed package `pkg` by
 
 ```r
 library(pkg)
@@ -1763,7 +1763,7 @@ library(help = pkg)
 help(package = pkg)
 ```
 
-You can unload the loaded package `pkg`{.variable} by
+You can unload the loaded package `pkg` by
 
 ```r
 detach("package:pkg", unload = TRUE)
@@ -1782,12 +1782,12 @@ Use
 $ R CMD REMOVE pkg_1 … pkg_n
 ```
 
-to remove the packages `pkg_1`{.variable}, ..., `pkg_n`{.variable} from
+to remove the packages `pkg_1`, ..., `pkg_n` from
 the library tree rooted at the first directory given in `R_LIBS` if this
 is set and non-null, and from the default library otherwise. (Versions
 of R prior to 1.3.0 removed from the default library by default.)
 
-To remove from library `lib`{.variable}, do
+To remove from library `lib`, do
 
 ```r
 $ R CMD REMOVE -l lib pkg_1 … pkg_n
@@ -1850,12 +1850,12 @@ There is an Emacs package called ESS ("Emacs Speaks Statistics") which
 provides a standard interface between statistical programs and
 statistical processes. It is intended to provide assistance for
 interactive statistical programming and data analysis. Languages
-supported include: S dialects (R, S 3/4, and [S-PLUS]{.small}
+supported include: S dialects (R, S 3/4, and [S-PLUS]
 3.x/4.x/5.x/6.x/7.x), LispStat dialects (XLispStat, ViSta), SAS, Stata,
 and BUGS.
 
 ESS grew out of the need for bug fixes and extensions to S-mode 4.8
-(which was a GNU Emacs interface to S/[S-PLUS]{.small} version 3 only).
+(which was a GNU Emacs interface to S/[S-PLUS] version 3 only).
 The current set of developers desired support for XEmacs, R, S4, and MS
 Windows. In addition, with new modes being developed for R, Stata, and
 SAS, it was felt that a unifying interface and framework for the user
@@ -1884,7 +1884,7 @@ For help with ESS, send email to <ESS-help@r-project.org>.
 
 Please send bug reports and suggestions on ESS to
 <ESS-bugs@r-project.org>. The easiest way to do this from is within
-Emacs by typing [M-x ess-submit-bug-report]{.kbd} or using the \[ESS\]
+Emacs by typing [M-x ess-submit-bug-report] or using the \[ESS\]
 or \[iESS\] pulldown menus.
 
 ---
@@ -1908,7 +1908,7 @@ In addition, it allows you to keep a record of your session, which can
 also be used for error recovery through the use of the transcript mode.
 
 To specify command line arguments for the inferior R process, use [C-u
-M-x R]{.kbd} for starting R.
+M-x R] for starting R.
 
 ---
 
@@ -1916,18 +1916,18 @@ M-x R]{.kbd} for starting R.
 
 To debug R "from within Emacs", there are several possibilities. To use
 the Emacs GUD (Grand Unified Debugger) library with the recommended
-debugger GDB, type [M-x gdb]{.kbd} and give the path to the R _binary_
+debugger GDB, type [M-x gdb] and give the path to the R _binary_
 as argument. At the `gdb` prompt, set `R_HOME` and other environment
-variables as needed (using e.g. [set env R\_HOME /path/to/R/]{.kbd}, but
+variables as needed (using e.g. [set env R\_HOME /path/to/R/], but
 see also below), and start the binary with the desired arguments (e.g.,
-[run \--quiet]{.kbd}).
+[run \--quiet]).
 
-If you have ESS, you can do [C-u M-x R [RET]{.key} - d [SPC]{.key} g d b
-[RET]{.key}]{.kbd} to start an inferior R process with arguments
+If you have ESS, you can do [C-u M-x R [RET] - d [SPC] g d b
+[RET]] to start an inferior R process with arguments
 `-d gdb`.
 
-A third option is to start an inferior R process via ESS ([M-x R]{.kbd})
-and then start GUD ([M-x gdb]{.kbd}) giving the R binary (using its full
+A third option is to start an inferior R process via ESS ([M-x R])
+and then start GUD ([M-x gdb]) giving the R binary (using its full
 path name) as the program to debug. Use the program `ps` to find the
 process number of the currently running R process then use the `attach`
 command in gdb to attach it to that process. One advantage of this
@@ -2028,7 +2028,7 @@ For dropping the row names of a matrix `x`, it may be easier to use
 
 `save.image()` saves the objects in the user's `.GlobalEnv` to the file
 `.RData` in the R startup directory. (This is also what happens
-after [q(\"yes\")]{.kbd}.) Using `save.image(file)` one can save the
+after [q(\"yes\")].) Using `save.image(file)` one can save the
 image under a different name.
 
 ---
@@ -2124,11 +2124,11 @@ somerows <- mat[index, , drop = FALSE]
 ### 7.6 How does autoloading work?
 
 R has a special environment called `.AutoloadEnv`. Using
-[autoload(`name`{.variable}, `pkg`{.variable})]{.kbd}, where
-`name`{.variable} and `pkg`{.variable} are strings giving the names of
+[autoload(`name`, `pkg`)], where
+`name` and `pkg` are strings giving the names of
 an object and the package containing it, stores some information in this
-environment. When R tries to evaluate `name`{.variable}, it loads the
-corresponding package `pkg`{.variable} and reevaluates `name`{.variable}
+environment. When R tries to evaluate `name`, it loads the
+corresponding package `pkg` and reevaluates `name`
 in the new package's environment.
 
 Using this mechanism makes R behave as if the package was loaded, but
@@ -2169,7 +2169,7 @@ R> test2()
 ```
 
 What is really used is the _global_ value of `.Options`, and using
-[options(OPT = VAL)]{.kbd} correctly updates it. Local copies of
+[options(OPT = VAL)] correctly updates it. Local copies of
 `.Options`, either in `.GlobalEnv` or in a function environment (frame),
 are just silently disregarded.
 
@@ -2580,7 +2580,7 @@ The most likely reason is that you forgot to tell R to display the
 graph. Lattice functions such as `xyplot()` create a graph object, but
 do not display it (the same is true of
 [**ggplot2**](https://CRAN.R-project.org/package=ggplot2) graphics, and
-Trellis graphics in [S-PLUS]{.small}). The `print()` method for the
+Trellis graphics in [S-PLUS]). The `print()` method for the
 graph object produces the actual display. When you use these functions
 interactively at the command line, the result is automatically printed,
 but in `source()` or inside your own functions you will need an explicit
@@ -3284,7 +3284,7 @@ When you decide that there is a bug, it is important to report it and to
 report it in a way which is useful. What is most useful is an exact
 description of what commands you type, starting with the shell command
 to run R, until the problem happens. Always include the version of R,
-machine, and operating system that you are using; type [version]{.kbd}
+machine, and operating system that you are using; type [version]
 in R to print this.
 
 The most important principle in reporting a bug is to report _facts_,

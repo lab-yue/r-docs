@@ -1,4 +1,4 @@
-4 Ordered and unordered factors
+# 4 Ordered and unordered factors
 
 ---
 

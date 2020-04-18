@@ -1,4 +1,4 @@
-4 Structure of an Installed Package
+# 4 Structure of an Installed Package
 
 ---
 

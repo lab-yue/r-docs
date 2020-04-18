@@ -1,4 +1,4 @@
-3 Objects, their modes and attributes
+# 3 Objects, their modes and attributes
 
 ---
 

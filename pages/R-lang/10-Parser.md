@@ -1,4 +1,4 @@
-10 Parser
+# 10 Parser
 
 ---
 
@@ -211,11 +211,11 @@ specified using _escape sequences_:
 
 `\n`
 
-: newline (aka 'line feed', `LF`{.key})
+: newline (aka 'line feed', `LF`)
 
 `\r`
 
-: carriage return (`CR`{.key})
+: carriage return (`CR`)
 
 `\t`
 
@@ -351,7 +351,7 @@ the newline terminates the `if` construction and a subsequent `else`
 causes a syntax error. This somewhat anomalous behaviour occurs because
 R should be usable in interactive mode and then it must decide whether
 the input expression is complete, incomplete, or invalid as soon as the
-user presses `RET`{.key}.
+user presses `RET`.
 
 The comma ('`,`') is used to separate function arguments and
 multiple indices.
@@ -524,7 +524,7 @@ object [ arg1, ...... , argn ]
 object [[ arg1, ...... , argn ]]
 ```
 
-The `object`{.variable} can formally be any valid expression, but it is
+The `object` can formally be any valid expression, but it is
 understood to denote or evaluate to a subsettable object. The arguments
 generally evaluate to numerical or character indices, but other kinds of
 arguments are possible (notably `drop = FALSE`).
@@ -538,7 +538,7 @@ The third index construction is
 object $ tag
 ```
 
-Here, `object`{.variable} is as above, whereas `tag`{.variable} is an
+Here, `object` is as above, whereas `tag` is an
 identifier or a text string. Internally, it is stored as a function call
 with name `"$"`
 
@@ -601,17 +601,17 @@ function ( arglist ) body
 ```
 
 The function body is an expression, often a compound expression. The
-`arglist`{.variable} is a comma-separated list of items each of which
+`arglist` is a comma-separated list of items each of which
 can be an identifier, or of the form '`identifier = default`',
-or the special token '`...`'. The `default`{.variable} can be
+or the special token '`...`'. The `default` can be
 any valid expression.
 
 Notice that function arguments unlike list tags, etc., cannot have
 "strange names" given as text strings.
 
 Internally, a function definition is stored as a function call with
-function name `function` and two arguments, the `arglist`{.variable} and
-the `body`{.variable}. The `arglist`{.variable} is stored as a tagged
+function name `function` and two arguments, the `arglist` and
+the `body`. The `arglist` is stored as a tagged
 pairlist where the tags are the argument names and the values are the
 default expressions.
 
@@ -626,16 +626,16 @@ similar to the C-preprocessor directive of the same name. The syntax is
 #line nn [ "filename" ]
 ```
 
-where `nn`{.variable} is an integer line number, and the optional
-`filename`{.variable} (in required double quotes) names the source file.
+where `nn` is an integer line number, and the optional
+`filename` (in required double quotes) names the source file.
 
 Unlike the C directive, `#line` must appear as the first five characters
-on a line. As in C, `nn`{.variable} and `"filename"` entries may be
+on a line. As in C, `nn` and `"filename"` entries may be
 separated from it by whitespace. And unlike C, any following text on the
 line will be treated as a comment and ignored.
 
 This directive tells the parser that the following line should be
-assumed to be line `nn`{.variable} of file `filename`{.variable}. (If
+assumed to be line `nn` of file `filename`. (If
 the filename is not given, it is assumed to be the same as for the
 
 ## Function and Variable Index

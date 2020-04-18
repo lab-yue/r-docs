@@ -342,16 +342,16 @@ Subversion repository. If you have a Subversion client (see
 current '`r-devel`' from <https://svn.r-project.org/R/trunk/>
 and the current '`r-patched`' from
 '`https://svn.r-project.org/R/branches/R-x-y-branch/`' (where
-`x`{.variable} and `y`{.variable} are the major and minor number of the
+`x` and `y` are the major and minor number of the
 current released version of R). E.g., use
 
 ```r
 svn checkout https://svn.r-project.org/R/trunk/ path
 ```
 
-to check out '`r-devel`' into directory `path`{.variable}
+to check out '`r-devel`' into directory `path`
 (which will be created if necessary). The alpha, beta and RC versions of
-an upcoming `x.y.0`{.variable} release are available from
+an upcoming `x.y.0` release are available from
 '`https://svn.r-project.org/R/branches/R-x-y-branch/`' in the
 four-week period prior to the release.
 
@@ -373,7 +373,7 @@ If downloading manually from CRAN, do ensure that you have the correct
 versions of the recommended packages: if the number in the file
 `VERSION` is '`x.y.z`' you need to download the
 contents of '`https://CRAN.R-project.org/src/contrib/dir`',
-where `dir`{.variable} is '`x.y.z/Recommended`' for r-devel or
+where `dir` is '`x.y.z/Recommended`' for r-devel or
 `x.y-patched/Recommended` for r-patched, respectively, to
 directory `src/library/Recommended` in the sources you have
 unpacked. After downloading manually you need to execute
@@ -441,7 +441,7 @@ spaces.[^3^](#FOOT3)
 
 Choose a directory to install the R tree (R is not just a binary, but
 has additional data sets, help files, font metrics etc). Let us call
-this place `R_HOME`{.variable}. Untar the source code. This should
+this place `R_HOME`. Untar the source code. This should
 create directories `src`, `doc`, and several more
 under a top-level directory: change to that top-level directory (At this
 point North American readers should consult [Setting paper size](#Setting-paper-size).) Issue the following commands:
@@ -515,7 +515,7 @@ allow this, and you will need no spaces in the path to the build
 directory. It is unlikely to work if the source directory has previously
 been used for a build.)
 
-Now `rehash` if necessary, type [R]{.kbd}, and read the R manuals and
+Now `rehash` if necessary, type [R], and read the R manuals and
 the R FAQ (files `FAQ` or `doc/manual/R-FAQ.html`, or
 <https://CRAN.R-project.org/doc/FAQ/R-FAQ.html> which always has the
 version for the latest release of R).
@@ -757,11 +757,11 @@ This will install to the following directories:
 `prefix/LIBnn/R` or `libdir/R`
 
 : all the rest (libraries, on-line help system, ...). Here
-`LIBnn`{.variable} is usually '`lib`', but may be
+`LIBnn` is usually '`lib`', but may be
 '`lib64`' on some 64-bit Linux systems. This is known as
 the R home directory.
 
-where `prefix`{.variable} is determined during configuration (typically
+where `prefix` is determined during configuration (typically
 `/usr/local`) and can be set by running `configure` with the
 option `--prefix`, as in
 
@@ -796,8 +796,8 @@ are installed.
 
 The configure option `--libdir` controls where the main R files
 are installed: the default is '`eprefix/LIBnn`', where
-`eprefix`{.variable} is the prefix used for installing
-architecture-dependent files, defaults to `prefix`{.variable}, and can
+`eprefix` is the prefix used for installing
+architecture-dependent files, defaults to `prefix`, and can
 be set via the configure option `--exec-prefix`.
 
 Each of `bindir`, `mandir` and `libdir` can also be specified on the
@@ -910,7 +910,7 @@ all but the executables and dynamic objects. Examples include builds
 under Linux and Solaris for different CPUs or 32- and 64-bit builds.
 
 R supports the idea of architecture-specific builds, specified by adding
-'`r_arch=name`' to the `configure` line. Here `name`{.variable}
+'`r_arch=name`' to the `configure` line. Here `name`
 can be anything non-empty, and is used to name subdirectories of
 `lib`, `etc`, `include` and the package
 `libs` subdirectories. Example names from other software are
@@ -1445,13 +1445,13 @@ You need to collect the following sets of files:
 
 - Get the R source code tarball `R-3.6.3.tar.gz` from CRAN.
   Open a command window (or another shell) at directory
-  `R_HOME`{.variable}, and run
+  `R_HOME`, and run
 
 ```r
 tar -xf R-3.6.3.tar.gz
 ```
 
-to create the source tree in `R_HOME`{.variable}. **Beware**: do use
+to create the source tree in `R_HOME`. **Beware**: do use
 `tar` to extract the sources rather than tools such as WinZip. If
 you are using an account with administrative privileges you may get
 a lot of messages which can be suppressed by
@@ -1947,10 +1947,10 @@ There is a GUI console normally installed with the R icon in
 `/Applications` which you can run by double-clicking (e.g. from
 Launchpad or Finder). (If you cannot find it there it was possibly
 installed elsewhere so try searching for it in Spotlight.) This is
-usually referred to as [R.APP]{.small} to distinguish it from
+usually referred to as [R.APP] to distinguish it from
 command-line R: its user manual is currently part of the macOS FAQ at
 <https://cran.r-project.org/bin/macosx/RMacOSX-FAQ.html> and can be
-viewed from [R.APP]{.small}'s 'Help' menu.
+viewed from [R.APP]'s 'Help' menu.
 
 You can run command-line R and `Rscript` from a
 Terminal[^20^](#FOOT20) so these can be typed as commands like
@@ -1961,11 +1961,11 @@ notably the default location of the personal library directory (under
 that warnings, messages and other output to `stderr` are
 highlighted in bold.
 
-It has been reported that running [R.APP]{.small} may fail if no
+It has been reported that running [R.APP] may fail if no
 preferences are stored, so if it fails when launched for the very first
 time, try it again (the first attempt will store some preferences).
 
-Users of [R.APP]{.small} need to be aware of the 'App Nap' feature
+Users of [R.APP] need to be aware of the 'App Nap' feature
 (<https://developer.apple.com/library/mac/releasenotes/MacOSX/WhatsNewInOSX/Articles/MacOSX10_9.html>)
 which can cause R tasks to appear to run very slowly when not producing
 output in the console. Here are ways to avoid it:
@@ -1984,7 +1984,7 @@ defaults write org.R-project.R NSAppSleepDisabled -bool YES
 
 Using the `X11` device or the X11-based versions of `View()` and
 `edit()` for data frames and matrices (the latter are the default for
-command-line R but not [R.APP]{.small}) requires an X sub-system to be
+command-line R but not [R.APP]) requires an X sub-system to be
 installed: see [macOS](#macOS). So do the **tcltk** package and some
 third-party packages.
 
@@ -1992,7 +1992,7 @@ third-party packages.
 
 ### 4.2 Uninstalling under macOS
 
-R for macOS consists of two parts: the GUI ([R.APP]{.small}) and the R
+R for macOS consists of two parts: the GUI ([R.APP]) and the R
 framework. The un-installation is as simple as removing those folders
 (e.g. by dragging them onto the Trash). The typical installation will
 install the GUI into the `/Applications/R.app` folder and the R
@@ -2045,14 +2045,14 @@ A version of R can be run directly from the command-line as e.g.
 /Library/Frameworks/R.framework/Versions/3.6/Resources/bin/R
 ```
 
-However, [R.APP]{.small} will always run the 'current' version, that is
+However, [R.APP] will always run the 'current' version, that is
 the last installed version. A small utility, `Rswitch.app` (available at
 <https://mac.R-project.org/#other>: it is 32-bit so not usable on
 Catalina), can be used to change the 'current' version. This is of
-limited use as [R.APP]{.small} is compiled against a particular version
+limited use as [R.APP] is compiled against a particular version
 of R and will likely crash if switched to an earlier version. This may
 allow you to install a development version of R (de-selecting
-[R.APP]{.small}) and then switch back to the release version.
+[R.APP]) and then switch back to the release version.
 
 ---
 
@@ -2360,7 +2360,7 @@ R from source: `mac.binary.el-capitan` for an 'El Capitan and later'
 build with `"default"` a synonym for the appropriate variant) which can
 be passed to `install.packages` in order to download and install binary
 packages from a suitable repository. These binary package files for
-macOS have the extension '`.tgz`'. The [R.APP]{.small} GUI
+macOS have the extension '`.tgz`'. The [R.APP] GUI
 provides menus for installation of either binary or source packages,
 from CRAN or local files.
 
@@ -2699,11 +2699,11 @@ trees for one or more of the following types of package distributions:
   `src/contrib` area with a possibly empty
   `PACKAGES` file.
 - `"win.binary"`: located at `bin/windows/contrib/x.y` for R
-  versions `x.y.z`{.variable} and containing `.zip` files for
+  versions `x.y.z` and containing `.zip` files for
   Windows.
 - `"mac.binary.el-capitan"`: located at
   `bin/macosx/el-capitan/contrib/3.y` for the CRAN builds for
-  'El Capitan (and later) for R versions `3.y.z`{.variable},
+  'El Capitan (and later) for R versions `3.y.z`,
   containing `.tgz` files.
 
 Each terminal directory must also contain a `PACKAGES` file.
@@ -4142,11 +4142,11 @@ are (defaults in brackets)
 
 `--x-includes=DIR`
 
-: X include files are in `DIR`{.variable}
+: X include files are in `DIR`
 
 `--x-libraries=DIR`
 
-: X library files are in `DIR`{.variable}
+: X library files are in `DIR`
 
 `--with-readline`
 
@@ -4194,7 +4194,7 @@ this can lead to symbol conflicts.
 For maximally effective use of `valgrind`, R should be compiled with
 valgrind instrumentation. The `configure` option is
 `--with-valgrind-instrumentation=level`, where
-`level`{.variable} is 0, 1 or 2. (Level 0 is the default and does not
+`level` is 0, 1 or 2. (Level 0 is the default and does not
 add anything.) The system headers for `valgrind` can be requested by
 option `--with-system-valgrind-headers`: they will be used if
 present (on Linux they may be in a separate package such as
@@ -5042,7 +5042,7 @@ although linked versions under `/usr/X11` will be found.
 
   Use `--without-aqua` if you want a standard Unix-alike
   build: apart from disabling `quartz()` and the ability to use the
-  build with [R.APP]{.small}, it also changes the default location of
+  build with [R.APP], it also changes the default location of
   the personal library (see `?.libPaths`).
 
 - Support for `cairo` (without `Pango`) can be enabled if `pkg-config`
@@ -5249,7 +5249,7 @@ system versions.
 
 If you plan to use the `tcltk` package for R, you need to install a
 distribution of Tcl/Tk. There are two alternatives. If you use
-[R.APP]{.small} you will want to use X11-based Tcl/Tk (as used on other
+[R.APP] you will want to use X11-based Tcl/Tk (as used on other
 Unix-alikes), which is installed as part of the CRAN binary for R and
 available as separate `tcl` and `tk` components from
 <https://mac.R-project.org/libs/>. This may need `configure` options
@@ -5268,7 +5268,7 @@ or
 Note that this requires a matching XQuartz installation.
 
 There is also a native ('Aqua') version of Tcl/Tk which produces widgets
-in the native macOS style: this will not work with [R.APP]{.small}
+in the native macOS style: this will not work with [R.APP]
 because of conflicts over the macOS menu, but for those only using
 command-line R this provides a much more intuitive interface to Tk for
 experienced Mac users. Most versions of macOS come with Aqua Tcl/Tk
@@ -5376,7 +5376,7 @@ the option
 support frameworks correctly but those from `llvm.org` do.)
 
 It is only needed if you want to build R for use with the
-[R.APP]{.small} console, and implies `--enable-R-shlib` to
+[R.APP] console, and implies `--enable-R-shlib` to
 build R as a dynamic library. This option configures R to be built and
 installed as a framework called `R.framework`. The default
 installation path for `R.framework` is
@@ -5397,8 +5397,8 @@ non-standard location) and Unix utilities may not support it (e.g. the
 
 #### C.3.7 Building R.app
 
-Note that building the [R.APP]{.small} GUI console is a separate
-project, using Xcode. Before compiling [R.APP]{.small} make sure the
+Note that building the [R.APP] GUI console is a separate
+project, using Xcode. Before compiling [R.APP] make sure the
 current version of R is installed in
 `/Library/Frameworks/R.framework` and working at the
 command-line (this can be a binary install).
@@ -5419,8 +5419,8 @@ xcodebuild -target R -configuration Release
 See also the `INSTALL` file in the checkout or directly at
 <https://svn.r-project.org/R-packages/trunk/Mac-GUI/INSTALL>.
 
-[R.APP]{.small} does not need to be installed in any specific way.
-Building [R.APP]{.small} results in the [R.APP]{.small} bundle which
+[R.APP] does not need to be installed in any specific way.
+Building [R.APP] results in the [R.APP] bundle which
 appears as one R icon. This application bundle can be run anywhere and
 it is customary to place it in the `/Applications` folder.
 
@@ -5741,7 +5741,7 @@ platform.
 If you are having trouble getting R to work on your platform please feel
 free to use the '`R-devel`' mailing list to ask questions. We
 have had a fair amount of practice at porting R to new platforms
-[\...]{.small}
+[\...]
 
 ---
 

@@ -1,4 +1,4 @@
-7 R Miscellanea
+# 7 R Miscellanea
 
 ---
 
@@ -74,7 +74,7 @@ For dropping the row names of a matrix `x`, it may be easier to use
 
 `save.image()` saves the objects in the user's `.GlobalEnv` to the file
 `.RData` in the R startup directory. (This is also what happens
-after [q(\"yes\")]{.kbd}.) Using `save.image(file)` one can save the
+after [q(\"yes\")].) Using `save.image(file)` one can save the
 image under a different name.
 
 ---
@@ -170,11 +170,11 @@ somerows <- mat[index, , drop = FALSE]
 ### 7.6 How does autoloading work?
 
 R has a special environment called `.AutoloadEnv`. Using
-[autoload(`name`{.variable}, `pkg`{.variable})]{.kbd}, where
-`name`{.variable} and `pkg`{.variable} are strings giving the names of
+[autoload(`name`, `pkg`)], where
+`name` and `pkg` are strings giving the names of
 an object and the package containing it, stores some information in this
-environment. When R tries to evaluate `name`{.variable}, it loads the
-corresponding package `pkg`{.variable} and reevaluates `name`{.variable}
+environment. When R tries to evaluate `name`, it loads the
+corresponding package `pkg` and reevaluates `name`
 in the new package's environment.
 
 Using this mechanism makes R behave as if the package was loaded, but
@@ -215,7 +215,7 @@ R> test2()
 ```
 
 What is really used is the _global_ value of `.Options`, and using
-[options(OPT = VAL)]{.kbd} correctly updates it. Local copies of
+[options(OPT = VAL)] correctly updates it. Local copies of
 `.Options`, either in `.GlobalEnv` or in a function environment (frame),
 are just silently disregarded.
 
@@ -626,7 +626,7 @@ The most likely reason is that you forgot to tell R to display the
 graph. Lattice functions such as `xyplot()` create a graph object, but
 do not display it (the same is true of
 [**ggplot2**](https://CRAN.R-project.org/package=ggplot2) graphics, and
-Trellis graphics in [S-PLUS]{.small}). The `print()` method for the
+Trellis graphics in [S-PLUS]). The `print()` method for the
 graph object produces the actual display. When you use these functions
 interactively at the command line, the result is automatically printed,
 but in `source()` or inside your own functions you will need an explicit

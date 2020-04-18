@@ -1,4 +1,4 @@
-3 Evaluation of expressions
+# 3 Evaluation of expressions
 
 ---
 
@@ -175,7 +175,7 @@ R contains a number of operators. They are listed in the table below.
 > `*` Multiplication, binary
 > `/` Division, binary
 > `^` Exponentiation, binary
-> `%x%` Special binary operators, `x`{.variable} can be replaced by any valid name
+> `%x%` Special binary operators, `x` can be replaced by any valid name
 > `%%` Modulus, binary
 > `%/%` Integer divide, binary
 > `%*%` Matrix product, binary
@@ -312,16 +312,16 @@ else
     statement3
 ```
 
-First, `statement1`{.variable} is evaluated to yield
-`value1`{.variable}. If `value1`{.variable} is a logical vector with
-first element `TRUE` then `statement2`{.variable} is evaluated. If the
-first element of `value1`{.variable} is `FALSE` then
-`statement3`{.variable} is evaluated. If `value1`{.variable} is a
-numeric vector then `statement3`{.variable} is evaluated when the first
-element of `value1`{.variable} is zero and otherwise
-`statement2`{.variable} is evaluated. Only the first element of
-`value1`{.variable} is used. All other elements are ignored. If
-`value1`{.variable} has any type other than a logical or a numeric
+First, `statement1` is evaluated to yield
+`value1`. If `value1` is a logical vector with
+first element `TRUE` then `statement2` is evaluated. If the
+first element of `value1` is `FALSE` then
+`statement3` is evaluated. If `value1` is a
+numeric vector then `statement3` is evaluated when the first
+element of `value1` is zero and otherwise
+`statement2` is evaluated. Only the first element of
+`value1` is used. All other elements are ignored. If
+`value1` has any type other than a logical or a numeric
 vector an error is signalled.
 
 `if`/`else` statements can be used to avoid numeric problems such as
@@ -337,8 +337,8 @@ them. The two examples below are equivalent.
 The `else` clause is optional. The statement
 `if(any(x <= 0)) x <- x[x <= 0]` is valid. When the `if` statement is
 not in a block the `else`, if present, must appear on the same line as
-the end of `statement2`{.variable}. Otherwise the new line at the end of
-`statement2`{.variable} completes the `if` and yields a syntactically
+the end of `statement2`. Otherwise the new line at the end of
+`statement2` completes the `if` and yields a syntactically
 complete statement that is evaluated. A simple solution is to use a
 compound statement wrapped in braces, putting the `else` on the same
 line as the closing brace that marks the end of the statement.
@@ -358,15 +358,15 @@ if ( statement1 ) {
 
 One of the even numbered statements will be evaluated and the resulting
 value returned. If the optional `else` clause is omitted and all the odd
-numbered `statement`{.variable}s evaluate to `FALSE` no statement will
+numbered `statement`s evaluate to `FALSE` no statement will
 be evaluated and `NULL` is returned.
 
-The odd numbered `statement`{.variable}s are evaluated, in order, until
+The odd numbered `statement`s are evaluated, in order, until
 one evaluates to `TRUE` and then the associated even numbered
-`statement`{.variable} is evaluated. In this example,
-`statement6`{.variable} will only be evaluated if
-`statement1`{.variable} is `FALSE` and `statement3`{.variable} is
-`FALSE` and `statement5`{.variable} is `TRUE`. There is no limit to the
+`statement` is evaluated. In this example,
+`statement6` will only be evaluated if
+`statement1` is `FALSE` and `statement3` is
+`FALSE` and `statement5` is `TRUE`. There is no limit to the
 number of `else if` clauses that are permitted.
 
 ---
@@ -405,7 +405,7 @@ syntax of the `repeat` loop is
 repeat statement
 ```
 
-When using `repeat`, `statement`{.variable} must be a block statement.
+When using `repeat`, `statement` must be a block statement.
 You need to both perform some computation and test whether or not to
 break from the loop and usually this requires two statements.
 
@@ -420,9 +420,9 @@ syntax of the `while` loop is
 while ( statement1 ) statement2
 ```
 
-where `statement1`{.variable} is evaluated and if its value is `TRUE`
-then `statement2`{.variable} is evaluated. This process continues until
-`statement1`{.variable} evaluates to `FALSE`.
+where `statement1` is evaluated and if its value is `TRUE`
+then `statement2` is evaluated. This process continues until
+`statement1` evaluates to `FALSE`.
 
 ---
 
@@ -435,12 +435,12 @@ for ( name in vector )
    statement1
 ```
 
-where `vector`{.variable} can be either a vector or a list. For each
-element in `vector`{.variable} the variable `name`{.variable} is set to
-the value of that element and `statement1`{.variable} is evaluated. A
-side effect is that the variable `name`{.variable} still exists after
+where `vector` can be either a vector or a list. For each
+element in `vector` the variable `name` is set to
+the value of that element and `statement1` is evaluated. A
+side effect is that the variable `name` still exists after
 the loop has concluded and it has the value of the last element of
-`vector`{.variable} that the loop was evaluated for.
+`vector` that the loop was evaluated for.
 
 ---
 
@@ -456,11 +456,11 @@ The syntax is
 switch (statement, list)
 ```
 
-where the elements of `list`{.variable} may be named. First,
-`statement`{.variable} is evaluated and the result, `value`{.variable},
-obtained. If `value`{.variable} is a number between 1 and the length of
-`list`{.variable} then the corresponding element of `list`{.variable} is
-evaluated and the result returned. If `value`{.variable} is too large or
+where the elements of `list` may be named. First,
+`statement` is evaluated and the result, `value`,
+obtained. If `value` is a number between 1 and the length of
+`list` then the corresponding element of `list` is
+evaluated and the result returned. If `value` is too large or
 too small `NULL` is returned.
 
 ```r
@@ -473,8 +473,8 @@ too small `NULL` is returned.
 NULL
 ```
 
-If `value`{.variable} is a character vector then the element of
-'`...`' with a name that exactly matches `value`{.variable} is
+If `value` is a character vector then the element of
+'`...`' with a name that exactly matches `value` is
 evaluated. If there is no match a single unnamed argument will be used
 as a default. If no default is specified, `NULL` is returned.
 

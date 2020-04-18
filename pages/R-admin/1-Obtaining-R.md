@@ -1,4 +1,4 @@
-1 Obtaining R
+# 1 Obtaining R
 
 ---
 
@@ -89,16 +89,16 @@ Subversion repository. If you have a Subversion client (see
 current '`r-devel`' from <https://svn.r-project.org/R/trunk/>
 and the current '`r-patched`' from
 '`https://svn.r-project.org/R/branches/R-x-y-branch/`' (where
-`x`{.variable} and `y`{.variable} are the major and minor number of the
+`x` and `y` are the major and minor number of the
 current released version of R). E.g., use
 
 ```r
 svn checkout https://svn.r-project.org/R/trunk/ path
 ```
 
-to check out '`r-devel`' into directory `path`{.variable}
+to check out '`r-devel`' into directory `path`
 (which will be created if necessary). The alpha, beta and RC versions of
-an upcoming `x.y.0`{.variable} release are available from
+an upcoming `x.y.0` release are available from
 '`https://svn.r-project.org/R/branches/R-x-y-branch/`' in the
 four-week period prior to the release.
 
@@ -120,7 +120,7 @@ If downloading manually from CRAN, do ensure that you have the correct
 versions of the recommended packages: if the number in the file
 `VERSION` is '`x.y.z`' you need to download the
 contents of '`https://CRAN.R-project.org/src/contrib/dir`',
-where `dir`{.variable} is '`x.y.z/Recommended`' for r-devel or
+where `dir` is '`x.y.z/Recommended`' for r-devel or
 `x.y-patched/Recommended` for r-patched, respectively, to
 directory `src/library/Recommended` in the sources you have
 unpacked. After downloading manually you need to execute

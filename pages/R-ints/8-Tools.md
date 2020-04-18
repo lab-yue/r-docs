@@ -1,4 +1,4 @@
-8 Tools
+# 8 Tools
 
 ---
 
@@ -11,7 +11,7 @@ not shown by `R CMD check --help`, with possible values
 `check:file`
 
 : Assume that installation was already performed with stdout/stderr to
-`file`{.variable}, the contents of which need to be checked (without
+`file`, the contents of which need to be checked (without
 repeating the installation). This is useful for checks applied by
 repository maintainers: it reduces the check time by the
 installation time given that the package has already been installed.
@@ -356,7 +356,7 @@ recommended packages unavailable unless declared. Default: false
 `_R_CHECK_CODETOOLS_PROFILE_`
 
 : A string with comma-separated `name=value` pairs (with
-`value`{.variable} a logical constant) giving additional arguments
+`value` a logical constant) giving additional arguments
 for the
 [**codetools**](https://CRAN.R-project.org/package=codetools)
 functions used for analyzing package code. E.g., use

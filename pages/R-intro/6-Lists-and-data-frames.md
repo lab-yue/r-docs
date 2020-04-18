@@ -1,4 +1,4 @@
-6 Lists and data frames
+# 6 Lists and data frames
 
 ---
 
@@ -94,8 +94,8 @@ An assignment of the form
 > Lst <- list(name_1=object_1, …, name_m=object_m)
 ```
 
-sets up a list `Lst` of _m_ components using `object_1`{.variable}, ...,
-`object_m`{.variable} for the components and giving them names as
+sets up a list `Lst` of _m_ components using `object_1`, ...,
+`object_m` for the components and giving them names as
 specified by the argument names, (which can be freely chosen). If these
 names are omitted, the components are numbered only. The components used
 to form the list are _copied_ when forming the new list and the

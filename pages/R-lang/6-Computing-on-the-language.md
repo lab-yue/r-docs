@@ -1,4 +1,4 @@
-6 Computing on the language
+# 6 Computing on the language
 
 ---
 

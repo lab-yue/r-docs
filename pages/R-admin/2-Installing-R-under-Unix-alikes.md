@@ -1,4 +1,4 @@
-2 Installing R under Unix-alikes
+# 2 Installing R under Unix-alikes
 
 ---
 
@@ -51,7 +51,7 @@ spaces.[^3^](#FOOT3)
 
 Choose a directory to install the R tree (R is not just a binary, but
 has additional data sets, help files, font metrics etc). Let us call
-this place `R_HOME`{.variable}. Untar the source code. This should
+this place `R_HOME`. Untar the source code. This should
 create directories `src`, `doc`, and several more
 under a top-level directory: change to that top-level directory (At this
 point North American readers should consult [Setting paper size](#Setting-paper-size).) Issue the following commands:
@@ -125,7 +125,7 @@ allow this, and you will need no spaces in the path to the build
 directory. It is unlikely to work if the source directory has previously
 been used for a build.)
 
-Now `rehash` if necessary, type [R]{.kbd}, and read the R manuals and
+Now `rehash` if necessary, type [R], and read the R manuals and
 the R FAQ (files `FAQ` or `doc/manual/R-FAQ.html`, or
 <https://CRAN.R-project.org/doc/FAQ/R-FAQ.html> which always has the
 version for the latest release of R).
@@ -367,11 +367,11 @@ This will install to the following directories:
 `prefix/LIBnn/R` or `libdir/R`
 
 : all the rest (libraries, on-line help system, ...). Here
-`LIBnn`{.variable} is usually '`lib`', but may be
+`LIBnn` is usually '`lib`', but may be
 '`lib64`' on some 64-bit Linux systems. This is known as
 the R home directory.
 
-where `prefix`{.variable} is determined during configuration (typically
+where `prefix` is determined during configuration (typically
 `/usr/local`) and can be set by running `configure` with the
 option `--prefix`, as in
 
@@ -406,8 +406,8 @@ are installed.
 
 The configure option `--libdir` controls where the main R files
 are installed: the default is '`eprefix/LIBnn`', where
-`eprefix`{.variable} is the prefix used for installing
-architecture-dependent files, defaults to `prefix`{.variable}, and can
+`eprefix` is the prefix used for installing
+architecture-dependent files, defaults to `prefix`, and can
 be set via the configure option `--exec-prefix`.
 
 Each of `bindir`, `mandir` and `libdir` can also be specified on the
@@ -520,7 +520,7 @@ all but the executables and dynamic objects. Examples include builds
 under Linux and Solaris for different CPUs or 32- and 64-bit builds.
 
 R supports the idea of architecture-specific builds, specified by adding
-'`r_arch=name`' to the `configure` line. Here `name`{.variable}
+'`r_arch=name`' to the `configure` line. Here `name`
 can be anything non-empty, and is used to name subdirectories of
 `lib`, `etc`, `include` and the package
 `libs` subdirectories. Example names from other software are

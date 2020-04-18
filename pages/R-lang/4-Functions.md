@@ -1,4 +1,4 @@
-4 Functions
+# 4 Functions
 
 ---
 
@@ -77,7 +77,7 @@ Default values for arguments can be specified using the special form
 '`name = expression`'. In this case, if the user does not
 specify a value for the argument when the function is invoked the
 expression will be associated with the corresponding symbol. When a
-value is needed the `expression`{.variable} is
+value is needed the `expression` is
 evaluated in the evaluation
 frame of the function.
 

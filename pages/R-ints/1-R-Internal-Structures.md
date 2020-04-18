@@ -1,4 +1,4 @@
-1 R Internal Structures
+# 1 R Internal Structures
 
 ---
 
@@ -912,9 +912,9 @@ There are three levels of collections. Level 0 collects only the
 youngest generation, level 1 collects the two youngest generations and
 level 2 collects all generations. After 20 level-0 collections the next
 collection is at level 1, and after 5 level-1 collections at level 2.
-Further, if a level-`n`{.variable} collection fails to provide 20% free
+Further, if a level-`n` collection fails to provide 20% free
 space (for each of nodes and the vector heap), the next collection will
-be at level `n+1`{.variable}. (The R-level function `gc()` performs a
+be at level `n+1`. (The R-level function `gc()` performs a
 level-2 collection.)
 
 A generational collector needs to efficiently 'age' the objects,

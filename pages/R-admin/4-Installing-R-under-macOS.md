@@ -1,4 +1,4 @@
-4 Installing R under macOS
+# 4 Installing R under macOS
 
 ---
 
@@ -67,10 +67,10 @@ There is a GUI console normally installed with the R icon in
 `/Applications` which you can run by double-clicking (e.g. from
 Launchpad or Finder). (If you cannot find it there it was possibly
 installed elsewhere so try searching for it in Spotlight.) This is
-usually referred to as [R.APP]{.small} to distinguish it from
+usually referred to as [R.APP] to distinguish it from
 command-line R: its user manual is currently part of the macOS FAQ at
 <https://cran.r-project.org/bin/macosx/RMacOSX-FAQ.html> and can be
-viewed from [R.APP]{.small}'s 'Help' menu.
+viewed from [R.APP]'s 'Help' menu.
 
 You can run command-line R and `Rscript` from a
 Terminal[^20^](#FOOT20) so these can be typed as commands like
@@ -81,11 +81,11 @@ notably the default location of the personal library directory (under
 that warnings, messages and other output to `stderr` are
 highlighted in bold.
 
-It has been reported that running [R.APP]{.small} may fail if no
+It has been reported that running [R.APP] may fail if no
 preferences are stored, so if it fails when launched for the very first
 time, try it again (the first attempt will store some preferences).
 
-Users of [R.APP]{.small} need to be aware of the 'App Nap' feature
+Users of [R.APP] need to be aware of the 'App Nap' feature
 (<https://developer.apple.com/library/mac/releasenotes/MacOSX/WhatsNewInOSX/Articles/MacOSX10_9.html>)
 which can cause R tasks to appear to run very slowly when not producing
 output in the console. Here are ways to avoid it:
@@ -104,7 +104,7 @@ defaults write org.R-project.R NSAppSleepDisabled -bool YES
 
 Using the `X11` device or the X11-based versions of `View()` and
 `edit()` for data frames and matrices (the latter are the default for
-command-line R but not [R.APP]{.small}) requires an X sub-system to be
+command-line R but not [R.APP]) requires an X sub-system to be
 installed: see [macOS](#macOS). So do the **tcltk** package and some
 third-party packages.
 
@@ -112,7 +112,7 @@ third-party packages.
 
 ### 4.2 Uninstalling under macOS
 
-R for macOS consists of two parts: the GUI ([R.APP]{.small}) and the R
+R for macOS consists of two parts: the GUI ([R.APP]) and the R
 framework. The un-installation is as simple as removing those folders
 (e.g. by dragging them onto the Trash). The typical installation will
 install the GUI into the `/Applications/R.app` folder and the R
@@ -165,13 +165,13 @@ A version of R can be run directly from the command-line as e.g.
 /Library/Frameworks/R.framework/Versions/3.6/Resources/bin/R
 ```
 
-However, [R.APP]{.small} will always run the 'current' version, that is
+However, [R.APP] will always run the 'current' version, that is
 the last installed version. A small utility, `Rswitch.app` (available at
 <https://mac.R-project.org/#other>: it is 32-bit so not usable on
 Catalina), can be used to change the 'current' version. This is of
-limited use as [R.APP]{.small} is compiled against a particular version
+limited use as [R.APP] is compiled against a particular version
 of R and will likely crash if switched to an earlier version. This may
 allow you to install a development version of R (de-selecting
-[R.APP]{.small}) and then switch back to the release version.
+[R.APP]) and then switch back to the release version.
 
 ---

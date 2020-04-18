@@ -1,4 +1,4 @@
-6 Image files
+# 6 Image files
 
 ---
 

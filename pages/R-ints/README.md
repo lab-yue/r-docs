@@ -1087,9 +1087,9 @@ There are three levels of collections. Level 0 collects only the
 youngest generation, level 1 collects the two youngest generations and
 level 2 collects all generations. After 20 level-0 collections the next
 collection is at level 1, and after 5 level-1 collections at level 2.
-Further, if a level-`n`{.variable} collection fails to provide 20% free
+Further, if a level-`n` collection fails to provide 20% free
 space (for each of nodes and the vector heap), the next collection will
-be at level `n+1`{.variable}. (The R-level function `gc()` performs a
+be at level `n+1`. (The R-level function `gc()` performs a
 level-2 collection.)
 
 A generational collector needs to efficiently 'age' the objects,
@@ -3522,7 +3522,7 @@ not shown by `R CMD check --help`, with possible values
 `check:file`
 
 : Assume that installation was already performed with stdout/stderr to
-`file`{.variable}, the contents of which need to be checked (without
+`file`, the contents of which need to be checked (without
 repeating the installation). This is useful for checks applied by
 repository maintainers: it reduces the check time by the
 installation time given that the package has already been installed.
@@ -3867,7 +3867,7 @@ recommended packages unavailable unless declared. Default: false
 `_R_CHECK_CODETOOLS_PROFILE_`
 
 : A string with comma-separated `name=value` pairs (with
-`value`{.variable} a logical constant) giving additional arguments
+`value` a logical constant) giving additional arguments
 for the
 [**codetools**](https://CRAN.R-project.org/package=codetools)
 functions used for analyzing package code. E.g., use
@@ -4376,8 +4376,8 @@ when using narrow fonts.)
 
 When you (as R developer) add new functions to the R base (all the
 packages distributed with R), be careful to check if [make
-test-Specific]{.kbd} or particularly, [cd tests; make
-no-segfault.Rout]{.kbd} still works (without interactive user
+test-Specific] or particularly, [cd tests; make
+no-segfault.Rout] still works (without interactive user
 intervention, and on a standalone computer). If the new function, for
 example, accesses the Internet, or requires GUI interaction, please add
 its name to the "stop list" in `tests/no-segfault.Rin`.

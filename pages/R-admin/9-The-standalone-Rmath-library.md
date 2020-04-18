@@ -1,4 +1,4 @@
-9 The standalone Rmath library
+# 9 The standalone Rmath library
 
 ---
 
@@ -1089,11 +1089,11 @@ are (defaults in brackets)
 
 `--x-includes=DIR`
 
-: X include files are in `DIR`{.variable}
+: X include files are in `DIR`
 
 `--x-libraries=DIR`
 
-: X library files are in `DIR`{.variable}
+: X library files are in `DIR`
 
 `--with-readline`
 
@@ -1141,7 +1141,7 @@ this can lead to symbol conflicts.
 For maximally effective use of `valgrind`, R should be compiled with
 valgrind instrumentation. The `configure` option is
 `--with-valgrind-instrumentation=level`, where
-`level`{.variable} is 0, 1 or 2. (Level 0 is the default and does not
+`level` is 0, 1 or 2. (Level 0 is the default and does not
 add anything.) The system headers for `valgrind` can be requested by
 option `--with-system-valgrind-headers`: they will be used if
 present (on Linux they may be in a separate package such as
@@ -1989,7 +1989,7 @@ although linked versions under `/usr/X11` will be found.
 
   Use `--without-aqua` if you want a standard Unix-alike
   build: apart from disabling `quartz()` and the ability to use the
-  build with [R.APP]{.small}, it also changes the default location of
+  build with [R.APP], it also changes the default location of
   the personal library (see `?.libPaths`).
 
 - Support for `cairo` (without `Pango`) can be enabled if `pkg-config`
@@ -2196,7 +2196,7 @@ system versions.
 
 If you plan to use the `tcltk` package for R, you need to install a
 distribution of Tcl/Tk. There are two alternatives. If you use
-[R.APP]{.small} you will want to use X11-based Tcl/Tk (as used on other
+[R.APP] you will want to use X11-based Tcl/Tk (as used on other
 Unix-alikes), which is installed as part of the CRAN binary for R and
 available as separate `tcl` and `tk` components from
 <https://mac.R-project.org/libs/>. This may need `configure` options
@@ -2215,7 +2215,7 @@ or
 Note that this requires a matching XQuartz installation.
 
 There is also a native ('Aqua') version of Tcl/Tk which produces widgets
-in the native macOS style: this will not work with [R.APP]{.small}
+in the native macOS style: this will not work with [R.APP]
 because of conflicts over the macOS menu, but for those only using
 command-line R this provides a much more intuitive interface to Tk for
 experienced Mac users. Most versions of macOS come with Aqua Tcl/Tk
@@ -2323,7 +2323,7 @@ the option
 support frameworks correctly but those from `llvm.org` do.)
 
 It is only needed if you want to build R for use with the
-[R.APP]{.small} console, and implies `--enable-R-shlib` to
+[R.APP] console, and implies `--enable-R-shlib` to
 build R as a dynamic library. This option configures R to be built and
 installed as a framework called `R.framework`. The default
 installation path for `R.framework` is
@@ -2344,8 +2344,8 @@ non-standard location) and Unix utilities may not support it (e.g. the
 
 #### C.3.7 Building R.app
 
-Note that building the [R.APP]{.small} GUI console is a separate
-project, using Xcode. Before compiling [R.APP]{.small} make sure the
+Note that building the [R.APP] GUI console is a separate
+project, using Xcode. Before compiling [R.APP] make sure the
 current version of R is installed in
 `/Library/Frameworks/R.framework` and working at the
 command-line (this can be a binary install).
@@ -2366,8 +2366,8 @@ xcodebuild -target R -configuration Release
 See also the `INSTALL` file in the checkout or directly at
 <https://svn.r-project.org/R-packages/trunk/Mac-GUI/INSTALL>.
 
-[R.APP]{.small} does not need to be installed in any specific way.
-Building [R.APP]{.small} results in the [R.APP]{.small} bundle which
+[R.APP] does not need to be installed in any specific way.
+Building [R.APP] results in the [R.APP] bundle which
 appears as one R icon. This application bundle can be run anywhere and
 it is customary to place it in the `/Applications` folder.
 
@@ -2688,7 +2688,7 @@ platform.
 If you are having trouble getting R to work on your platform please feel
 free to use the '`R-devel`' mailing list to ask questions. We
 have had a fair amount of practice at porting R to new platforms
-[\...]{.small}
+[\...]
 
 ---
 

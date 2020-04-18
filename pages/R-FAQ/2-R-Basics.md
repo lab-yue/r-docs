@@ -1,4 +1,4 @@
-2 R Basics
+# 2 R Basics
 
 ---
 
@@ -80,10 +80,10 @@ operating systems. Support for Mac OS Classic ended with R 1.7.1.
 
 The current version of R will configure and build under a number of
 common Unix-like (e.g., <https://en.wikipedia.org/wiki/Unix-like>)
-platforms including `cpu`{.variable}-linux-gnu for the i386,
+platforms including `cpu`-linux-gnu for the i386,
 amd64/x86_64, alpha, arm, arm64, hppa, mips/mipsel, powerpc, s390x and
 sparc CPUs (e.g., <https://buildd.debian.org/build.php?&pkg=r-base>),
-i386-hurd-gnu, `cpu`{.variable}-kfreebsd-gnu for i386 and amd64,
+i386-hurd-gnu, `cpu`-kfreebsd-gnu for i386 and amd64,
 i386-pc-solaris, rs6000-ibm-aix, sparc-sun-solaris,
 x86_64-apple-darwin, x86_64-unknown-freebsd and
 x86_64-unknown-openbsd.
@@ -134,7 +134,7 @@ versions of R can be found at <https://stat.ethz.ch/R/daily>.
 
 #### 2.5.1 How can R be installed (Unix-like)
 
-If R is already installed, it can be started by typing [R]{.kbd} at the
+If R is already installed, it can be started by typing [R] at the
 shell prompt (of course, provided that the executable is in your path).
 
 If binaries are available for your platform (see [Are there Unix-like
@@ -167,22 +167,22 @@ can invoke it, for example to `/usr/local/bin`. In addition,
 plain text help pages as well as HTML and LaTeX versions of the
 documentation are built.
 
-Use [make dvi]{.kbd} to create DVI versions of the R manuals, such as
+Use [make dvi] to create DVI versions of the R manuals, such as
 `refman.dvi` (an R object reference index) and
 `R-exts.dvi`, the "R Extension Writers Guide", in the
 `doc/manual` subdirectory. These files can be previewed and
 printed using standard programs such as `xdvi` and `dvips`. You can also
-use [make pdf]{.kbd} to build PDF (Portable Document Format) version of
+use [make pdf] to build PDF (Portable Document Format) version of
 the manuals, and view these using e.g. Acrobat. Manuals written in the
 GNU Texinfo system can also be converted to info files suitable for
-reading online with Emacs or stand-alone GNU Info; use [make info]{.kbd}
+reading online with Emacs or stand-alone GNU Info; use [make info]
 to create these versions (note that this requires Makeinfo version 4.5).
 
-Finally, use [make check]{.kbd} to find out whether your R system works
+Finally, use [make check] to find out whether your R system works
 correctly.
 
 You can also perform a "system-wide" installation using [make
-install]{.kbd}. By default, this will install to the following
+install]. By default, this will install to the following
 directories:
 
 `${prefix}/bin`
@@ -210,8 +210,8 @@ $ ./configure --prefix=/where/you/want/R/to/go
 `/where/you/want/R/to/go/bin`.)
 
 To install DVI, info and PDF versions of the manuals, use [make
-install-dvi]{.kbd}, [make install-info]{.kbd} and [make
-install-pdf]{.kbd}, respectively.
+install-dvi], [make install-info] and [make
+install-pdf], respectively.
 
 ---
 
@@ -300,8 +300,8 @@ CRAN.
 
 Online documentation for most of the functions and variables in R
 exists, and can be printed on-screen by typing
-[help(`name`{.variable})]{.kbd} (or [?`name`{.variable}]{.kbd}) at the R
-prompt, where `name`{.variable} is the name of the topic help is sought
+[help(`name`)] (or [?`name`]) at the R
+prompt, where `name` is the name of the topic help is sought
 for. (In the case of unary and binary operators and control-flow special
 forms, the name may need to be be quoted.)
 
@@ -321,7 +321,7 @@ The R distribution also comes with the following manuals.
 
 - "An Introduction to R" (`R-intro`) includes information on
   data types, programming elements, statistical modeling and graphics.
-  This document is based on the "Notes on [S-PLUS]{.small}" by Bill
+  This document is based on the "Notes on [S-PLUS]" by Bill
   Venables and David Smith.
 - "Writing R Extensions" (`R-exts`) currently describes the
   process of creating R add-on packages, writing R documentation, R's
@@ -338,7 +338,7 @@ The R distribution also comes with the following manuals.
 An annotated bibliography (BibTeX format) of R-related publications can
 be found at
 
-```{.display}
+```
 https://www.R-project.org/doc/bib/R.bib
 ```
 
@@ -402,7 +402,7 @@ To cite R in publications, use
 }
 ```
 
-where `YEAR`{.variable} is the release year of the version of R used and
+where `YEAR` is the release year of the version of R used and
 can determined as `R.version$year`.
 
 Citation strings (or BibTeX entries) for R and R packages can also be

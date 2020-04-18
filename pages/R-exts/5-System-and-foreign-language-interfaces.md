@@ -1,4 +1,4 @@
-5 System and foreign language interfaces
+# 5 System and foreign language interfaces
 
 ---
 
@@ -242,7 +242,7 @@ is either loaded or unloaded. This can be used, for example, to register
 native routines with R's dynamic symbol mechanism, initialize some data
 in the native code, or initialize a third party library. On loading a
 DLL, R will look for a routine within that DLL named `R_init_lib` where
-`lib`{.variable} is the name of the DLL file with the extension removed.
+`lib` is the name of the DLL file with the extension removed.
 For example, in the command
 
 ```r
@@ -845,7 +845,7 @@ C or Objective C++ (with extensions `.c`, `.cc` or
 `.cpp`, `.f` (fixed-form Fortran), `.f90` or
 `.f95` (free-form), `.m`, and `.mm` or
 `.M`, respectively), or commands to be passed to the linker.
-See [R CMD SHLIB \--help]{.kbd} (or the R help for `SHLIB`) for usage
+See [R CMD SHLIB \--help] (or the R help for `SHLIB`) for usage
 information. Note that files intended for the Fortran pre-processor with
 extension `.F` are not accepted.
 
@@ -1396,9 +1396,9 @@ using the object by using the `PROTECT` macro on a pointer to the
 object. This tells R that the object is in use so it is not destroyed
 during garbage collection. Notice that it is the object which is
 protected, not the pointer variable. It is a common mistake to believe
-that if you invoked `PROTECT(p)` at some point then `p`{.variable} is
+that if you invoked `PROTECT(p)` at some point then `p` is
 protected from then on, but that is not true once a new object is
-assigned to `p`{.variable}.
+assigned to `p`.
 
 Protecting an R object automatically protects all the R objects pointed
 to in the corresponding `SEXPREC`, for example all elements of a
@@ -1408,7 +1408,7 @@ The programmer is solely responsible for housekeeping the calls to
 `PROTECT`. There is a corresponding macro `UNPROTECT` that takes as
 argument an `int` giving the number of objects to unprotect when they
 are no longer needed. The protection mechanism is stack-based, so
-`UNPROTECT(n)` unprotects the last `n`{.variable} objects which were
+`UNPROTECT(n)` unprotects the last `n` objects which were
 protected. The calls to `PROTECT` and `UNPROTECT` must balance when the
 user's code returns. R will warn about `"stack imbalance in .Call"` (or
 `.External`) if the housekeeping is wrong.
@@ -1449,7 +1449,7 @@ Protection is not needed for objects which R already knows are in use.
 In particular, this applies to function arguments.
 
 There is a less-used macro `UNPROTECT_PTR(s)` that unprotects the object
-pointed to by the `SEXP` `s`{.variable}, even if it is not the top item
+pointed to by the `SEXP` `s`, even if it is not the top item
 on the pointer protection stack. This macro was introduced for use in
 the parser, where the code interfacing with the R heap is generated and
 the generator cannot be configured to insert proper calls to `PROTECT`
@@ -1546,8 +1546,8 @@ data types of objects created by evaluating an R expression in the C
 code. You can use functions like `isReal`, `isInteger` and `isString` to
 do type checking. See the header file `Rinternals.h` for
 definitions of other such functions. All of these take a `SEXP` as
-argument and return 1 or 0 to indicate `TRUE`{.variable} or
-`FALSE`{.variable}.
+argument and return 1 or 0 to indicate `TRUE` or
+`FALSE`.
 
 What happens if the `SEXP` is not of the correct type? Sometimes you
 have no other option except to generate an error. You can use the
@@ -1912,9 +1912,9 @@ constructs a pairlist from `u` followed by `v` (which is a pairlist or
 Functions `list1` to `list6` construct a pairlist from one to six items,
 and `lang1` to `lang6` do the same for a language object (a function to
 call plus zero to five arguments). Functions `elt` and `lastElt` find
-the `i`{.variable}th element and the last element of a pairlist, and
-`nthcdr` returns a pointer to the `n`{.variable}th position in the
-pairlist (whose `CAR` is the `n`{.variable}th item).
+the `i`th element and the last element of a pairlist, and
+`nthcdr` returns a pointer to the `n`th position in the
+pairlist (whose `CAR` is the `n`th item).
 
 Functions `str2type` and `type2str` map R length-one character strings
 to and from `SEXPTYPE` numbers, and `type2char` maps numbers to C

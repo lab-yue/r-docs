@@ -1,4 +1,4 @@
-3 R and S
+# 3 R and S
 
 ---
 
@@ -63,9 +63,9 @@ information on the "Evolution of the S Language".
 
 ---
 
-### 3.2 What is [S-PLUS]{.small}?
+### 3.2 What is [S-PLUS]?
 
-[S-PLUS]{.small} is a value-added version of S currently sold by [TIBCO
+[S-PLUS] is a value-added version of S currently sold by [TIBCO
 Software Inc](http://www.tibco.com/) as 'TIBCO Spotfire S+'. See
 <https://en.wikipedia.org/wiki/S-PLUS> for more information.
 
@@ -74,8 +74,8 @@ Software Inc](http://www.tibco.com/) as 'TIBCO Spotfire S+'. See
 ### 3.3 What are the differences between R and S?
 
 We can regard S as a language with three current implementations or
-"engines", the "old S engine" (S version 3; [S-PLUS]{.small} 3.x and
-4.x), the "new S engine" (S version 4; [S-PLUS]{.small} 5.x and above),
+"engines", the "old S engine" (S version 3; [S-PLUS] 3.x and
+4.x), the "new S engine" (S version 4; [S-PLUS] 5.x and above),
 and R. Given this understanding, asking for "the differences between R
 and S" really amounts to asking for the specifics of the R
 implementation of the S language, i.e., the difference between the R and
@@ -144,7 +144,7 @@ For simplicity, we shall use both the cdf and pdf of the distribution as
 explicit arguments. (Example compiled from various postings by Luke
 Tierney.)
 
-The [S-PLUS]{.small} documentation for `call()` basically suggests the
+The [S-PLUS] documentation for `call()` basically suggests the
 following:
 
 ```r
@@ -254,7 +254,7 @@ work if the optimizer supports this.
 
 Nested lexically scoped functions allow using function closures and
 maintaining local state. A simple example (taken from Abelson and
-Sussman) is obtained by typing [demo(\"scoping\")]{.kbd} at the R
+Sussman) is obtained by typing [demo(\"scoping\")] at the R
 prompt. Further information is provided in the standard R reference "R:
 A Language for Data Analysis and Graphics" (see [What documentation
 exists for R?](#What-documentation-exists-for-R_003f)) and in Robert
@@ -362,7 +362,7 @@ Some known differences are the following.
   should always use `TRUE` and `FALSE`.
 
 - In R, `dyn.load()` can only load _shared objects_, as created for
-  example by [R CMD SHLIB]{.kbd}.
+  example by [R CMD SHLIB].
 
 - In R, `attach()` currently only works for lists and data frames, but
   not for directories. (In fact, `attach()` also works for R data
@@ -437,7 +437,7 @@ the global environment) in S.
 - In S, `tapply(simplify=TRUE)` returns a vector where R returns a
   one-dimensional array (which can have named dimnames).
 
-- In S(-[PLUS]{.small}) the C locale is used, whereas in R the current
+- In S(-[PLUS]) the C locale is used, whereas in R the current
   operating system locale is used for determining which characters are
   alphanumeric and how they are sorted. This affects the set of valid
   names for R objects (for example accented chars may be allowed in R)
@@ -445,7 +445,7 @@ the global environment) in S.
   is true or false). From version 1.2.0 the locale can be (re-)set in
   R by the `Sys.setlocale()` function.
 
-- In S, `missing(arg)` remains `TRUE` if `arg`{.variable} is
+- In S, `missing(arg)` remains `TRUE` if `arg` is
   subsequently modified; in R it doesn't.
 
 - From R version 1.3.0, `data.frame` strips `I()` when creating
@@ -477,7 +477,7 @@ the global environment) in S.
   withdrawn to avoid further confusion.)
 
 - Numeric constants with no fractional and exponent (i.e., only
-  integer) part are taken as integer in [S-PLUS]{.small} 6.x or later,
+  integer) part are taken as integer in [S-PLUS] 6.x or later,
   but as double in R.
 
 There are also differences which are not intentional, and result from
@@ -488,15 +488,15 @@ if you were to implement the change yourself and make sure it works.
 
 ---
 
-### 3.4 Is there anything R can do that [S-PLUS]{.small} cannot?
+### 3.4 Is there anything R can do that [S-PLUS] cannot?
 
 Since almost anything you can do in R has source code that you could
-port to [S-PLUS]{.small} with little effort there will never be much you
-can do in R that you couldn't do in [S-PLUS]{.small} if you wanted to.
+port to [S-PLUS] with little effort there will never be much you
+can do in R that you couldn't do in [S-PLUS] if you wanted to.
 (Note that using lexical scoping may simplify matters considerably,
 though.)
 
-R offers several graphics features that [S-PLUS]{.small} does not, such
+R offers several graphics features that [S-PLUS] does not, such
 as finer handling of line types, more convenient color handling (via
 palettes), gamma correction for color, and, most importantly,
 mathematical annotation in plot texts, via input expressions reminiscent

@@ -1,4 +1,4 @@
-11 Statistical models in R
+# 11 Statistical models in R
 
 ---
 
@@ -37,14 +37,14 @@ extractor functions.
 The template for a statistical model is a linear regression model with
 independent, homoscedastic errors
 
-```{.display}
+```
 y_i = sum_{j=0}^p beta_j x_{ij} + e_i,     i = 1, …, n,
 ```
 
 where the e_i are NID(0, sigma\^2). In matrix terms this would be
 written
 
-```{.display}
+```
 y = X  beta + e
 ```
 
@@ -144,17 +144,17 @@ response ~ op_1 term_1 op_2 term_2 op_3 term_3 …
 
 where
 
-`response`{.variable}
+`response`
 
 : is a vector or matrix, (or expression evaluating to a vector or
 matrix) defining the response variable(s).
 
-`op_i`{.variable}
+`op_i`
 
 : is an operator, either `+` or `-`, implying the inclusion or
 exclusion of a term in the model, (the first is optional).
 
-`term_i`{.variable}
+`term_i`
 
 : is either
 
@@ -178,19 +178,19 @@ p.29):
 
 `Y ~ M`
 
-: `Y`{.variable} is modeled as `M`{.variable}.
+: `Y` is modeled as `M`.
 
 `M_1 + M_2`
 
-: Include `M_1`{.variable} and `M_2`{.variable}.
+: Include `M_1` and `M_2`.
 
 `M_1 - M_2`
 
-: Include `M_1`{.variable} leaving out terms of `M_2`{.variable}.
+: Include `M_1` leaving out terms of `M_2`.
 
 `M_1 : M_2`
 
-: The tensor product of `M_1`{.variable} and `M_2`{.variable}. If both
+: The tensor product of `M_1` and `M_2`. If both
 terms are factors, then the "subclasses" factor.
 
 `M_1 %in% M_2`
@@ -207,12 +207,12 @@ terms are factors, then the "subclasses" factor.
 
 `M^n`
 
-: All terms in `M`{.variable} together with "interactions" up to order
-`n`{.variable}
+: All terms in `M` together with "interactions" up to order
+`n`
 
 `I(M)`
 
-: Insulate `M`{.variable}. Inside `M`{.variable} all operators have
+: Insulate `M`. Inside `M` all operators have
 their normal arithmetic meaning, and that term appears in the model
 matrix.
 
@@ -261,7 +261,7 @@ options(contrasts = c("contr.treatment", "contr.poly"))
 The main reason for mentioning this is that R and S have different
 defaults for unordered factors, S using Helmert contrasts. So if you
 need to compare your results to those of a textbook or paper which used
-[S-PLUS]{.small}, you will need to set
+[S-PLUS], you will need to set
 
 ```r
 options(contrasts = c("contr.helmert", "contr.poly"))
@@ -355,7 +355,7 @@ diagnostics.
 The data frame supplied must have variables specified with the same
 labels as the original. The value is a vector or matrix of predicted
 values corresponding to the determining variable values in
-`data.frame`{.variable}.
+`data.frame`.
 
 `print(object)`
 
@@ -401,8 +401,8 @@ response ~ mean.formula + Error(strata.formula)
 ```
 
 specifies a multi-stratum experiment with error strata defined by the
-`strata.formula`{.variable}. In the simplest case,
-`strata.formula`{.variable} is simply a factor, when it defines a two
+`strata.formula`. In the simplest case,
+`strata.formula` is simply a factor, when it defines a two
 strata experiment, namely between and within the levels of the factor.
 
 For example, with all determining variables factors, a model formula
@@ -462,7 +462,7 @@ just a few additional or removed terms. Its form is
 > new.model <- update(old.model, new.formula)
 ```
 
-In the `new.formula`{.variable} the special name consisting of a period,
+In the `new.formula` the special name consisting of a period,
 '`.`', only, can be used to stand for "the
 corresponding part of the old model formula". For example,
 
@@ -513,7 +513,7 @@ assumptions:
   single linear function, only_. This linear function is called the
   _linear predictor_, and is usually written
 
-```{.display}
+```
 eta = beta_1 x_1 + beta_2 x_2 + … + beta_p x_p,
 ```
 
@@ -522,7 +522,7 @@ if beta_i is zero.
 
 - The distribution of _y_ is of the form
 
-```{.display}
+```
 f_Y(y; mu, phi)
   = exp((A/phi) * (y lambda(mu) - gamma(lambda(mu))) + tau(y, phi))
 ```
@@ -536,7 +536,7 @@ by its mean and possibly a scale parameter as well.
 - The mean, mu, is a smooth invertible function of the linear
   predictor:
 
-```{.display}
+```
 mu = m(eta),    eta = m^{-1}(mu) = ell(mu)
 ```
 
@@ -598,7 +598,7 @@ the form
 > fitted.model <- glm(formula, family=family.generator, data=data.frame)
 ```
 
-The only new feature is the `family.generator`{.variable}, which is the
+The only new feature is the `family.generator`, which is the
 instrument by which the family is described. It is the name of a
 function that generates a list of functions and expressions that
 together define and control the model and estimation process. Although
@@ -773,7 +773,7 @@ Models (`glm()`). But in the majority of cases we have to approach the
 nonlinear curve fitting problem as one of nonlinear optimization. R's
 nonlinear optimization routines are `optim()`, `nlm()` and `nlminb()`,
 which provide the
-functionality (and more) of [S-PLUS]{.small}'s `ms()` and `nlminb()`. We
+functionality (and more) of [S-PLUS]'s `ms()` and `nlminb()`. We
 seek the parameter values that minimize some index of lack-of-fit, and
 they do this by trying out various parameter values iteratively. Unlike
 linear regression for example, there is no guarantee that the procedure
